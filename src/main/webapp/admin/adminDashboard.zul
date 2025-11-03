@@ -1,0 +1,14 @@
+<!-- ============================================================
+ Page Name: adminDashboard.zul
+ Purpose: Overview of system statistics and activities.
+ Features: Displays total users, accounts, transactions, and alerts.
+ Controller: AdminDashboardController.java
+ ============================================================ -->
+
+
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="new page title" border="normal">
+New Content Here!
+</window>
+</zk>

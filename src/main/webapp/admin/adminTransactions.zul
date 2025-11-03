@@ -1,0 +1,14 @@
+<!-- ============================================================
+ Page Name: adminTransactions.zul
+ Purpose: View all bank transactions for monitoring and reporting.
+ Features: Filter transactions, detect fraud, export reports.
+ Controller: AdminTransactionsController.java
+ ============================================================ -->
+
+
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="new page title" border="normal">
+New Content Here!
+</window>
+</zk>

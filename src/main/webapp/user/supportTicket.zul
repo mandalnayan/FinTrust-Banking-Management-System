@@ -1,0 +1,15 @@
+<!-- ============================================================
+ Page Name: supportTicket.zul
+ Purpose: Allows users to raise or view support tickets.
+ Features: Submit complaints, view status (Open/In Progress/Resolved).
+ Controller: SupportTicketController.java
+ ============================================================ -->
+
+
+
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="new page title" border="normal">
+New Content Here!
+</window>
+</zk>

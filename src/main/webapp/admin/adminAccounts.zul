@@ -1,0 +1,14 @@
+<!-- ============================================================
+ Page Name: adminAccounts.zul
+ Purpose: Manage all customer accounts.
+ Features: View, activate/deactivate, or delete user accounts.
+ Controller: AdminAccountsController.java
+ ============================================================ -->
+
+
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="new page title" border="normal">
+New Content Here!
+</window>
+</zk>

@@ -1,0 +1,53 @@
+<!-- ============================================================
+ Page Name: userLogin.zul
+ Purpose: Allows users to log in using username/password.
+ Features: Includes validation and OTP-based 2FA.
+ Controller: UserLoginController.java
+ ============================================================ -->
+
+
+<!-- ============================================================
+ Page Name: userLogin.zul
+ Purpose: Handles user login functionality.
+ Features: Allows login with email/username and password.
+ Controller: UserLoginController.java
+ ============================================================ -->
+
+<?page title="User Login - FinTrust Bank" contentType="text/html;charset=UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/resources/css/style.css"?>
+
+<zk xmlns:h="xhtml">
+    <window border="none" sclass="login-window"  width = "80vw" style = "margin: 0px auto;">
+        <div sclass="login-container"  width = "100%">  
+
+            <!-- Left Section (Image / Banner) -->
+            <div sclass="login-left">
+                <image src="/resources/images/signup-rightSec.png" sclass="login-img"/>
+            </div>
+
+            <!-- Right Section (Form) -->
+            <div sclass="login-right">
+                <label value="FinTrust Banking System" sclass="brand-title"/>
+                <label value="Welcome Back!" sclass="login-heading"/>
+
+                <vlayout spacing="15px" width="100%" sclass="login-form">
+                    <textbox id="email" sclass="input-field" placeholder="Email or Username" constraint="no empty"/>
+                    <textbox id="password" type="password" sclass="input-field" placeholder="Password" constraint="no empty"/>
+
+                    <hlayout sclass="login-options">
+                        <checkbox label="Remember Me" sclass="remember-check"/>
+                        <a href="/user/forgotPassword.zul" label="Forgot Password?" sclass="forgot-link"/>
+                    </hlayout>
+
+                    <button label="Login" sclass="login-btn" onClick="@command('onLogin')"/>
+
+                    <hlayout sclass="signup-redirect">
+                        <label value="Don't have an account?"/>
+                        <a href="/user/userSignup.zul" label="Sign Up"/>
+                    </hlayout>
+                </vlayout>
+            </div>
+
+        </div>
+    </window>
+</zk>

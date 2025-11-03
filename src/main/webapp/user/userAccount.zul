@@ -1,0 +1,14 @@
+<!-- ============================================================
+ Page Name: userAccount.zul
+ Purpose: View and edit user profile/account details.
+ Features: Update address, phone, or email; view account status.
+ Controller: UserAccountController.java
+ ============================================================ -->
+
+
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="new page title" border="normal">
+New Content Here!
+</window>
+</zk>

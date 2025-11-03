@@ -1,0 +1,47 @@
+<?page title="User Signup - FinTrust Bank" contentType="text/html;charset=UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/resources/css/style.css"?>
+
+<zk xmlns:h="xhtml">
+    <window border="none" sclass="signup-window" width = "100vw" apply = "com.fintrust.controller.UserSignupController">
+
+        <div sclass="signup-container" width = "100vw">
+
+            <!-- Left Section (Image) -->
+            <div sclass="signup-left">
+                <image src="/resources/images/signup-rightSec.png" sclass="signup-img"/>
+            </div>
+
+            <!-- Right Section (Form) -->
+            <div sclass="signup-right">
+                <label value="FinTrust Banking System" sclass="brand-title"/>
+                <label value="Create Your Account" sclass="signup-heading"/>
+
+                <!-- Form grid layout -->
+                <div sclass="form-grid">
+                    <textbox id = "name" placeholder="Full Name" sclass="input-field" constraint="no empty"/>
+                    <textbox id = "email" placeholder="Email Address" sclass="input-field" constraint="no empty"/>
+
+                    <textbox id = "phoneNumber" placeholder="Phone Number" sclass="input-field" constraint="no empty"/>
+                    <datebox id = "dob" placeholder="Date of Birth" constraint="no empty"/>
+
+                    <textbox id = "country" placeholder="Country" sclass="input-field" constraint="no empty"/>
+                    <textbox id = "phone" placeholder="State" sclass="input-field" constraint="no empty"/>
+
+                    <textbox id = "city" placeholder="City" sclass="input-field" constraint="no empty"/>
+                    <textbox id = "pincode" placeholder="Pin Code" sclass="input-field" constraint="no empty"/>
+
+                    <textbox id = "password" type="password" placeholder="Password" sclass="input-field" constraint="no empty"/>
+                    <textbox id = "confirmPassword" type="password" placeholder="Confirm Password" sclass="input-field" constraint="no empty"/>
+                </div>
+				<separator />
+                <button id = "signupBtn" label="Sign Up" sclass="signup-btn" onClick="@command('onSignup')"/>
+
+                <hlayout sclass="login-redirect">
+                    <label value="Already have an account?"/>
+                    <a href="/user/userLogin.zul" label="Login"/>
+                </hlayout>
+            </div>
+
+        </div>
+    </window>
+</zk>

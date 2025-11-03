@@ -1,0 +1,240 @@
+
+ /* ============================================================
+   FinTrust Bank – Common Style Sheet
+   Covers: Signup & Login pages
+   ============================================================ */
+
+
+/* =======================
+   1. GLOBAL BASE STYLES
+   ======================= */
+body, .z-window {
+    font-family: "Poppins", sans-serif;
+    background: #f7f9fc;
+    margin: 0;
+    padding: 0;
+}
+
+.input-field {
+    width: 100% !important;
+    border: 1px solid #ccc !important;
+    border-radius: 6px !important;
+    padding: 10px !important;
+    font-size: 14px !important;
+    box-sizing: border-box !important;
+}
+.input-field:focus {
+    border-color: #0052cc !important;
+    box-shadow: 0 0 5px rgba(0,82,204,0.2);
+}
+
+/* Common buttons */
+.signup-btn,
+.login-btn {
+    background-color: #0052cc !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 6px !important;
+    font-weight: 600 !important;
+    padding: 12px 0 !important;
+    cursor: pointer !important;
+    transition: 0.3s !important;
+    width: 100% !important;
+}
+.signup-btn:hover,
+.login-btn:hover {
+    background-color: #003d99 !important;
+}
+
+/* Common link styles */
+a {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+/* ==================================
+   2. SIGNUP PAGE LAYOUT & COMPONENTS
+   ================================== */
+
+/* === Container Layout === */
+.signup-window {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.signup-container {
+    display: flex;
+    flex-direction: row;
+    background: #ffffff;
+    width: 85%;
+    max-width: 1000px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* === Left Section === */
+.signup-left {
+    flex: 0.4;
+    background: linear-gradient(135deg, #0052cc, #007bff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+.signup-img {
+    width: 90%;
+    max-width: 400px;
+}
+
+/* === Right Section === */
+.signup-right {
+    flex: 0.6;
+    padding: 40px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.brand-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #003366;
+    text-align: center;
+    margin-bottom: 5px;
+}
+.signup-heading {
+    font-size: 18px;
+    color: #444;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+/* === Two-column Grid === */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px 25px;
+    width: 100%;
+}
+
+/* === Login Redirect (bottom of signup) === */
+.login-redirect {
+    justify-content: center;
+    margin-top: 15px;
+    font-size: 14px;
+}
+.login-redirect a {
+    color: #0052cc;
+    margin-left: 5px;
+}
+
+/* === Responsive Layout === */
+@media (max-width: 768px) {
+    .signup-container {
+        flex-direction: column;
+        width: 95%;
+    }
+    .signup-left {
+        display: none;
+    }
+    .signup-right {
+        padding: 30px 20px;
+    }
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* =============================
+   3. LOGIN PAGE LAYOUT & COMPONENTS
+   ============================= */
+
+/* === Container === */
+.login-window {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.login-container {
+    display: flex;
+    flex-direction: row;
+    background: #fff;
+    width: 80%;
+    max-width: 900px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* === Left Section === */
+.login-left {
+    flex: 0.4;
+    background: linear-gradient(135deg, #0052cc, #007bff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.login-img {
+    width: 85%;
+    max-width: 380px;
+}
+
+/* === Right Section === */
+.login-right {
+    flex: 0.6;
+    padding: 40px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.login-heading {
+    font-size: 18px;
+    color: #444;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* === Login Options === */
+.login-options {
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.remember-check {
+    font-size: 13px;
+}
+.forgot-link {
+    color: #0052cc;
+    font-size: 13px;
+}
+
+/* === Sign Up Redirect === */
+.signup-redirect {
+    justify-content: center;
+    margin-top: 15px;
+    font-size: 14px;
+}
+.signup-redirect a {
+    color: #0052cc;
+    margin-left: 5px;
+}
+
+/* === Responsive Layout === */
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+        width: 95%;
+    }
+    .login-left {
+        display: none;
+    }
+    .login-right {
+        padding: 30px 20px;
+    }
+}
+ 

@@ -1,0 +1,14 @@
+<!-- ============================================================
+ Page Name: adminSupport.zul
+ Purpose: Handle customer support tickets.
+ Features: View open tickets, reply, mark resolved.
+ Controller: AdminSupportController.java
+ ============================================================ -->
+
+
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="new page title" border="normal">
+New Content Here!
+</window>
+</zk>

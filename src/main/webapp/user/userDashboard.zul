@@ -1,0 +1,15 @@
+<!-- ============================================================
+ Page Name: userDashboard.zul
+ Purpose: Displays user overview after login.
+ Features: Shows account summary, recent transactions, quick links.
+ Controller: UserDashboardController.java
+ ============================================================ -->
+
+
+
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="new page title" border="normal">
+New Content Here!
+</window>
+</zk>

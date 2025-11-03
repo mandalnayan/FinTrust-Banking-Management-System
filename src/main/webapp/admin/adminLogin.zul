@@ -1,0 +1,13 @@
+<!-- ============================================================
+ Page Name: adminLogin.zul
+ Purpose: Allows admin to log in to the back-office system.
+ Features: Validates credentials and redirects to admin dashboard.
+ Controller: AdminLoginController.java
+ ============================================================ -->
+
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="new page title" border="normal">
+New Content Here!
+</window>
+</zk>

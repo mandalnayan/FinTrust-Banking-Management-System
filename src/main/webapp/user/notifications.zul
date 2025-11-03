@@ -1,0 +1,14 @@
+<!-- ============================================================
+ Page Name: notifications.zul
+ Purpose: Display user-specific alerts and notifications.
+ Features: Transaction alerts, login alerts, low balance warnings.
+ Controller: NotificationController.java
+ ============================================================ -->
+
+
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="new page title" border="normal">
+New Content Here!
+</window>
+</zk>

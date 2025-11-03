@@ -1,0 +1,14 @@
+<!-- ============================================================
+ Page Name: adminReports.zul
+ Purpose: Generate financial and activity reports.
+ Features: Export reports (PDF/CSV), monthly or daily summaries.
+ Controller: AdminReportsController.java
+ ============================================================ -->
+
+
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="new page title" border="normal">
+New Content Here!
+</window>
+</zk>

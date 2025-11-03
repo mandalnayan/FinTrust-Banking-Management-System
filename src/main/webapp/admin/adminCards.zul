@@ -1,0 +1,14 @@
+<!-- ============================================================
+ Page Name: adminCards.zul
+ Purpose: Manage customer debit/credit card operations.
+ Features: Approve requests, block/unblock, update limits.
+ Controller: AdminCardsController.java
+ ============================================================ -->
+
+
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="new page title" border="normal">
+New Content Here!
+</window>
+</zk>
