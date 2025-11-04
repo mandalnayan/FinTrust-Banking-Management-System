@@ -19,17 +19,22 @@
                 <!-- Form grid layout -->
                 <div sclass="form-grid">
                     <textbox id = "name" placeholder="Full Name" sclass="input-field" constraint="no empty"/>
-                    <textbox id = "email" placeholder="Email Address" sclass="input-field" constraint="no empty"/>
+                    <textbox id = "email" placeholder="Email Address" sclass="input-field" />
 
-                    <textbox id = "phoneNumber" placeholder="Phone Number" sclass="input-field" constraint="no empty"/>
+                    <textbox id = "phoneNumber" placeholder="Phone Number" sclass="input-field" />
                     <datebox id = "dob" placeholder="Date of Birth" constraint="no empty"/>
 
-                    <textbox id = "country" placeholder="Country" sclass="input-field" constraint="no empty"/>
-                    <textbox id = "phone" placeholder="State" sclass="input-field" constraint="no empty"/>
+                    <textbox id = "country" placeholder="Country" sclass="input-field" />
+                    <textbox id = "state" placeholder="State" sclass="input-field" />
+                    <textbox id = "dist" placeholder="Distice" sclass="input-field" />
 
-                    <textbox id = "city" placeholder="City" sclass="input-field" constraint="no empty"/>
-                    <textbox id = "pincode" placeholder="Pin Code" sclass="input-field" constraint="no empty"/>
-
+                    <textbox id = "city" placeholder="City" sclass="input-field" />
+                    <textbox id = "pincode" placeholder="Pin Code" sclass="input-field" />
+					<radiogroup id = "gender"> <label value = "Gender" />
+					<radio label="Male"/>
+					<radio  label="Female"/>
+					<radio label="Other"/>
+					</radiogroup>
                     <textbox id = "password" type="password" placeholder="Password" sclass="input-field" constraint="no empty"/>
                     <textbox id = "confirmPassword" type="password" placeholder="Confirm Password" sclass="input-field" constraint="no empty"/>
                 </div>
