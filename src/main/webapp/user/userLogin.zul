@@ -17,7 +17,7 @@
 <?link rel="stylesheet" type="text/css" href="/resources/css/style.css"?>
 
 <zk xmlns:h="xhtml">
-    <window border="none" sclass="login-window"  width = "80vw" style = "margin: 0px auto;">
+    <window border="none" sclass="login-window"  width = "80vw" style = "margin: 0px auto;" apply = "com.fintrust.controller.UserLoginController">
         <div sclass="login-container"  width = "100%">  
 
             <!-- Left Section (Image / Banner) -->
@@ -39,7 +39,7 @@
                         <a href="/user/forgotPassword.zul" label="Forgot Password?" sclass="forgot-link"/>
                     </hlayout>
 
-                    <button label="Login" sclass="login-btn" onClick="@command('onLogin')"/>
+                    <button label="Login" sclass="login-btn" id = "submit"/>
 
                     <hlayout sclass="signup-redirect">
                         <label value="Don't have an account?"/>
