@@ -1,0 +1,18 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<div sclass="navbar">
+            <div sclass="navbar-left">
+                <image src="/resources/images/logo.png" sclass="navbar-logo"/>
+                <label value="FinTrust Bank" sclass="navbar-title"/>
+            </div>
+
+            <div sclass="navbar-right">
+                <a href="/user/userHome.zul" label="Home" sclass="nav-link active"/>
+                <a href="/user/userAccounts.zul" label="Accounts" sclass="nav-link"/>
+                <a href="/user/userTransactions.zul" label="Transactions" sclass="nav-link"/>
+                <a href="/user/userCards.zul" label="Cards" sclass="nav-link"/>
+                <a href="/user/userProfile.zul" label="Profile" sclass="nav-link"/>
+                <a href="/user/userLogin.zul" label="Logout" sclass="logout-btn"/>
+            </div>
+        </div>
+</zk>

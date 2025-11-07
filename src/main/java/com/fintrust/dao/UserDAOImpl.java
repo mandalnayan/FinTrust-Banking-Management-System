@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.zkoss.zk.ui.util.Clients;
@@ -55,6 +56,23 @@ public class UserDAOImpl implements UserDAO {
 		return false;
 	}
 
+   public boolean isAuthorize(String userName, String password) {
+    		try(Connection con = DBConnection.getConnection()) {
+    			PreparedStatement pstmt = con.prepareStatement("Select name from users where email = ? and password = ?");
+    			pstmt.setString(1, userName);
+    			pstmt.setString(2, password);
+    			ResultSet rs = pstmt.executeQuery();
+    			if (rs.next()) {
+    				Clients.showNotification("Login Successfull! \n Welcome " + rs.getString(1), true);
+    				return true;
+    			}
+    		} catch(SQLException e) {
+    			Clients.showNotification(e.getMessage());
+    		}
+    		return false;
+    }
+
+	
 	private boolean createUserTable() {
 		String query = "CREATE TABLE users (" + "id INT AUTO_INCREMENT PRIMARY KEY," + "name VARCHAR(100),"
 				+ "email VARCHAR(100) UNIQUE," + "phone VARCHAR(15)," + "gender VARCHAR(10)," + "country VARCHAR(50),"

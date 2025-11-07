@@ -4,6 +4,9 @@ package com.fintrust.controller;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.select.SelectorComposer;
+
+import java.util.Date;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Radio;
@@ -26,10 +29,17 @@ public class UserSignupController extends SelectorComposer<Component> {
 	private Radiogroup gender;
 	
     private UserService userService = new UserServiceImpl();
+    
+    @Override
+    public void doAfterCompose(Component comp) throws Exception {
+    	// TODO Auto-generated method stub
+    	super.doAfterCompose(comp);
+    	dob.setConstraint("no empty,before " + new java.text.SimpleDateFormat("yyyyMMdd").format(new Date()));
+    }
 
 	@Listen("onClick=#signupBtn")
 	public void onSignup() {
-		Radio radio = gender.getSelectedItem();
+		Radio radio = gender.getSelectedItem();		
 		if (radio == null) {
 			Messagebox.show("Please select your gender.", "Error", Messagebox.OK, Messagebox.ERROR);
 			return;
@@ -61,7 +71,7 @@ public class UserSignupController extends SelectorComposer<Component> {
         user.setName(name.getValue());
         user.setEmail(email.getValue());
         user.setPhone(phoneNumber.getValue());
-        user.setGender(radio.getName());
+        user.setGender(radio.getLabel());
         user.setDist(dist.getValue());
         user.setPassword(password.getValue());
         user.setCountry(country.getValue());
@@ -93,8 +103,13 @@ public class UserSignupController extends SelectorComposer<Component> {
 	}
 
 	private boolean isValidPhone(String phone) {
-		// Accepts only digits and must be 10 characters
-		return phone != null && phone.matches("\\d{10}");
+	    if (phone == null) return false;
+
+	    // Regex Explanation:
+	    // ^(\+91[\-\s]?)?  → optional +91 or +91- or +91(space)
+	    // 0?               → optional leading 0
+	    // [6-9]\d{9}$      → starts with 6-9 and followed by 9 digits
+	    return phone.matches("^(\\+91[\\-\\s]?)?0?[6-9]\\d{9}$");
 	}
 
 	private boolean isValidPassword(String password) {
