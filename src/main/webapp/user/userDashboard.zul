@@ -17,7 +17,7 @@
     </north> 
 
     <!-- WEST: Sidebar navigation -->
-    <west size="240px" splittable="true">
+    <west size="240px" splittable="true"  viewModel="@id('vm') @init('com.fintrust.controller.UserDashboardController')">
       <vbox sclass="sidebar" spacing="12px" >
         <h:div sclass="sidebar-brand">
           <image src="/resources/images/logo.png" sclass="sidebar-logo-img"/>

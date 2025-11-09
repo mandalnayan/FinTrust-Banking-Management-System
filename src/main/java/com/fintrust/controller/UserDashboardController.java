@@ -28,7 +28,6 @@ public class UserDashboardController extends SelectorComposer<Borderlayout>{
 	@Override
 	public ComponentInfo doBeforeCompose(Page page, Component parent, ComponentInfo compInfo) {
 		Object user = Sessions.getCurrent().getAttribute("user");
-		Clients.showNotification((user == null) + "");
 		if (user == null) {
 			Executions.sendRedirect("/user/userLogin.zul");
 			return null;
@@ -48,6 +47,7 @@ public class UserDashboardController extends SelectorComposer<Borderlayout>{
     @Command
     public void go(String page) {
         // navigate based on menu clicks
+    	alert("HIi");
         switch (page) {
             case "dashboard":
                 org.zkoss.zk.ui.Executions.sendRedirect("/user/userDashboard.zul");
@@ -56,7 +56,7 @@ public class UserDashboardController extends SelectorComposer<Borderlayout>{
                 org.zkoss.zk.ui.Executions.sendRedirect("/user/userAccounts.zul");
                 break;
             case "transactions":
-                org.zkoss.zk.ui.Executions.sendRedirect("/user/userTransactions.zul");
+                org.zkoss.zk.ui.Executions.sendRedirect("/user/transactionHistory.zul");
                 break;
             case "cards":
                 org.zkoss.zk.ui.Executions.sendRedirect("/user/userCards.zul");
