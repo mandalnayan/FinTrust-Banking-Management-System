@@ -1,0 +1,115 @@
+<!-- ============================================================
+	Page Name: userHome.zul
+	Purpose: FinTrust user home page after login
+	Features: Responsive navbar, scrollable content, hero section, features, and footer
+	Controller: UserHomeController.java
+	============================================================ -->
+
+<?page title="FinTrust Bank - Home" contentType="text/html;charset=UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/resources/css/home.css"?>
+
+<zk xmlns:h="xhtml">
+	<!-- Use vflex and hflex for proper auto sizing -->
+	<window border="none" sclass="home-window" vflex="1" hflex="1"
+		style="padding-left: 0px; padding-right: 0px; padding-bottom: 0px">
+		<vlayout sclass="home-layout" vflex="1" hflex="1">
+			<!-- Navbar -->
+			<include src="/WEB-INF/components/navbar.zul"/>
+
+			<!-- Scrollable Content Wrapper -->
+			<scrollview vflex="1" hflex="1" sclass="scroll-container">
+				<vlayout spacing="25px" sclass="scroll-content"
+					width="100%">
+
+					<!-- ================= HERO SECTION ================= -->
+					<!-- HERO SECTION: copy/paste into your userHome.zul -->
+					<div sclass="hero-section">
+						<!-- decoration overlay (optional darker tint for contrast) -->
+						<div sclass="hero-overlay"></div>
+
+						<!-- content card centered inside hero -->
+						<div sclass="hero-card">
+
+							<!-- left column: heading, subheading, CTA -->
+							<div sclass="hero-left">
+								<label value="Welcome to FinTrust Bank"
+									sclass="hero-heading" />
+								<label
+									value="Secure. Reliable. Seamless banking for everyone. Manage accounts, transfer funds and stay protected."
+									sclass="hero-subheading" />
+								<div style="height:18px"></div>
+								<button label="Explore Your Account"
+									sclass="hero-cta" onClick="@command('goToDashboard')" />
+							</div>
+
+							<!-- right column: illustration inside a pale panel -->
+							<div sclass="hero-right">
+								<div sclass="hero-illustration-panel">
+									<image
+										src="/resources/images/hero-bank.png" sclass="hero-img" />
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+					<!-- Feature Section -->
+					<div sclass="feature-section">
+						<div sclass="feature-card">
+							<image src="/resources/images/account.png"
+								sclass="feature-icon" />
+							<label value="Smart Accounts"
+								sclass="feature-title" />
+							<label
+								value="Open, view and manage all your accounts securely."
+								sclass="feature-desc" />
+						</div>
+
+						<div sclass="feature-card">
+							<image src="/resources/images/transfer.jpg"
+								sclass="feature-icon" />
+							<label value="Quick Transfers"
+								sclass="feature-title" />
+							<label
+								value="Send and receive funds instantly across banks."
+								sclass="feature-desc" />
+						</div>
+
+						<div sclass="feature-card">
+							<image src="/resources/images/card.png"
+								sclass="feature-icon" />
+							<label value="Digital Cards"
+								sclass="feature-title" />
+							<label
+								value="Track and control all your debit and credit cards easily."
+								sclass="feature-desc" />
+						</div>
+
+						<div sclass="feature-card">
+							<image src="/resources/images/support.jpg"
+								sclass="feature-icon" />
+							<label value="24x7 Support"
+								sclass="feature-title" />
+							<label
+								value="We’re here to help you anytime, anywhere."
+								sclass="feature-desc" />
+						</div>
+					</div>
+				</vlayout>
+				<div height="200px"></div>
+
+			        <!-- About / Trust Section -->
+        <div sclass="about-section" id="about" visible="${user == null}">
+            <label value="Why Choose FinTrust?" sclass="section-title" />
+            <vlayout sclass="about-content">
+                <label value="With 10+ years of trusted service, FinTrust Bank offers modern banking solutions with advanced security, 24×7 accessibility, and personalized support." sclass="about-text" />
+                <label value="Join thousands of customers who trust FinTrust for safe and seamless banking." sclass="about-text" />
+            </vlayout>
+        </div>
+			
+
+			<include src = "/WEB-INF/components/footer.zul"></include>
+			</scrollview>
+		</vlayout>
+	</window>
+</zk>

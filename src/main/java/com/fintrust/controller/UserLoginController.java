@@ -1,5 +1,7 @@
 package com.fintrust.controller;
 
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
@@ -18,8 +20,13 @@ public class UserLoginController extends SelectorComposer<Window>{
 	public void login() {
 		String userName = email.getText();
 		String pasw = password.getText();
-		alert("Hii");
-		if(!userDAO.isAuthorize(userName, pasw)) {
+		
+		if(userDAO.isAuthorize(userName, pasw)) {
+			// Set session for curren user
+			Sessions.getCurrent().setAttribute("user", userName);
+			
+			Executions.sendRedirect("/user/userDashboard.zul");		
+		} else {
 			alert("Unauthorized User..!");
 		}
 	}

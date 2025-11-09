@@ -1,6 +1,83 @@
 <?page title="Auto Generated index.zul"?>
-<window title="Hello World!!" border="normal" width="200px">
 
-<label value="You are using: ${desktop.webApp.version}"/>
 
-</window>
+<!-- ============================================================
+Page Name: index.zul
+Purpose: Public landing page of FinTrust Bank (before login)
+Features: Hero banner, features, call-to-action, responsive footer
+============================================================ -->
+
+<?page title="FinTrust Bank - Welcome" contentType="text/html;charset=UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/resources/css/publicHome.css"?>
+
+<zk xmlns:h="xhtml">
+    <window border="none" sclass="landing-window">
+
+        <!-- Navbar -->
+        <include src = "/user/navbar.zul"></include>
+        
+        <div sclass="navbar">
+            <label value="FinTrust Bank" sclass="nav-logo" />
+            <div sclass="nav-links">
+                <a href="#features" label="Features" />
+                <a href="#about" label="About Us" />
+                <a href="/user/userLogin.zul" label="Login" sclass="nav-btn" />
+            </div>
+        </div>
+
+        <!-- Hero Section -->
+        <div sclass="hero-section">
+            <div sclass="hero-overlay"></div>
+            <div sclass="hero-content">
+                <div sclass="hero-text">
+                    <label value="Welcome to FinTrust Bank" sclass="hero-heading" />
+                    <label value="Bank smarter. Manage easier. Experience secure digital banking with FinTrust." sclass="hero-subheading" />
+                    <div sclass="hero-buttons">
+                        <button label="Open an Account" sclass="primary-btn" onClick="Executions.sendRedirect('/user/userSignup.zul')" />
+                        <button label="Learn More" sclass="secondary-btn" />
+                    </div>
+                </div>
+                <image src="/resources/images/hero-bank.png" sclass="hero-image" />
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div sclass="features-section" id="features">
+            <label value="Our Key Features" sclass="section-title" />
+            <div sclass="feature-grid">
+
+                <div sclass="feature-card">
+                    <image src="/resources/images/account.png" sclass="feature-icon" />
+                    <label value="Smart Accounts" sclass="feature-title" />
+                    <label value="Instant digital savings and current accounts with zero paperwork." sclass="feature-desc" />
+                </div>
+
+                <div sclass="feature-card">
+                    <image src="/resources/images/transfer.jpg" sclass="feature-icon" />
+                    <label value="Instant Transfers" sclass="feature-title" />
+                    <label value="Transfer money 24×7 securely using UPI, NEFT, or RTGS." sclass="feature-desc" />
+                </div>
+
+                <div sclass="feature-card">
+                    <image src="/resources/images/card.png" sclass="feature-icon" />
+                    <label value="Smart Cards" sclass="feature-title" />
+                    <label value="Manage and control your debit and credit cards with one click." sclass="feature-desc" />
+                </div>
+
+                <div sclass="feature-card">
+                    <image src="/resources/images/support.jpg" sclass="feature-icon" />
+                    <label value="24x7 Customer Support" sclass="feature-title" />
+                    <label value="Our support team is always available for your financial needs." sclass="feature-desc" />
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div sclass="footer">
+            <label value="© 2025 FinTrust Bank. All Rights Reserved." />
+        </div>
+
+    </window>
+</zk>
+

@@ -1,8 +1,9 @@
 <?page title="User Signup - FinTrust Bank" contentType="text/html;charset=UTF-8"?>
 <?link rel="stylesheet" type="text/css" href="/resources/css/style.css"?>
-
+<?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 <zk xmlns:h="xhtml">
-    <window border="none" sclass="signup-window" width = "100vw" apply = "com.fintrust.controller.UserSignupController">
+	<include src = "/WEB-INF/components/navbar.zul"/>
+    <window border="none" sclass="signup-window, scroll-container" width = "100vw" apply = "com.fintrust.controller.UserSignupController">
 
         <div sclass="signup-container" width = "100vw">
 

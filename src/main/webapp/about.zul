@@ -1,0 +1,93 @@
+<!-- ============================================================
+Page Name: about.zul
+Purpose: About page for FinTrust Bank (public information page)
+Features: Hero banner, mission section, values, team, and contact CTA
+============================================================ -->
+
+<?page title="About Us - FinTrust Bank" contentType="text/html;charset=UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/resources/css/about.css"?>
+<?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
+
+<zk xmlns:h="xhtml">
+    <window border="none" sclass="about-window">
+
+        <!-- Navbar -->
+       <include src="/WEB-INF/components/navbar.zul"/>
+
+        <!-- Hero Section -->
+        <div sclass="hero-section about-hero">
+            <div sclass="hero-overlay"></div>
+            <vbox sclass="hero-content centered" align="center">
+                <label value="About FinTrust Bank" sclass="hero-heading" />
+                <label value="Empowering digital banking with trust, transparency, and technology." sclass="hero-subheading" />
+            </vbox>
+        </div>
+
+        <!-- Mission Section -->
+        <div sclass="mission-section" id="mission">
+            <image src="/resources/images/about-mission.png" sclass="mission-image" />
+            <div sclass="mission-text">
+                <label value="Our Mission" sclass="section-title" />
+                <label value="At FinTrust Bank, our mission is to deliver secure and user-friendly digital banking services that simplify lives and empower financial growth for individuals and businesses." sclass="section-desc" />
+            </div>
+        </div>
+
+        <!-- Core Values Section -->
+        <div sclass="values-section">
+            <label value="Our Core Values" sclass="section-title" />
+            <div sclass="values-grid">
+                <div sclass="value-card">
+                    <image src="/resources/images/about-secure.png" sclass="value-icon" />
+                    <label value="Security First" sclass="value-title" />
+                    <label value="We protect every transaction with advanced encryption and multi-layered authentication." sclass="value-desc" />
+                </div>
+
+                <div sclass="value-card">
+                    <image src="/resources/images/about-growth.png" sclass="value-icon" />
+                    <label value="Growth and Innovation" sclass="value-title" />
+                    <label value="We constantly innovate to offer cutting-edge banking solutions for the digital era." sclass="value-desc" />
+                </div>
+
+                <div sclass="value-card">
+                    <image src="/resources/images/about-team.png" sclass="value-icon" />
+                    <label value="Customer Commitment" sclass="value-title" />
+                    <label value="Your satisfaction drives us — every decision we make is for your financial well-being." sclass="value-desc" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Section -->
+        <div sclass="team-section" id="team">
+            <label value="Meet Our Leadership Team" sclass="section-title" />
+            <div sclass="team-grid">
+                <div sclass="team-card">
+                    <image src="/resources/images/person1.png" sclass="team-photo" />
+                    <label value="Mr. Harish Kumar" sclass="team-name" />
+                    <label value="CEO and Founder" sclass="team-role" />
+                </div>
+
+                <div sclass="team-card">
+                    <image src="/resources/images/person2.png" sclass="team-photo" />
+                    <label value="Ms. Vikash Sharma" sclass="team-name" />
+                    <label value="Head of Operations" sclass="team-role" />
+                </div>
+
+                <div sclass="team-card">
+                    <image src="/resources/images/person3.png" sclass="team-photo" />
+                    <label value="Ms Yogita" sclass="team-name" />
+                    <label value="Chief Technology Officer" sclass="team-role" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact CTA -->
+        <div sclass="contact-cta">
+            <label value="Want to know more?" sclass="cta-heading" /> <separator spacing="20px"/>
+            <button label="Contact Us" sclass="cta-btn" onClick='Executions.sendRedirect("/contact.zul")' />
+        </div>
+
+        <!-- Footer -->
+     	<include src="/WEB-INF/components/footer.zul"/>
+
+    </window>
+</zk>

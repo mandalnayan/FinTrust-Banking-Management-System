@@ -1,0 +1,59 @@
+
+  
+  <?page title="Transaction History" contentType="text/html;charset=UTF-8"?>
+<zk>
+    <window 
+        apply="com.fintrust.controller.TransactionHistoryController"
+        closable="false"
+        sizable="true"
+        vflex="1"
+        hflex="1">
+
+        <vlayout spacing="10px" vflex="1" hflex="1">
+
+            <!-- Header -->
+            <hlayout width="100%" spacing="10px" style="align-items:center;">
+                <label value="💳 Transaction History"
+                       style="font-weight:bold; font-size:18px; color:#2b4b80;"/>
+
+                <button label="⟳ Refresh" sclass="btn-refresh" 
+                    style="background:#2563eb; color:white; border:none; border-radius:6px; padding:6px 12px; font-weight:600; cursor:pointer;"
+                    onClick='Executions.sendRedirect(null);'/>
+            </hlayout>
+
+            <!-- Date range filter -->
+            <hlayout width="100%" spacing="8px" style="margin-bottom:10px; align-items:center;">
+                <label value="📅 From:"/>
+                <datebox id="fromDate" width="150px"/>
+
+                <label value="To:"/>
+                <datebox id="toDate" width="150px"/>
+
+                <button id="filterBtn" label="Show Transactions"
+                        style="background:#16a34a; color:white; border:none; border-radius:6px; padding:6px 12px; font-weight:600; cursor:pointer;"/>
+            </hlayout>
+
+            <!-- Transaction list -->
+            <listbox id="transactionListbox"
+                     vflex="1"
+                     hflex="1"
+                     mold="paging"
+                     pageSize="10"
+                     sizedByContent="true"
+                     style="border:1px solid #ccc; border-radius:8px;">
+                <listhead>
+                    <listheader label="Transaction ID" width="130px"/>
+                    <listheader label="From Account" width="130px"/>
+                    <listheader label="To Account" width="130px"/>
+                    <listheader label="Amount" width="130px" align="right"/>
+                    <listheader label="Type" width="130px"/>
+                    <listheader label="Status" width="120px"/>
+                    <listheader label="Remarks" width="190px"/>
+                    <listheader label="Created At" width="180px"/>
+                </listhead>
+            </listbox>
+
+        </vlayout>
+    </window>
+</zk>
+  

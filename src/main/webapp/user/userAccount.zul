@@ -5,10 +5,14 @@
  Controller: UserAccountController.java
  ============================================================ -->
 
+<?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
-<window title="new page title" border="normal">
+<include src = "/WEB-INF/components/navbar.zul"></include>
+<window title="new page title" border="normal" height="90vh">
 New Content Here!
 </window>
+
+<include src = "/WEB-INF/components/footer.zul"></include>
 </zk>

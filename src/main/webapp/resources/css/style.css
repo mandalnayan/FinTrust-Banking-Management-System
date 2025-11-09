@@ -28,6 +28,15 @@ body, .z-window {
     box-shadow: 0 0 5px rgba(0,82,204,0.2);
 }
 
+/* scroll container: let ZK scrollview handle scrolling */
+.scroll-container {
+  /* do NOT force scroll on html/body — scrollview will be scrollable */
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
 /* Common buttons */
 .signup-btn,
 .login-btn {
@@ -65,12 +74,14 @@ a:hover {
     align-items: center;
     justify-content: center;
 }
+
 .signup-container {
     display: flex;
     flex-direction: row;
     background: #ffffff;
     width: 85%;
     max-width: 1000px;
+    margin: auto !important;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);

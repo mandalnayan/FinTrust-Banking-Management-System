@@ -4,12 +4,131 @@
  Features: Shows account summary, recent transactions, quick links.
  Controller: UserDashboardController.java
  ============================================================ -->
+<?page title="Dashboard - FinTrust Bank" contentType="text/html;charset=UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/resources/css/dashboard.css"?>
 
+<zk xmlns:h="xhtml">
+  <!-- Use borderlayout for predictable ZK structure -->
+  <borderlayout  sclass="dashboard-window" >
 
+    <!-- NORTH: Top header (compact) -->
+  <north >    
+     <include src = "/WEB-INF/components/privateNavbar.zul" /> 
+    </north> 
 
-<?page title="new page title" contentType="text/html;charset=UTF-8"?>
-<zk>
-<window title="new page title" border="normal">
-New Content Here!
-</window>
+    <!-- WEST: Sidebar navigation -->
+    <west size="240px" splittable="true">
+      <vbox sclass="sidebar" spacing="12px" >
+        <h:div sclass="sidebar-brand">
+          <image src="/resources/images/logo.png" sclass="sidebar-logo-img"/>
+          <label value="FinTrust" sclass="sidebar-title"/>
+        </h:div>
+
+        <vbox sclass="sidebar-menu" vflex="1" spacing="6px" >
+          <toolbarbutton label="Dashboard" sclass="menu-item active" onClick="@command('go','dashboard')"/>
+          <toolbarbutton label="Accounts" sclass="menu-item" onClick="@command('go','accounts')"/>
+          <toolbarbutton label="Transactions" sclass="menu-item" onClick="@command('go','transactions')"/>
+          <toolbarbutton label="Cards" sclass="menu-item" onClick="@command('go','cards')"/>
+          <toolbarbutton label="Profile" sclass="menu-item" onClick="@command('go','profile')"/>
+        </vbox>
+
+        <div sclass="sidebar-footer">
+          <label value="Need help?"/>
+          <button label="Support" sclass="support-btn" onClick="@command('support')"/>
+        </div>
+      </vbox>
+    </west>
+
+    <!-- CENTER: Main content area -->
+    <center>
+      <borderlayout>
+
+        <!-- CENTER.NORTH: Summary bar -->
+        <north size="auto">
+          <h:div sclass="summary-bar">
+            <hlayout class="summary-row" spacing="18px">
+              <vbox sclass="summary-card">
+                <label value="Available Balance" sclass="summary-title"/>
+                <label value="${availableBalance}" sclass="summary-value"/>
+                <label value="Account: ${defaultAccount}" sclass="summary-sub"/>
+              </vbox>
+
+              <vbox sclass="summary-card">
+                <label value="Pending Transactions" sclass="summary-title"/>
+                <label value="${pendingCount}" sclass="summary-value"/>
+              </vbox>
+
+              <vbox sclass="summary-card">
+                <label value="Reward Points" sclass="summary-title"/>
+                <label value="${rewardPoints}" sclass="summary-value"/>
+              </vbox>
+
+              <hbox sclass="quick-actions" spacing="12px">
+                <button label="Transfer" sclass="action-btn" onClick="@command('go','transfer')"/>
+                <button label="Pay Bill" sclass="action-btn" onClick="@command('go','payBill')"/>
+              </hbox>
+            </hlayout>
+          </h:div>
+        </north>
+
+        <!-- CENTER.CENTER: Widgets + table -->
+        <center>
+          <vlayout spacing="20px" style="padding:18px">
+
+            <!-- Widgets Row (use hbox/hlayout) -->
+            <hlayout sclass="widgets-row"  spacing="18px">
+              <vbox sclass="widget widget-card">
+                <label value="Quick Transfer" sclass="widget-title"/>
+                <label value="Transfer to saved beneficiaries" sclass="widget-desc"/>
+                <button label="Transfer Now" sclass="widget-btn" onClick="@command('go','transfer')"/>
+              </vbox>
+
+              <vbox sclass="widget widget-card">
+                <label value="Cards Overview" sclass="widget-title"/>
+                <label value="${activeCards} Active" sclass="widget-desc"/>
+                <button label="Manage Cards" sclass="widget-btn" onClick="@command('go','cards')"/>
+              </vbox>
+
+              <vbox sclass="widget widget-chart">
+                <label value="Spending (30 days)" sclass="widget-title"/>
+                <image src="/resources/images/chart-placeholder.png" sclass="widget-chart-img"/>
+              </vbox>
+            </hlayout>
+
+            <!-- Recent Transactions (ZK grid with paging) -->
+            <vbox>
+              <label value="Recent Transactions" sclass="section-title"/>
+              <grid sclass="transactions-grid" mold="paging" pageSize="5">
+                <columns>
+                  <column label="Date" />
+                  <column label="Description" />
+                  <column label="Type" />
+                  <column label="Amount" />
+                  <column label="Status" />
+                </columns>
+                <rows>
+                  <!-- Example static rows; replace by model-binding in controller -->
+                  <row>
+                    <label value="2025-11-08"/>
+                    <label value="POS - Grocery Store"/>
+                    <label value="Debit"/>
+                    <label value="-₹ 3,250.00"/>
+                    <label value="Completed"/>
+                  </row>
+                </rows>
+              </grid>
+
+              <hbox style="justify-content:flex-end; margin-top:12px">
+                <button label="View All Transactions" sclass="view-all-btn" onClick="@command('go','transactions')"/>
+              </hbox>
+            </vbox>
+          </vlayout>
+        </center>
+
+      </borderlayout>
+    </center>
+
+  </borderlayout>
 </zk>
+
+

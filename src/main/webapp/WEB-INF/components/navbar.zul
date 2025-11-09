@@ -1,0 +1,25 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+
+<zk>
+	
+	
+	<!-- Navbar -->
+			<div sclass="navbar" >
+				<div sclass="navbar-left">
+					<image src="/resources/images/logo.png"
+						sclass="navbar-logo" />
+					<label value="FinTrust Bank" sclass="navbar-title" />
+				</div>
+				<div sclass="navbar-right" apply="com.fintrust.controller.NavbarController">
+						<label id = "homeId" sclass="nav-link active"  value = "Home" onClick='Executions.sendRedirect("/home.zul")'/>
+						<label id = "aboutId" sclass="nav-link"  value = "About"/>
+						<label id = "accountsId" sclass="nav-link"  value = "Open Account"/>
+						<label id = "transactionsId" sclass="nav-link" visible="false" value = "Transactions"/>
+						<label id = "cardsId" sclass="nav-link" visible="false" value = "Cards"/>
+						<!-- Label value will dynamically change Signup/Profile based on page  -->
+						<label id = "signupId" sclass="nav-link"  value = "Signup" onClick='Executions.sendRedirect("/user/userSignup.zul")'/>
+						<!-- Label value will dynamically change login/logout based on page  -->
+						<label id = "loginId" sclass="logout-btn"  value = "login" onClick='Executions.sendRedirect("/user/userLogin.zul")'/>
+				</div>
+			</div>
+</zk>

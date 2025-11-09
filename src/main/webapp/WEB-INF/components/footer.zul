@@ -1,0 +1,8 @@
+<?page title="footer" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<!-- Footer -->
+	<div sclass="footer">
+		<label value="© 2025 FinTrust Bank. All Rights Reserved." />
+	</div>
+
+</zk>
