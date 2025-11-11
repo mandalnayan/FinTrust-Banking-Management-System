@@ -23,7 +23,7 @@ public class UserLoginController extends SelectorComposer<Window>{
 		
 		if(userDAO.isAuthorize(userName, pasw)) {
 			// Set session for curren user
-			Sessions.getCurrent().setAttribute("user", userName);
+			Sessions.getCurrent().setAttribute("currentUser", userName);
 			
 			Executions.sendRedirect("/user/userDashboard.zul");		
 		} else {

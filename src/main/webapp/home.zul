@@ -106,7 +106,6 @@
                 <label value="Join thousands of customers who trust FinTrust for safe and seamless banking." sclass="about-text" />
             </vlayout>
         </div>
-			
 
 			<include src = "/WEB-INF/components/footer.zul"></include>
 			</scrollview>

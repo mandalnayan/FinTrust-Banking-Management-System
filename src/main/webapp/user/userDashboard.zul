@@ -6,6 +6,11 @@
  ============================================================ -->
 <?page title="Dashboard - FinTrust Bank" contentType="text/html;charset=UTF-8"?>
 <?link rel="stylesheet" type="text/css" href="/resources/css/dashboard.css"?>
+<!-- head footer csss -->
+<?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
+
+
+<?init class = "com.fintrust.controller.AuthenticationController" ?>
 
 <zk xmlns:h="xhtml">
   <!-- Use borderlayout for predictable ZK structure -->
@@ -17,7 +22,7 @@
     </north> 
 
     <!-- WEST: Sidebar navigation -->
-    <west size="240px" splittable="true"  viewModel="@id('vm') @init('com.fintrust.controller.UserDashboardController')">
+    <west closable="true" collapsible="true" size="240px"  splittable="true"  viewModel="@id('vm') @init('com.fintrust.controller.UserDashboardController')">
       <vbox sclass="sidebar" spacing="12px" >
         <h:div sclass="sidebar-brand">
           <image src="/resources/images/logo.png" sclass="sidebar-logo-img"/>
@@ -40,12 +45,13 @@
     </west>
 
     <!-- CENTER: Main content area -->
-    <center>
-      <borderlayout>
+   
+    <center >
+      <borderlayout >
 
         <!-- CENTER.NORTH: Summary bar -->
-        <north size="auto">
-          <h:div sclass="summary-bar">
+        <north sclass="card-sec">
+          <h:div >
             <hlayout class="summary-row" spacing="18px">
               <vbox sclass="summary-card">
                 <label value="Available Balance" sclass="summary-title"/>
@@ -72,11 +78,11 @@
         </north>
 
         <!-- CENTER.CENTER: Widgets + table -->
-        <center>
-          <vlayout spacing="20px" style="padding:18px">
+        <center sclass = "card-sec">
+          <vlayout vflex="1" style="padding: 0px; overflow: auto;">
 
             <!-- Widgets Row (use hbox/hlayout) -->
-            <hlayout sclass="widgets-row"  spacing="18px">
+            <hlayout sclass="widgets-row" style="padding: 0px">
               <vbox sclass="widget widget-card">
                 <label value="Quick Transfer" sclass="widget-title"/>
                 <label value="Transfer to saved beneficiaries" sclass="widget-desc"/>
@@ -121,6 +127,7 @@
               <hbox style="justify-content:flex-end; margin-top:12px">
                 <button label="View All Transactions" sclass="view-all-btn" onClick="@command('go','transactions')"/>
               </hbox>
+
             </vbox>
           </vlayout>
         </center>

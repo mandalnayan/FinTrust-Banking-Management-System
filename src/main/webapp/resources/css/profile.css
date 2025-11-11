@@ -2,7 +2,7 @@
 
 /* FinTrust - Profile Page Styles */
 
-.profile-window { font-family: 'Poppins', sans-serif; background:#f5f8fc; height:100vh; }
+.profile-window { font-family: 'Poppins', sans-serif; padding: 0px; background:#f5f8fc; height:100vh; }
 
 /* Topbar */
 .topbar {
@@ -10,6 +10,7 @@
   background: linear-gradient(90deg, #003366, #0052cc);
   padding:10px 24px; color:#fff;
 }
+
 .top-logo { width:36px; height:auto; }
 .top-title { font-size:18px; font-weight:700; color:#fff; }
 .top-right { display:flex; align-items:center; gap:12px; }

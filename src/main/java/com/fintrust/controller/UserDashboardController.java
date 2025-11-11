@@ -8,6 +8,7 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.select.SelectorComposer;
@@ -22,26 +23,15 @@ public class UserDashboardController extends SelectorComposer<Borderlayout>{
     private String defaultAccount = "Savings - 1234567890";
     private int pendingCount = 3;
     private int rewardPoints = 1200;
-    private int activeCards = 2;
-
-	
-	@Override
-	public ComponentInfo doBeforeCompose(Page page, Component parent, ComponentInfo compInfo) {
-		Object user = Sessions.getCurrent().getAttribute("user");
-		if (user == null) {
-			Executions.sendRedirect("/user/userLogin.zul");
-			return null;
-		}
-		return super.doBeforeCompose(page, parent, compInfo);
-	}
-	 
- 
+    private int activeCards = 2; 
 
     // commands wired from ZUL
    @Listen("onClick=#logout")
     public void logout() {
-        Sessions.getCurrent().setAttribute("user", null);
-        org.zkoss.zk.ui.Executions.sendRedirect("/user/userLogin.zul");
+	   Session session = Sessions.getCurrent();
+	   session.removeAttribute("currentUser");
+	   session.invalidate();
+        org.zkoss.zk.ui.Executions.sendRedirect("/user/login.zul");
     }
 
     @Command

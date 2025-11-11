@@ -16,7 +16,7 @@ public class NavbarController extends SelectorComposer<Div>{
 	
 	@Listen("onClick=#loginId")
 	public void login() {
-		Executions.sendRedirect("/user/userLogin.zul");
+		Executions.sendRedirect("/user/login.zul");
 		}
 	
 	@Listen("onClick=#aboutId")
