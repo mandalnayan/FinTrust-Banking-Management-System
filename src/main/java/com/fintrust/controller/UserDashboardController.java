@@ -13,8 +13,11 @@ import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
+import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Borderlayout;
+import org.zkoss.zul.Include;
+import org.zkoss.zul.Toolbarbutton;
 
 public class UserDashboardController extends SelectorComposer<Borderlayout>{
 
@@ -24,6 +27,12 @@ public class UserDashboardController extends SelectorComposer<Borderlayout>{
     private int pendingCount = 3;
     private int rewardPoints = 1200;
     private int activeCards = 2; 
+    
+    @Wire Include userdashboard_sec, profile_sec; 
+    
+    @Wire Toolbarbutton userdashboard, profile;
+    
+    
 
     // commands wired from ZUL
    @Listen("onClick=#logout")
@@ -33,14 +42,32 @@ public class UserDashboardController extends SelectorComposer<Borderlayout>{
 	   session.invalidate();
         org.zkoss.zk.ui.Executions.sendRedirect("/user/login.zul");
     }
-
+   
+   @Listen("onClick=#userdashboard")
+   public void dashboard() {
+	   profile_sec.setVisible(false);
+	   userdashboard_sec.setVisible(true);
+	   profile.removeSclass("active");
+	   userdashboard.addSclass("active");
+   }
+   
+   @Listen("onClick=#profile")
+   public void profile() {
+	   profile_sec.setVisible(true);
+	   profile.addSclass("active");
+	   userdashboard.removeSclass("active");
+	   userdashboard_sec.setVisible(false);
+   }
+   
+   /*
     @Command
     public void go(String page) {
         // navigate based on menu clicks
-    	alert("HIi");
         switch (page) {
             case "dashboard":
-                org.zkoss.zk.ui.Executions.sendRedirect("/user/userDashboard.zul");
+               // org.zkoss.zk.ui.Executions.sendRedirect("/user/userDashboard.zul");
+                profile.setVisible(false);
+                userdashboard.setVisible(true);
                 break;
             case "accounts":
                 org.zkoss.zk.ui.Executions.sendRedirect("/user/userAccounts.zul");
@@ -52,7 +79,9 @@ public class UserDashboardController extends SelectorComposer<Borderlayout>{
                 org.zkoss.zk.ui.Executions.sendRedirect("/user/userCards.zul");
                 break;
             case "profile":
-                org.zkoss.zk.ui.Executions.sendRedirect("/user/userProfile.zul");
+               // org.zkoss.zk.ui.Executions.sendRedirect("/user/userProfile.zul");
+                profile.setVisible(true);
+                userdashboard.setVisible(false);
                 break;
             case "transfer":
                 org.zkoss.zk.ui.Executions.sendRedirect("/user/transfer.zul");
@@ -69,7 +98,7 @@ public class UserDashboardController extends SelectorComposer<Borderlayout>{
     public void support() {
         org.zkoss.zk.ui.Executions.sendRedirect("/contact.zul");
     }
-
+*/
     // getters for data binding if you bind via MVVM (optional)
     public String getAvailableBalance() { return availableBalance; }
     public String getDefaultAccount() { return defaultAccount; }

@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.util.Clients;
 
 import com.fintrust.db.DBConnection;
@@ -63,6 +64,7 @@ public class UserDAOImpl implements UserDAO {
     			pstmt.setString(2, password);
     			ResultSet rs = pstmt.executeQuery();
     			if (rs.next()) {
+    				Sessions.getCurrent().setAttribute("userName", rs.getString(1));
     				Clients.showNotification("Login Successfull! \n Welcome " + rs.getString(1), true);
     				return true;
     			}
