@@ -15,6 +15,7 @@
   box-shadow: 0 3px 8px rgba(0,0,0,0.08);
   box-sizing:border-box;
 }
+
 .top-left { display:flex; align-items:center; gap:12px; }
 .top-logo { width:40px; height:auto; }
 .top-title { font-weight:700; font-size:18px; color:#fff; }
@@ -62,6 +63,7 @@
 
 .zero-padding {
 	padding: 0px !important;
+	height : 100% !important;
 }
 
 /* Summary row - responsive grid */

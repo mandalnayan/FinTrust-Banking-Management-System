@@ -8,15 +8,33 @@ public class User {
     private String email;
     private String phone;
     private String gender;
-    private String password;
     private String country;
     private String state;
     private String dist;
     private String city;
     private String pincode;
     private Date dob;
+    private boolean twoFactor;
+  
+	private String password;
 
-    // Getters and Setters
+    
+      public User(int id, String name, String email, String phone, String gender, String country, String state,
+			String dist, String city, String pincode, Date dob) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.email = email;
+		this.phone = phone;
+		this.gender = gender;
+		this.country = country;
+		this.state = state;
+		this.dist = dist;
+		this.city = city;
+		this.pincode = pincode;
+		this.dob = dob;
+	}
+	// Getters and Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -52,4 +70,20 @@ public class User {
 
     public Date getDob() { return dob; }
     public void setDob(Date dob) { this.dob = dob; }
+    
+    public boolean isTwoFactor() {
+		return twoFactor;
+	}
+    
+	public void setTwoFactor(boolean twoFactor) {
+		this.twoFactor = twoFactor;
+	}
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", name=" + name + ", email=" + email + ", phone=" + phone + ", gender=" + gender
+				+ ", country=" + country + ", state=" + state + ", dist=" + dist + ", city=" + city + ", pincode="
+				+ pincode + ", dob=" + dob + ", twoFactor=" + twoFactor + "]";
+	}
+	
+	
 }

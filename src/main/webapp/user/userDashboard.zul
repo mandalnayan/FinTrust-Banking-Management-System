@@ -60,7 +60,7 @@
    
     <center sclass = "zero-padding">
     <!-- User dashboard content -->
-    <h:div>
+    <h:div >
      <include id = "userdashboard_sec" src="dashboard.zul" /> 
       <include id = "profile_sec" src = "userProfile.zul" visible="false"/>
       </h:div>

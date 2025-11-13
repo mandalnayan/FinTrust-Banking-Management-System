@@ -1,5 +1,7 @@
 package com.fintrust.service;
 
+import org.zkoss.zk.ui.Sessions;
+
 import com.fintrust.dao.UserDAO;
 import com.fintrust.dao.UserDAOImpl;
 import com.fintrust.model.User;
@@ -22,4 +24,21 @@ public class UserServiceImpl implements UserService {
         // Save user to DB
         return userDAO.saveUser(user);
     }
+    
+    public User getLoggedInUser() {
+    	String email = (String)Sessions.getCurrent().getAttribute("currentUser");
+    	System.out.println("Lognied User: " + email);
+    	return userDAO.getUserByEmail(email);
+    }
+    
+    public boolean updateUser(User user) {
+    	return false;
+    }
+
+	@Override
+	public void update2FA(User user) {
+		// TODO Auto-generated method stub
+		
+	}
+    
 }

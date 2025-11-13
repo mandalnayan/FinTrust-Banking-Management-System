@@ -1,6 +1,7 @@
 package com.fintrust.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,11 +16,14 @@ import com.fintrust.model.User;
 
 public class UserDAOImpl implements UserDAO {
 
+	/**
+	 * User: Take user data from signup form Save user data in db
+	 */
 	@Override
 	public boolean saveUser(User user) {
 		// Execute this command first time while table creation
-	   //	createUserTable();
-		
+		// createUserTable();
+
 		String sql = "INSERT INTO users(name, email, phone, gender, country, state, dist, city, pincode, dob, password) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 		try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -42,11 +46,14 @@ public class UserDAOImpl implements UserDAO {
 		return false;
 	}
 
+	/**
+	 * Checking email is exit or not Use: While signup we make sure same email can't
+	 * registered twich
+	 */
 	@Override
 	public boolean isEmailExists(String email) {
 		String sql = "SELECT email FROM users WHERE email=?";
-		try (Connection conn = DBConnection.getConnection();
-				PreparedStatement ps = conn.prepareStatement(sql)) {
+		try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
 			ps.setString(1, email);
 			ResultSet rs = ps.executeQuery();
@@ -57,24 +64,48 @@ public class UserDAOImpl implements UserDAO {
 		return false;
 	}
 
-   public boolean isAuthorize(String userName, String password) {
-    		try(Connection con = DBConnection.getConnection()) {
-    			PreparedStatement pstmt = con.prepareStatement("Select name from users where email = ? and password = ?");
-    			pstmt.setString(1, userName);
-    			pstmt.setString(2, password);
-    			ResultSet rs = pstmt.executeQuery();
-    			if (rs.next()) {
-    				Sessions.getCurrent().setAttribute("userName", rs.getString(1));
-    				Clients.showNotification("Login Successfull! \n Welcome " + rs.getString(1), true);
-    				return true;
-    			}
-    		} catch(SQLException e) {
-    			Clients.showNotification(e.getMessage());
-    		}
-    		return false;
-    }
+	public boolean isAuthorize(String userName, String password) {
+		try (Connection con = DBConnection.getConnection()) {
+			PreparedStatement pstmt = con.prepareStatement("Select name from users where email = ? and password = ?");
+			pstmt.setString(1, userName);
+			pstmt.setString(2, password);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				Sessions.getCurrent().setAttribute("userName", rs.getString(1));
+				Clients.showNotification("Login Successfull! \n Welcome " + rs.getString(1), true);
+				return true;
+			}
+		} catch (SQLException e) {
+			Clients.showNotification(e.getMessage());
+		}
+		return false;
+	}
 
-	
+	public User getUserByEmail(String email) {
+		String sql = "SELECT * FROM users WHERE email=?";
+		try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+			ps.setString(1, email);
+			ResultSet rs = ps.executeQuery();
+			User user = null;
+			if (rs.next()) {
+				user = new User(rs.getInt("id"), rs.getString("name"), rs.getString("email"), rs.getString("phone"),
+						rs.getString("gender"), rs.getString("country"), rs.getString("state"), rs.getString("dist"),
+						rs.getString("city"), rs.getString("pincode"), rs.getDate("dob"));
+			}
+
+			return user;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * Creating table
+	 * 
+	 * @return
+	 */
 	private boolean createUserTable() {
 		String query = "CREATE TABLE users (" + "id INT AUTO_INCREMENT PRIMARY KEY," + "name VARCHAR(100),"
 				+ "email VARCHAR(100) UNIQUE," + "phone VARCHAR(15)," + "gender VARCHAR(10)," + "country VARCHAR(50),"

@@ -23,7 +23,7 @@
 .menu-item.active, .menu-item:hover { color:#fff; font-weight:600; }
 
 /* Profile Container */
-.profile-container { padding:30px 40px; background:#f5f8fc; height:calc(100vh - 70px); overflow:auto; }
+.profile-container { padding:10px 40px; background:#f5f8fc; height:calc(100vh - 70px); overflow:auto; }
 
 /* Profile Header */
 .profile-header { background:#fff; padding:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.08); }
