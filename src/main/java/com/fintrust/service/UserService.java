@@ -23,6 +23,10 @@ public interface UserService {
      */
     boolean updateUser(User user);
 
+    /**
+     * Update 2FA
+     * @param user
+     */
 	void update2FA(User user);
     
 }

@@ -50,7 +50,7 @@
         </vbox> -->
 
         <div sclass="sidebar-footer">
-          <label value="Need help?"/>
+          <label value="Need help?"/> <separator/>
           <button label="Support" sclass="support-btn" onClick="@command('support')"/>
         </div>
       </vbox>

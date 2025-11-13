@@ -3,6 +3,7 @@ package com.fintrust.viewModel;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.annotation.Command;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Messagebox;
@@ -18,11 +19,12 @@ public class UserProfileVM {
     private UserService userService;
 
     @Init
+    @NotifyChange("user")
     public void init() {
-        // Load user data (e.g., from database or session)
-    	userService = new UserServiceImpl();
+        userService = new UserServiceImpl();
         user = userService.getLoggedInUser();
-        Messagebox.show("Hii: " + user);
+        Sessions.getCurrent().setAttribute("user", user);
+       
     }
 
     @Command
@@ -34,9 +36,13 @@ public class UserProfileVM {
     @Command
     @NotifyChange("user")
     public void updateProfile() {
-    	userService.updateUser(user);
+    	if(userService.updateUser(user)) {
         editMode = false;
         Clients.showNotification("Profile updated successfully!", "info", null, "top_center", 3000);
+    	} else {
+//    		user = (User) Sessions.getCurrent().getAttribute("user");
+    		 Clients.showNotification("Failed to updated. Please try again", "error", null, "top_center", 3000);
+    	}
     }
 
     @Command

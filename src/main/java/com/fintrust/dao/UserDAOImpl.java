@@ -10,6 +10,7 @@ import java.sql.Statement;
 
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Messagebox;
 
 import com.fintrust.db.DBConnection;
 import com.fintrust.model.User;
@@ -91,7 +92,7 @@ public class UserDAOImpl implements UserDAO {
 			if (rs.next()) {
 				user = new User(rs.getInt("id"), rs.getString("name"), rs.getString("email"), rs.getString("phone"),
 						rs.getString("gender"), rs.getString("country"), rs.getString("state"), rs.getString("dist"),
-						rs.getString("city"), rs.getString("pincode"), rs.getDate("dob"));
+						rs.getString("city"), rs.getString("pincode"), rs.getString("image"), rs.getDate("registered_date"), rs.getDate("dob"));
 			}
 
 			return user;
@@ -100,6 +101,31 @@ public class UserDAOImpl implements UserDAO {
 			return null;
 		}
 	}
+	
+	@Override
+    public boolean updateUser(User user) {
+        String sql = "UPDATE users SET name=?, phone=?, gender=?, country=?, state=?, city=?, pincode=?, dob=? WHERE email=?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getPhone());
+            ps.setString(3, user.getGender());
+            ps.setString(4, user.getCountry());
+            ps.setString(5, user.getState());
+            ps.setString(6, user.getCity());
+            ps.setString(7, user.getPincode());
+            ps.setDate(8, user.getDob());
+            ps.setString(9, user.getEmail());
+
+            int rows = ps.executeUpdate();
+            return rows > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 	/**
 	 * Creating table

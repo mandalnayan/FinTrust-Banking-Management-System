@@ -1,5 +1,6 @@
 package com.fintrust.controller;
 
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zul.Borderlayout;
 import org.zkoss.zul.Messagebox;
@@ -21,7 +22,7 @@ public class UserProfileController extends SelectorComposer<Borderlayout> {
 		// Load user data (e.g., from database or session)
 		userService = new UserServiceImpl();
 		user = userService.getLoggedInUser();
-		comp.setAttribute("user", user);
+		Executions.getCurrent().setAttribute("user", user);
 		Messagebox.show("Hii: " + user);
 	}
 }

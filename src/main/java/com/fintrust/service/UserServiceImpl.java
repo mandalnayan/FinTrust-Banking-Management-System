@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService {
             return false;
         }
 
-        // Encrypt password (optional, you can add later)
+        // Encrypt password (optional, we will add later)
         // user.setPassword(PasswordUtil.encrypt(user.getPassword()));
 
         // Save user to DB
@@ -26,13 +26,13 @@ public class UserServiceImpl implements UserService {
     }
     
     public User getLoggedInUser() {
-    	String email = (String)Sessions.getCurrent().getAttribute("currentUser");
-    	System.out.println("Lognied User: " + email);
-    	return userDAO.getUserByEmail(email);
+    		String email = (String)Sessions.getCurrent().getAttribute("currentUser");
+    		return userDAO.getUserByEmail(email);
     }
     
     public boolean updateUser(User user) {
-    	return false;
+    		
+    	    return userDAO.updateUser(user);
     }
 
 	@Override

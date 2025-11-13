@@ -14,13 +14,16 @@ public class User {
     private String city;
     private String pincode;
     private Date dob;
-    private boolean twoFactor;
+    private Date registeredDate;
+    private String image;
+	private boolean twoFactor;
   
 	private String password;
 
+	public User() {}
     
       public User(int id, String name, String email, String phone, String gender, String country, String state,
-			String dist, String city, String pincode, Date dob) {
+			String dist, String city, String pincode, String image, Date registeredDate, Date dob) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -32,8 +35,19 @@ public class User {
 		this.dist = dist;
 		this.city = city;
 		this.pincode = pincode;
+		this.image = image;
+		this.registeredDate = registeredDate;
 		this.dob = dob;
 	}
+      
+	public String getImage() {
+		return image;
+	}
+
+	  public void setImage(String image) {
+		  this.image = image;
+	  }
+
 	// Getters and Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
@@ -73,6 +87,14 @@ public class User {
     
     public boolean isTwoFactor() {
 		return twoFactor;
+	}
+    
+    public Date getRegisteredDate() {
+		return registeredDate;
+	}
+
+	public void setRegisteredDate(Date registeredDate) {
+		this.registeredDate = registeredDate;
 	}
     
 	public void setTwoFactor(boolean twoFactor) {
