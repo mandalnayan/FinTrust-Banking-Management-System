@@ -28,7 +28,7 @@ public class UserDashboardController extends SelectorComposer<Borderlayout>{
     private int rewardPoints = 1200;
     private int activeCards = 2; 
     
-    @Wire Include userdashboard_sec, profile_sec; 
+    @Wire Include userdashboard_sec, profile_sec, changePassword_sec; 
     
     @Wire Toolbarbutton userdashboard, profile;
     

@@ -1,0 +1,24 @@
+<?page title="Verify Otp" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+
+<window title="Email OTP Login"
+        apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('com.fintrust.viewModel.OtpViewModel')"
+        border="normal"
+        width="300px" style = "margin: 0px auto;">
+    <vlayout spacing="10px" style="margin:10px auto">
+
+        <label value="Enter your email:"/>
+        <textbox value="@bind(vm.email)" placeholder="your@example.com"/>
+        <button label="Send OTP" onClick="@command('sendOtp')"/>
+
+        <label value="Enter OTP:"/>
+        <textbox value="@bind(vm.otpCode)" placeholder="123456"/>
+        <button label="Verify OTP" onClick="@command('verifyOtp')"/>
+
+        <label value="@bind(vm.statusMessage)" sclass="@load(vm.success ? 'success-msg' : 'error-msg')"/>
+    </vlayout>
+</window>
+
+</zk>

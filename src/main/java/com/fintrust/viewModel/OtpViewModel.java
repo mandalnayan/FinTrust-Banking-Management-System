@@ -15,6 +15,8 @@ public class OtpViewModel {
     private final OtpService otpService;
     private final String adminEmail = "nayanm417@gmail.com";
     private final String password = "zxrhrgrielkhqxml";
+    
+    private boolean success; // css file
 
     public OtpViewModel() {
         // Initialize manually (since no Spring)
@@ -25,9 +27,11 @@ public class OtpViewModel {
 
         otpService = new OtpService(mailSender, repo);
     }
-
+    
+    public boolean isSuccess() { return success; }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+   
 
     public String getOtpCode() { return otpCode; }
     public void setOtpCode(String otpCode) { this.otpCode = otpCode; }
@@ -36,7 +40,7 @@ public class OtpViewModel {
     public void setStatusMessage(String statusMessage) { this.statusMessage = statusMessage; }
 
     @Command
-    @NotifyChange("statusMessage")
+    @NotifyChange({"statusMessage", "success"})
     public void sendOtp() {
         try {
             if (email == null || email.isBlank()) {
@@ -44,6 +48,7 @@ public class OtpViewModel {
                 return;
             }
             otpService.generateAndSendOtp(email);
+            success = true;
             statusMessage = "OTP sent to " + email;
         } catch (Exception e) {
             statusMessage = "Failed to send OTP: " + e.getMessage();
@@ -51,12 +56,14 @@ public class OtpViewModel {
     }
 
     @Command
-    @NotifyChange("statusMessage")
+    @NotifyChange({"statusMessage", "success"})
     public void verifyOtp() {
         if (otpService.verifyOtp(email, otpCode)) {
+        		success = true;
             statusMessage = "Verification successful!";
-            Executions.sendRedirect("/user/userDashboard.zul"); // redirect after success
+            Executions.sendRedirect("/WEB-INF/components/changePassword.zul"); // redirect after success
         } else {
+        		success = false;
             statusMessage = "Invalid or expired OTP";
         }
     }

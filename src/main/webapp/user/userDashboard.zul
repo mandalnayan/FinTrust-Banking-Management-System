@@ -11,6 +11,9 @@
 <?link rel="stylesheet" type="text/css" href="/resources/css/profile.css"?>
 <!-- head footer csss -->
 <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
+<!-- Global css -->
+<?link rel="stylesheet" type="text/css" href="/resources/css/global.css"?>
+
 
 <?init class = "com.fintrust.controller.AuthenticationController" ?>
 
@@ -31,6 +34,7 @@
           <label value="FinTrust" sclass="sidebar-title"/>
         </h:div>
 
+<!-- MVC  -->
         <vbox sclass="sidebar-menu" vflex="1" spacing="6px" >
           <toolbarbutton label="Dashboard" sclass="menu-item active" id = "userdashboard"/>
           <toolbarbutton label="Accounts" sclass="menu-item" id = "accounts"/>
@@ -61,8 +65,10 @@
     <center sclass = "zero-padding">
     <!-- User dashboard content -->
     <h:div >
-     <include id = "userdashboard_sec" src="dashboard.zul" /> 
+     <include id = "userdashboard_sec" src="dashboard.zul" visible="false"/> 
       <include id = "profile_sec" src = "userProfile.zul" visible="false"/>
+      <include id = "otp_sec" src = "/WEB-INF/components/otpPage.zul" visible="false" />
+          <include id = "changePassword_sec" src = "/WEB-INF/components/otpPage.zul"  />
       </h:div>
     </center>
 
