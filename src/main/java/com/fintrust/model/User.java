@@ -3,7 +3,7 @@ package com.fintrust.model;
 import java.sql.Date;
 
 public class User {
-    private int id;
+    private long id;
     private String name;
     private String email;
     private String phone;
@@ -22,7 +22,7 @@ public class User {
 
 	public User() {}
     
-      public User(int id, String name, String email, String phone, String gender, String country, String state,
+      public User(long id, String name, String email, String phone, String gender, String country, String state,
 			String dist, String city, String pincode, String image, Date registeredDate, Date dob) {
 		super();
 		this.id = id;
@@ -49,8 +49,8 @@ public class User {
 	  }
 
 	// Getters and Setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public long getId() { return id; }
+    public void setId(long id) { this.id = id; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
