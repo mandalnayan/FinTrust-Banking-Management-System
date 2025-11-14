@@ -48,8 +48,8 @@ public class BlockUnblockVerification  extends SelectorComposer<Window>{
 		//Executions.sendRedirect("/Card/block_unblock_verification.zul");
 		 String doStatus;
 	
-	    String s=(String) Sessions.getCurrent().getAttribute("blockOrUnblock");
-	    if(s.equalsIgnoreCase("block card"))
+	    String currentStatus=(String) Sessions.getCurrent().getAttribute("blockOrUnblock");
+	    if(currentStatus.equalsIgnoreCase("block card"))
 	    {
 	        doStatus="Blocked";  
 	    }else {
@@ -58,8 +58,8 @@ public class BlockUnblockVerification  extends SelectorComposer<Window>{
 	   
 	    String atmCardNumber=(String)Sessions.getCurrent().getAttribute("atmNumber");
 		
-		 long atmNumber = (Long) Long.parseLong(atmCardNumber);
-	     String sql = "UPDATE issuedatmcard_dummy SET card_status = ? WHERE atm_card_number = ?";
+		// long atmNumber = (Long) Long.parseLong(atmCardNumber);
+	     String sql = "UPDATE card SET card_status = ? WHERE card_number = ?";
 
 		//String atmCardNumber=(String)Sessions.getCurrent().getAttribute("atmNumber");
 		Connection connection=DBConnection.getConnection();
@@ -67,7 +67,7 @@ public class BlockUnblockVerification  extends SelectorComposer<Window>{
 		try(  PreparedStatement pstm=connection.prepareStatement(sql))
 		{
 			pstm.setString(1, doStatus);
-			pstm.setLong(2, atmNumber );
+			pstm.setString(2, atmCardNumber );
 			int  n = pstm.executeUpdate();
 			//Executions.sendRedirect("");
 			
@@ -128,7 +128,7 @@ public class BlockUnblockVerification  extends SelectorComposer<Window>{
 	   if(btnValue.equalsIgnoreCase("Confirm"))
 	   {
 		   
-		  statusChange(); 
+		 statusChange(); 
 		 Messagebox.show("Your card is "+btnValue);
 		 Executions.sendRedirect("/Card/manageCard.zul");
 	   }

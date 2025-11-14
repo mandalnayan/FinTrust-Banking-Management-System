@@ -103,6 +103,7 @@
   flex-direction:column;
   justify-content:space-between;
 }
+
 .widget-title { font-weight:700; color:#01284f; margin-bottom:8px; }
 .widget-desc { color:#6b7a8b; margin-bottom:12px; }
 .widget-btn { background: linear-gradient(90deg,#0066d6,#0052cc); color:#fff; border:none; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer; align-self:start; }
@@ -120,6 +121,7 @@
 @media (max-width: 1100px) {
   .top-title { display:none; } /* compact header */
 }
+
 @media (max-width: 800px) {
   /* stack sidebar horizontally */
   .z-west, .z-east { width:100% !important; }
