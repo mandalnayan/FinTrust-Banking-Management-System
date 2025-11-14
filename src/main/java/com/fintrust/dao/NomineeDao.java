@@ -55,7 +55,7 @@ public class NomineeDao {
 		String q = "select * from nominee where nominee_id = ?";
 		try(PreparedStatement statement = DBConnection.getConnection().prepareStatement(q)){
 			
-			statement.setLong(1, nominee.getNominee_id());
+			statement.setLong(1, nominee_id);
 			ResultSet rs = statement.executeQuery();
 			if(rs.next()) {
 				System.out.println("Account created successfully");

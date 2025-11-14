@@ -1,0 +1,54 @@
+    <window id="popupWin" title="Block / Unblock Card Confirmation"
+            apply="com.fintrust.cards.controller.BlockUnblockVerification"
+            width="400px" 
+            mode="overlapped" visible="true" 
+            position="center"
+            style="border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,0.3);
+                   padding:20px;background:white;">
+
+        <vlayout spacing="15px" style="padding:10px">
+
+            <label id="lblPopupTitle" value=""
+                   style="font-weight:bold;color:#333;text-align:center;"/>
+
+            <separator height="10px"/>
+
+            <hlayout spacing="10px" style="align-items:center;">
+                <label value="Enter Password:" width="120px"/>
+                <textbox type="password" id="txtPassword" width="200px"/>
+                <label id="isVerifyLbl"></label>
+            </hlayout>
+
+            <button id="btnVerifyPassword" label="Verify Password" width="150px"
+                    style="background:#28a745;color:white;border:none;border-radius:5px;
+                           padding:5px 10px;"/>
+
+            <hlayout spacing="10px" style="align-items:center;">
+                <label value="Email:" width="120px"/>
+                <label id="lblEmail" value="vi***@gmail.com" style="font-weight:bold;"/>
+            </hlayout>
+
+            <button id="btnSendOTP" label="Send OTP to Email" width="150px"
+                    style="background:#007bff;color:white;border:none;border-radius:5px;
+                           padding:5px 10px;" disabled="true"/>
+
+            <hlayout spacing="10px" style="align-items:center;">
+                <label value="Enter OTP:" width="120px"/>
+                <textbox id="txtOTP" width="200px"/>
+            </hlayout>
+
+            <button id="btnVerifyOTP" label="Verify OTP" width="150px"
+                    style="background:#17a2b8;color:white;border:none;border-radius:5px;
+                           padding:5px 10px;"/>
+
+            <separator height="15px"/>
+           
+            <hlayout spacing="10px" style="justify-content:center;">
+                <button id="btnConfirm" label="Confirm" width="100px"
+                        style="background:#0069d9;color:white;border:none;border-radius:5px;"/>
+                <button id="btnCancel" label="Cancel" width="100px"
+                        onClick='popupWin.detach()'
+                        style="background:#6c757d;color:white;border:none;border-radius:5px;"/>
+            </hlayout>
+        </vlayout>
+    </window>

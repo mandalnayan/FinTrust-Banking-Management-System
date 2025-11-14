@@ -92,7 +92,8 @@ public class UserDAOImpl implements UserDAO {
 			if (rs.next()) {
 				user = new User(rs.getInt("id"), rs.getString("name"), rs.getString("email"), rs.getString("phone"),
 						rs.getString("gender"), rs.getString("country"), rs.getString("state"), rs.getString("dist"),
-						rs.getString("city"), rs.getString("pincode"), rs.getString("image"), rs.getDate("registered_date"), rs.getDate("dob"));
+						rs.getString("city"), rs.getString("pincode"), rs.getString("image"),
+						rs.getDate("registered_date"), rs.getDate("dob"));
 			}
 
 			return user;
@@ -101,31 +102,30 @@ public class UserDAOImpl implements UserDAO {
 			return null;
 		}
 	}
-	
+
 	@Override
-    public boolean updateUser(User user) {
-        String sql = "UPDATE users SET name=?, phone=?, gender=?, country=?, state=?, city=?, pincode=?, dob=? WHERE email=?";
-        try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+	public boolean updateUser(User user) {
+		String sql = "UPDATE users SET name=?, phone=?, gender=?, country=?, state=?, city=?, pincode=?, dob=? WHERE email=?";
+		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(1, user.getName());
-            ps.setString(2, user.getPhone());
-            ps.setString(3, user.getGender());
-            ps.setString(4, user.getCountry());
-            ps.setString(5, user.getState());
-            ps.setString(6, user.getCity());
-            ps.setString(7, user.getPincode());
-            ps.setDate(8, user.getDob());
-            ps.setString(9, user.getEmail());
+			ps.setString(1, user.getName());
+			ps.setString(2, user.getPhone());
+			ps.setString(3, user.getGender());
+			ps.setString(4, user.getCountry());
+			ps.setString(5, user.getState());
+			ps.setString(6, user.getCity());
+			ps.setString(7, user.getPincode());
+			ps.setDate(8, user.getDob());
+			ps.setString(9, user.getEmail());
 
-            int rows = ps.executeUpdate();
-            return rows > 0;
+			int rows = ps.executeUpdate();
+			return rows > 0;
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 	/**
 	 * Creating table
@@ -136,8 +136,33 @@ public class UserDAOImpl implements UserDAO {
 		String query = "CREATE TABLE users (" + "id INT AUTO_INCREMENT PRIMARY KEY," + "name VARCHAR(100),"
 				+ "email VARCHAR(100) UNIQUE," + "phone VARCHAR(15)," + "gender VARCHAR(10)," + "country VARCHAR(50),"
 				+ "state VARCHAR(50)," + "dist VARCHAR(50)," + "city VARCHAR(50)," + "pincode VARCHAR(10),"
-				+ "dob VARCHAR(20)," + "password VARCHAR(255)," + "image varchar(50)" + "twoFactor boolean" + "registered_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"
-				+ "status VARCHAR(20) DEFAULT 'Active'" + ");";
+				+ "dob VARCHAR(20)," + "password VARCHAR(255)," + "image varchar(50)" + "twoFactor boolean"
+				+ "registered_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP," + "status VARCHAR(20) DEFAULT 'Active'" + ");";
+
+		// Latest table code
+
+		String newQuery = """
+								CREATE TABLE `customer` (
+				  `customer_id` bigint unsigned NOT NULL,
+				  `name` varchar(100) DEFAULT NULL,
+				  `email` varchar(100) DEFAULT NULL,
+				  `phone` varchar(15) DEFAULT NULL,
+				  `gender` varchar(10) DEFAULT NULL,
+				  `country` varchar(50) DEFAULT NULL,
+				  `state` varchar(50) DEFAULT NULL,
+				  `dist` varchar(50) DEFAULT NULL,
+				  `city` varchar(50) DEFAULT NULL,
+				  `pincode` varchar(10) DEFAULT NULL,
+				  `dob` varchar(20) DEFAULT NULL,
+				  `password` varchar(255) DEFAULT NULL,
+				  `registered_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+				  `status` varchar(20) DEFAULT 'Active',
+				  `image` varchar(50) DEFAULT NULL,
+				  `twoFactor` tinyint(1) DEFAULT NULL,
+				  PRIMARY KEY (`customer_id`),
+				  UNIQUE KEY `email` (`email`)
+				)
+								""";
 
 		try (Connection con = DBConnection.getConnection();) {
 			Statement stmt = con.createStatement();
@@ -150,6 +175,5 @@ public class UserDAOImpl implements UserDAO {
 		}
 
 	}
-	
 
 }

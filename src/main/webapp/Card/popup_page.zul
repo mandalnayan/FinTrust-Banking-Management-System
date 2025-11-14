@@ -1,0 +1,30 @@
+<zk>
+    <window title="Main Page" border="normal" width="70%" >
+        <button label="Open Popup"
+                onClick='popupWin.doModal()'
+                style="margin:10px;background:#007bff;color:white;border:none;padding:6px 12px;border-radius:6px;"/>
+         
+        <!-- Hidden Popup Window -->
+        <window id="popupWin" title="Confirmation"
+                width="350px"
+                visible="false"
+                closable="true"
+                mode="modal"
+                border="normal"
+                style="border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,0.2);padding:15px;">
+            <vlayout spacing="10px">
+                <label value="Are you sure you want to block this card?"
+                       style="font-weight:bold;color:#333;"/>
+
+                <hlayout spacing="10px" style="justify-content:center;">
+                    <button label="Yes"
+                            onClick="@command('confirmBlock')"
+                            style="background:#dc3545;color:white;border:none;padding:6px 12px;border-radius:6px;"/>
+                    <button label="Cancel"
+                            onClick='popupWin.detach()'
+                            style="background:#6c757d;color:white;border:none;padding:6px 12px;border-radius:6px;"/>
+                </hlayout>
+            </vlayout>
+        </window>
+    </window>
+</zk>
