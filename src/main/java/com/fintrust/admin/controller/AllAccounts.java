@@ -5,11 +5,9 @@ import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.*;
 import org.zkoss.zul.*;
 
-import models.Account;
-import models.Account.AccountStatus;
-import models.Account.AccountType;
-import services.AccountServiceImp;
-import services.NomineeServiceImp;
+import com.fintrust.model.Account;
+import com.fintrust.service.AccountServiceImp;
+import com.fintrust.service.NomineeServiceImp;
 
 import java.util.*;
 import java.util.stream.Collectors;

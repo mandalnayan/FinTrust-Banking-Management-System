@@ -1,5 +1,6 @@
 package com.fintrust.service;
-import models.Nominee;
+
+import com.fintrust.model.Nominee;
 
 public interface NomineeService {
 	boolean saveNominee(Nominee nominee);

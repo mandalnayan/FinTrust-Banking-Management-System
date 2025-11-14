@@ -8,19 +8,16 @@ import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.*;
 
-import models.Account;
-import models.Account.AccountStatus;
-import models.Account.AccountType;
-import models.Account.ModeOfOperation;
-import models.Nominee;
-import services.AccountServiceImp;
-import services.NomineeServiceImp;
-import utils.DBConnection;
+import com.fintrust.model.Account;
+import com.fintrust.model.Account.AccountStatus;
+import com.fintrust.model.Account.AccountType;
+import com.fintrust.model.Account.ModeOfOperation;
+import com.fintrust.model.Nominee;
+import com.fintrust.service.AccountServiceImp;
+import com.fintrust.service.NomineeServiceImp;
 
 import java.time.LocalDateTime;
 
-
-import dao.AccountDaoImp;
 
 public class OpenAccountComposer extends SelectorComposer<Component> {
 
@@ -83,7 +80,7 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 //               // Executions.sendRedirect("/customer_dashboard.zul");
 //                return;
 //            }
-            customerId = (long)1001L;  // existing customer
+            customerId = 1L;  // existing customer
             
             if(acconntService.isAccountExists(customerId , accType)) {
             	return;
@@ -188,8 +185,4 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
         nomineeRelation.setValue("");
     }
     
-    public static void main(String[] args) {
-    	System.out.println(DBConnection.getMyConnection());
-		
-	}
 }

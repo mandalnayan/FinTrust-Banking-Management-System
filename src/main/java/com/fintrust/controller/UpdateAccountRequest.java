@@ -9,10 +9,11 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Messagebox;
-import dao.AccountUpdateRequestDao;
-import models.Account;
-import models.AccountUpdateRequest;
-import services.AccountServiceImp;
+
+import com.fintrust.dao.AccountUpdateRequestDao;
+import com.fintrust.model.Account;
+import com.fintrust.model.AccountUpdateRequest;
+import com.fintrust.service.AccountServiceImp;
 
 public class UpdateAccountRequest extends SelectorComposer<Component> {
 	private static final long serialVersionUID = 1L;

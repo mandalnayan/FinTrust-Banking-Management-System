@@ -5,8 +5,10 @@ import org.zkoss.zk.ui.select.annotation.*;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.*;
-import dao.AccountUpdateRequestDao;
-import models.AccountUpdateRequest;
+
+import com.fintrust.dao.AccountUpdateRequestDao;
+import com.fintrust.model.AccountUpdateRequest;
+
 import java.util.*;
 
 public class EmployeeApprovalController extends SelectorComposer<Component> {

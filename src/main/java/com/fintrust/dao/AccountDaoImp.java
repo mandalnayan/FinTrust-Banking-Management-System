@@ -12,19 +12,18 @@ import java.util.List;
 
 import org.zkoss.zul.Messagebox;
 
-import models.Account;
-import models.Nominee;
-import models.Account.AccountStatus;
-import models.Account.AccountType;
-import models.Account.ModeOfOperation;
-import utils.DBConnection;
+import com.fintrust.db.DBConnection;
+import com.fintrust.model.Account;
+import com.fintrust.model.Account.AccountStatus;
+import com.fintrust.model.Account.AccountType;
+import com.fintrust.model.Account.ModeOfOperation;
 
 public class AccountDaoImp implements AccountDao {
 	
 	@Override
 	public boolean isSameAccount(long customer_id, String accountType) {
 		String q = "select * from account where customer_id = ? and account_type = ?";
-		try(PreparedStatement statement = DBConnection.getMyConnection().prepareStatement(q)){
+		try(PreparedStatement statement = DBConnection.getConnection().prepareStatement(q)){
 			
 			statement.setLong(1, customer_id);
 			statement.setString(2,accountType);
@@ -51,7 +50,7 @@ public class AccountDaoImp implements AccountDao {
 				);
 				""";
 		try {
-			Statement statement = DBConnection.getMyConnection().createStatement();
+			Statement statement = DBConnection.getConnection().createStatement();
 			statement.executeUpdate(query);
 			System.out.println("customer table created");
 			return true;
@@ -61,12 +60,7 @@ public class AccountDaoImp implements AccountDao {
 		}
 		return false;
 	}
-	
-	
-	
-	
-	
-	
+		
 	private boolean createAccountSchema() {
 		String query = """
 					CREATE TABLE IF NOT EXISTS account (
@@ -81,14 +75,14 @@ public class AccountDaoImp implements AccountDao {
 				    FOREIGN KEY (nominee_id) REFERENCES nominee(nominee_id),
 
 				    customer_id BIGINT NOT NULL,
-				    FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
+				    FOREIGN KEY (customer_id) REFERENCES users(id),
 
 				    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 				);
 
 				""";
 		
-		try(Connection con = DBConnection.getMyConnection()){
+		try(Connection con = DBConnection.getConnection()){
 			if(con!=null) {
 				Statement statement = con.createStatement();
 				statement.executeUpdate(query);
@@ -106,7 +100,7 @@ public class AccountDaoImp implements AccountDao {
 	@Override
 	public boolean createAccount(Account account) {
 		String query = "insert into account values(?,?,?,?,?,?,?,?,?)";
-		try(Connection con = DBConnection.getMyConnection();){
+		try(Connection con = DBConnection.getConnection();){
 			if (con != null) {
 				PreparedStatement statement = con.prepareStatement(query);
 			statement.setLong(1, account.getAccount_no());
@@ -135,7 +129,7 @@ public class AccountDaoImp implements AccountDao {
 	@Override
 	public Account getAccountByNo(long accountNo) {
 		String query = "select * from account where account_no = ?";
-		try (PreparedStatement statement = DBConnection.getMyConnection().prepareStatement(query)){
+		try (PreparedStatement statement = DBConnection.getConnection().prepareStatement(query)){
 			statement.setLong(1, accountNo);
 
 			ResultSet rs = statement.executeQuery();
@@ -163,7 +157,7 @@ public class AccountDaoImp implements AccountDao {
 	public List<Account> getAllAccounts() {
 		List<Account> accounts = new ArrayList<>();
 		String query = "select * from account";
-		try(PreparedStatement statement = DBConnection.getMyConnection().prepareStatement(query)){
+		try(PreparedStatement statement = DBConnection.getConnection().prepareStatement(query)){
 
 			ResultSet rs = statement.executeQuery();
 			while(rs.next()) {
@@ -191,7 +185,7 @@ public class AccountDaoImp implements AccountDao {
 	public List<Account> getAllAccounts(long customerId) {
 		List<Account> accounts = new ArrayList<>();
 		String query = "select * from account where customer_id = ?";
-		try(PreparedStatement statement = DBConnection.getMyConnection().prepareStatement(query)){
+		try(PreparedStatement statement = DBConnection.getConnection().prepareStatement(query)){
 			statement.setLong(1, customerId);
 			
 			ResultSet rs = statement.executeQuery();
@@ -219,7 +213,7 @@ public class AccountDaoImp implements AccountDao {
 	@Override
 	public boolean updateAccount(Account account) {
 		String sql = "UPDATE account SET balance=?, account_type=?, branch_name=?, mode_of_operation =?,nominee_id=?, WHERE account_no=?";
-        try (PreparedStatement ps = DBConnection.getMyConnection().prepareStatement(sql)) {
+        try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {
             ps.setDouble(1, account.getBalance());
             ps.setString(2, account.getAccount_type().toString());
             ps.setString(3, account.getBranch_Name());
@@ -241,7 +235,7 @@ public class AccountDaoImp implements AccountDao {
 	public boolean updateBalance(long accountNo, double newBalance) {
 	    String query = "UPDATE account SET balance = ? WHERE account_no = ?";
 
-	    try (Connection conn = DBConnection.getMyConnection()) {
+	    try (Connection conn = DBConnection.getConnection()) {
 	        conn.setAutoCommit(false); //  Start transaction
 
 	        try (PreparedStatement statement = conn.prepareStatement(query)) {
@@ -271,7 +265,7 @@ public class AccountDaoImp implements AccountDao {
 	@Override
 	public boolean updateAccountStatus(long accountNo, String status) {
 		String query = "update account set account_status = ? where account_no = ?";
-		try (PreparedStatement statement = DBConnection.getMyConnection().prepareStatement(query)){
+		try (PreparedStatement statement = DBConnection.getConnection().prepareStatement(query)){
 			statement.setString(1, status);
 			statement.setLong(2, accountNo);
 			
@@ -289,7 +283,7 @@ public class AccountDaoImp implements AccountDao {
 	@Override
 	public boolean deleteAccount(long accountNo) {
 		String query = "delete from account where account_no = ?";
-		try (PreparedStatement statement = DBConnection.getMyConnection().prepareStatement(query)){
+		try (PreparedStatement statement = DBConnection.getConnection().prepareStatement(query)){
 			statement.setLong(1, accountNo);
 
 			if(statement.executeUpdate() > 0) {
@@ -307,7 +301,7 @@ public class AccountDaoImp implements AccountDao {
 	public long getHighestAccountNo() {
 	    String query = "SELECT account_no FROM account ORDER BY account_no DESC LIMIT 1";
 	    
-	    try (PreparedStatement statement = DBConnection.getMyConnection().prepareStatement(query);
+	    try (PreparedStatement statement = DBConnection.getConnection().prepareStatement(query);
 	         ResultSet resultSet = statement.executeQuery()) {
 	        
 	        if (resultSet.next()) {

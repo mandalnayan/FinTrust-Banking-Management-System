@@ -5,8 +5,9 @@ import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.*;
 import org.zkoss.zul.*;
 
-import models.Account;
-import services.AccountServiceImp;
+import com.fintrust.model.Account;
+import com.fintrust.service.AccountServiceImp;
+
 
 public class SingleAccountDetails extends SelectorComposer<Window> {
 	private final AccountServiceImp acconntService = new AccountServiceImp();

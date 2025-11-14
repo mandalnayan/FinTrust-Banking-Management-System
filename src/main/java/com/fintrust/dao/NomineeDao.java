@@ -7,8 +7,9 @@ import java.sql.Statement;
 
 import org.zkoss.zhtml.Messagebox;
 
-import models.Nominee;
-import utils.DBConnection;
+import com.fintrust.db.DBConnection;
+import com.fintrust.model.Nominee;
+
 
 public class NomineeDao {
 	public static boolean createNomineeSchema() {
@@ -18,7 +19,7 @@ public class NomineeDao {
 				+ "    nominee_relation VARCHAR(50) NOT NULL\r\n"
 				+ ");";
 		try {
-			Statement statement = DBConnection.getMyConnection().createStatement();
+			Statement statement = DBConnection.getConnection().createStatement();
 			statement.executeUpdate(q);
 			System.out.println("customer table created");
 			return true;
@@ -32,7 +33,7 @@ public class NomineeDao {
 	
 	public boolean createNominee(Nominee nominee) {
 		String q = "INSERT INTO nominee VALUES ( ?, ?, ?);";
-		try(PreparedStatement statement = DBConnection.getMyConnection().prepareStatement(q)){
+		try(PreparedStatement statement = DBConnection.getConnection().prepareStatement(q)){
 			
 			statement.setLong(1, nominee.getNominee_id());
 			statement.setString(2, nominee.getNominee_name());
@@ -52,7 +53,7 @@ public class NomineeDao {
 	public Nominee getNominee(long nominee_id) {
 		Nominee nominee = new Nominee();
 		String q = "select * from nominee where nominee_id = ?";
-		try(PreparedStatement statement = DBConnection.getMyConnection().prepareStatement(q)){
+		try(PreparedStatement statement = DBConnection.getConnection().prepareStatement(q)){
 			
 			statement.setLong(1, nominee.getNominee_id());
 			ResultSet rs = statement.executeQuery();

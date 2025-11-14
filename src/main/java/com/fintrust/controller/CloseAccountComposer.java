@@ -8,8 +8,8 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Textbox;
 
-import models.Account;
-import services.AccountServiceImp;
+import com.fintrust.service.AccountServiceImp;
+
 
 public class CloseAccountComposer extends SelectorComposer<Component>{
 	@Wire private Label accountNo;

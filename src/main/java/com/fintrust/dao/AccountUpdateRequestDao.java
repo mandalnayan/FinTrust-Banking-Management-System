@@ -5,8 +5,9 @@ import java.util.*;
 
 import org.zkoss.zul.Messagebox;
 
-import models.AccountUpdateRequest;
-import utils.DBConnection;
+import com.fintrust.db.DBConnection;
+import com.fintrust.model.AccountUpdateRequest;
+
 
 public class AccountUpdateRequestDao {
 	
@@ -29,7 +30,7 @@ public class AccountUpdateRequestDao {
 				""";
 		
 		try {
-			Statement statement = DBConnection.getMyConnection().createStatement();
+			Statement statement = DBConnection.getConnection().createStatement();
 			statement.executeUpdate(query);
 			System.out.println("updation table created");
 			return true;
@@ -45,7 +46,7 @@ public class AccountUpdateRequestDao {
 	                 "(account_no, new_account_type, new_branch_name, new_mode_of_operation, requested_by) " +
 	                 "VALUES (?, ?, ?, ?, ?)";
 
-	    try (Connection conn = DBConnection.getMyConnection();
+	    try (Connection conn = DBConnection.getConnection();
 	         PreparedStatement ps = conn.prepareStatement(sql)) {
 
 	        ps.setLong(1, req.getAccountNo());
@@ -69,7 +70,7 @@ public class AccountUpdateRequestDao {
 	    List<AccountUpdateRequest> list = new ArrayList<>();
 	    String sql = "SELECT * FROM account_update_request WHERE status = 'PENDING'";
 
-	    try (Connection conn = DBConnection.getMyConnection();
+	    try (Connection conn = DBConnection.getConnection();
 	         Statement stmt = conn.createStatement();
 	         ResultSet rs = stmt.executeQuery(sql)) {
 
@@ -98,7 +99,7 @@ public class AccountUpdateRequestDao {
 	    String updateAccSql = "UPDATE account SET account_type = ?, branch_name = ?, mode_of_operation = ? WHERE account_no = ?";
 	    String updateReqSql = "UPDATE account_update_request SET status = 'APPROVED', reviewed_by = ?, review_date = NOW() WHERE request_id = ?";
 
-	    try (Connection conn = DBConnection.getMyConnection()) {
+	    try (Connection conn = DBConnection.getConnection()) {
 	        conn.setAutoCommit(false); // start transaction
 
 	        // Step 1: Get request details
@@ -142,7 +143,7 @@ public class AccountUpdateRequestDao {
 	                        "Database Error", Messagebox.OK, Messagebox.ERROR);
 	        try {
 	            // attempt rollback
-	            Connection conn = DBConnection.getMyConnection();
+	            Connection conn = DBConnection.getConnection();
 	            conn.rollback();
 	        } catch (SQLException ex) {
 	            ex.printStackTrace();
@@ -154,7 +155,7 @@ public class AccountUpdateRequestDao {
 	    String sql = "UPDATE account_update_request SET status = 'REJECTED', reviewed_by = ?, review_date = NOW() " +
 	                 "WHERE request_id = ?";
 
-	    try (Connection conn = DBConnection.getMyConnection();
+	    try (Connection conn = DBConnection.getConnection();
 	         PreparedStatement ps = conn.prepareStatement(sql)) {
 
 	        ps.setLong(1, empId);

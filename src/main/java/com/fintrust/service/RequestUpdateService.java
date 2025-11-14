@@ -1,6 +1,6 @@
 package com.fintrust.service;
 
-import models.AccountUpdateRequest;
+import com.fintrust.model.AccountUpdateRequest;
 
 public class RequestUpdateService {
 	public boolean saveRequest(AccountUpdateRequest req) {

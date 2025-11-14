@@ -5,13 +5,10 @@ import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.*;
 import org.zkoss.zul.*;
 
+import com.fintrust.model.Account;
+import com.fintrust.service.AccountServiceImp;
+import com.fintrust.service.NomineeServiceImp;
 import com.lowagie.text.Anchor;
-
-import models.Account;
-import models.Account.AccountStatus;
-import models.Account.AccountType;
-import services.AccountServiceImp;
-import services.NomineeServiceImp;
 
 import java.util.*;
 

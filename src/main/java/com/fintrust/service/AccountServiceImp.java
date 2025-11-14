@@ -2,11 +2,10 @@ package com.fintrust.service;
 
 import java.util.List;
 
-import dao.AccountDao;
-import dao.AccountDaoImp;
-import models.Account;
-import models.Account.AccountStatus;
-import utils.DBConnection;
+import com.fintrust.dao.AccountDao;
+import com.fintrust.dao.AccountDaoImp;
+import com.fintrust.model.Account;
+import com.fintrust.model.Account.AccountStatus;
 
 public class AccountServiceImp implements AccountService {
 
@@ -101,8 +100,5 @@ public class AccountServiceImp implements AccountService {
 		long highest_accountNo = new AccountDaoImp().getHighestAccountNo();
 		return highest_accountNo+1;
     }
-    
-    public static void main(String[] args) {
-		System.out.println(DBConnection.getMyConnection());
-	}
+
 }
