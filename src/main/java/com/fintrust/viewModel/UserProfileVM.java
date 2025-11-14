@@ -23,6 +23,7 @@ public class UserProfileVM {
     public void init() {
         userService = new UserServiceImpl();
         user = userService.getLoggedInUser();
+        
         Sessions.getCurrent().setAttribute("user", user);
        
     }
@@ -66,5 +67,17 @@ public class UserProfileVM {
 
     public boolean isEditMode() {
         return editMode;
+    }
+    
+    /**
+     * Getting registered date in specific formate(YYY-MM-dd)
+     * @return
+     */
+    public String getRegisteredDateFormatted() {
+        if (user == null || user.getRegisteredDate() == null) {
+            return "";
+        }
+        return new java.text.SimpleDateFormat("yyyy-MM-dd")
+                .format(user.getRegisteredDate());
     }
 }

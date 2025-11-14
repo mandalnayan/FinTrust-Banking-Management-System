@@ -136,7 +136,7 @@ public class UserDAOImpl implements UserDAO {
 		String query = "CREATE TABLE users (" + "id INT AUTO_INCREMENT PRIMARY KEY," + "name VARCHAR(100),"
 				+ "email VARCHAR(100) UNIQUE," + "phone VARCHAR(15)," + "gender VARCHAR(10)," + "country VARCHAR(50),"
 				+ "state VARCHAR(50)," + "dist VARCHAR(50)," + "city VARCHAR(50)," + "pincode VARCHAR(10),"
-				+ "dob VARCHAR(20)," + "password VARCHAR(255)," + "registered_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"
+				+ "dob VARCHAR(20)," + "password VARCHAR(255)," + "image varchar(50)" + "twoFactor boolean" + "registered_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"
 				+ "status VARCHAR(20) DEFAULT 'Active'" + ");";
 
 		try (Connection con = DBConnection.getConnection();) {
@@ -150,4 +150,6 @@ public class UserDAOImpl implements UserDAO {
 		}
 
 	}
+	
+
 }
