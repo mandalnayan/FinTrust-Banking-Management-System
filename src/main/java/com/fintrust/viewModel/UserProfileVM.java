@@ -8,26 +8,26 @@ import org.zkoss.zk.ui.annotation.Command;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Messagebox;
 
+import com.fintrust.model.Customer;
 import com.fintrust.model.User;
 import com.fintrust.service.UserService;
 import com.fintrust.service.UserServiceImpl;
 
 public class UserProfileVM {
 
-    private User user;
+    private Customer customer;
     private boolean editMode = false;
     private UserService userService;
 
     @Init
-    @NotifyChange("user")
+    @NotifyChange("customer")
     public void init() {
         userService = new UserServiceImpl();
-        user = userService.getLoggedInUser();
+        customer = userService.getLoggedInUser();
         
-        Sessions.getCurrent().setAttribute("user", user);
-       
+        Sessions.getCurrent().setAttribute("customer", customer);
     }
-
+    
     @Command
     @NotifyChange("editMode")
     public void toggleEditMode() {
@@ -35,9 +35,9 @@ public class UserProfileVM {
     }
 
     @Command
-    @NotifyChange("user")
+    @NotifyChange("customer")
     public void updateProfile() {
-    	if(userService.updateUser(user)) {
+    	if(userService.updateUser(customer)) {
         editMode = false;
         Clients.showNotification("Profile updated successfully!", "info", null, "top_center", 3000);
     	} else {
@@ -49,20 +49,23 @@ public class UserProfileVM {
     @Command
     public void changePassword() {
         // Logic for password change dialog
-        Executions.createComponents("/views/change-password.zul", null, null);
+        Clients.showNotification("Invoked", "info", null, "top_center", 3000);
+
+        Executions.createComponents("/change-password.zul", null, null);
+        Executions.sendRedirect("/change-password.zul");
     }
 
     @Command
     @NotifyChange("user")
     public void toggle2FA() {
-        user.setTwoFactor(!user.isTwoFactor());
-        userService.update2FA(user);
+    	customer.setTwoFactor(!customer.getTwoFactor());
+        userService.update2FA(customer);
         Clients.showNotification("Two-Factor Authentication setting updated.", "info", null, "top_center", 3000);
     }
 
     // Getters and setters
-    public User getUser() {
-        return user;
+    public Customer getCustomer() {
+        return customer;
     }
 
     public boolean isEditMode() {
@@ -74,10 +77,10 @@ public class UserProfileVM {
      * @return
      */
     public String getRegisteredDateFormatted() {
-        if (user == null || user.getRegisteredDate() == null) {
+        if (customer == null || customer.getRegisteredDate() == null) {
             return "";
         }
         return new java.text.SimpleDateFormat("yyyy-MM-dd")
-                .format(user.getRegisteredDate());
+                .format(customer.getRegisteredDate());
     }
 }

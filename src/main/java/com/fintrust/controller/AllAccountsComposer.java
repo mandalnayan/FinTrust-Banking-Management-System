@@ -1,6 +1,7 @@
 package com.fintrust.controller;
 
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.*;
 import org.zkoss.zul.*;
@@ -23,8 +24,7 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
         super.doAfterCompose(comp);
       
 
-        Long customerId = (Long) Executions.getCurrent().getSession().getAttribute("customer_id");
-        customerId=1001L;
+        Long customerId = (Long)Sessions.getCurrent().getAttribute("customer_id");
         
 //        if (customerId == null) {
 //            Messagebox.show("Session expired. Please log in again.", "Error", Messagebox.OK, Messagebox.ERROR);
@@ -84,7 +84,7 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
     	// Store selected account number in session
         Executions.getCurrent().getSession().setAttribute("selected_account_no", acc.getAccount_no());
         // Redirect to details page
-        Executions.sendRedirect("view_spc_account.zul");
+        Executions.sendRedirect("/user/account/view_spc_account.zul");
     }
 
     /** Edit account **/

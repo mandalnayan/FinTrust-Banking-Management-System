@@ -47,6 +47,6 @@ public class SingleAccountDetails extends SelectorComposer<Window> {
 
     @Listen("onClick = #backBtn")
     public void onBackClick() {
-        Executions.sendRedirect("view_all_account.zul");
+        Executions.sendRedirect("/user/userDashboard.zul");
     }
 }

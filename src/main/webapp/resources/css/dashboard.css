@@ -108,9 +108,31 @@
 .widget-desc { color:#6b7a8b; margin-bottom:12px; }
 .widget-btn { background: linear-gradient(90deg,#0066d6,#0052cc); color:#fff; border:none; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer; align-self:start; }
 
+
 /* Top card-section for  */
 .card-sec{
 	width: 100% !important;
+	overflow: auto !important;
+}
+
+.card-sec-padding{
+	 padding-bottom: 60px !important;
+}
+
+.vlayout_sec{
+	overflow: auto !important;
+}
+
+/* Space under transaction section */
+.transactions-grid {
+    margin-bottom: 20px !important;
+}
+
+/* Fix bottom button visibility */
+.view-all-btn {
+    margin-bottom: 20px !important;
+    position: relative;
+    z-index: 10;
 }
 
 /* transactions */

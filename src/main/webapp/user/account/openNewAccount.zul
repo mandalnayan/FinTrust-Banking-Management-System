@@ -108,7 +108,7 @@
         <rows>
         	<row>
                 <label value="Account Type:"/>
-                <combobox id="accountType" width="200px">
+                <combobox id="accountType" width="200px" readonly="true">
                 	<comboitem label="Saving"/>
                  	<comboitem label="Current"/>
                     <comboitem label="Salary"/>
@@ -116,7 +116,7 @@
             </row>
             <row>
                  <label value="Branch:"/>
-                 <combobox id="branch" width="200px">
+                 <combobox id="branch" width="200px" readonly="true">
                  	<comboitem label="Mathura"/>
                     <comboitem label="Aligarch"/>
                     <comboitem label="New Delhi"/>
@@ -128,7 +128,7 @@
             </row>
             <row>
                 <label value="Mode of Operation:"/>
-                <combobox id="modeOfOperation" width="200px">
+                <combobox id="modeOfOperation" width="200px" readonly="true">
                        <comboitem label="Self"/>
                        <comboitem label="Joint"/>
                 </combobox>
@@ -139,7 +139,7 @@
             </row>
             <row>
                 <label value="Nominee Relationship:"/>
-                 <combobox id="nomineeRelation" width="200px">
+                 <combobox id="nomineeRelation" width="200px" readonly="true">
                        <comboitem label="Mother"/>
                        <comboitem label="Father"/>
                        <comboitem label="Brother"/>
@@ -153,8 +153,8 @@
             </row>
         </rows>
     </grid>
-    <hbox  pack="center" spacing="20px" style="margin-top:20px; " height="50px" width="100%">
-           <button label="Submit" id="btnSubmit" sclass="btn-primary" />
+    <hbox  pack="center" spacing="20px" width="30%" style="margin:20px auto;" height="50px">
+           <button label="Submit" id="btnSubmit" sclass="btn-primary" /> <space/>
            <button label="Reset" id="btnReset" sclass="btn-primary" />
     </hbox>
 </window>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:h="xhtml" xmlns:n="native">
+
+<style>
+    body {
+        margin: 0;
+        background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC); /* Banking blue theme */
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Scrollable outer wrapper */
+    .page-wrapper {
+        width: 100%;
+        height: 100vh;
+        overflow-y: auto;
+        padding: 20px 0;
+        box-sizing: border-box;
+    }
+
+    /* Main form window */
+    .form-container {
+        width: 90%;
+        max-width: 750px;
+        background: #ffffff;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+        animation: fadeIn 0.5s ease-in;
+        margin: 0px auto !important;
+        box-sizing: border-box;
+        overflow-y: auto;
+        max-height: 90vh;   /* makes window scrollable */
+    }
+
+    @keyframes fadeIn {
+        0% {opacity: 0; transform: translateY(20px);}
+        100% {opacity: 1; transform: translateY(0);}
+    }
+
+    label {
+        font-weight: 600;
+        color: #003366;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg,#003399,#0055FF);
+        color: white;
+        border: none;
+        padding: 10px 0;
+        border-radius: 10px;
+        font-size: 12pt;
+        cursor: pointer;
+        transition: 0.3s;
+        width: 150px;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg,#002080,#0044DD);
+        transform: translateY(-2px);
+        box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .form-container {
+            width: 95%;
+            padding: 18px;
+            max-height: 95vh;
+        }
+
+        grid, hbox, row {
+            display: block;
+            width: 100%;
+        }
+
+        textbox, combobox, doublebox, longbox {
+            width: 80% !important;
+        }
+
+        .btn-primary {
+            width: 100%;
+            margin-top: 10px;
+        }
+    }
+</style>
+
+<!-- OUTER SCROLL WRAPPER -->
+<hbox class="page-wrapper" align="center" pack = "center" style=" background-color: #003366;">
+
+    <!-- MAIN FORM -->
+    <window border="none" sclass="form-container"
+            apply="com.fintrust.controller.OpenAccountComposer">
+
+        <hbox align="center" pack="center" spacing="10px" height="50px" width="100%">
+            <label value="Bank Account Opening Form"
+                   style="font-size:20px; font-weight:bold; color:#003366;" />
+        </hbox>
+
+        <grid width="100%">
+            <rows>
+
+                <row>
+                    <label value="Account Type:"/>
+                    <combobox id="accountType" width="200px" readonly="true">
+                        <comboitem label="Saving"/>
+                        <comboitem label="Current"/>
+                        <comboitem label="Salary"/>
+                    </combobox>
+                </row>
+
+                <row>
+                    <label value="Branch:"/>
+                    <combobox id="branch" width="200px" readonly="true">
+                        <comboitem label="Mathura"/>
+                        <comboitem label="Aligarch"/>
+                        <comboitem label="New Delhi"/>
+                    </combobox>
+                </row>
+
+                <row>
+                    <label value="Initial Deposit:"/>
+                    <doublebox id="initialDeposit" width="200px"
+                               placeholder="Min 1000"/>
+                </row>
+
+                <row>
+                    <label value="Mode of Operation:"/>
+                    <combobox id="modeOfOperation" width="200px" readonly="true">
+                        <comboitem label="Self"/>
+                        <comboitem label="Joint"/>
+                    </combobox>
+                </row>
+
+                <row>
+                    <label value="Nominee Name:"/>
+                    <textbox id="nomineeName" width="200px"/>
+                </row>
+
+                <row>
+                    <label value="Nominee Relationship:"/>
+                    <combobox id="nomineeRelation" width="200px" readonly="true">
+                        <comboitem label="Mother"/>
+                        <comboitem label="Father"/>
+                        <comboitem label="Brother"/>
+                        <comboitem label="Wife"/>
+                        <comboitem label="Husband"/>
+                    </combobox>
+                </row>
+
+                <row>
+                    <label value="Nominee Id Number:"/>
+                    <longbox id="nomineeId" width="200px" placeholder="Aadhar No."/>
+                </row>
+
+            </rows>
+        </grid>
+ <space/>
+        <hbox  pack="center" spacing="20px" width="30%" style="margin:20px auto;" height="50px">
+        <space/>
+            <button label="Submit" id="btnSubmit" sclass="btn-primary"/> <space/>
+            <button label="Reset" id="btnReset" sclass="btn-primary"/>
+        </hbox>
+    <separator spacing="60px"/>
+    </window>
+</hbox>
+
+</zk>

@@ -6,6 +6,7 @@ import com.fintrust.service.OtpService;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Sessions;
 
 public class OtpViewModel {
 
@@ -44,7 +45,7 @@ public class OtpViewModel {
     public void sendOtp() {
         try {
             if (email == null || email.isBlank()) {
-                statusMessage = "Enter a valid email";
+                statusMessage = "Enter a valid email";               
                 return;
             }
             otpService.generateAndSendOtp(email);
@@ -60,8 +61,9 @@ public class OtpViewModel {
     public void verifyOtp() {
         if (otpService.verifyOtp(email, otpCode)) {
         		success = true;
+        		Sessions.getCurrent().setAttribute("currentUser", email);
             statusMessage = "Verification successful!";
-            Executions.sendRedirect("/WEB-INF/components/changePassword.zul"); // redirect after success
+            Executions.sendRedirect("/changePassword.zul"); // redirect after success
         } else {
         		success = false;
             statusMessage = "Invalid or expired OTP";

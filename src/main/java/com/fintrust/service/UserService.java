@@ -1,6 +1,6 @@
 package com.fintrust.service;
 
-import com.fintrust.model.User;
+import com.fintrust.model.Customer;
 
 public interface UserService {
 /**
@@ -8,25 +8,25 @@ public interface UserService {
  * @param user
  * @return
  */
-    boolean registerUser(User user);
+    boolean registerUser(Customer user);
     
     /**
      * Fetch loggedIn user data
      * @return
      */
-    User getLoggedInUser();
+    Customer getLoggedInUser();
     
     /**
      * Updated user data
      * @param user
      * @return
      */
-    boolean updateUser(User user);
+    boolean updateUser(Customer user);
 
     /**
      * Update 2FA
      * @param user
      */
-	void update2FA(User user);
+	void update2FA(Customer user);
     
 }

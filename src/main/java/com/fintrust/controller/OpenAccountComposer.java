@@ -3,6 +3,7 @@ package com.fintrust.controller;
 import org.zkoss.zhtml.Messagebox;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
@@ -74,13 +75,13 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
             
 
             // These IDs should exist in DB
-            Long customerId = (Long) Executions.getCurrent().getSession().getAttribute("customer_id");
-//            if (customerId == null) {
-//                Messagebox.show("Session expired. Please log in again.", "Error", Messagebox.OK, Messagebox.ERROR);
-//               // Executions.sendRedirect("/customer_dashboard.zul");
-//                return;
-//            }
-            customerId = 1L;  // existing customer
+            Long customerId = (Long)Sessions.getCurrent().getAttribute("customer_id");
+            if (customerId == null) {
+                Messagebox.show("Session expired. Please log in again.", "Error", Messagebox.OK, Messagebox.ERROR);
+               // Executions.sendRedirect("/customer_dashboard.zul");
+                return;
+            }
+           
             
             if(acconntService.isAccountExists(customerId , accType)) {
             	return;
@@ -108,6 +109,7 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
                 Messagebox.show("Account created successfully!", "Success",
                         Messagebox.OK, Messagebox.INFORMATION);
                 resetForm();
+                Executions.sendRedirect("");
             } else {
                 Messagebox.show("Account creation failed! Please try again.",
                         "Database Error", Messagebox.OK, Messagebox.ERROR);
@@ -151,7 +153,7 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
             showWarning("Nominee Name cannot be empty.");
             return false;
         }
-        if(!nomineeName.getValue().trim().matches("[a-zA-Z]+")) {
+        if(!nomineeName.getValue().trim().matches("[a-z-A-Z ]+")) {
         	showWarning("Nominee Name cannot have other than character");
             return false;
         }
@@ -182,6 +184,7 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
         initialDeposit.setValue(null);
         modeOfOperation.setSelectedIndex(-1);
         nomineeName.setValue("");
+        nomineeId.setText("");
         nomineeRelation.setValue("");
     }
     

@@ -1,4 +1,4 @@
-<window width="80%" title="Session Timeout" border="normal">
+<window width="80%" title="Session Timeout" border="normal" apply="com.fintrust.controller.SessionTimeOutController">
 	<vbox>
 The page or component you request is no longer available.
 This is normally caused by timeout, opening too many Web pages, or rebooting

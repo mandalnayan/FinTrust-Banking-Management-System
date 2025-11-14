@@ -8,11 +8,13 @@ import org.zkoss.zk.ui.select.SelectorComposer;
 import java.util.Date;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Radio;
 import org.zkoss.zul.Radiogroup;
 import org.zkoss.zul.Textbox;
 
+import com.fintrust.model.Customer;
 import com.fintrust.model.User;
 import com.fintrust.service.UserService;
 import com.fintrust.service.UserServiceImpl;
@@ -67,7 +69,7 @@ public class UserSignupController extends SelectorComposer<Component> {
 		}
 
 		 // Create User object
-        User user = new User();
+		Customer user = new Customer();
         user.setName(name.getValue());
         user.setEmail(email.getValue());
         user.setPhone(phoneNumber.getValue());
@@ -90,6 +92,7 @@ public class UserSignupController extends SelectorComposer<Component> {
 
         if (success) {
             Messagebox.show("Signup successful! You can now log in.", "Success", Messagebox.OK, Messagebox.INFORMATION);
+            Executions.sendRedirect("/user/login.zul");
         } else {
             Messagebox.show("Signup failed! Email may already exist.", "Error", Messagebox.OK, Messagebox.ERROR);
         }	

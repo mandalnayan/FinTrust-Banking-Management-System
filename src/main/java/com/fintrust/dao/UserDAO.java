@@ -1,12 +1,13 @@
 package com.fintrust.dao;
 
-import com.fintrust.model.User;
+import com.fintrust.model.Customer;
 
 public interface UserDAO {
-    boolean saveUser(User user);
-    boolean updateUser(User user);
+    boolean saveUser(Customer user);
+    boolean updateUser(Customer user);
     boolean isEmailExists(String email);
     boolean isAuthorize(String userName, String password);
-    User getUserByEmail(String email);
+    Customer getUserByEmail(String email);
+    boolean updatePassword(String password);
 }
 

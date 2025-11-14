@@ -13,6 +13,7 @@ import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Messagebox;
 
 import com.fintrust.db.DBConnection;
+import com.fintrust.model.Customer;
 import com.fintrust.model.User;
 
 public class UserDAOImpl implements UserDAO {
@@ -21,11 +22,11 @@ public class UserDAOImpl implements UserDAO {
 	 * User: Take user data from signup form Save user data in db
 	 */
 	@Override
-	public boolean saveUser(User user) {
+	public boolean saveUser(Customer user) {
 		// Execute this command first time while table creation
 		// createUserTable();
 
-		String sql = "INSERT INTO users(name, email, phone, gender, country, state, dist, city, pincode, dob, password) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+		String sql = "INSERT INTO customer(name, email, phone, gender, country, state, dist, city, pincode, dob, password) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 		try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
 			ps.setString(1, user.getName());
@@ -53,7 +54,7 @@ public class UserDAOImpl implements UserDAO {
 	 */
 	@Override
 	public boolean isEmailExists(String email) {
-		String sql = "SELECT email FROM users WHERE email=?";
+		String sql = "SELECT email FROM customer WHERE email=?";
 		try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
 			ps.setString(1, email);
@@ -67,13 +68,16 @@ public class UserDAOImpl implements UserDAO {
 
 	public boolean isAuthorize(String userName, String password) {
 		try (Connection con = DBConnection.getConnection()) {
-			PreparedStatement pstmt = con.prepareStatement("Select name from users where email = ? and password = ?");
+			PreparedStatement pstmt = con.prepareStatement("Select * from customer where email = ? and password = ?");
 			pstmt.setString(1, userName);
 			pstmt.setString(2, password);
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
-				Sessions.getCurrent().setAttribute("userName", rs.getString(1));
-				Clients.showNotification("Login Successfull! \n Welcome " + rs.getString(1), true);
+				Sessions.getCurrent().setAttribute("customer_id", rs.getLong(1));
+				Sessions.getCurrent().setAttribute("userName", rs.getString(2));
+				Clients.showNotification("Login Successfull! \n Welcome " + rs.getString(2), "info", null, "top_center",
+						3000);
+
 				return true;
 			}
 		} catch (SQLException e) {
@@ -82,30 +86,31 @@ public class UserDAOImpl implements UserDAO {
 		return false;
 	}
 
-	public User getUserByEmail(String email) {
-		String sql = "SELECT * FROM users WHERE email=?";
+	public Customer getUserByEmail(String email) {
+		String sql = "SELECT * FROM customer WHERE email=?";
 		try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
 			ps.setString(1, email);
 			ResultSet rs = ps.executeQuery();
-			User user = null;
+			Customer customer = null;
 			if (rs.next()) {
-				user = new User(rs.getInt("id"), rs.getString("name"), rs.getString("email"), rs.getString("phone"),
-						rs.getString("gender"), rs.getString("country"), rs.getString("state"), rs.getString("dist"),
-						rs.getString("city"), rs.getString("pincode"), rs.getString("image"),
+				customer = new Customer(rs.getLong("customer_id"), rs.getString("name"), rs.getString("email"),
+						rs.getString("phone"), rs.getString("gender"), rs.getString("country"), rs.getString("state"),
+						rs.getString("dist"), rs.getString("city"), rs.getString("pincode"), rs.getString("image"),
 						rs.getDate("registered_date"), rs.getDate("dob"));
 			}
 
-			return user;
+			return customer;
 		} catch (Exception e) {
+			System.out.println("\nError: " + e.getMessage());
 			e.printStackTrace();
 			return null;
 		}
 	}
 
 	@Override
-	public boolean updateUser(User user) {
-		String sql = "UPDATE users SET name=?, phone=?, gender=?, country=?, state=?, city=?, pincode=?, dob=? WHERE email=?";
+	public boolean updateUser(Customer user) {
+		String sql = "UPDATE customer SET name=?, phone=?, gender=?, country=?, state=?, city=?, pincode=?, dob=? WHERE email=?";
 		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
 			ps.setString(1, user.getName());
@@ -122,9 +127,39 @@ public class UserDAOImpl implements UserDAO {
 			return rows > 0;
 
 		} catch (Exception e) {
+			System.out.println("\nError: " + e.getMessage());
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	public boolean updatePassword(String password) {
+		String sql = "SELECT password FROM customer WHERE email=?";
+		String updateQ = "Update customer set password = ? where email = ?";
+		try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			String email = (String) Sessions.getCurrent().getAttribute("currentUser");
+			
+			ps.setString(1, email);
+			ResultSet rs = ps.executeQuery();
+			Customer customer = null;
+			if (rs.next()) {
+				if (rs.getString(1).equals(password)) {
+					Clients.showNotification("New password can't be same as old password..!", "info", null,
+							"top_center", 3000);
+
+				} else {
+					PreparedStatement updatePS = conn.prepareStatement(updateQ);
+					updatePS.setString(1, password);
+					updatePS.setString(2, email);
+					int updated = updatePS.executeUpdate();
+					return updated > 0;
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("\nError: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	/**
@@ -142,8 +177,8 @@ public class UserDAOImpl implements UserDAO {
 		// Latest table code
 
 		String newQuery = """
-								CREATE TABLE `customer` (
-				  `customer_id` bigint unsigned NOT NULL,
+												CREATE TABLE `customer` (
+				  `customer_id` bigint unsigned NOT NULL auto_increment,
 				  `name` varchar(100) DEFAULT NULL,
 				  `email` varchar(100) DEFAULT NULL,
 				  `phone` varchar(15) DEFAULT NULL,
@@ -161,8 +196,8 @@ public class UserDAOImpl implements UserDAO {
 				  `twoFactor` tinyint(1) DEFAULT NULL,
 				  PRIMARY KEY (`customer_id`),
 				  UNIQUE KEY `email` (`email`)
-				)
-								""";
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+												""";
 
 		try (Connection con = DBConnection.getConnection();) {
 			Statement stmt = con.createStatement();

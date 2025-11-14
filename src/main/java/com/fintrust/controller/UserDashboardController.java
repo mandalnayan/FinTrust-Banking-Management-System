@@ -1,6 +1,8 @@
 package com.fintrust.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.zkoss.bind.annotation.Command;
@@ -28,35 +30,90 @@ public class UserDashboardController extends SelectorComposer<Borderlayout>{
     private int rewardPoints = 1200;
     private int activeCards = 2; 
     
-    @Wire Include userdashboard_sec, profile_sec, changePassword_sec; 
+    @Wire Include userdashboard_sec, profile_sec, changePassword_sec, openAccount_sec, viewAllAccount_sec; 
     
-    @Wire Toolbarbutton userdashboard, profile;
+    @Wire Toolbarbutton userdashboard, profile, account, viewAccounts;
     
+    private List<Include> includes = new ArrayList<>();
+    private List<Toolbarbutton> buttons = new ArrayList<>();
     
-
+    private void initialize() {
+    	if (!includes.isEmpty()) return;
+    	includes.add(userdashboard_sec);
+		includes.add(profile_sec);
+		includes.add(changePassword_sec);
+		includes.add(openAccount_sec);
+		includes.add(viewAllAccount_sec);
+		
+		buttons.add(userdashboard);
+		buttons.add(profile);
+		buttons.add(account);
+		buttons.add(viewAccounts);
+    }
+    
     // commands wired from ZUL
    @Listen("onClick=#logout")
     public void logout() {
 	   Session session = Sessions.getCurrent();
 	   session.removeAttribute("currentUser");
 	   session.invalidate();
-        org.zkoss.zk.ui.Executions.sendRedirect("/user/login.zul");
-    }
+       org.zkoss.zk.ui.Executions.sendRedirect("/home.zul");
+    }   
    
    @Listen("onClick=#userdashboard")
-   public void dashboard() {
-	   profile_sec.setVisible(false);
+   public void dashboard() {	   
 	   userdashboard_sec.setVisible(true);
-	   profile.removeSclass("active");
+	   profile_sec.setVisible(false);
+	   changePassword_sec.setVisible(false);
+	   openAccount_sec.setVisible(false);
+	   viewAllAccount_sec.setVisible(false);
+	   
 	   userdashboard.addSclass("active");
+	   account.removeSclass("active");
+	   viewAccounts.removeSclass("active");
+	   profile.removeSclass("active");
+   }
+   
+   @Listen("onClick=#account")
+   public void openAccount() {
+	   openAccount_sec.setVisible(true);
+	   userdashboard_sec.setVisible(false);
+	   profile_sec.setVisible(false);
+	   changePassword_sec.setVisible(false);
+	   viewAllAccount_sec.setVisible(false);
+	   
+	   userdashboard.removeSclass("active");
+	   account.addSclass("active");
+	   viewAccounts.removeSclass("active");
+	   profile.removeSclass("active");
+   }
+   
+   @Listen("onClick=#viewAccounts")
+   public void viewAccount() {
+	   viewAllAccount_sec.setVisible(true);
+	   openAccount_sec.setVisible(false);
+	   userdashboard_sec.setVisible(false);
+	   profile_sec.setVisible(false);
+	   changePassword_sec.setVisible(false);
+	   
+	   viewAccounts.addSclass("active");
+	   userdashboard.removeSclass("active");
+	   account.removeSclass("active");
+	   profile.removeSclass("active");
    }
    
    @Listen("onClick=#profile")
    public void profile() {
 	   profile_sec.setVisible(true);
-	   profile.addSclass("active");
-	   userdashboard.removeSclass("active");
+	   viewAllAccount_sec.setVisible(false);
+	   openAccount_sec.setVisible(false);
 	   userdashboard_sec.setVisible(false);
+	   changePassword_sec.setVisible(false);
+	   
+	   profile.addSclass("active");
+	   viewAccounts.removeSclass("active");
+	   userdashboard.removeSclass("active");
+	   account.removeSclass("active");
    }
    
    /*
@@ -99,6 +156,19 @@ public class UserDashboardController extends SelectorComposer<Borderlayout>{
         org.zkoss.zk.ui.Executions.sendRedirect("/contact.zul");
     }
 */
+   
+   private void toggleVisibility(Include activeSection, Toolbarbutton button) {
+	   includes.forEach((section) -> {
+		   section.setVisible(section.equals(activeSection));			   
+	   });
+	   buttons.forEach((btn) -> {
+		   if (btn.getLabel().equals(button.getLabel())) {
+			   button.addSclass("active");
+		   } else {
+			   button.removeSclass("active");
+		   }
+	   });
+   }
     // getters for data binding if you bind via MVVM (optional)
     public String getAvailableBalance() { return availableBalance; }
     public String getDefaultAccount() { return defaultAccount; }

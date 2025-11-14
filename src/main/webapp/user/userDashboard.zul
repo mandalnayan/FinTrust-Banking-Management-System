@@ -37,7 +37,8 @@
 <!-- MVC  -->
         <vbox sclass="sidebar-menu" vflex="1" spacing="6px" >
           <toolbarbutton label="Dashboard" sclass="menu-item active" id = "userdashboard"/>
-          <toolbarbutton label="Accounts" sclass="menu-item" id = "accounts"/>
+          <toolbarbutton label="open Accounts" sclass="menu-item" id = "account"/>
+          <toolbarbutton label="view Accounts" sclass="menu-item" id = "viewAccounts"/>
           <toolbarbutton label="Transactions" sclass="menu-item" id = "transactions"/>
           <toolbarbutton label="Cards" sclass="menu-item" id = "cards"/>
           <toolbarbutton label="Profile" sclass="menu-item" id = "profile"/>
@@ -47,7 +48,7 @@
 <!-- 
     <vbox sclass="sidebar-menu" vflex="1" spacing="6px" >
           <toolbarbutton label="Dashboard" sclass="menu-item active" onClick="@command('go','dashboard')"/>
-          <toolbarbutton label="Accounts" sclass="menu-item" onClick="@command('go','accounts')"/>
+          <toolbarbutton label="open Accounts" sclass="menu-item" onClick="@command('go','accounts')"/>
           <toolbarbutton label="Transactions" sclass="menu-item" onClick="@command('go','transactions')"/>
           <toolbarbutton label="Cards" sclass="menu-item" onClick="@command('go','cards')"/>
           <toolbarbutton label="Profile" sclass="menu-item" onClick="@command('go','profile')"/>
@@ -65,10 +66,13 @@
     <center sclass = "zero-padding">
     <!-- User dashboard content -->
     <h:div >
-     <include id = "userdashboard_sec" src="dashboard.zul" visible="false"/> 
+     <include id = "userdashboard_sec" src="dashboard.zul" visible="true"/> 
       <include id = "profile_sec" src = "userProfile.zul" visible="false"/>
       <include id = "otp_sec" src = "/WEB-INF/components/otpPage.zul" visible="false" />
-          <include id = "changePassword_sec" src = "/WEB-INF/components/otpPage.zul"  />
+       <include id = "changePassword_sec" src = "/WEB-INF/components/otpPage.zul"  visible="false"/>
+      <include id = "openAccount_sec" src = "/WEB-INF/components/openNewAccount.zul" visible="false" />   
+      <include id = "viewAllAccount_sec" src = "/WEB-INF/components/view_all_account.zul" visible="false" />   
+       
       </h:div>
     </center>
 
