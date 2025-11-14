@@ -33,18 +33,14 @@ public class CardDetailsComposer extends SelectorComposer<Window> {
 		// TODO Auto-generated method stub
 		super.doAfterCompose(comp);
 
-		// Class.forName("com.mysql.cj.jdbc.Driver");
-		// Connection
-		// connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/fintrustbank","root","Vikas123");
-
 		String atmCardNumber = (String) Sessions.getCurrent().getAttribute("atmNumber");
 
-		atmNumber = (Long) Long.parseLong(atmCardNumber);
+		
 
 		Connection connection = DBConnection.getConnection();
-		String sql = "select * from issuedatmcard_dummy where atm_card_number=?";
+		String sql = "select * from card where card_number=?";
 		PreparedStatement ptsm = connection.prepareStatement(sql);
-		ptsm.setLong(1, atmNumber);
+		ptsm.setString(1, atmCardNumber);
 
 		ResultSet rs = ptsm.executeQuery();
 		while (rs.next()) {

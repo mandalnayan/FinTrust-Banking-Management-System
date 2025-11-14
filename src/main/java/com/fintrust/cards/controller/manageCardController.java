@@ -111,11 +111,12 @@ public class manageCardController extends SelectorComposer<Window> {
     public void showDetails(Event e)
     {
        
-         Component targetButton= e.getTarget();
+          Component targetButton= e.getTarget();
        
           Listitem item =  (Listitem) targetButton.getParent().getParent();
           
-          String atmNumber = ((Listcell) item.getChildren().get(0)).getLabel();        
+          String atmNumber = ((Listcell) item.getChildren().get(0)).getLabel();  
+          System.out.println(atmNumber);
           Sessions.getCurrent().setAttribute("atmNumber", atmNumber);
           Executions.sendRedirect("/Card/cardDetails.zul");
              
