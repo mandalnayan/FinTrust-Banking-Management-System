@@ -1,0 +1,166 @@
+
+<!-- Make sure page shouln't render without login -->
+<?init class = "com.fintrust.controller.AuthenticationController" ?>
+<!-- head footer csss -->
+<?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
+
+<zk xmlns:h="xhtml">
+    <style>
+        body {
+            background-color: #f1f5f9;
+            font-family: "Segoe UI", Roboto, sans-serif;
+        }
+
+        .container {
+            width: 650px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+            padding: 30px 40px;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #2563eb, #1e40af);
+            color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .header p {
+            font-size: 13px;
+            margin-top: 5px;
+            opacity: 0.9;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #374151;
+            font-size: 15px;
+        }
+
+        .form-input {
+            width: 250px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            padding: 8px 10px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 4px rgba(37,99,235,0.3);
+        }
+
+        .action-btn {
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 15px;
+            padding: 10px 20px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .add-btn {
+           
+            width: 220px;
+        }
+
+        .add-btn:hover {
+           
+            transform: translateY(-2px);
+        }
+
+        .clear-btn {
+            back
+           
+            width: 120px;
+        }
+
+        .clear-btn:hover {
+            
+            transform: translateY(-2px);
+        }
+
+        .status-label {
+            font-weight: bold;
+            font-size: 15px;
+            color: #1d4ed8;
+            margin-top: 12px;
+        }
+
+        .footer-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 13px;
+            margin-top: 25px;
+        }
+
+    </style>
+    
+    
+    <!-- Top nav bar -->
+    <include src = "/WEB-INF/components/privateNavbar.zul" /> 
+
+    <window
+            border="none"
+            width="100%"
+            apply="com.fintrust.controller.AddBeneficiaryController">
+
+        <div class="container">
+            <div class="header">
+                <label>Add New Beneficiary</label>
+                <label>Link a trusted account to transfer funds safely</label>
+            </div>
+
+            <vlayout spacing="12px" style="align-items:left;">
+                <grid width="100%">
+                    <rows>
+                        <row>
+                            <label value="Beneficiary Name:" sclass="form-label"/>
+                            <textbox id="nameBox" placeholder="Enter beneficiary name" sclass="form-input"/>
+                        </row>
+
+                        <row>
+                            <label value="Account Number:" sclass="form-label"/>
+                            <textbox id="accountBox" placeholder="Enter account number" sclass="form-input"/>
+                        </row>
+
+                        <row>
+                            <label value="Bank Name:" sclass="form-label"/>
+                            <textbox id="bankBox" placeholder="Enter bank name" sclass="form-input"/>
+                        </row>
+
+                        <row>
+                            <label value="IFSC Code:" sclass="form-label"/>
+                            <textbox id="ifscBox" placeholder="Enter IFSC code" sclass="form-input"/>
+                        </row>
+                    </rows>
+                </grid>
+
+                <hlayout spacing="20px" style="margin-top:20px;">
+                    <button id="addBtn" label=" Add Beneficiary" sclass="action-btn add-btn"/>
+                    <button label=" Clear" sclass="action-btn clear-btn"
+                            onClick='nameBox.setValue(""); accountBox.setValue(""); bankBox.setValue(""); ifscBox.setValue(""); statusLabel.setValue("");'/>
+                </hlayout>
+
+                <label id="statusLabel" sclass="status-label"/>
+
+                <separator bar="true" style="margin-top:25px; border-color:#e5e7eb"/>
+
+                <label value=" Your details are protected under OUR guidelines." sclass="footer-note"/>
+            </vlayout>
+        </div>
+    </window>
+</zk>

@@ -11,24 +11,24 @@
         <north sclass="card-sec">
         
             <hlayout class="summary-row" spacing="18px">
-              <vbox sclass="summary-card">
-                <label value="Available Balance" sclass="summary-title"/>
-                <label value="${availableBalance}" sclass="summary-value"/>
-                <label value="Account: ${defaultAccount}" sclass="summary-sub"/>
+              <vbox sclass="summary-card" style="font-weigh:400; text-align:center;" pack="center">
+                <label value="Available Balance" sclass="summary-title"/> 
+                <label value="${availableBalance}" sclass="summary-value" style="font-weigh:bold;"> 1500</label>
+                <label value="Account: ${defaultAccount}" sclass="summary-sub"/> 
               </vbox>
 
-              <vbox sclass="summary-card">
-                <label value="Pending Transactions" sclass="summary-title"/>
-                <label value="${pendingCount}" sclass="summary-value"/>
+           <vbox sclass="summary-card" style="font-weigh:400; text-align:center;" pack="center">
+                <label value="Pending Transactions" sclass="summary-title"/> 
+                <label value="${pendingCount}" sclass="summary-value" > 5 </label>
               </vbox>
 
-              <vbox sclass="summary-card">
+             <vbox sclass="summary-card" style="font-weigh:400; text-align:center;" pack="center">
                 <label value="Reward Points" sclass="summary-title"/>
-                <label value="${rewardPoints}" sclass="summary-value"/>
+                <label value="${rewardPoints}" sclass="summary-value">125</label>
               </vbox>
 
               <hbox sclass="quick-actions" spacing="12px">
-                <button label="Transfer" sclass="action-btn" onClick="@command('go','transfer')"/>
+                <button label="Transfer" sclass="action-btn" onClick='Executions.sendRedirect("/user/account/fundtransfer.zul")'/>
                 <button label="Pay Bill" sclass="action-btn" onClick="@command('go','payBill')"/>
               </hbox>
             </hlayout>

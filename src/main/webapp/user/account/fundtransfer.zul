@@ -1,0 +1,96 @@
+<!-- Make sure page shouln't render without login -->
+<?init class = "com.fintrust.controller.AuthenticationController" ?>
+<!-- head footer csss -->
+<?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
+
+
+<zk>
+<!-- Top navbar -->
+    <include src = "/WEB-INF/components/privateNavbar.zul" /> 
+
+    <window border="normal" width="90%"
+            apply="com.fintrust.controller.FundTransferController"
+            style="border-radius: 12px; background-color: #f9fafc; padding: 20px; box-shadow: 0 0 15px rgba(0,0,0,0.1);">
+
+        <vlayout spacing="20px" style="align-items: center;">
+
+            <label value="Fund Transfer Portal" 
+                   style="font-size: 22px; font-weight: bold; color: #1e3a8a; text-align:center;"/>
+
+            <separator bar="true" width="90%" style="border-color:#60a5fa"/>
+
+            <grid width="80%" sclass="form-grid">
+                <rows>
+                    <row>
+                        <label value="From Account:" style="font-weight:bold; color:#374151;"/>
+                        <textbox id="fromAccount" placeholder="Enter your account number" width="300px"
+                                 sclass="form-text"/>
+                    </row>
+
+                    <row>
+                        <label value="Select Beneficiary:" style="font-weight:bold; color:#374151;"/>
+                        <combobox id="beneficiaryCombo" autodrop="true" width="300px" 
+                                  placeholder="Select Beneficiary" />
+                    </row>
+
+                    <row>
+                        <label value="To Account:" style="font-weight:bold; color:#374151;"/>
+                        <textbox id="toAccount" readonly="true" width="300px" />
+                    </row>
+
+                    <row>
+                        <label value="IFSC Code:" style="font-weight:bold; color:#374151;"/>
+                        <textbox id="ifsccode" readonly="true" width="300px" />
+                    </row>
+
+                    <row>
+                        <label value="Amount:" style="font-weight:bold; color:#374151;"/>
+                        <doublebox id="amount" width="300px" format="###,###.00" 
+                                   placeholder="Enter amount to transfer" sclass="form-text"/>
+                    </row>
+                </rows>
+            </grid>
+
+            <hlayout spacing="20px">
+                <button id="transferBtn" label="Transfer Funds" 
+                        width="220px" height="40px"
+                        style="background-color:#16a34a; color:white; font-weight:bold; border:none; border-radius:8px;"/>
+
+                <button id="resetBtn" label=" Clear" 
+                        width="120px" height="40px"
+                        style="background-color:#9ca3af; color:white; font-weight:bold; border:none; border-radius:8px;"
+                        onClick='fromAccount.setValue(""); toAccount.setValue(""); amount.setValue(null); beneficiaryCombo.setValue(""); ifsccode.setValue(""); statusLabel.setValue("");'/>
+            </hlayout>
+
+            <label id="statusLabel" 
+                   style="font-weight:bold; color:#1d4ed8; margin-top:10px; font-size:16px;"/>
+
+        </vlayout>
+    </window>
+
+    <style>
+        .form-grid .z-row { 
+            padding: 10px 0;
+        }
+        .form-text {
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            padding: 5px;
+        }
+        .form-readonly {
+            background-color: #f3f4f6;
+            color: #6b7280;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+        }
+        .form-select {
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            padding: 5px;
+            background-color: white;
+        }
+        .z-button:hover {
+            cursor: pointer;
+        }
+    </style>
+</zk>
