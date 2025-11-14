@@ -73,7 +73,7 @@ public class TransactionHistoryController extends SelectorComposer<Component> {
             }
 
             ResultSet rs = ps.executeQuery();
-            alert("Message fetched..!");
+          //  alert("Message fetched..!");
             List<Listitem> items = new ArrayList<>();
 
             while (rs.next()) {

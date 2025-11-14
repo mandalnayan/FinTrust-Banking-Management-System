@@ -116,6 +116,16 @@ public class UserDashboardController extends SelectorComposer<Borderlayout>{
 	   account.removeSclass("active");
    }
    
+  @Listen("onClick=#transactions")
+  public void transactions() {
+	  Executions.sendRedirect("transactionHistory.zul");
+  }
+  
+  @Listen("onClick=#cards")
+  public void cards() {
+	  Executions.sendRedirect("/Card/cardHome.zul");
+  }
+   
    /*
     @Command
     public void go(String page) {

@@ -1,8 +1,16 @@
 
  
+ <!-- Make sure page shouln't render without login -->
+<?init class = "com.fintrust.controller.AuthenticationController" ?>
+<!-- head footer csss -->
+<?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
  
 <zk>
-<window title="Manage Existing Cards" border="normal" width="100%" apply="com.fintrust.cards.controller.manageCardController">
+   <!-- Top Nav bar -->
+   <include src = "/WEB-INF/components/privateNavbar.zul" /> 
+<window width="100%" apply="com.fintrust.cards.controller.manageCardController">
+   
+   
     <vlayout spacing="15px" style="padding:20px">
 
        

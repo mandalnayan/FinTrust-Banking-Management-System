@@ -5,9 +5,15 @@
  Controller: TransactionHistoryController.java
  ============================================================ -->
 
+<!-- head footer csss -->
+<?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
+
+<!-- Before loading page it ensuer page should not render -->
+<?init class = "com.fintrust.controller.AuthenticationController" ?>
 
 <?page title="Transactions" contentType="text/html;charset=UTF-8"?>
 <zk>
+<include src = "/WEB-INF/components/privateNavbar.zul" /> 
     <window 
         apply="com.fintrust.controller.TransactionHistoryController"
         closable="false"

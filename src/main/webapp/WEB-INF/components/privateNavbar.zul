@@ -3,9 +3,9 @@
    <!-- Topbar (same style as dashboard) -->
         <hbox width = "100%" sclass="topbar" align="center" pack = "center" apply="com.fintrust.controller.UserDashboardController" >
         
-            <hbox sclass="top-left" hflex="1" pack="start" >
-                <image src="/resources/images/logo.png" sclass="top-logo"/>
-                <label value="FinTrust Bank" sclass="top-title"/>
+            <hbox sclass="top-left" hflex="1" pack="start" onClick='Executions.sendRedirect("/user/userDashboard.zul")' style = "cursor:pointer;">
+                <image src="/resources/images/logo.png" sclass="top-logo" />
+                <label value="FinTrust Bank" sclass="top-title" />
             </hbox>
 
             <hbox  hflex="1" pack = "end"  align="center" >

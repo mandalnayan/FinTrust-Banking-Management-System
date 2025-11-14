@@ -4,23 +4,6 @@
 	overflow:auto; padding-bottom:40px;">
 	
 	🌐 Top Navigation Bar
-	<div style="background:linear-gradient(90deg, #004080, #0066cc);
-	color:white; padding:12px 25px;
-	display:flex; align-items:center; justify-content:space-between;
-	box-shadow:0 2px 8px rgba(0,0,0,0.2); position:sticky; top:0; z-index:10;">
-	
-	<div style="display:flex; align-items:center; gap:10px;">
-	<image src="/img/fintrust_logo.png" style="height:38px;" />
-	<label value="FinTrust Bank" style="font-size:22px;font-weight:bold;" />
-	</div>
-	
-	<hlayout spacing="20px">
-	<label value="🏦 Home" style="cursor:pointer;font-weight:500;" onClick="@command('goHome')" />
-	<label value="💳 Pending Requests" style="cursor:pointer;font-weight:700;text-decoration:underline;" />
-	<label value="📜 Approved Requests" style="cursor:pointer;font-weight:500;" onClick="@command('viewApproved')" />
-	<label value="👤 Profile" style="cursor:pointer;font-weight:500;" />
-	</hlayout>
-	</div>
 	
 	📋 Main Content Area
 	<div style="display:flex; justify-content:center; padding:40px 10px;">
@@ -323,12 +306,10 @@
 	</zk> -->
 
 
-
-
-
-
-
-
+<!-- Make sure page shouln't render without login -->
+<?init class = "com.fintrust.controller.AuthenticationController" ?>
+<!-- head footer csss -->
+<?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 
 
 <zk>
@@ -338,33 +319,8 @@
 		apply="com.fintrust.cards.controller.card_status_controller">
 
 		<!-- 🌐 Top Navigation Bar -->
-		<div
-			style="background:linear-gradient(90deg, #004080, #0066cc);
-                    color:white; padding:10px 20px;
-                    display:flex; align-items:center; justify-content:space-between;
-                    box-shadow:0 2px 8px rgba(0,0,0,0.2); position:sticky; top:0; z-index:10; flex-wrap:wrap;">
-
-			<div
-				style="display:flex; align-items:center; gap:8px; margin-bottom:5px;">
-				<image src="/img/fintrust_logo.png"
-					style="height:30px;" />
-				<label value="FinTrust Bank"
-					style="font-size:18px;font-weight:bold;" />
-			</div>
-
-			<hlayout spacing="10px" style="flex-wrap:wrap;">
-				<label value="🏦 Home"
-					style="cursor:pointer;font-size:13px;font-weight:500;"
-					onClick="@command('goHome')" />
-				<label value="💳 Card Services"
-					style="cursor:pointer;font-size:13px;font-weight:500;"
-					onClick="@command('openCardServices')" />
-				<label value="📞 Support"
-					style="cursor:pointer;font-size:13px;font-weight:500;" />
-				<label value="👤 Profile"
-					style="cursor:pointer;font-size:13px;font-weight:500;" />
-			</hlayout>
-		</div>
+		<include src = "/WEB-INF/components/privateNavbar.zul" />
+		
 
 		<!-- 🌈 Main Section -->
 		<div
@@ -384,8 +340,8 @@
 				style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-bottom:20px;">
 				<textbox id="searchBox" width="200px"
 					placeholder="Search account no..." />
-				<combobox id="statusFilter" width="150px"
-					placeholder="Filter by status" autodrop="true">
+				<combobox id="statusFilter" width="200px"
+					placeholder="Filter by status" autodrop="true" >
 					<comboitem label="All" value="ALL" />
 					<comboitem label="Pending" value="Pending" />
 					<comboitem label="Approved" value="Approved" />
@@ -396,14 +352,14 @@
 
 			<!-- 📋 Requests Grid -->
 			<div
-				style="width:95%; max-width:1000px; height:80%; background:rgba(255,255,255,0.95);
+				style="width:95%; max-width:1000px; height:500px; background:rgba(255,255,255,0.95);
                         backdrop-filter:blur(6px);
                         border-radius:12px; padding:15px;
-                        box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+                        box-shadow:10px 4px 10px rgba(0,0,0,0.1);">
 
 				<!-- 🔼 Increased height -->
-				<listbox id="atmRequestList" width="100%" height="600px"
-					mold="paging" pageSize="6" vflex="min" style="border:none;">
+				<listbox id="atmRequestList" width="100%" height="500px"
+					mold="paging" pageSize="4"  style="border:none;">
 					<listhead>
 						<listheader label="Account No" width="140px" />
 						<listheader label="Card Type" width="120px" />

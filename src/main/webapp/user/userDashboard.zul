@@ -4,6 +4,7 @@
  Features: Shows account summary, recent transactions, quick links.
  Controller: UserDashboardController.java
  ============================================================ -->
+ 
 <?page title="Dashboard - FinTrust Bank" contentType="text/html;charset=UTF-8"?>
 <!-- Dashboard css -->
 <?link rel="stylesheet" type="text/css" href="/resources/css/dashboard.css"?>
@@ -15,6 +16,7 @@
 <?link rel="stylesheet" type="text/css" href="/resources/css/global.css"?>
 
 
+<!-- Before loading page it ensuer page should not render -->
 <?init class = "com.fintrust.controller.AuthenticationController" ?>
 
 <zk xmlns:h="xhtml">

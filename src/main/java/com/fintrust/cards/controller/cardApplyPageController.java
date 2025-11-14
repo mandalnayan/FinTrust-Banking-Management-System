@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
@@ -62,9 +62,9 @@ public class cardApplyPageController extends SelectorComposer<Window>{
 
 	//	Connection con=DbConnection.getConnection();
 		String sql="select account_no from account where customer_id=?;";
-		String custId="1";                                        // take it from session
+		Long customer_id = (Long) Sessions.getCurrent().getAttribute("customer_id");                                       // take it from session
 		PreparedStatement pStatement=con.prepareStatement(sql);
-		pStatement.setString(1, custId);    
+		pStatement.setLong(1, customer_id);    
 		
 		ResultSet resultSet=pStatement.executeQuery();
 		while(resultSet.next())

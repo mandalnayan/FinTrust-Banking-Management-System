@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- support.zul -->
+<zk sclass="support-page">
+
+	<style>
+
+		.help{ font-weight: bold; }
+
+		.support-page .container { display: flex; gap: 20px; padding:
+		16px; }
+
+		.support-page .main-form { flex: 2; min-width: 280px; }
+
+		.support-page .sidebar { flex: 1; min-width: 220px; }
+
+		.support-page .card { background: #fff; border-radius: 8px;
+		box-shadow: 0 2px 6px rgba(0,0,0,0.08); padding: 12px;
+		margin-bottom: 12px; }
+
+		@media (max-width: 800px) { .support-page .container {
+		flex-direction: column; } .support-page .sidebar { order: 2; } }
+		html, body { height:100%; overflow:auto !important; }
+		.z-window-content { overflow-y:auto !important; max-height:100%;
+		} .form-section { height:100vh; overflow-y:auto; }
+		.sidebar-section { height:100vh; overflow-y:auto; }
+	</style>
+
+	<window border="normal" width="100%"
+		height="100%" apply="com.fintrust.controller.ContactController" >
+		<hbox pack="center" align="center" width="100%">
+				<label hflex="1" sclass="help" value = "Contact Support" style="text-align:center; font-size: 20px; font-weight:bold;"/>
+				<space spacing="20px"/>
+				</hbox>
+		<div class="container">
+			<div class="main-form"  width="100%">
+			
+				<grid>
+					<columns>
+						<column width="50%" />
+						<column width="50%" />
+					</columns>
+					<rows>
+						<row>
+							<label value="Full Name *" />
+							<textbox id="fullName"
+								placeholder="Enter your full name" />
+						</row>
+						<row>
+							<label value="Mobile (Registered) *" />
+							<textbox id="mobile"
+								placeholder="10-digit mobile" />
+						</row>
+						<row>
+							<label value="Email *" />
+							<textbox id="email"
+								placeholder="you@domain.com" />
+						</row>
+						<row>
+							<label
+								value="Customer ID / Account (optional)" />
+							<textbox id="customerId"
+								placeholder="Enter Customer Id" />
+						</row>
+						<row>
+							<label value="Category *" />
+							<combobox id="category" />
+						</row>
+						<row>
+							<label value="Subcategory" />
+							<combobox id="subcategory"
+								placeholder="Select subcategory (optional)" />
+						</row>
+						<row>
+							<label value="Priority" />
+							<radiogroup id="priority">
+								<radio label="Low" />
+								<radio label="Medium" selected="true" />
+								<radio label="High" />
+							</radiogroup>
+						</row>
+						<row>
+							<label value="Subject *" />
+							<textbox id="subject" />
+						</row>
+						<row>
+							<label value="Description *" />
+							<textbox id="description" multiline="true"
+								rows="6" />
+						</row>
+						<row>
+							<label value="Attachments" />
+							<button label="Upload" upload="true"
+								id="fileUpload" />
+						</row>
+
+						<row>
+							<label value="Uploaded Files" />
+							<listbox id="fileList" width="300px">
+								<listhead>
+									<listheader label="File Name" />
+									<listheader label="Action" />
+								</listhead>
+							</listbox>
+						</row>
+
+						<row>
+							<label value="Preferred Contact Method" />
+							<combobox id="preferredContactMethod" />
+						</row>
+						<row>
+							<label value="Best Time to Reach" />
+							<combobox id="preferredTime" />
+						</row>
+						<row>
+							<hlayout>
+								<button id="submitBtn" label="Submit"
+									style="font-weight:bold;" />
+								<button label="Clear" id="clear" />
+							</hlayout>
+						</row>
+					</rows>
+				</grid>
+			</div>
+
+			<space />
+
+			<div class="sidebar">
+				<label sclass="help">Quick Help</label>
+				<grid>
+					<columns>
+						<column width="50%" />
+						<column width="50%" />
+					</columns>
+					<rows>
+						<row>
+
+							<label>Helpline:</label>
+							<label>1800-123-456</label>
+
+						</row>
+
+						<row>
+
+							<label>Email:</label>
+							<label>support@fintrust.com</label>
+
+						</row>
+
+						<row>
+
+							<label>WhatsApp:</label>
+							<label>+91-98765-43210</label>
+
+						</row>
+					</rows>
+
+
+
+
+				</grid>
+
+
+				<!-- <div class="card"> <label>Emergency</label> <label><a href="/report-card-loss.zul">Report 
+					Lost Card</a></label> <label><a href="/fraud-hotline.zul">Report Fraud</a></label> 
+					</div> -->
+				<space></space>
+				<div class="card">
+					<label>Track Ticket</label>
+					<textbox placeholder="Enter ticket #"   id="trackId"/>
+					<button label="Track" id="trackBtn" />
+				</div>
+			</div>
+		</div>
+	</window>
+</zk>
