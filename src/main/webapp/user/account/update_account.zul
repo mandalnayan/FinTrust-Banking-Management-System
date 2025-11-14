@@ -1,0 +1,118 @@
+<?page title="Request Account Update" contentType="text/html;charset=UTF-8"?>
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native">
+
+<style>
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .form-container {
+            width: 50vw;              /* 40% of viewport width */
+        	min-width: 500px;         /* Prevent it from shrinking too much */
+        	max-width: 600px;         /* Prevent it from stretching too wide */
+        	border-radius: 15px;
+        	padding: 10px;
+        	box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        	background-color: #fff;
+        	animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            0% {opacity: 0; transform: translateY(20px);}
+            100% {opacity: 1; transform: translateY(0);}
+        }
+
+        label {
+            font-weight: bold;
+            color: #333;
+        }
+
+       
+        .btn-primary {
+            background: linear-gradient(135deg, #6c63ff, #8e7dff);
+            color: white;
+            border: none;
+            padding: 10px 0;
+            border-radius: 10px;
+            font-size: 12pt;
+            cursor: pointer;
+            transition: 0.3s all;
+            width: 150px;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #574fd6, #6c63ff);
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        </style>    
+    
+<hbox align = "center" pack = "center" width="100%" height = "100%" style = " background-color: #B7AEC8;">
+<window border="normal"  sclass="form-container" apply="com.fintrust.controller.UpdateAccountRequest">
+
+    <vlayout spacing="10px" style="padding:20px">
+
+		<hbox align="center" pack="center" spacing="10px" height="40px" width="100%">
+			<label value="Account Update Request Form" style="font-weight:bold; font-size:23px; color:#003366"/>
+		</hbox>
+
+
+        <grid width="100%">
+            <rows>
+                <row>
+                    <label value="Account Number:" width="40%"/>
+                    <label id="accountNo" style="font-weight:bold"/>
+                </row>
+                <row>
+                    <label value="Current Balance:" width="40%"/>
+                    <label id="accountBalance" />
+                </row>
+                <row>
+                    <label value="Account Status:" width="40%"/>
+                    <label id="accountStatus" />
+                </row>
+            </rows>
+        </grid>
+
+        
+        <grid width="100%">
+            <rows>
+                <row>
+                    <label value="Account Type:" />
+                    <combobox placeholder="Select new type" width="90%" id="accountType">
+                    	<comboitem label="Saving" value="SAVING"></comboitem>
+                    	<comboitem label="Current" value="CURRENT"></comboitem>
+                    	<comboitem label="Salary" value="SALARY"></comboitem>
+                    </combobox>
+                </row>
+
+                <row>
+                    <label value="Branch Name:" />
+                    <combobox placeholder="Select Branch" width="90%" id="accountBranch">
+                    	<comboitem label="Aligarh" value="Aligarh"></comboitem>
+                    	<comboitem label="Mathura" value="Mathura"></comboitem>
+                    	<comboitem label="New Delhi" value='New Delhi'></comboitem>
+                    </combobox>
+                </row>
+
+                <row>
+                    <label value="Mode of Operation:" />
+                    <combobox placeholder="Select new mode" width="90%" id="accountMode">
+                    	<comboitem label="Self" value="SELF"></comboitem>
+                    	<comboitem label="Join" value="JOINT"></comboitem>
+                    </combobox>
+                </row>
+            </rows>
+        </grid>
+
+        <hbox  pack="center" spacing="20px" style="margin-top:20px; " height="20px" width="100%">
+            <button label="Submit" id="update" width="130px" sclass="btn-primary" />
+            <button label="Cancel" id="cancel"  width="130px" sclass="btn-primary"  />
+        </hbox>
+
+    </vlayout>
+</window>
+</hbox>
+</zk>

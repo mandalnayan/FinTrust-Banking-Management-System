@@ -1,0 +1,101 @@
+<?page title="All Accounts" contentType="text/html;charset=UTF-8"?>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+
+<style>
+
+	
+
+    .container {
+        width: 95%;
+        max-width: 900px;
+        margin: 30px auto;
+        background: #fff;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .btn {
+        background: linear-gradient(135deg, #6c63ff, #8e7dff);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 10px;
+        cursor: pointer;
+        transition: 0.3s all;
+    }
+
+    listbox:hover {
+        cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+        .container { width: 100%; padding: 15px; }
+    }
+    
+    
+    
+    
+    
+    
+	.action-icon {
+    	font-size: 21px;
+    	cursor: pointer;
+    	transition: all 0.2s ease;
+    	padding: 8px;
+    	border-radius: 50%;
+	}
+
+	.action-icon:hover {
+    	transform: scale(1.2);
+	}
+
+	.view-icon {
+    	color: #2196F3; 
+	}
+
+	.view-icon:hover {
+    	background-color: rgba(33,150,243,0.15);
+	}
+
+	.edit-icon {
+    	color: #FFC107;
+	}
+
+	.edit-icon:hover {
+    	background-color: rgba(255,193,7,0.15);
+	} 
+
+	.delete-icon {
+   		color: #F44336; /* red */
+	}
+
+	.delete-icon:hover {
+    	background-color: rgba(244,67,54,0.15);
+	}
+
+    
+</style>
+
+<hbox align = "center" pack = "center" width="100%" height = "100%" style = " background-color: #B7AEC8;">
+<window border="normal" sclass="container" apply="com.fintrust.controller.AllAccountsComposer">
+
+    <vlayout spacing="15px">
+        <label value="Your Accounts" style="font-weight:bold; font-size:23px;"/>
+
+        <listbox id="accountListbox" mold="paging" pageSize="5" width="100%">
+            <listhead>
+                <listheader label="Account No" width="20%" align="center"/>
+                <listheader label="Balance" width="20%" align="center"/>
+                <listheader label="Status" width="15%" align="center"/>
+                <listheader label="Action"  width="30%" align="center"/>
+            </listhead>
+        </listbox>
+
+        <hbox pack="center" style="margin-top:15px;">
+            <button id="backBtn" label="Back to Dashboard" sclass="btn"/>
+        </hbox>
+    </vlayout>
+</window>
+</hbox>
+</zk>

@@ -1,0 +1,51 @@
+<?page title="Account Detail" contentType="text/html;charset=UTF-8"?>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+
+<style>
+    .container {
+        width: 90%;
+        max-width: 650px;
+        margin: 30px auto;
+        background: #fff;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    label { font-weight: bold; color: #2c3e50; }
+    .btn {
+        background: linear-gradient(135deg, #6c63ff, #8e7dff);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 10px;
+        cursor: pointer;
+        transition: 0.3s all;
+    }
+    .btn:hover { background: linear-gradient(135deg, #574fd6, #6c63ff); }
+</style>
+
+<hbox align = "center" pack = "center" width="100%" height = "100%" style = " background-color: #B7AEC8;">
+<window border="normal" sclass="container" apply="com.fintrust.controller.SingleAccountDetails">
+
+    <vlayout spacing="12px">
+        <label value="Account Detail" style="font-size:18px; font-weight:bold; text-align:center;"/>
+
+        <grid width="100%">
+            <rows>
+                <row><label value="Account No:"/><label id="accountNo"/></row>
+                <row><label value="Account Type:"/><label id="accountType"/></row>
+                <row><label value="Balance:"/><label id="accountBalance"/></row>
+                <row><label value="Status:"/><label id="accountStatus"/></row>
+                <row><label value="Branch:"/><label id="accountBranch"/></row>
+                <row><label value="Mode of Operation:"/><label id="modeOfOperation"/></row>
+                <row><label value="Nominee ID:"/><label id="nomineeId"/></row>
+            </rows>
+        </grid>
+
+        <hbox pack="center" spacing="15px" style="margin-top:20px;">
+            <button id="backBtn" label="Back to All Accounts" sclass="btn"/>
+        </hbox>
+    </vlayout>
+</window>
+</hbox>
+</zk>
