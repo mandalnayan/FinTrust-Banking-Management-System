@@ -25,21 +25,22 @@ public class UserDAOImpl implements UserDAO {
 	public boolean saveUser(Customer user) {
 		// Execute this command first time while table creation
 		// createUserTable();
+		long randomNo = (long)(Math.random()*10000);
 
-		String sql = "INSERT INTO customer(name, email, phone, gender, country, state, dist, city, pincode, dob, password) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+		String sql = "INSERT INTO customer(customer_id, name, email, phone, gender, country, state, dist, city, pincode, dob, password) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
 		try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-
-			ps.setString(1, user.getName());
-			ps.setString(2, user.getEmail());
-			ps.setString(3, user.getPhone());
-			ps.setString(4, user.getGender());
-			ps.setString(5, user.getCountry());
-			ps.setString(6, user.getState());
-			ps.setString(7, user.getDist());
-			ps.setString(8, user.getCity());
-			ps.setString(9, user.getPincode());
-			ps.setDate(10, user.getDob());
-			ps.setString(11, user.getPassword());
+			ps.setLong(1, randomNo);
+			ps.setString(2, user.getName());
+			ps.setString(3, user.getEmail());
+			ps.setString(4, user.getPhone());
+			ps.setString(5, user.getGender());
+			ps.setString(6, user.getCountry());
+			ps.setString(7, user.getState());
+			ps.setString(8, user.getDist());
+			ps.setString(9, user.getCity());
+			ps.setString(10, user.getPincode());
+			ps.setDate(11, user.getDob());
+			ps.setString(12, user.getPassword());
 
 			return ps.executeUpdate() > 0;
 		} catch (Exception e) {

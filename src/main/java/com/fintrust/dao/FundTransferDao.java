@@ -32,9 +32,9 @@ public class FundTransferDao {
 
             
             double senderBalance = 0;
-            String sqlCheckSender = "SELECT balance FROM accounts WHERE account_number = ?";
+            String sqlCheckSender = "SELECT balance FROM account WHERE account_no = ?";
             try (PreparedStatement ps = conn.prepareStatement(sqlCheckSender)) {
-                ps.setString(1, fromAcc);
+                ps.setLong(1, Long.parseLong(fromAcc));
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
                         senderBalance = rs.getDouble("balance");
@@ -53,10 +53,10 @@ public class FundTransferDao {
             }
 
             
-            String sqlCheckReceiver = "SELECT 1 FROM accounts WHERE account_number = ?";
+            String sqlCheckReceiver = "SELECT 1 FROM account WHERE account_no = ?";
             boolean receiverExists = false;
             try (PreparedStatement ps = conn.prepareStatement(sqlCheckReceiver)) {
-                ps.setString(1, toAcc);
+            	 ps.setLong(1, Long.parseLong(toAcc));
                 try (ResultSet rs = ps.executeQuery()) {
                     receiverExists = rs.next();
                 }
@@ -68,11 +68,11 @@ public class FundTransferDao {
             }
 
             
-            String sqlDebit = "UPDATE accounts SET balance = balance - ? WHERE account_number = ?";
+            String sqlDebit = "UPDATE account SET balance = balance - ? WHERE account_no = ?";
             int debitRows;
             try (PreparedStatement ps = conn.prepareStatement(sqlDebit)) {
                 ps.setDouble(1, amount);
-                ps.setString(2, fromAcc);
+                ps.setLong(2, Long.parseLong(fromAcc));
                 debitRows = ps.executeUpdate();
             }
             System.out.println("Debit rows affected = " + debitRows);
@@ -84,11 +84,11 @@ public class FundTransferDao {
             }
 
             
-            String sqlCredit = "UPDATE accounts SET balance = balance + ? WHERE account_number = ?";
+            String sqlCredit = "UPDATE account SET balance = balance + ? WHERE account_no = ?";
             int creditRows;
             try (PreparedStatement ps = conn.prepareStatement(sqlCredit)) {
                 ps.setDouble(1, amount);
-                ps.setString(2, toAcc);
+                ps.setLong(2, Long.parseLong(toAcc));
                 creditRows = ps.executeUpdate();
             }
             System.out.println(" Credit rows affected = " + creditRows);

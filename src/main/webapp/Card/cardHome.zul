@@ -52,7 +52,7 @@
                     </row>
                     <row>
                         <cell>
-                            <div sclass="card-box" onClick='Executions.sendRedirect("/Card/manageCard.zul")'>
+                            <div sclass="card-box" onClick='Executions.sendRedirect("/Card/cardDetails.zul")'>
                                 <label value="📈 Set Card Limit" />
                             </div>
                         </cell>

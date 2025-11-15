@@ -57,16 +57,22 @@ public class FundTransferController extends SelectorComposer<Component> {
         Double amt = amount.getValue();
 
         if (fromAcc.isEmpty() || toAcc.isEmpty() || amt == null || amt <= 0) {
-            Clients.showNotification("Please enter valid transfer details!");
+            Clients.showNotification("Please enter valid transfer details!", "error", null, "top_center", 3000);
+
             return;
         }
 
         boolean result = FundTransferDao.transferFunds(fromAcc, toAcc, amt);
         Clients.showNotification("from=" + fromAcc + ", to=" + toAcc + ", amount=" + amt);
         if (result) {
-            statusLabel.setValue("Transfer successful!");
+   		 Clients.showNotification("Transfer successfull!", "info", null, "top_center", 3000);
+   		fromAccount.setValue("");
+   		toAccount.setValue("");
+   		ifsccode.setValue("");
+   		amount.setValue(0);
+
         } else {
-            statusLabel.setValue("Transfer failed! Check balance or account.");
+            Clients.showNotification("Transfer failed! Check balance or account.", "error", null, "top_center", 3000);
         }
     }
 }

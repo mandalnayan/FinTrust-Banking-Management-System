@@ -43,7 +43,7 @@ public class CustomerDetailsComposer extends SelectorComposer<Window> {
     private void loadAllCustomers() {
         try {
             Connection con = DBConnection.getConnection();
-            String sql = "SELECT * FROM customers ORDER BY customer_id DESC";
+            String sql = "SELECT * FROM customer ORDER BY customer_id DESC";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();

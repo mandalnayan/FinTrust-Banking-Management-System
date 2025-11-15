@@ -1,5 +1,5 @@
 <zk>
-    <window apply="controller.customer.CustomerDetailsComposer" width="100%" style="padding:20px;">
+    <window apply="com.fintrust.controller.CustomerDetailsComposer" width="100%" style="padding:20px;">
 
         <!-- ===== SUMMARY SECTION ===== -->
         <hlayout spacing="20px" style="margin:15px 0;">

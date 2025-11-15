@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- support.zul -->
-<zk sclass="support-page">
+
+<!-- Before loading page it ensuer page should not render -->
+<?init class = "com.fintrust.controller.AuthenticationController" ?>
+<!-- head footer csss -->
+<?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
+
+<!-- sclass="support-page" -->
+<zk >
+
+   <include src = "/WEB-INF/components/privateNavbar.zul" /> 
 
 	<style>
 
@@ -27,10 +36,12 @@
 
 	<window border="normal" width="100%"
 		height="100%" apply="com.fintrust.controller.ContactController" >
-		<hbox pack="center" align="center" width="100%">
-				<label hflex="1" sclass="help" value = "Contact Support" style="text-align:center; font-size: 20px; font-weight:bold;"/>
+		<window width="30%" style="margin: 0px auto;">
+		<hbox pack="center" align="center" width="1000px">
+				<label hflex="1" sclass="help" value = "Contact Support" style="text-align:center; font-size: 25px; font-weight:bold;"/>
 				<space spacing="20px"/>
-				</hbox>
+		</hbox>
+		</window>
 		<div class="container">
 			<div class="main-form"  width="100%">
 			
@@ -58,8 +69,8 @@
 						<row>
 							<label
 								value="Customer ID / Account (optional)" />
-							<textbox id="customerId"
-								placeholder="Enter Customer Id" />
+							<textbox id="customerId" readonly="true"
+								placeholder="Enter Customer Id" value="${sessionScope.customer_id}" />
 						</row>
 						<row>
 							<label value="Category *" />

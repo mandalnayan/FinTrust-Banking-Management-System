@@ -4,7 +4,7 @@
 	Features: Responsive navbar, scrollable content, hero section, features, and footer
 	Controller: UserHomeController.java
 	============================================================ -->
-
+<?link rel="stylesheet" type="text/css" href="/resources/css/about.css"?>
 <?page title="FinTrust Bank - Home" contentType="text/html;charset=UTF-8"?>
 <?link rel="stylesheet" type="text/css" href="/resources/css/home.css"?>
 
@@ -96,8 +96,30 @@
 						</div>
 					</div>
 				</vlayout>
-				<div height="200px"></div>
+			
+ <!-- Core Values Section -->
+        <div sclass="values-section">
+            <label value="Our Core Values" sclass="section-title" />
+            <div sclass="values-grid">
+                <div sclass="value-card">
+                    <image src="/resources/images/about-secure.png" sclass="value-icon" />
+                    <label value="Security First" sclass="value-title" />
+                <!--     <label value="We protect every transaction with advanced encryption and multi-layered authentication." sclass="value-desc" /> -->
+                </div>
 
+                <div sclass="value-card">
+                    <image src="/resources/images/about-growth.png" sclass="value-icon" />
+                    <label value="Growth and Innovation" sclass="value-title" />
+                  <!--   <label value="We constantly innovate to offer cutting-edge banking solutions for the digital era." sclass="value-desc" /> -->
+                </div>
+
+                <div sclass="value-card">
+                    <image src="/resources/images/about-team.png" sclass="value-icon" />
+                    <label value="Customer Commitment" sclass="value-title" />
+                   <!--  <label value="Your satisfaction drives us — every decision we make is for your financial well-being." sclass="value-desc" /> -->
+                </div>
+            </div>
+        </div>
 			        <!-- About / Trust Section -->
         <div sclass="about-section" id="about" visible="${user == null}">
             <label value="Why Choose FinTrust?" sclass="section-title" />

@@ -24,7 +24,7 @@
         <vlayout spacing="10px" vflex="1" hflex="1">
 
             <!-- Header -->
-            <hlayout width="100%" spacing="10px" style="align-items:center;">
+            <hlayout width="90%" spacing="10px" style="align-items:center; margin: 0px auto">
                 <label value="💳 Transaction History"
                        style="font-weight:bold; font-size:18px; color:#2b4b80;"/>
 
@@ -54,14 +54,12 @@
                      sizedByContent="true"
                      style="border:1px solid #ccc; border-radius:8px;">
                 <listhead>
-                    <listheader label="Transaction ID" width="130px"/>
-                    <listheader label="From Account" width="130px"/>
-                    <listheader label="To Account" width="130px"/>
-                    <listheader label="Amount" width="130px" align="right"/>
-                    <listheader label="Type" width="130px"/>
+                    <listheader label="Transaction ID" width="160px"/>
+                    <listheader label="From Account" width="170px"/>
+                    <listheader label="To Account" width="170px"/>
+                    <listheader label="Amount" width="150px" align="right"/>                    
                     <listheader label="Status" width="120px"/>
-                    <listheader label="Remarks" width="190px"/>
-                    <listheader label="Created At" width="180px"/>
+                 <listheader label="Date" width="230px"/> 
                 </listhead>
             </listbox>
 

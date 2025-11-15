@@ -42,15 +42,15 @@
             <!-- Widgets Row (use hbox/hlayout) -->
             <hlayout sclass="widgets-row" style="padding: 0px">
               <vbox sclass="widget widget-card">
-                <label value="Quick Transfer" sclass="widget-title"/>
+                <label value="Quick Transfer" sclass="widget-title" />
                 <label value="Transfer to saved beneficiaries" sclass="widget-desc"/>
-                <button label="Transfer Now" sclass="widget-btn" onClick="@command('go','transfer')"/>
+                <button label="Transfer Now" sclass="widget-btn" onClick='Executions.sendRedirect("/user/account/fundtransfer.zul")'/>
               </vbox>
 
               <vbox sclass="widget widget-card">
                 <label value="Cards Overview" sclass="widget-title"/>
                 <label value="${activeCards} Active" sclass="widget-desc"/>
-                <button label="Manage Cards" sclass="widget-btn" onClick="@command('go','cards')"/>
+                <button label="Manage Cards" sclass="widget-btn" onClick='Executions.sendRedirect("/Card/cardHome.zul")'/>
               </vbox>
 				
               <vbox sclass="widget widget-chart">

@@ -58,7 +58,7 @@
 
         <div sclass="sidebar-footer">
           <label value="Need help?"/> <separator/>
-          <button label="Support" sclass="support-btn" onClick="@command('support')"/>
+          <button label="Support" sclass="support-btn" onClick='Executions.sendRedirect("/contact-us.zul")'/>
         </div>
       </vbox>
     </west>

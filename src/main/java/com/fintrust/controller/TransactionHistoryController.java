@@ -55,14 +55,13 @@ public class TransactionHistoryController extends SelectorComposer<Component> {
        
     	transactionListbox.getItems().clear();
 
-        String query = "SELECT transaction_id, from_account, to_account, amount, transaction_type, " +
-                       "status, remarks, created_at FROM transactions";
+        String query = "SELECT id, from_account, to_account, amount, status, created_at FROM transactions";
+        		
 
         if (from != null && to != null) {
             query += " WHERE DATE(created_at) BETWEEN ? AND ?";
         }
 
-        query += " ORDER BY created_at DESC";
 
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
@@ -78,14 +77,12 @@ public class TransactionHistoryController extends SelectorComposer<Component> {
 
             while (rs.next()) {
                 Listitem item = new Listitem();
-                item.appendChild(new Listcell(String.valueOf(rs.getLong("transaction_id"))));
-                item.appendChild(new Listcell(nullToDash(rs.getString("from_account"))));
-                item.appendChild(new Listcell(nullToDash(rs.getString("to_account"))));
+                item.appendChild(new Listcell(String.valueOf(rs.getLong("id"))));
+                item.appendChild(new Listcell(rs.getLong("from_account")+""));
+                item.appendChild(new Listcell((rs.getLong("to_account") +"")));
                 item.appendChild(new Listcell(String.format("%.2f", rs.getDouble("amount"))));
-                item.appendChild(new Listcell(rs.getString("transaction_type")));
                 item.appendChild(new Listcell(rs.getString("status")));
-                item.appendChild(new Listcell(nullToDash(rs.getString("remarks"))));
-                item.appendChild(new Listcell(rs.getTimestamp("created_at").toString()));
+				 item.appendChild(new Listcell(rs.getTimestamp("created_at").toString())); 
                 items.add(item);
             }
 
