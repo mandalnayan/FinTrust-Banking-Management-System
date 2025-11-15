@@ -61,6 +61,34 @@ public class AccountDaoImp implements AccountDao {
 		return false;
 	}
 		
+	public Account getDefaultAccount() {
+	
+		try(Connection con = DBConnection.getConnection()){
+			if(con!=null) {
+				Statement statement = con.createStatement();
+				ResultSet rs = statement.executeQuery("Select * from account limit 1");
+			//	System.out.println("account data fetched!!");
+				if(rs.next()) {
+					Account account = new Account();
+					account.setAccount_no(rs.getLong(1));
+					account.setBalance(rs.getDouble(2));
+					account.setAccount_type(AccountType.valueOf(rs.getString(3)));
+					account.setAccount_status(AccountStatus.valueOf(rs.getString(4)));
+					account.setBranch_Name(rs.getString(5));
+					account.setMode_of_operation(ModeOfOperation.valueOf(rs.getString(6)));
+					account.setNominee_id(rs.getLong(7));
+					account.setCustomer_id(rs.getLong(8));
+					account.setCreated_at(rs.getTimestamp(9).toLocalDateTime());
+					return account;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			Messagebox.show(e.getMessage());
+		}
+		return null;
+	}
+	
 	private boolean createAccountSchema() {
 		String query = """
 					CREATE TABLE IF NOT EXISTS account (

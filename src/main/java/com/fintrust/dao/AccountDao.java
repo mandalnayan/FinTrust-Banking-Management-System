@@ -18,4 +18,6 @@ public interface AccountDao {
 	boolean deleteAccount(long accountNo);
 
 	boolean isSameAccount(long customer_id, String accountType);
+
+	Account getDefaultAccount();
 }

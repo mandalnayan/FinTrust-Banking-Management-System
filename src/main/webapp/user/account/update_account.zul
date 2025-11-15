@@ -81,8 +81,8 @@
             <rows>
                 <row>
                     <label value="Account Type:" />
-                    <combobox placeholder="Select new type" width="90%" id="accountType">
-                    	<comboitem label="Saving" value="SAVING"></comboitem>
+                    <combobox placeholder="Select new type" width="90%" id="accountType" readonly="true">
+                    	<comboitem label="Savings" value="SAVINGS" ></comboitem>
                     	<comboitem label="Current" value="CURRENT"></comboitem>
                     	<comboitem label="Salary" value="SALARY"></comboitem>
                     </combobox>
@@ -90,7 +90,7 @@
 
                 <row>
                     <label value="Branch Name:" />
-                    <combobox placeholder="Select Branch" width="90%" id="accountBranch">
+                    <combobox placeholder="Select Branch" width="90%" id="accountBranch" readonly="true">
                     	<comboitem label="Aligarh" value="Aligarh"></comboitem>
                     	<comboitem label="Mathura" value="Mathura"></comboitem>
                     	<comboitem label="New Delhi" value='New Delhi'></comboitem>
@@ -99,7 +99,7 @@
 
                 <row>
                     <label value="Mode of Operation:" />
-                    <combobox placeholder="Select new mode" width="90%" id="accountMode">
+                    <combobox placeholder="Select new mode" width="90%" id="accountMode" readonly="true">
                     	<comboitem label="Self" value="SELF"></comboitem>
                     	<comboitem label="Join" value="JOINT"></comboitem>
                     </combobox>
@@ -108,7 +108,7 @@
         </grid>
 
         <hbox  pack="center" spacing="20px" style="margin-top:20px; " height="20px" width="100%">
-            <button label="Submit" id="update" width="130px" sclass="btn-primary" />
+            <button label="Submit" id="update" width="130px" sclass="btn-primary"  />
             <button label="Cancel" id="cancel"  width="130px" sclass="btn-primary"  />
         </hbox>
 

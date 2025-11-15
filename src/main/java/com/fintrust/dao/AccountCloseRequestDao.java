@@ -15,6 +15,8 @@ import com.fintrust.model.AccountCloseRequest;
 
 
 public class AccountCloseRequestDao {
+
+	
 	public AccountCloseRequestDao() {
 		createAccountCloserSchema();
 	}

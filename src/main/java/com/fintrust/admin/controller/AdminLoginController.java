@@ -24,14 +24,16 @@ public class AdminLoginController extends SelectorComposer<Window>{
 		if(isAuthorize(adminName, pasw)) {
 			// Set session for curren user
 			Sessions.getCurrent().setAttribute("userName", adminName);
+			alert(adminName + ":: " + pasw);
 			
-			Executions.sendRedirect("/user/adminDashboard.zul");		
+			Executions.sendRedirect("/admin/adminDashboard.zul");		
 		} else {
+			
 			alert("Unauthorized User..!");
 		}
 	}
 	
 	private boolean isAuthorize(String userName, String password) {
-		return userName.isBlank() && userName.equals("admin") && password.equals("123");
+		return (!userName.isBlank()) && userName.equals("admin") && password.equals("123");
 	}
 }

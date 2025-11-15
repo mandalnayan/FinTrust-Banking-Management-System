@@ -92,7 +92,7 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
     	// Store selected account number in session
         Executions.getCurrent().getSession().setAttribute("selected_account_no", acc.getAccount_no());
         // Redirect to details page
-        Executions.sendRedirect("update_account.zul");
+        Executions.sendRedirect("/user/account/update_account.zul");
     }
 
     /** Close account **/
@@ -100,11 +100,11 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
     	// Store selected account number in session
         Executions.getCurrent().getSession().setAttribute("selected_account_no", acc.getAccount_no());
         // Redirect to details page
-        Executions.sendRedirect("close_account.zul");
+        Executions.sendRedirect("/user/account/close_account.zul");
     }
 
     @Listen("onClick = #backBtn")
     public void onBackClick() {
-        Executions.sendRedirect("customer_dashboard.zul");
+        Executions.sendRedirect("/user/account/customer_dashboard.zul");
     }
 }

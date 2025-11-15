@@ -109,7 +109,7 @@
         	<row>
                 <label value="Account Type:"/>
                 <combobox id="accountType" width="200px" readonly="true">
-                	<comboitem label="Saving"/>
+                	<comboitem label="Savings"/>
                  	<comboitem label="Current"/>
                     <comboitem label="Salary"/>
                 </combobox>
