@@ -62,6 +62,11 @@
                         width="120px" height="40px"
                         style="background-color:#9ca3af; color:white; font-weight:bold; border:none; border-radius:8px;"
                         onClick='fromAccount.setValue(""); toAccount.setValue(""); amount.setValue(null); beneficiaryCombo.setValue(""); ifsccode.setValue(""); statusLabel.setValue("");'/>
+                
+                 <button id="benificryBtn" label="Add Beneficiary" 
+                        height="40px"
+                        style="background-color:#16a34a; color:white; font-weight:bold; border:none; border-radius:8px;"
+                        onClick='Executions.sendRedirect("/user/account/addBeneficiary.zul")'/>
             </hlayout>
 
             <label id="statusLabel" 

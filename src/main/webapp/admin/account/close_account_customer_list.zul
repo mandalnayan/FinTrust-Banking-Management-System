@@ -1,0 +1,130 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+
+   <style>
+    body {
+        margin: 0;
+        background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .form-container {
+        
+        min-width: 40%;
+        max-width: 60%;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        background-color: #fff;
+        animation: fadeIn 0.5s ease-in;
+        margin: 20px auto;
+        box-sizing: border-box;
+    }
+
+    @keyframes fadeIn {
+        0% {opacity: 0; transform: translateY(20px);}
+        100% {opacity: 1; transform: translateY(0);}
+    }
+
+    label {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #6c63ff, #8e7dff);
+        color: white;
+        border: none;
+        padding: 10px 0;
+        border-radius: 10px;
+        font-size: 12pt;
+        cursor: pointer;
+        transition: 0.3s all;
+        width: 150px;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #574fd6, #6c63ff);
+        transform: translateY(-2px);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* === Responsive Design === */
+
+    /* Tablet screens */
+    @media (max-width: 1024px) {
+        .form-container {
+            width: 70%;
+            padding: 20px;
+        }
+
+        label {
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            width: 130px;
+            font-size: 11pt;
+        }
+    }
+
+    /* Mobile screens */
+    @media (max-width: 768px) {
+        .form-container {
+            width: 90%;
+            padding: 15px;
+        }
+
+        grid, hbox, row {
+            display: block;
+            width: 100%;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 13px;
+        }
+
+        textbox, combobox, doublebox, longbox {
+            width: 50% !important;
+        }
+
+        .btn-primary {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+    }
+</style>
+
+<hbox align = "center" pack = "center" width="100%" height = "100%" style = " background-color: #B7AEC8;">
+<window sclass="form-container" border="normal" apply="com.fintrust.admin.controller.AccountCloseApprovelComposer">
+
+	 <hbox align="center" pack="center" spacing="10px" height="50px" width="100%">
+	 	<label value="Pending Account Closing Requests" style="font-size:20px; font-weight:bold; color:#333" />
+	 </hbox>
+    <listbox id="requestList" width="100%" mold="paging" pageSize="10">
+       <listhead>
+       		<listheader>Request ID</listheader>
+       		<listheader>accountNo</listheader>
+       		<listheader>Reason</listheader>
+       			
+       </listhead>
+       <template name="model">
+       		<listitem>
+       			<listcell label="${each.requestId}"></listcell>
+       			<listcell label="${each.accountNo}"></listcell>
+       			<listcell label="${each.reason}"></listcell>
+       			
+       		</listitem>
+       </template>
+    </listbox>
+    <hbox align="center" spacing="10px" style="margin-top:10px;">
+        <button id="approveBtn" label="Approve" sclass="btn-primary"/>
+        <button id="rejectBtn" label="Reject" sclass="btn-primary"/>
+    </hbox>
+</window>
+</hbox>
+</zk>
