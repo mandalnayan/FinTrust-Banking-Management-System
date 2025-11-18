@@ -1,0 +1,121 @@
+<!-- ============================================================
+ Page Name: Dashboard.zul
+ Purpose: Displays user overview after login.
+ Features: Shows account summary, recent transactions, quick links.
+ Controller: UserDashboardController.java
+ ============================================================ -->
+<?page title="User Dashboard"?>
+
+<zk>
+    <!-- Attach ViewModel -->
+    <window viewModel="@id('vm') @init('com.fintrust.viewModel.UserDashboardVM')" 
+            width="100%" height="100%" border="none">
+
+        <borderlayout width="100%" height="700px">
+
+            <!-- NORTH: Summary -->
+            <north sclass="card-sec">
+                <hlayout class="summary-row" spacing="18px">
+
+                    <vbox sclass="summary-card" style="text-align:center;" pack="center">
+                        <label value="Available Balance" sclass="summary-title"/> 
+                        <label value="@load(vm.availableBalance)" 
+                               sclass="summary-value" style="font-weight:bold;"/>
+                        <label value="Account: @load(vm.defaultAccountNo)" sclass="summary-sub"/> 
+                    </vbox>
+
+                    <vbox class="summary-card" style="text-align:center;" pack="center">
+                        <label value="Pending Transactions" sclass="summary-title"/> 
+                        <label value="@load(vm.pendingCount)" sclass="summary-value"/>
+                    </vbox>
+
+                    <vbox class="summary-card" style="text-align:center;" pack="center">
+                        <label value="Reward Points" sclass="summary-title"/>
+                        <label value="@load(vm.rewardPoints)" sclass="summary-value"/>
+                    </vbox>
+
+                    <hbox sclass="quick-actions" spacing="12px">
+                        <button label="Transfer"
+                                sclass="action-btn"
+                                onClick="@command('go', page='account/fundtransfer')"/>
+                        <button label="Pay Bill"
+                                sclass="action-btn"
+                                onClick="@command('go', page='payBill')"/>
+                    </hbox>
+
+                </hlayout>
+            </north>
+
+            <!-- CENTER -->
+            <center sclass="card-sec card-sec-padding">
+                <vlayout vflex="1" style="padding:0; overflow:auto;">
+
+                    <!-- Widgets -->
+                    <hlayout sclass="widgets-row">
+                        <vbox sclass="widget widget-card">
+                            <label value="Quick Transfer" class="widget-title"/>
+                            <label value="Transfer to saved beneficiaries" class="widget-desc"/>
+                            <button label="Transfer Now"
+                                    class="widget-btn"
+                                    onClick="@command('go', page='account/fundtransfer')"/>
+                        </vbox>
+
+                        <vbox class="widget widget-card">
+                            <label value="Cards Overview" class="widget-title"/>
+                            <label value="@load(vm.activeCards) + ' Active'" class="widget-desc"/>
+                            <button label="Manage Cards"
+                                    class="widget-btn"
+                                    onClick="@command('go', page='Card/cardHome')"/>
+                        </vbox>
+
+                        <vbox class="widget widget-chart">
+                            <label value="Spending (30 days)" class="widget-title"/>
+                            <image src="/resources/images/chart-placeholder.png"
+                                   class="widget-chart-img"/>
+                        </vbox>
+                    </hlayout>
+
+                    <!-- Transactions Table -->
+                    <vbox>
+                        <label value="Recent Transactions" sclass="section-title"/>
+
+                        <grid model="@load(vm.recentTransactions)" 
+                              sclass="transactions-grid" mold="paging" pageSize="5">
+
+                            <columns>
+                                <column label="Date"/>
+                                <column label="Description"/>
+                                <column label="Type"/>
+                                <column label="Amount"/>
+                                <column label="Status"/>
+                            </columns>
+
+                            <rows>
+                                <template name="model">
+                                    <row>
+                                        <label value="@load(each.date)"/>
+                                        <label value="@load(each.description)"/>
+                                        <label value="@load(each.type)"/>
+                                        <label value="@load(each.amount)"/>
+                                        <label value="@load(each.status)"/>
+                                    </row>
+                                </template>
+                            </rows>
+                        </grid>
+
+                        <hbox style="justify-content:flex-end; margin-top:12px;">
+                            <button label="View All Transactions"
+                                    class="view-all-btn"
+                                    onClick="@command('go', page='transactions')"/>
+                        </hbox>
+                    </vbox>
+
+                </vlayout>
+            </center>
+
+        </borderlayout>
+    </window>
+</zk>
+
+
+

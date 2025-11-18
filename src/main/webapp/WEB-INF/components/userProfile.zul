@@ -1,0 +1,110 @@
+<?page title="customer Profile - FinTrust Bank" contentType="text/html;charset=UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/resources/css/profile.css"?>
+<?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
+
+<zk xmlns:h="xhtml">
+	<borderlayout width="100%" height="100vh"
+		viewModel="@id('vm') @init('com.fintrust.viewModel.UserProfileVM')">
+
+		<!-- CENTER: Main Profile Content -->
+		<center sclass="zero-padding">
+			<vlayout sclass="profile-container" spacing="20px">
+
+				<!-- Header -->
+				<hbox align="center" sclass="profile-header"
+					spacing="16px" hflex="1">
+					<image src="/resources/images/default.jpg"
+						sclass="profile-avatar" />
+					<vbox hflex="1">
+						<label value="@load(vm.customer.name)"
+							sclass="profile-name" />
+						<label value="@load(vm.customer.email)"
+							sclass="profile-email" />
+						<hbox>
+							<label value="Joined on:"
+								sclass="profile-date" />
+							<label
+								value="@load(vm.registeredDateFormatted)" sclass="profile-date" />
+						</hbox>
+					</vbox>
+				</hbox>
+
+				<!-- Profile Info Form -->
+				<vbox sclass="profile-form" spacing="15px"
+					width="100%">
+					<label value="Personal Information"
+						sclass="section-title" />
+
+					<grid width="100%" sclass="info-grid">
+						<rows>
+							<row>
+								<label value="Full Name:" />
+								<textbox value="@bind(vm.customer.name)"
+									hflex="1" placeholder="Enter full name" />
+							</row>
+							<row>
+								<label value="Email:" />
+								<textbox value="@load(vm.customer.email)"
+									hflex="1" readonly="true" />
+							</row>
+							<row>
+								<label value="Phone:" />
+								<textbox value="@bind(vm.customer.phone)"
+									hflex="1" placeholder="Enter phone number" />
+							</row>
+							<row>
+								<label value="Date of Birth:" />
+								<datebox value="@bind(vm.customer.dob)"
+									hflex="1" format="yyyy-MM-dd" readonly="true" disabled="true"/>
+							</row>
+							<row>
+								<label value="Country:" />
+								<textbox value="@bind(vm.customer.country)"
+									hflex="1" />
+							</row>
+							<row>
+								<label value="State:" />
+								<textbox value="@bind(vm.customer.state)"
+									hflex="1" />
+							</row>
+							<row>
+								<label value="City:" />
+								<textbox value="@bind(vm.customer.city)"
+									hflex="1" />
+							</row>
+							<row>
+								<label value="Pincode:" />
+								<textbox value="@bind(vm.customer.pincode)"
+									hflex="1" />
+							</row>
+						</rows>
+					</grid>
+
+					<hbox spacing="10px" align="center"
+						sclass="profile-btn-row">
+						<button label="Update Profile"
+							sclass="update-btn" onClick="@command('updateProfile')" />
+						<button label="Change Password"
+							sclass="secondary-btn" onClick="@command('changePassword')" />
+					</hbox>
+				</vbox>
+
+				<!-- Security Section -->
+				<vbox spacing="15px" sclass="security-section"
+					align="center" hflex="1"
+					style="background-color:#f2f6ff; border-radius:10px; padding:20px;">
+					<label value="Security Settings"
+						sclass="section-title" />
+					<hbox spacing="10px" align="center">
+						<label value="Two-Factor Authentication:" />
+						<checkbox label="Enable"
+							checked="@bind(vm.customer.twoFactor)"
+							onCheck="@command('toggle2FA')" />
+					</hbox>
+				</vbox>
+
+				<separator spacing="40px" />
+			</vlayout>
+		</center>
+	</borderlayout>
+</zk>

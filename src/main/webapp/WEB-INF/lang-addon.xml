@@ -1,0 +1,26 @@
+<?xml version = "1.0" encoding="UTF-8"?>
+
+<language-addon>
+<addon-name>xyz</addon-name>
+<language-name>zul</language-name>
+
+
+<!-- map Navbar micro component  -->
+<component>
+<component-name>navbar</component-name>
+<component-class>com.fintrust.controller.macro.Navbar</component-class>
+</component>
+
+<!-- map private Navbar micro component  -->
+<component>
+<component-name>privateNavbar</component-name>
+<component-class>com.fintrust.controller.macro.PrivateNavbar</component-class>
+</component>
+
+<!-- map Navbar micro component  -->
+<component>
+<component-name>footer</component-name>
+<component-class>com.fintrust.controller.macro.Footer</component-class>
+</component>
+
+</language-addon>
