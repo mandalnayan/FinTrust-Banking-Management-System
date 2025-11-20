@@ -1,0 +1,215 @@
+package com.fintrust.model;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+public class Account {
+    private Long accountId;
+    private Long userId;
+    private String accountNumber;
+    private String accountType;   // savings/current/salary/fixed_deposit
+    private BigDecimal balance;
+    private String currency;
+    private String status;
+    private LocalDateTime openedAt;
+    private LocalDateTime updatedAt;
+
+    // Getters & Setters
+    // ...
+}
+
+package com.fintrust.model;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+public class UserDetails {
+    private Long detailsId;
+    private Long userId;
+    private String gender;
+    private LocalDate dob;
+    private String aadhaarMasked;
+    private String panMasked;
+    private String country;
+    private String state;
+    private String district;
+    private String city;
+    private String pincode;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    // Getters & Setters
+    // ...
+}
+
+package com.fintrust.model;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+public class Account {
+    private Long accountId;
+    private Long userId;
+    private String accountNumber;
+    private String accountType;   // savings/current/salary/fixed_deposit
+    private BigDecimal balance;
+    private String currency;
+    private String status;
+    private LocalDateTime openedAt;
+    private LocalDateTime updatedAt;
+
+    // Getters & Setters
+    // ...
+}
+
+package com.fintrust.model;
+
+import java.time.LocalDateTime;
+
+public class Beneficiary {
+    private Long beneficiaryId;
+    private Long userId;
+    private String name;
+    private String accountNumber;
+    private String bankName;
+    private String ifscCode;
+    private LocalDateTime addedAt;
+
+    // Getters & Setters
+    // ...
+}
+
+package com.fintrust.model;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+public class Transaction {
+    private Long transactionId;
+    private Long accountId;
+    private Long relatedAccountId;
+    private Long beneficiaryId;
+    private String txnReference;
+    private String txnType;       // credit/debit
+    private String mode;          // upi/neft/imps/card/cash
+    private BigDecimal amount;
+    private BigDecimal balanceAfter;
+    private String description;
+    private String status;
+    private LocalDateTime createdAt;
+
+    // Getters & Setters
+    // ...
+}
+
+package com.fintrust.model;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+public class Card {
+    private Long cardId;
+    private Long userId;
+    private Long accountId;
+    private String cardNumberMasked;
+    private String cardBin;
+    private String cardType;
+    private String provider;
+    private LocalDate expiryDate;
+    private String status;
+    private LocalDateTime issuedAt;
+
+    // Getters & Setters
+    // ...
+}
+
+package com.fintrust.model;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+public class Loan {
+    private Long loanId;
+    private Long userId;
+    private String loanType;
+    private BigDecimal principalAmount;
+    private BigDecimal interestRate;
+    private Integer tenureMonths;
+    private String status;
+    private LocalDateTime createdAt;
+    private LocalDateTime approvedAt;
+
+    // Getters & Setters
+    // ...
+}
+
+package com.fintrust.model;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+public class Loan {
+    private Long loanId;
+    private Long userId;
+    private String loanType;
+    private BigDecimal principalAmount;
+    private BigDecimal interestRate;
+    private Integer tenureMonths;
+    private String status;
+    private LocalDateTime createdAt;
+    private LocalDateTime approvedAt;
+
+    // Getters & Setters
+    // ...
+}
+
+package com.fintrust.model;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+public class LoanPayment {
+    private Long paymentId;
+    private Long loanId;
+    private BigDecimal amount;
+    private LocalDateTime paymentDate;
+    private String method;
+    private String status;
+
+    // Getters & Setters
+    // ...
+}
+
+package com.fintrust.model;
+
+import java.time.LocalDateTime;
+
+public class SupportTicket {
+    private Long ticketId;
+    private Long userId;
+    private String subject;
+    private String message;
+    private String priority;
+    private String status;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    // Getters & Setters
+    // ...
+}
+
+package com.fintrust.model;
+
+import java.time.LocalDateTime;
+
+public class AdminLog {
+    private Long logId;
+    private Long adminId;
+    private String action;
+    private String metadataJson;
+    private LocalDateTime createdAt;
+
+    // Getters & Setters
+    // ...
+}
+
