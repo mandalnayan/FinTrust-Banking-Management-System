@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.SelectorComposer;
@@ -20,6 +21,8 @@ import org.zkoss.zul.Radiogroup;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
+import com.fintrust.dao.AccountDao;
+import com.fintrust.dao.AccountDaoImp;
 import com.fintrust.db.DBConnection;
 import com.fintrust.service.CardServices;
 
@@ -50,29 +53,16 @@ public class cardApplyPageController extends SelectorComposer<Window>{
     Button submitApplyCard;
     
     CardServices cardService =new CardServices();
+    AccountDao accountDao;
     
      
     @Override
 	public  void doAfterCompose(Window comp) throws Exception {
 		// TODO Auto-generated method stub
 		super.doAfterCompose(comp);
-		Class.forName("com.mysql.cj.jdbc.Driver");
-
-		Connection con=DBConnection.getConnection();
-
-	//	Connection con=DbConnection.getConnection();
-		String sql="select account_no from account where customer_id=?;";
-		Long customer_id = (Long) Sessions.getCurrent().getAttribute("customer_id");                                       // take it from session
-		PreparedStatement pStatement=con.prepareStatement(sql);
-		pStatement.setLong(1, customer_id);    
-		
-		ResultSet resultSet=pStatement.executeQuery();
-		while(resultSet.next())
-		{ 
-		     System.out.println(resultSet.getLong("account_no"));
-			accountList.appendItem(resultSet.getLong("account_no")+"");
-		}
-		
+		accountDao = new AccountDaoImp();
+		List<Long> accounts= accountDao.getAccountsByUserId(null);
+		accounts.forEach(accountNo -> accountList.appendItem(accountNo+""));		
 	}
 
     @Listen("onClick=#submitApplyCard")

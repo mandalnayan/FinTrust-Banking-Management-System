@@ -44,7 +44,7 @@
 
                 <hlayout sclass="login-redirect">
                     <label value="Already have an account?"/>
-                    <a href="/user/userLogin.zul" label="Login"/>
+                    <a href="/user/login.zul" label="Login"/>
                 </hlayout>
             </div>
 

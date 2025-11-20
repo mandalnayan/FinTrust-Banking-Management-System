@@ -20,4 +20,8 @@ public interface AccountDao {
 	boolean isSameAccount(long customer_id, String accountType);
 
 	Account getDefaultAccount();
+	
+	List<Long> getAccountsByUserId(Long userid);
+		
+	
 }

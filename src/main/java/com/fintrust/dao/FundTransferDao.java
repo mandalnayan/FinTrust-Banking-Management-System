@@ -10,13 +10,12 @@ public class FundTransferDao {
      * Transfers amount from fromAcc to toAcc in a single transactional operation.
      * Returns true if transfer committed successfully, false otherwise.
      */
-    public static boolean transferFunds(String fromAcc, String toAcc, double amount) {
-        if (fromAcc == null || toAcc == null || fromAcc.trim().isEmpty() || toAcc.trim().isEmpty() || amount <= 0) {
+    public static boolean transferFunds(Long fromAcc, String toAcc, double amount) {
+        if (fromAcc == null || toAcc == null || fromAcc == null|| toAcc.trim().isEmpty() || amount <= 0) {
             System.out.println(" Invalid parameters for transfer.");
             return false;
         }
 
-        fromAcc = fromAcc.trim();
         toAcc = toAcc.trim();
 
         Connection conn = null;
@@ -34,7 +33,7 @@ public class FundTransferDao {
             double senderBalance = 0;
             String sqlCheckSender = "SELECT balance FROM account WHERE account_no = ?";
             try (PreparedStatement ps = conn.prepareStatement(sqlCheckSender)) {
-                ps.setLong(1, Long.parseLong(fromAcc));
+                ps.setLong(1, fromAcc);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
                         senderBalance = rs.getDouble("balance");
@@ -72,7 +71,7 @@ public class FundTransferDao {
             int debitRows;
             try (PreparedStatement ps = conn.prepareStatement(sqlDebit)) {
                 ps.setDouble(1, amount);
-                ps.setLong(2, Long.parseLong(fromAcc));
+                ps.setLong(2,fromAcc);
                 debitRows = ps.executeUpdate();
             }
             System.out.println("Debit rows affected = " + debitRows);
@@ -97,7 +96,7 @@ public class FundTransferDao {
             String status = (creditRows > 0) ? "SUCCESS" : "FAILED";
             String sqlTxn = "INSERT INTO transactions(from_account, to_account, amount, status) VALUES (?, ?, ?, ?)";
             try (PreparedStatement ps = conn.prepareStatement(sqlTxn)) {
-                ps.setString(1, fromAcc);
+                ps.setLong(1, fromAcc);
                 ps.setString(2, toAcc);
                 ps.setDouble(3, amount);
                 ps.setString(4, status);

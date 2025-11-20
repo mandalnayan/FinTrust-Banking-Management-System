@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.Messagebox;
 
 import com.fintrust.db.DBConnection;
@@ -16,11 +17,18 @@ public class TransactionHistoryDAO {
 
 	public static List<Transaction> loadTransactionData(java.sql.Date from, java.sql.Date to) {
 
-		String query = "SELECT id, from_account, to_account, amount, status, created_at FROM transactions";
-
+		String query = "SELECT id, from_account, to_account, amount, status, created_at FROM transactions where";
+		List<Transaction> transactions = new ArrayList<>();
+		
 		if (from != null && to != null) {
-			query += " WHERE DATE(created_at) BETWEEN ? AND ?";
+			query += " DATE(created_at) BETWEEN ? AND ? AND";
 		}
+		
+		query += " customer_id = ?";
+		Long customer_id = (Long)Sessions.getCurrent().getAttribute("customer_id");
+		
+//		If we got customer_id is null
+		if (customer_id == null) return null;
 		
 		//query += " Order By created_at DESC";
 
@@ -29,11 +37,12 @@ public class TransactionHistoryDAO {
 			if (from != null && to != null) {
 				ps.setDate(1, from);
 				ps.setDate(2, to);
+				ps.setLong(3, customer_id);
+			} else {
+				ps.setLong(1, customer_id);
 			}
 
-			ResultSet rs = ps.executeQuery();
-			// alert("Message fetched..!");
-			List<Transaction> transactions = new ArrayList<>();
+			ResultSet rs = ps.executeQuery();			
 
 			while (rs.next()) {
 				Transaction transaction = new Transaction(rs.getLong("id"), rs.getLong("from_account"),

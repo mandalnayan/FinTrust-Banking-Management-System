@@ -55,7 +55,7 @@ public class TransactionHistoryController extends SelectorComposer<Component> {
        
     	transactionListbox.getItems().clear();
 
-        String query = "SELECT id, from_account, to_account, amount, status, created_at FROM transactions";
+        String query = "SELECT id, from_account, to_account, amount, status, created_at FROM transactions where user";
         		
 
         if (from != null && to != null) {

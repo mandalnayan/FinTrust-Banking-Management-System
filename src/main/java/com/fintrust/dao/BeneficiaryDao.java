@@ -27,13 +27,13 @@ public class BeneficiaryDao {
 		}
 	}
 
-	public static List<BeneficiaryModel> getBeneficiariesByUserId(int userId) {
+	public static List<BeneficiaryModel> getBeneficiariesByUserId(Long userId) {
 		List<BeneficiaryModel> list = new ArrayList<>();
 		String sql = "SELECT * FROM beneficiary WHERE user_id=?";
 
 		try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
-			ps.setInt(1, userId);
+			ps.setLong(1, userId);
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {

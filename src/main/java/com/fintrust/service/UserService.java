@@ -28,5 +28,13 @@ public interface UserService {
      * @param user
      */
 	void update2FA(Customer user);
+	
+	/**
+	 * Authenticating the user
+	 * @param userName
+	 * @param password
+	 * @return
+	 */
+	boolean isAuthorize(String userName, String password);
     
 }
