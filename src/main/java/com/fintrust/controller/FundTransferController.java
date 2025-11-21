@@ -9,12 +9,13 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.*;
 
-import com.fintrust.dao.AccountDao;
-import com.fintrust.dao.AccountDaoImp;
-import com.fintrust.dao.BeneficiaryDao;
-import com.fintrust.dao.FundTransferDao;
 import com.fintrust.model_copy.Account;
 import com.fintrust.model_copy.BeneficiaryModel;
+
+import zcom.finrust.dao_copy.AccountDao;
+import zcom.finrust.dao_copy.AccountDaoImp;
+import zcom.finrust.dao_copy.BeneficiaryDao;
+import zcom.finrust.dao_copy.FundTransferDao;
 
 
 public class FundTransferController extends SelectorComposer<Component> {

@@ -2,10 +2,11 @@ package com.fintrust.service;
 
 import org.zkoss.zk.ui.Sessions;
 
-import com.fintrust.dao.UserDAO;
-import com.fintrust.dao.UserDAOImpl;
 import com.fintrust.model_copy.Customer;
 import com.fintrust.model_copy.User;
+
+import zcom.finrust.dao_copy.UserDAO;
+import zcom.finrust.dao_copy.UserDAOImpl;
 
 public class UserServiceImpl implements UserService {
 

@@ -21,10 +21,11 @@ import org.zkoss.zul.Radiogroup;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
-import com.fintrust.dao.AccountDao;
-import com.fintrust.dao.AccountDaoImp;
 import com.fintrust.db.DBConnection;
 import com.fintrust.service.CardServices;
+
+import zcom.finrust.dao_copy.AccountDao;
+import zcom.finrust.dao_copy.AccountDaoImp;
 
 
 public class cardApplyPageController extends SelectorComposer<Window>{

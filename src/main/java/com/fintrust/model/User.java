@@ -2,6 +2,14 @@ package com.fintrust.model;
 
 import java.time.LocalDateTime;
 
+/**
+ * Represents a user record in the banking system.
+ * <p>
+ * This model is immutable to ensure security, stability, and prevention
+ * of accidental modifications, which is a key requirement in financial applications.
+ */
+
+
 public class User {
 
     private Integer id;

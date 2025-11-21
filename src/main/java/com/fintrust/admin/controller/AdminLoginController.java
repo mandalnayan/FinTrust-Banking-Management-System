@@ -8,8 +8,8 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
-import com.fintrust.dao.UserDAO;
-import com.fintrust.dao.UserDAOImpl;
+import zcom.finrust.dao_copy.UserDAO;
+import zcom.finrust.dao_copy.UserDAOImpl;
 
 public class AdminLoginController extends SelectorComposer<Window>{
 

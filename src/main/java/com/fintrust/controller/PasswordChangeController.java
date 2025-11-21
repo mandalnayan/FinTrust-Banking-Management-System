@@ -11,7 +11,7 @@ import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
-import com.fintrust.dao.UserDAOImpl;
+import zcom.finrust.dao_copy.UserDAOImpl;
 
 public class PasswordChangeController extends SelectorComposer<Window>{
 

@@ -1,7 +1,8 @@
 package com.fintrust.service;
 
-import com.fintrust.dao.ContactDAO;
 import com.fintrust.model_copy.ContactModel;
+
+import zcom.finrust.dao_copy.ContactDAO;
 
 public class ContactService {
 

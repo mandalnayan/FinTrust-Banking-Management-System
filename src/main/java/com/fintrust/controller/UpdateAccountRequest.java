@@ -10,10 +10,11 @@ import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Messagebox;
 
-import com.fintrust.dao.AccountUpdateRequestDao;
 import com.fintrust.model_copy.Account;
 import com.fintrust.model_copy.AccountUpdateRequest;
 import com.fintrust.service.AccountServiceImp;
+
+import zcom.finrust.dao_copy.AccountUpdateRequestDao;
 
 public class UpdateAccountRequest extends SelectorComposer<Component> {
 	private static final long serialVersionUID = 1L;

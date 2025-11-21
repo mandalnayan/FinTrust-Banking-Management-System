@@ -1,7 +1,8 @@
 package com.fintrust.service;
 
-import com.fintrust.dao.AccountCloseRequestDao;
 import com.fintrust.model_copy.AccountCloseRequest;
+
+import zcom.finrust.dao_copy.AccountCloseRequestDao;
 
 public class AccountCloseRequestService {
 	AccountCloseRequestDao closeReqDao;

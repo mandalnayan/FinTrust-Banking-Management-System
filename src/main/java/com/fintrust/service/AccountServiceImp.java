@@ -2,10 +2,11 @@ package com.fintrust.service;
 
 import java.util.List;
 
-import com.fintrust.dao.AccountDao;
-import com.fintrust.dao.AccountDaoImp;
 import com.fintrust.model_copy.Account;
 import com.fintrust.model_copy.Account.AccountStatus;
+
+import zcom.finrust.dao_copy.AccountDao;
+import zcom.finrust.dao_copy.AccountDaoImp;
 
 public class AccountServiceImp implements AccountService {
 

@@ -2,6 +2,13 @@ package com.fintrust.model_copy;
 
 import java.sql.Date;
 
+/**
+ * Represents a user record in the banking system.
+ * <p>
+ * This model is immutable to ensure security, stability, and prevention
+ * of accidental modifications, which is a key requirement in financial applications.
+ */
+
 public class User {
     private long id;
     private String name;

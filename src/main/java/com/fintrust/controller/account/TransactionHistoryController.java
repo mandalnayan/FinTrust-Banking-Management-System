@@ -7,9 +7,10 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zul.*;
 
-import com.fintrust.dao.TransactionHistoryDAO;
 import com.fintrust.db.DBConnection;
 import com.fintrust.model_copy.Transaction;
+
+import zcom.finrust.dao_copy.TransactionHistoryDAO;
 
 import java.sql.*;
 import java.util.ArrayList;

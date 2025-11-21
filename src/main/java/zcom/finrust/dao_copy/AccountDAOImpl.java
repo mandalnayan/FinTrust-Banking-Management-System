@@ -1,4 +1,4 @@
-package com.fintrust.dao;
+package zcom.finrust.dao_copy;
 
 public class AccountDAOImpl {
 	

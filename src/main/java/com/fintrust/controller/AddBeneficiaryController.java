@@ -7,8 +7,9 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.*;
 
-import com.fintrust.dao.BeneficiaryDao;
 import com.fintrust.model_copy.BeneficiaryModel;
+
+import zcom.finrust.dao_copy.BeneficiaryDao;
 
 public class AddBeneficiaryController extends SelectorComposer<Component> {
 
