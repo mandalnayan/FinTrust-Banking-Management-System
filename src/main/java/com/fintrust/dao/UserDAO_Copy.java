@@ -1,8 +1,9 @@
 package com.fintrust.dao;
 
-	import com.fintrust.model.User;
 	import java.sql.*;
 	import java.util.*;
+
+import com.fintrust.model_copy.User;
 
 	public class UsersDAO_Copy {
 
@@ -48,7 +49,7 @@ package com.fintrust.dao;
 
 	    public List<User> findAll() throws SQLException {
 	        List<User> list = new ArrayList<>();
-	        String sql = "SELECT * FROM users ORDER BY created_at DESC";
+	        String sql = "SELECT * FROM user ORDER BY created_at DESC";
 
 	        try (PreparedStatement ps = conn.prepareStatement(sql)) {
 	            ResultSet rs = ps.executeQuery();
@@ -59,15 +60,7 @@ package com.fintrust.dao;
 
 	    private User map(ResultSet rs) throws SQLException {
 	        User u = new User();
-	        u.setUserId(rs.getLong("user_id"));
-	        u.setFullName(rs.getString("full_name"));
-	        u.setEmail(rs.getString("email"));
-	        u.setPhone(rs.getString("phone"));
-	        u.setPasswordHash(rs.getString("password_hash"));
-	        u.setRole(rs.getString("role"));
-	        u.setStatus(rs.getString("status"));
-	        u.setCreatedAt(rs.getTimestamp("created_at").toInstant());
-	        u.setUpdatedAt(rs.getTimestamp("updated_at").toInstant());
+	        
 	        return u;
 	    }
 	}

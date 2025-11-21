@@ -1,6 +1,6 @@
 package com.fintrust.service;
 
-import com.fintrust.model.Customer;
+import com.fintrust.model_copy.Customer;
 
 public interface UserService {
 /**

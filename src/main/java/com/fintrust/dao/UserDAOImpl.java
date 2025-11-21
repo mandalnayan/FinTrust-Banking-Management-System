@@ -13,14 +13,15 @@ import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Messagebox;
 
 import com.fintrust.db.DBConnection;
-import com.fintrust.model.Customer;
-import com.fintrust.model.User;
+import com.fintrust.model_copy.Customer;
+import com.fintrust.model_copy.User;
 
 public class UserDAOImpl implements UserDAO {
 
 	/**
 	 * User: Take user data from signup form Save user data in db
 	 */
+	
 	@Override
 	public boolean saveUser(Customer user) {
 		// Execute this command first time while table creation

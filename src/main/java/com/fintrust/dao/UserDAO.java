@@ -1,6 +1,6 @@
 package com.fintrust.dao;
 
-import com.fintrust.model.Customer;
+import com.fintrust.model_copy.Customer;
 
 public interface UserDAO {
     boolean saveUser(Customer user);

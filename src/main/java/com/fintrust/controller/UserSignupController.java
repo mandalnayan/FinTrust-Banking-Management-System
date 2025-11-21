@@ -14,8 +14,8 @@ import org.zkoss.zul.Radio;
 import org.zkoss.zul.Radiogroup;
 import org.zkoss.zul.Textbox;
 
-import com.fintrust.model.Customer;
-import com.fintrust.model.User;
+import com.fintrust.model_copy.Customer;
+import com.fintrust.model_copy.User;
 import com.fintrust.service.UserService;
 import com.fintrust.service.UserServiceImpl;
 

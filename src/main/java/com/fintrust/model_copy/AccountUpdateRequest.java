@@ -1,4 +1,4 @@
-package com.fintrust.model;
+package com.fintrust.model_copy;
 import java.time.LocalDateTime;
 
 public class AccountUpdateRequest {

@@ -3,7 +3,7 @@ package com.fintrust.service;
 import org.zkoss.zhtml.Messagebox;
 
 import com.fintrust.dao.NomineeDao;
-import com.fintrust.model.Nominee;
+import com.fintrust.model_copy.Nominee;
 
 
 public class NomineeServiceImp implements NomineeService{

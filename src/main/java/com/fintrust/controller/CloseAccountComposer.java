@@ -12,7 +12,7 @@ import org.zkoss.zul.Label;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 
-import com.fintrust.model.AccountCloseRequest;
+import com.fintrust.model_copy.AccountCloseRequest;
 import com.fintrust.service.AccountCloseRequestService;
 
 

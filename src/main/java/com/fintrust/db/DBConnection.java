@@ -9,7 +9,7 @@ import org.zkoss.zk.ui.util.Clients;
 public class DBConnection {
 
     // Database configuration constants
-    private static final String URL = "jdbc:mysql://localhost:3306/fintrustdb";
+    private static final String URL = "jdbc:mysql://localhost:3306/fintrust_bank";
     private static final String USER = "root";
     private static final String PASSWORD = "root123";
     private static Connection connection = null;

@@ -1,111 +1,121 @@
 package com.fintrust.model;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 public class User {
-    private long id;
-    private String name;
+
+    private Integer id;
     private String email;
     private String phone;
-    private String gender;
-    private String country;
-    private String state;
-    private String dist;
-    private String city;
-    private String pincode;
-    private Date dob;
-    private Date registeredDate;
-    private String image;
-	private boolean twoFactor;
-  
-	private String password;
+    private String password;
+    private Role role;
+    private Status status;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
-	public User() {}
-    
-      public User(long id, String name, String email, String phone, String gender, String country, String state,
-			String dist, String city, String pincode, String image, Date registeredDate, Date dob) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.email = email;
-		this.phone = phone;
-		this.gender = gender;
-		this.country = country;
-		this.state = state;
-		this.dist = dist;
-		this.city = city;
-		this.pincode = pincode;
-		this.image = image;
-		this.registeredDate = registeredDate;
-		this.dob = dob;
-	}
-      
-	public String getImage() {
-		return image;
-	}
+    public enum Role {
+        USER,
+        ADMIN,
+        SUPER_ADMIN
+    }
 
-	  public void setImage(String image) {
-		  this.image = image;
-	  }
+    public enum Status {
+        ACTIVE,
+        INACTIVE,
+        BLOCKED
+    }
 
-	// Getters and Setters
-    public long getId() { return id; }
-    public void setId(long id) { this.id = id; }
+    public User() {
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public User(Integer id, String email, String phone, String password, Role role, Status status,
+                LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.email = email;
+        this.phone = phone;
+        this.password = password;
+        this.role = role;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
 
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
-    
-    public String getGender() { return gender; }
-    public void setGender(String gender) { this.gender = gender; }
+    public Integer getId() {
+        return id;
+    }
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-    public String getCountry() { return country; }
-    public void setCountry(String country) { this.country = country; }
+    public String getEmail() {
+        return email;
+    }
 
-    public String getState() { return state; }
-    public void setState(String state) { this.state = state; }
-    
-    public String getDist() { return dist; }
-    public void setDist(String dist) { this.dist = dist; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-    public String getCity() { return city; }
-    public void setCity(String city) { this.city = city; }
+    public String getPhone() {
+        return phone;
+    }
 
-    public String getPincode() { return pincode; }
-    public void setPincode(String pincode) { this.pincode = pincode; }
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
-    public Date getDob() { return dob; }
-    public void setDob(Date dob) { this.dob = dob; }
-    
-    public boolean isTwoFactor() {
-		return twoFactor;
-	}
-    
-    public Date getRegisteredDate() {
-		return registeredDate;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void setRegisteredDate(Date registeredDate) {
-		this.registeredDate = registeredDate;
-	}
-    
-	public void setTwoFactor(boolean twoFactor) {
-		this.twoFactor = twoFactor;
-	}
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", email=" + email + ", phone=" + phone + ", gender=" + gender
-				+ ", country=" + country + ", state=" + state + ", dist=" + dist + ", city=" + city + ", pincode="
-				+ pincode + ", dob=" + dob + ", twoFactor=" + twoFactor + "]";
-	}
-	
-	
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", role=" + role +
+                ", status=" + status +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
 }
+

@@ -26,7 +26,7 @@ import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Radiogroup;
 import org.zkoss.zul.Textbox;
 
-import com.fintrust.model.ContactModel;
+import com.fintrust.model_copy.ContactModel;
 import com.fintrust.service.ContactService;
 
 public class ContactController extends SelectorComposer<Component> {

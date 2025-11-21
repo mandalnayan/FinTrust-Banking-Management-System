@@ -4,7 +4,7 @@ import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.ListitemRenderer;
 
-import com.fintrust.model.Transaction;
+import com.fintrust.model_copy.Transaction;
 
 public class TransactionRender implements ListitemRenderer<Transaction> {
 

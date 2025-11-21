@@ -8,7 +8,7 @@ import java.sql.Statement;
 import org.zkoss.zhtml.Messagebox;
 
 import com.fintrust.db.DBConnection;
-import com.fintrust.model.Nominee;
+import com.fintrust.model_copy.Nominee;
 
 
 public class NomineeDao {

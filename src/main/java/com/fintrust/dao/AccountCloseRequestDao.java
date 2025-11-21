@@ -11,7 +11,7 @@ import java.util.List;
 import org.zkoss.zul.Messagebox;
 
 import com.fintrust.db.DBConnection;
-import com.fintrust.model.AccountCloseRequest;
+import com.fintrust.model_copy.AccountCloseRequest;
 
 
 public class AccountCloseRequestDao {

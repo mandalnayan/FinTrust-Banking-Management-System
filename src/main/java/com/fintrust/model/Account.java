@@ -1,129 +1,92 @@
 package com.fintrust.model;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class Account {
-	private long account_no;
-	private long customer_id;
-	private double balance;
-	private AccountType account_type;
-	private AccountStatus account_status;
-	private String branch_Name;
-	private ModeOfOperation mode_of_operation;
-	private long nominee_id ;
-	private LocalDateTime created_at;
-	
-	
-	
-	public Account(long account_no, long customer_id, double balance, AccountType account_type,
-			AccountStatus account_status, String branch_Name, ModeOfOperation mode_of_operation, long nominee_id,
-			LocalDateTime created_at) {
+    private Long accountId;
+    private Long userId;
+    private String accountNumber;
+    private String accountType;   // savings/current/salary/fixed_deposit
+    private BigDecimal balance;
+    private String currency;
+    private String status;
+    private LocalDateTime openedAt;
+    private LocalDateTime updatedAt;
+    
+    public Account() {
+    	
+    }
+    
+	public Account(Long accountId, Long userId, String accountNumber, String accountType, BigDecimal balance,
+			String currency, String status, LocalDateTime openedAt, LocalDateTime updatedAt) {
 		super();
-		this.account_no = account_no;
-		this.customer_id = customer_id;
+		this.accountId = accountId;
+		this.userId = userId;
+		this.accountNumber = accountNumber;
+		this.accountType = accountType;
 		this.balance = balance;
-		this.account_type = account_type;
-		this.account_status = account_status;
-		this.branch_Name = branch_Name;
-		this.mode_of_operation = mode_of_operation;
-		this.nominee_id = nominee_id;
-		this.created_at = created_at;
-	}
-
-	public Account() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public enum AccountStatus {
-		ACTIVE,INACTIVE,CLOSED
+		this.currency = currency;
+		this.status = status;
+		this.openedAt = openedAt;
+		this.updatedAt = updatedAt;
 	}
 	
-	public enum AccountType {
-		CURRENT,SAVING,SALARY
+	public Long getAccountId() {
+		return accountId;
 	}
-	
-	public enum ModeOfOperation{
-		SELF, JOINT 
+	public void setAccountId(Long accountId) {
+		this.accountId = accountId;
 	}
-	
-	public long getAccount_no() {
-		return account_no;
+	public Long getUserId() {
+		return userId;
 	}
-
-	public void setAccount_no(long account_no) {
-		this.account_no = account_no;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
-
-	public long getCustomer_id() {
-		return customer_id;
+	public String getAccountNumber() {
+		return accountNumber;
 	}
-
-	public void setCustomer_id(long customer_id) {
-		this.customer_id = customer_id;
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
 	}
-
-	public double getBalance() {
+	public String getAccountType() {
+		return accountType;
+	}
+	public void setAccountType(String accountType) {
+		this.accountType = accountType;
+	}
+	public BigDecimal getBalance() {
 		return balance;
 	}
-
-	public void setBalance(double balance) {
+	public void setBalance(BigDecimal balance) {
 		this.balance = balance;
 	}
-
-	public AccountType getAccount_type() {
-		return account_type;
+	public String getCurrency() {
+		return currency;
+	}
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public LocalDateTime getOpenedAt() {
+		return openedAt;
+	}
+	public void setOpenedAt(LocalDateTime openedAt) {
+		this.openedAt = openedAt;
+	}
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
-	public void setAccount_type(AccountType account_type) {
-		this.account_type = account_type;
-	}
-
-	public AccountStatus getAccount_status() {
-		return account_status;
-	}
-
-	public void setAccount_status(AccountStatus account_status) {
-		this.account_status = account_status;
-	}
-
-	public String getBranch_Name() {
-		return branch_Name;
-	}
-
-	public void setBranch_Name(String branch_Name) {
-		this.branch_Name = branch_Name;
-	}
-
-	public ModeOfOperation getMode_of_operation() {
-		return mode_of_operation;
-	}
-
-	public void setMode_of_operation(ModeOfOperation mode_of_operation) {
-		this.mode_of_operation = mode_of_operation;
-	}
-
-	public long getNominee_id() {
-		return nominee_id;
-	}
-
-	public void setNominee_id(long nominee_id) {
-		this.nominee_id = nominee_id;
-	}
-
-	public LocalDateTime getCreated_at() {
-		return created_at;
-	}
-
-	public void setCreated_at(LocalDateTime created_at) {
-		this.created_at = created_at;
-	}
-
-	@Override
-	public String toString() {
-		return "Account [account_no=" + account_no + ", customer_id=" + customer_id + ", balance=" + balance
-				+ ", account_type=" + account_type + ", account_status=" + account_status + ", branch_Name="
-				+ branch_Name + ", mode_of_operation=" + mode_of_operation + ", nominee_id=" + nominee_id
-				+ ", created_at=" + created_at + "]";
-	}
-	
-	
+   
+    
+    
 }

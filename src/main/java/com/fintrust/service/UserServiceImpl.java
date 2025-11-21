@@ -4,8 +4,8 @@ import org.zkoss.zk.ui.Sessions;
 
 import com.fintrust.dao.UserDAO;
 import com.fintrust.dao.UserDAOImpl;
-import com.fintrust.model.Customer;
-import com.fintrust.model.User;
+import com.fintrust.model_copy.Customer;
+import com.fintrust.model_copy.User;
 
 public class UserServiceImpl implements UserService {
 

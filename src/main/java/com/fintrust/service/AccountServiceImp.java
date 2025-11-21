@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.fintrust.dao.AccountDao;
 import com.fintrust.dao.AccountDaoImp;
-import com.fintrust.model.Account;
-import com.fintrust.model.Account.AccountStatus;
+import com.fintrust.model_copy.Account;
+import com.fintrust.model_copy.Account.AccountStatus;
 
 public class AccountServiceImp implements AccountService {
 

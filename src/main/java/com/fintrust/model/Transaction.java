@@ -1,67 +1,123 @@
 package com.fintrust.model;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 public class Transaction {
-private long id;
-private long from_account;
-private long to_account;
-private double amount;
-private String status;
-private String created_at;
+    private Long transactionId;
+    private Long accountId;
+    private Long relatedAccountId;
+    private Long beneficiaryId;
+    private String txnReference;
+    private String txnType;       // credit/debit
+    private String mode;          // upi/neft/imps/card/cash
+    private BigDecimal amount;
+    private BigDecimal balanceAfter;
+    private String description;
+    private String status;
+    private LocalDateTime createdAt;
+    
+    
+    public Transaction() {
+    	
+    }
+    
+    
+    
+	public Transaction(Long transactionId, Long accountId, Long relatedAccountId, Long beneficiaryId,
+			String txnReference, String txnType, String mode, BigDecimal amount, BigDecimal balanceAfter,
+			String description, String status, LocalDateTime createdAt) {
+		super();
+		this.transactionId = transactionId;
+		this.accountId = accountId;
+		this.relatedAccountId = relatedAccountId;
+		this.beneficiaryId = beneficiaryId;
+		this.txnReference = txnReference;
+		this.txnType = txnType;
+		this.mode = mode;
+		this.amount = amount;
+		this.balanceAfter = balanceAfter;
+		this.description = description;
+		this.status = status;
+		this.createdAt = createdAt;
+	}
+	
+	
+	public Long getTransactionId() {
+		return transactionId;
+	}
+	public void setTransactionId(Long transactionId) {
+		this.transactionId = transactionId;
+	}
+	public Long getAccountId() {
+		return accountId;
+	}
+	public void setAccountId(Long accountId) {
+		this.accountId = accountId;
+	}
+	public Long getRelatedAccountId() {
+		return relatedAccountId;
+	}
+	public void setRelatedAccountId(Long relatedAccountId) {
+		this.relatedAccountId = relatedAccountId;
+	}
+	public Long getBeneficiaryId() {
+		return beneficiaryId;
+	}
+	public void setBeneficiaryId(Long beneficiaryId) {
+		this.beneficiaryId = beneficiaryId;
+	}
+	public String getTxnReference() {
+		return txnReference;
+	}
+	public void setTxnReference(String txnReference) {
+		this.txnReference = txnReference;
+	}
+	public String getTxnType() {
+		return txnType;
+	}
+	public void setTxnType(String txnType) {
+		this.txnType = txnType;
+	}
+	public String getMode() {
+		return mode;
+	}
+	public void setMode(String mode) {
+		this.mode = mode;
+	}
+	public BigDecimal getAmount() {
+		return amount;
+	}
+	public void setAmount(BigDecimal amount) {
+		this.amount = amount;
+	}
+	public BigDecimal getBalanceAfter() {
+		return balanceAfter;
+	}
+	public void setBalanceAfter(BigDecimal balanceAfter) {
+		this.balanceAfter = balanceAfter;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
 
-
-
-
-public Transaction(long id, long from_account, long to_account, double amount, String status, String created_at) {
-	super();
-	this.id = id;
-	this.from_account = from_account;
-	this.to_account = to_account;
-	this.amount = amount;
-	this.status = status;
-	this.created_at = created_at;
-}
-public long getId() {
-	return id;
-}
-public void setId(long id) {
-	this.id = id;
-}
-public long getFrom_account() {
-	return from_account;
-}
-public void setFrom_account(long from_account) {
-	this.from_account = from_account;
-}
-public long getTo_account() {
-	return to_account;
-}
-public void setTo_account(long to_account) {
-	this.to_account = to_account;
-}
-public double getAmount() {
-	return amount;
-}
-public void setAmount(double amount) {
-	this.amount = amount;
-}
-public String getStatus() {
-	return status;
-}
-public void setStatus(String status) {
-	this.status = status;
-}
-public String getCreated_at() {
-	return created_at;
-}
-public void setCreated_at(String created_at) {
-	this.created_at = created_at;
-}
-@Override
-public String toString() {
-	return "Transaction [id=" + id + ", from_account=" + from_account + ", to_account=" + to_account + ", amount="
-			+ amount + ", status=" + status + ", created_at=" + created_at + "]";
+   
+    
 }
 
-
-}
 

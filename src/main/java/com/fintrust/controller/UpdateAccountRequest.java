@@ -11,8 +11,8 @@ import org.zkoss.zul.Label;
 import org.zkoss.zul.Messagebox;
 
 import com.fintrust.dao.AccountUpdateRequestDao;
-import com.fintrust.model.Account;
-import com.fintrust.model.AccountUpdateRequest;
+import com.fintrust.model_copy.Account;
+import com.fintrust.model_copy.AccountUpdateRequest;
 import com.fintrust.service.AccountServiceImp;
 
 public class UpdateAccountRequest extends SelectorComposer<Component> {

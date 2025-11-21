@@ -6,8 +6,8 @@ import org.zkoss.zul.Borderlayout;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
 
-import com.fintrust.model.Customer;
-import com.fintrust.model.User;
+import com.fintrust.model_copy.Customer;
+import com.fintrust.model_copy.User;
 import com.fintrust.service.UserService;
 import com.fintrust.service.UserServiceImpl;
 

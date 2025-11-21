@@ -1,4 +1,4 @@
-package com.fintrust.model;
+package com.fintrust.model_copy;
 
 import java.sql.Date;
 

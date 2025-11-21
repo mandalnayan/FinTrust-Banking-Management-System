@@ -5,7 +5,7 @@ package com.fintrust.service;
 	import java.time.temporal.ChronoUnit;
 	import java.util.concurrent.ThreadLocalRandom;
 
-import com.fintrust.model.OtpRecord;
+import com.fintrust.model_copy.OtpRecord;
 import com.fintrust.repository.OtpRepository;
 
 import jakarta.mail.MessagingException;

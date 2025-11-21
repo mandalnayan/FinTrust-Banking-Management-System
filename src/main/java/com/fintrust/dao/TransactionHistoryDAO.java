@@ -11,7 +11,7 @@ import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.Messagebox;
 
 import com.fintrust.db.DBConnection;
-import com.fintrust.model.Transaction;
+import com.fintrust.model_copy.Transaction;
 
 public class TransactionHistoryDAO {
 

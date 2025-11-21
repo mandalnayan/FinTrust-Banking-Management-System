@@ -9,11 +9,11 @@ import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.*;
 
-import com.fintrust.model.Account;
-import com.fintrust.model.Account.AccountStatus;
-import com.fintrust.model.Account.AccountType;
-import com.fintrust.model.Account.ModeOfOperation;
-import com.fintrust.model.Nominee;
+import com.fintrust.model_copy.Account;
+import com.fintrust.model_copy.Nominee;
+import com.fintrust.model_copy.Account.AccountStatus;
+import com.fintrust.model_copy.Account.AccountType;
+import com.fintrust.model_copy.Account.ModeOfOperation;
 import com.fintrust.service.AccountServiceImp;
 import com.fintrust.service.NomineeServiceImp;
 

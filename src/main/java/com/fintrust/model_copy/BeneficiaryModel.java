@@ -1,9 +1,4 @@
-package com.fintrust.model;
-
-
-
-import java.time.LocalDateTime;
-
+package com.fintrust.model_copy;
 
 public class BeneficiaryModel {
     private int beneficiaryId;
@@ -12,7 +7,6 @@ public class BeneficiaryModel {
     private String accountNumber;
     private String bankName;
     private String ifscCode;
-    private LocalDateTime addedAt;
 
     public int getBeneficiaryId() { return beneficiaryId; }
     public void setBeneficiaryId(int beneficiaryId) { this.beneficiaryId = beneficiaryId; }
@@ -20,13 +14,7 @@ public class BeneficiaryModel {
     public int getUserId() { return userId; }
     public void setUserId(int userId) { this.userId = userId; }
 
-    public LocalDateTime getAddedAt() {
-		return addedAt;
-	}
-	public void setAddedAt(LocalDateTime addedAt) {
-		this.addedAt = addedAt;
-	}
-	public String getName() { return name; }
+    public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
     public String getAccountNumber() { return accountNumber; }

@@ -8,8 +8,8 @@ import org.zkoss.zk.ui.annotation.Command;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Messagebox;
 
-import com.fintrust.model.Customer;
-import com.fintrust.model.User;
+import com.fintrust.model_copy.Customer;
+import com.fintrust.model_copy.User;
 import com.fintrust.service.UserService;
 import com.fintrust.service.UserServiceImpl;
 

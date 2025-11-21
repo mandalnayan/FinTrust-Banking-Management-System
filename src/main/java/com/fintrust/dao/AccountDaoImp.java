@@ -14,10 +14,10 @@ import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.Messagebox;
 
 import com.fintrust.db.DBConnection;
-import com.fintrust.model.Account;
-import com.fintrust.model.Account.AccountStatus;
-import com.fintrust.model.Account.AccountType;
-import com.fintrust.model.Account.ModeOfOperation;
+import com.fintrust.model_copy.Account;
+import com.fintrust.model_copy.Account.AccountStatus;
+import com.fintrust.model_copy.Account.AccountType;
+import com.fintrust.model_copy.Account.ModeOfOperation;
 
 public class AccountDaoImp implements AccountDao {
 

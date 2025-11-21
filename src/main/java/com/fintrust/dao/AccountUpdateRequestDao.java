@@ -6,7 +6,7 @@ import java.util.*;
 import org.zkoss.zul.Messagebox;
 
 import com.fintrust.db.DBConnection;
-import com.fintrust.model.AccountUpdateRequest;
+import com.fintrust.model_copy.AccountUpdateRequest;
 
 
 public class AccountUpdateRequestDao {

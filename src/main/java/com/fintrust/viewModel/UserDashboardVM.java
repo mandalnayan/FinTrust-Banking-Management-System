@@ -5,7 +5,7 @@ import org.zkoss.zk.ui.Executions;
 
 import com.fintrust.dao.AccountDao;
 import com.fintrust.dao.AccountDaoImp;
-import com.fintrust.model.Account;
+import com.fintrust.model_copy.Account;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

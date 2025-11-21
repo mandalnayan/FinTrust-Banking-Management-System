@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fintrust.db.DBConnection;
-import com.fintrust.model.BeneficiaryModel;
+import com.fintrust.model_copy.BeneficiaryModel;
 
 public class BeneficiaryDao {
 

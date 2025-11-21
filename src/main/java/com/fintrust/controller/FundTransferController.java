@@ -9,12 +9,12 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.*;
 
-import com.fintrust.model.Account;
-import com.fintrust.model.BeneficiaryModel;
 import com.fintrust.dao.AccountDao;
 import com.fintrust.dao.AccountDaoImp;
 import com.fintrust.dao.BeneficiaryDao;
 import com.fintrust.dao.FundTransferDao;
+import com.fintrust.model_copy.Account;
+import com.fintrust.model_copy.BeneficiaryModel;
 
 
 public class FundTransferController extends SelectorComposer<Component> {
@@ -97,7 +97,7 @@ public class FundTransferController extends SelectorComposer<Component> {
         Clients.showNotification("from=" + fromAcc + ", to=" + toAcc + ", amount=" + amt);
         if (result) {
    		 Clients.showNotification("Transfer successfull!", "info", null, "top_center", 3000);
-   		fromAccount.setValue("");
+   		//fromAccount.setValue("");
    		toAccount.setValue("");
    		ifsccode.setValue("");
    		amount.setValue(0);

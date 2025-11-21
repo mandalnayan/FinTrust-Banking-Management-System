@@ -2,7 +2,7 @@ package com.fintrust.dao;
 
 import java.util.List;
 
-import com.fintrust.model.Account;
+import com.fintrust.model_copy.Account;
 
 public interface AccountDao {
 	boolean createAccount(Account account);

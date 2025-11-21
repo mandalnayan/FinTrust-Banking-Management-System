@@ -2,7 +2,7 @@ package com.fintrust.repository;
 
 	import java.util.concurrent.ConcurrentHashMap;
 
-import com.fintrust.model.OtpRecord;
+import com.fintrust.model_copy.OtpRecord;
 
 	public class OtpRepository {
 

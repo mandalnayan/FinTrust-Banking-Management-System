@@ -5,7 +5,7 @@ import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.*;
 import org.zkoss.zul.*;
 
-import com.fintrust.model.Account;
+import com.fintrust.model_copy.Account;
 import com.fintrust.service.AccountServiceImp;
 
 

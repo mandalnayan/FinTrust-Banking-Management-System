@@ -9,7 +9,7 @@ import org.zkoss.zul.*;
 
 import com.fintrust.dao.TransactionHistoryDAO;
 import com.fintrust.db.DBConnection;
-import com.fintrust.model.Transaction;
+import com.fintrust.model_copy.Transaction;
 
 import java.sql.*;
 import java.util.ArrayList;

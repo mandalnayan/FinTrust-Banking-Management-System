@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fintrust.db.DBConnection;
-import com.fintrust.model.ContactModel;
+import com.fintrust.model_copy.ContactModel;
 
 public class ContactDAO {
 
