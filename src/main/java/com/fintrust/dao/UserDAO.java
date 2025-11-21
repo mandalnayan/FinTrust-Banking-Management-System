@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import com.fintrust.model.User;
+
 /**
  * DAO interface for managing users in the banking system.
  * <p>
@@ -15,16 +17,16 @@ public interface UserDAO {
     /**
      * Inserts a new user into the database.
      *
-     * @param email         unique email
-     * @param phone         phone number
-     * @param passwordHash  hashed password
-     * @param role          user role ('user', 'admin', 'super_admin')
-     * @param status        account status ('active','inactive','blocked')
-     * @return generated user_id
+     * @param User contains all information about user
      * @throws SQLException if database operation fails
      */
-    long create(String email, String phone,
-                String passwordHash, String role, String status) throws SQLException;
+    long create(User user);
+    
+    /**
+     * Check either email already exist
+     */
+    
+    boolean isEmailExists(String email);
 
     /**
      * Finds a user by ID.

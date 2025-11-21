@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class User {
 
     private Integer id;
+    private String fullName;
     private String email;
     private String phone;
     private String password;
@@ -36,9 +37,10 @@ public class User {
     public User() {
     }
 
-    public User(Integer id, String email, String phone, String password, Role role, Status status,
+	public User(Integer id, String name, String email, String phone, String password, Role role, Status status,
                 LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
+        this.fullName = name;
         this.email = email;
         this.phone = phone;
         this.password = password;
@@ -53,6 +55,15 @@ public class User {
         return id;
     }
 
+
+    public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String name) {
+		this.fullName = name;
+	}
+    
     public void setId(Integer id) {
         this.id = id;
     }

@@ -6,6 +6,8 @@ import java.sql.*;
 import java.util.*;
 
 import com.fintrust.dao.UserDAO;
+import com.fintrust.db.DBConnection;
+import com.fintrust.model.User;
 
 /**
  * JDBC implementation of UserDAO for banking systems.
@@ -22,34 +24,52 @@ public class UserDAOImpl implements UserDAO {
      *
      * @param connection JDBC connection managed externally
      */
-    public UserDAOImpl(Connection connection) {
-        this.connection = connection;
+    public UserDAOImpl() {
+        this.connection = DBConnection.getConnection();
     }
 
     @Override
-    public long create(String email, String phone, String passwordHash,
-                       String role, String status) throws SQLException {
+    public long create(User user){
 
         String sql = """
-            INSERT INTO users (email, phone, password_hash, role, status)
+            INSERT INTO users (full_name, phone, password_hash, role)
             VALUES (?, ?, ?, ?, ?)
         """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setString(1, email);
-            ps.setString(2, phone);
-            ps.setString(3, passwordHash);
-            ps.setString(4, role.toLowerCase());
-            ps.setString(5, status.toLowerCase());
+            ps.setString(1, user.getFullName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPhone());
+            ps.setString(4, user.getPassword());
+            ps.setString(5, user.getRole().name().toLowerCase());
 
             ps.executeUpdate();
 
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) return rs.getLong(1);
+            } catch(SQLException ex) {
+            	ex.printStackTrace();
             }
+        } catch(SQLException ex) {
+        	ex.printStackTrace();
         }
 
         return -1;
+    }
+    
+    @Override
+    public boolean isEmailExists(String email) {
+    	String sql = "SELECT * FROM users WHERE email = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, email); 
+           ResultSet rs = ps.executeQuery();
+                return rs.next();
+            } 
+        catch(SQLException ex) {
+        	ex.printStackTrace();
+        }
+        return false;
     }
 
     @Override
@@ -64,9 +84,10 @@ public class UserDAOImpl implements UserDAO {
         }
         return null;
     }
+    
 
     @Override
-    public List<Map<String, Object>> findAll() throws SQLException {
+    public List<Map<String, Object>> findAll() {
         String sql = "SELECT * FROM users ORDER BY email ASC";
         List<Map<String, Object>> list = new ArrayList<>();
 
@@ -76,30 +97,37 @@ public class UserDAOImpl implements UserDAO {
             while (rs.next()) {
                 list.add(mapRow(rs));
             }
+        } catch(SQLException ex) {
+        	ex.printStackTrace();
         }
         return list;
     }
 
+//    	will work  **********
     @Override
-    public boolean update(long userId, String email, String phone, String role, String status) throws SQLException {
-        String sql = """
-            UPDATE users SET
-                email = ?,
-                phone = ?,
-                role = ?,
-                status = ?
-            WHERE user_id = ?
-        """;
-
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, email);
-            ps.setString(2, phone);
-            ps.setString(3, role.toLowerCase());
-            ps.setString(4, status.toLowerCase());
-            ps.setLong(5, userId);
-
-            return ps.executeUpdate() > 0;
-        }
+    public boolean update(User user) throws SQLException {
+    	
+      
+//    	String sql = """
+//            UPDATE users SET
+//        		full_name = ?,
+//                phone = ?,
+//                role = ?,
+//                status = ?
+//            WHERE user_id = ?
+//        """;
+//
+//        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+//        	
+//            ps.setString(1, user.getPhone());
+//            ps.setString(3, role.toLowerCase());
+//            ps.setString(4, status.toLowerCase());
+//            ps.setLong(5, userId);
+//
+//            return ps.executeUpdate() > 0;
+//        }
+    	
+    	return false;
     }
 
     @Override

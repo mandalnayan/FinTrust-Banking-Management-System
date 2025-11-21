@@ -14,8 +14,7 @@ import org.zkoss.zul.Radio;
 import org.zkoss.zul.Radiogroup;
 import org.zkoss.zul.Textbox;
 
-import com.fintrust.model_copy.Customer;
-import com.fintrust.model_copy.User;
+import com.fintrust.model.User;
 import com.fintrust.service.UserService;
 import com.fintrust.service.UserServiceImpl;
 
@@ -69,22 +68,11 @@ public class UserSignupController extends SelectorComposer<Component> {
 		}
 
 		 // Create User object
-		Customer user = new Customer();
-        user.setName(name.getValue());
+		User user = new User();
+        user.setFullName(name.getValue());
         user.setEmail(email.getValue());
         user.setPhone(phoneNumber.getValue());
-        user.setGender(radio.getLabel());
-        user.setDist(dist.getValue());
         user.setPassword(password.getValue());
-        user.setCountry(country.getValue());
-        user.setState(state.getValue());
-        user.setCity(city.getValue());
-        user.setPincode(pincode.getValue());
-        if (dob.getValue() != null) {
-            java.sql.Date sqlDob = new java.sql.Date(dob.getValue().getTime());
-            user.setDob(sqlDob);
-        } else {
-            user.setDob(null);
         }
 
         // Send data to service layer

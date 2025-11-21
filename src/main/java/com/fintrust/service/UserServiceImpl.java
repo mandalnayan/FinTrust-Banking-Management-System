@@ -2,11 +2,10 @@ package com.fintrust.service;
 
 import org.zkoss.zk.ui.Sessions;
 
-import com.fintrust.model_copy.Customer;
-import com.fintrust.model_copy.User;
+import com.fintrust.dao.UserDAO;
+import com.fintrust.dao.impl.UserDAOImpl;
+import com.fintrust.model.User;
 
-import zcom.finrust.dao_copy.UserDAO;
-import zcom.finrust.dao_copy.UserDAOImpl;
 
 public class UserServiceImpl implements UserService {
 
@@ -17,7 +16,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean registerUser(Customer user) {
+    public boolean registerUser(User user) {
         // Check if email already exists
         if (userDAO.isEmailExists(user.getEmail())) {
             System.out.println("Email already registered.");
@@ -31,22 +30,23 @@ public class UserServiceImpl implements UserService {
         String digestPassword = PasswordDigestion.digestPassword(user.getPassword());
         user.setPassword(digestPassword);
         
-        // Save user to DB
-        return userDAO.saveUser(user);
+        // Insert user to DB
+        Long userId = userDAO.create(user);
+        return userId != -1;
     }
     
-    public Customer getLoggedInUser() {
+    public User getLoggedInUser() {
     		String email = (String)Sessions.getCurrent().getAttribute("currentUser");
     		return userDAO.getUserByEmail(email);
     }
     
-    public boolean updateUser(Customer customer) {
+    public boolean updateUser(User user) {
     		
-    	    return userDAO.updateUser(customer);
+    	    return userDAO.update(user);
     }
 
 	@Override
-	public void update2FA(Customer customer) {
+	public void update2FA(User user) {
 		// TODO Auto-generated method stub
 		
 	}
