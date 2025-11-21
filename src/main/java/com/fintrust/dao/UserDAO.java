@@ -24,9 +24,17 @@ public interface UserDAO {
     
     /**
      * Check either email already exist
-     */
-    
+     */    
     boolean isEmailExists(String email);
+    
+    /**
+     * Authenticating user
+     * @param userName
+     * @param password
+     * @return
+     * @throws SQLException
+     */
+    boolean authenticate(String userName, String password) throws SQLException; 
 
     /**
      * Finds a user by ID.
@@ -35,7 +43,7 @@ public interface UserDAO {
      * @return a Map representing column names and values, or null if not found
      * @throws SQLException if database operation fails
      */
-    Map<String, Object> findById(long userId) throws SQLException;
+    User findById(long userId) throws SQLException;
 
     /**
      * Retrieves all users.
@@ -56,7 +64,7 @@ public interface UserDAO {
      * @return true if update successful
      * @throws SQLException if database operation fails
      */
-    boolean update(long userId, String email, String phone, String role, String status) throws SQLException;
+    boolean update(User user) throws SQLException;
 
     /**
      * Updates only the password hash for a user.

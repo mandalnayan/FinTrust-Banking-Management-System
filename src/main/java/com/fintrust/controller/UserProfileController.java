@@ -6,8 +6,7 @@ import org.zkoss.zul.Borderlayout;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
 
-import com.fintrust.model_copy.Customer;
-import com.fintrust.model_copy.User;
+import com.fintrust.model.User;
 import com.fintrust.service.UserService;
 import com.fintrust.service.UserServiceImpl;
 
@@ -22,8 +21,8 @@ public class UserProfileController extends SelectorComposer<Borderlayout> {
 
 		// Load user data (e.g., from database or session)
 		userService = new UserServiceImpl();
-		Customer customer = userService.getLoggedInUser();
+		User user = userService.getLoggedInUser();
 		Executions.getCurrent().setAttribute("user", user);
-		Messagebox.show("Hii: " + user);
+		//Messagebox.show("Hii: " + user);
 	}
 }

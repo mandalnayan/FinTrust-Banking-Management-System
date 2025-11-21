@@ -1,53 +1,55 @@
-<?page title="User Signup - FinTrust Bank" contentType="text/html;charset=UTF-8"?>
-<?link rel="stylesheet" type="text/css" href="/resources/css/style.css"?>
+<?page title="Signup - FinTrust Bank" contentType="text/html;charset=UTF-8"?>
+
 <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
+<?link rel="stylesheet" type="text/css" href="/resources/css/auth-common3.css"?>
+
+<?link rel="stylesheet" type="text/css" href="/resources/css/auth.css"?>
+
 <zk xmlns:h="xhtml">
-	<include src = "/WEB-INF/components/navbar.zul"/>
-    <window border="none" sclass="signup-window, scroll-container" width = "100vw" apply = "com.fintrust.controller.UserSignupController">
 
-        <div sclass="signup-container" width = "100vw">
+    <include src="/WEB-INF/components/navbar.zul"/>
 
-            <!-- Left Section (Image) -->
-            <div sclass="signup-left">
-                <image src="/resources/images/signup-rightSec.png" sclass="signup-img"/>
+    <div sclass="signup-wrapper">
+
+        <!-- LEFT Panel -->
+        <div sclass="signup-left">
+            <image src="/resources/images/signup-rightSec.png" sclass="signup-hero-img"/>
+            <label value="Secure • Trusted • Digital Banking" sclass="signup-tagline"/>
+        </div>
+
+        <!-- RIGHT Panel -->
+        <div sclass="signup-right" apply="com.fintrust.controller.UserSignupController">
+            
+            <label value="Create Your FinTrust Account" sclass="signup-title"/>
+            <label value="Open your secure digital banking profile" sclass="signup-subtitle"/>
+
+            <!-- FORM GRID -->
+            <div sclass="form-grid">
+                <textbox id="name" placeholder="Full Name" sclass="input-field"/>
+
+                <textbox id="email" placeholder="Email Address" sclass="input-field"/>
+
+                <textbox id="phoneNumber" placeholder="Phone Number" sclass="input-field"/>
+
+                <textbox id="password" type="password" placeholder="Password" sclass="input-field"/>
+
+                <textbox id="confirmPassword" type="password" placeholder="Confirm Password" 
+                         sclass="input-field confirm"/>
             </div>
 
-            <!-- Right Section (Form) -->
-            <div sclass="signup-right">
-                <label value="FinTrust Banking System" sclass="brand-title"/>
-                <label value="Create Your Account" sclass="signup-heading"/>
+            <!-- Button -->
+            <button label="Create Account" sclass="signup-btn" onClick="@command('onSignup')"/>
 
-                <!-- Form grid layout -->
-                <div sclass="form-grid">
-                    <textbox id = "name" placeholder="Full Name" sclass="input-field" constraint="no empty"/>
-                    <textbox id = "email" placeholder="Email Address" sclass="input-field" />
-
-                    <textbox id = "phoneNumber" placeholder="Phone Number" sclass="input-field" />
-                    <datebox id = "dob" placeholder="Date of Birth"  constraint="no empty"/>
-
-                    <textbox id = "country" placeholder="Country" sclass="input-field" />
-                    <textbox id = "state" placeholder="State" sclass="input-field" />
-                    <textbox id = "dist" placeholder="Distice" sclass="input-field" />
-
-                    <textbox id = "city" placeholder="City" sclass="input-field" />
-                    <textbox id = "pincode" placeholder="Pin Code" sclass="input-field" />
-					<radiogroup id = "gender"> <label value = "Gender" />
-					<radio label="Male"/>
-					<radio  label="Female"/>
-					<radio label="Other"/>
-					</radiogroup>
-                    <textbox id = "password" type="password" placeholder="Password" sclass="input-field" constraint="no empty"/>
-                    <textbox id = "confirmPassword" type="password" placeholder="Confirm Password" sclass="input-field" constraint="no empty"/>
-                </div>
-				<separator />
-                <button id = "signupBtn" label="Sign Up" sclass="signup-btn" onClick="@command('onSignup')"/>
-
-                <hlayout sclass="login-redirect">
-                    <label value="Already have an account?"/>
-                    <a href="/user/login.zul" label="Login"/>
-                </hlayout>
-            </div>
+            <!-- Login Redirect -->
+            <hlayout sclass="login-redirect">
+                <label value="Already have an account?"/>
+                <a href="/user/login.zul">Login</a>
+            </hlayout>
 
         </div>
-    </window>
+    </div>
+
 </zk>
+
+
+

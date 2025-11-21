@@ -11,7 +11,7 @@ public class DBConnection {
     // Database configuration constants
     private static final String URL = "jdbc:mysql://localhost:3306/fintrust_bank";
     private static final String USER = "root";
-    private static final String PASSWORD = "root123";
+    private static final String PASSWORD = "Nayan@2002";
     private static Connection connection = null;
 
     // Private constructor to prevent external instantiation
@@ -24,6 +24,7 @@ public class DBConnection {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 connection = DriverManager.getConnection(URL, USER, PASSWORD);
                 System.out.println("✅ Database Connected Successfully");
+                TableCreator.createAllTables();
             }
         } catch (ClassNotFoundException e) {
         		Clients.showNotification("JDBC Driver not found", Clients.NOTIFICATION_TYPE_ERROR, null, 100, 100, 2000);

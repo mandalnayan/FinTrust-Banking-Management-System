@@ -1,5 +1,7 @@
 package com.fintrust.service;
 
+import java.sql.SQLException;
+
 import org.zkoss.zk.ui.Sessions;
 
 import com.fintrust.dao.UserDAO;
@@ -14,7 +16,7 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl() {
     	userDAO = new UserDAOImpl();
     }
-
+    
     @Override
     public boolean registerUser(User user) {
         // Check if email already exists
@@ -34,15 +36,28 @@ public class UserServiceImpl implements UserService {
         Long userId = userDAO.create(user);
         return userId != -1;
     }
-    
+        
     public User getLoggedInUser() {
-    		String email = (String)Sessions.getCurrent().getAttribute("currentUser");
-    		return userDAO.getUserByEmail(email);
+    		Long userId = (Long)Sessions.getCurrent().getAttribute("currentUserId");
+    		try {
+				return userDAO.findById(userId);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return new User();
+			}
     }
+    
     
     public boolean updateUser(User user) {
     		
-    	    return userDAO.update(user);
+    	    try {
+				return userDAO.update(user);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}
     }
 
 	@Override
@@ -62,7 +77,13 @@ public class UserServiceImpl implements UserService {
 		 String digestPassword = PasswordDigestion.digestPassword(password);
 		 
 		// converting password into digest password 
-	   return  userDAO.isAuthorize(userName, digestPassword);
+	   try {
+		return  userDAO.authenticate(userName, digestPassword);
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		return false;
+	}
 	}
     
 }

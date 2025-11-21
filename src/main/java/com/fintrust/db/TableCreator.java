@@ -5,7 +5,7 @@ import java.sql.Statement;
 
 public class TableCreator {
 
-	public void createAllTables() {
+	public static void createAllTables() {
 	    try (Connection con = DBConnection.getConnection();
 	         Statement st = con.createStatement()) {
 
@@ -44,8 +44,8 @@ public class TableCreator {
 	            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 	        """);
 
-	        st.execute("CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);");
-	        st.execute("CREATE INDEX IF NOT EXISTS idx_users_phone ON users(phone);");
+	   //     st.execute("CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);");
+	    //    st.execute("CREATE INDEX IF NOT EXISTS idx_users_phone ON users(phone);");
 
 	        // -----------------------------
 	        // 3) user_details
@@ -72,7 +72,7 @@ public class TableCreator {
 	            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 	        """);
 
-	        st.execute("CREATE UNIQUE INDEX IF NOT EXISTS ux_ud_userid ON user_details(user_id);");
+	    //    st.execute("CREATE UNIQUE INDEX IF NOT EXISTS ux_ud_userid ON user_details(user_id);");
 
 	        // -----------------------------
 	        // 4) accounts
@@ -100,7 +100,7 @@ public class TableCreator {
 	            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 	        """);
 
-	        st.execute("CREATE INDEX IF NOT EXISTS idx_accounts_user ON accounts(user_id);");
+	  //      st.execute("CREATE INDEX IF NOT EXISTS idx_accounts_user ON accounts(user_id);");
 
 	        // -----------------------------
 	        // 5) beneficiaries
@@ -121,7 +121,7 @@ public class TableCreator {
 	            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 	        """);
 
-	        st.execute("CREATE INDEX IF NOT EXISTS idx_benef_user ON beneficiaries(user_id);");
+	  //      st.execute("CREATE INDEX IF NOT EXISTS idx_benef_user ON beneficiaries(user_id);");
 
 	        // -----------------------------
 	        // 6) transactions

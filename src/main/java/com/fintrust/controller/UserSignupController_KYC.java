@@ -20,15 +20,31 @@ import com.fintrust.service.UserServiceImpl;
 
 import org.zkoss.zul.Datebox;
 
-public class UserSignupController extends SelectorComposer<Component> {
+public class UserSignupController_KYC extends SelectorComposer<Component> {
 
 	@Wire
-	private Textbox name, email, phoneNumber, password, confirmPassword;
+	private Textbox name, email, phoneNumber, password, confirmPassword, country, state, dist, city, pincode;
+	@Wire
+	private Datebox dob;
+	@Wire
+	private Radiogroup gender;
 	
     private UserService userService = new UserServiceImpl();
+    
+    @Override
+    public void doAfterCompose(Component comp) throws Exception {
+    	// TODO Auto-generated method stub
+    	super.doAfterCompose(comp);
+    	dob.setConstraint("no empty,before " + new java.text.SimpleDateFormat("yyyyMMdd").format(new Date()));
+    }
 
 	@Listen("onClick=#signupBtn")
-	public void onSignup() {			
+	public void onSignup() {
+		Radio radio = gender.getSelectedItem();		
+		if (radio == null) {
+			Messagebox.show("Please select your gender.", "Error", Messagebox.OK, Messagebox.ERROR);
+			return;
+		}		
 		
 		// Basic validations
 		if (!isValidEmail(email.getValue())) {
@@ -57,7 +73,7 @@ public class UserSignupController extends SelectorComposer<Component> {
         user.setEmail(email.getValue());
         user.setPhone(phoneNumber.getValue());
         user.setPassword(password.getValue());
-        
+        }
 
         // Send data to service layer
         boolean success = userService.registerUser(user);
