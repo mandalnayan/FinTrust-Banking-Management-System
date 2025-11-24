@@ -21,7 +21,7 @@
 
 <zk xmlns:h="xhtml">
   <!-- Use borderlayout for predictable ZK structure -->
-  <borderlayout  sclass="dashboard-window" apply="com.fintrust.controller.UserDashboardController_copy">
+  <borderlayout  sclass="dashboard-window" apply="com.fintrust.controller.UserDashboardController">
 
     <!-- NORTH: Top header (compact) -->
   <north >    

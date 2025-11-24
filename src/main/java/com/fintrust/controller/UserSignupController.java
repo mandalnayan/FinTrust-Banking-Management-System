@@ -27,9 +27,8 @@ public class UserSignupController extends SelectorComposer<Component> {
 	
     private UserService userService = new UserServiceImpl();
 
-	@Listen("onClick=#signupBtn")
-	public void onSignup() {			
-		
+	@Listen("onClick=#signup")
+	public void onSignup() {		
 		// Basic validations
 		if (!isValidEmail(email.getValue())) {
 			Messagebox.show("Invalid email address format.", "Error", Messagebox.OK, Messagebox.ERROR);
@@ -56,6 +55,7 @@ public class UserSignupController extends SelectorComposer<Component> {
         user.setFullName(name.getValue());
         user.setEmail(email.getValue());
         user.setPhone(phoneNumber.getValue());
+        user.setRole(User.Role.USER);
         user.setPassword(password.getValue());
         
 

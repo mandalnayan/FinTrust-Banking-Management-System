@@ -1,25 +1,25 @@
 <?page title="Signup - FinTrust Bank" contentType="text/html;charset=UTF-8"?>
 
 <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
-<?link rel="stylesheet" type="text/css" href="/resources/css/auth-common3.css"?>
-
-<?link rel="stylesheet" type="text/css" href="/resources/css/auth.css"?>
+<?link rel="stylesheet" type="text/css" href="/resources/css/auth-common.css"?>
 
 <zk xmlns:h="xhtml">
 
+    <!-- NAVBAR -->
     <include src="/WEB-INF/components/navbar.zul"/>
-
+	<window zclass = "wnd" apply="com.fintrust.controller.UserSignupController">
+    <!-- MAIN WRAPPER -->
     <div sclass="signup-wrapper">
 
-        <!-- LEFT Panel -->
+        <!-- LEFT PANEL -->
         <div sclass="signup-left">
             <image src="/resources/images/signup-rightSec.png" sclass="signup-hero-img"/>
             <label value="Secure • Trusted • Digital Banking" sclass="signup-tagline"/>
         </div>
 
-        <!-- RIGHT Panel -->
+        <!-- RIGHT PANEL -->
         <div sclass="signup-right" apply="com.fintrust.controller.UserSignupController">
-            
+
             <label value="Create Your FinTrust Account" sclass="signup-title"/>
             <label value="Open your secure digital banking profile" sclass="signup-subtitle"/>
 
@@ -33,23 +33,22 @@
 
                 <textbox id="password" type="password" placeholder="Password" sclass="input-field"/>
 
-                <textbox id="confirmPassword" type="password" placeholder="Confirm Password" 
+                <textbox id="confirmPassword" type="password" placeholder="Confirm Password"
                          sclass="input-field confirm"/>
             </div>
 
-            <!-- Button -->
-            <button label="Create Account" sclass="signup-btn" onClick="@command('onSignup')"/>
+            <!-- BUTTON -->
+            <button label="Create Account" sclass="signup-btn" id = "signup"/>
 
-            <!-- Login Redirect -->
+            <!-- LOGIN REDIRECT -->
             <hlayout sclass="login-redirect">
                 <label value="Already have an account?"/>
                 <a href="/user/login.zul">Login</a>
             </hlayout>
 
         </div>
+
     </div>
+    </window>
 
 </zk>
-
-
-

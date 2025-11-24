@@ -21,9 +21,9 @@ import jakarta.mail.MessagingException;
 	    }
 
 	    public void generateAndSendOtp(String email) throws MessagingException {
+	    
 	        String code = String.format("%06d", ThreadLocalRandom.current().nextInt(0, 1_000_000));
 	        Instant expiry = Instant.now().plus(5, ChronoUnit.MINUTES);
-
 	        otpRepository.saveOtpForEmail(email, code, expiry);
 
 	        mailSender.sendSimple(email, "Your OTP Code", "Your OTP code is: " + code + "\nIt expires in 5 minutes.");

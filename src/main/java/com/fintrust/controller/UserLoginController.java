@@ -18,12 +18,12 @@ public class UserLoginController extends SelectorComposer<Window>{
 
 	@Listen("onClick=#submit")
 	public void login() {
-		String userName = email.getText();
+		String userEmail = email.getText();
 		String pasw = password.getText();
 		
-		if(userSerivce.isAuthorize(userName, pasw)) {
+		if(userSerivce.isAuthorize(userEmail, pasw)) {
 			// Set session for curren user
-			Sessions.getCurrent().setAttribute("currentUser", userName);
+			Sessions.getCurrent().setAttribute("userEmail", userEmail);
 			
 			Executions.sendRedirect("/user/userDashboard.zul");		
 		} else {

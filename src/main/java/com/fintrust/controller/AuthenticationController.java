@@ -16,7 +16,7 @@ public class AuthenticationController implements Initiator{
 
 	@Override
 	public void doInit(Page page, Map<String, Object> args) throws Exception {
-		String user = (String) Sessions.getCurrent().getAttribute("currentUser");
+		String user = (String) Sessions.getCurrent().getAttribute("userEmail");
 		if (user == null || user.isBlank()) {
 			Executions.sendRedirect("/home.zul");
 		}

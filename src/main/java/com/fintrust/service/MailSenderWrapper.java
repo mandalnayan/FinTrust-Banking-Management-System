@@ -84,9 +84,7 @@ This actually opens the network connection and sends the email using the session
      * @param subject
      * @param body
      * @throws MessagingException
-     */
-    
-    
+     */      
     
     public void sendSimple(String toEmail, String subject, String body) throws MessagingException {
         MimeMessage msg = new MimeMessage(session);

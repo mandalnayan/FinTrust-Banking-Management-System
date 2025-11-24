@@ -30,7 +30,7 @@ public class UserDAOImpl implements UserDAO {
 	public long create(User user) {
 
 		String sql = """
-				    INSERT INTO users (full_name, phone, password_hash, role)
+				    INSERT INTO users (full_name, email, phone, password_hash, role)
 				    VALUES (?, ?, ?, ?, ?)
 				""";
 
@@ -72,7 +72,7 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public boolean authenticate(String userName, String password) throws SQLException {
-		String sql = "SELECT * FROM users WHERE userName = ? and password = ?";
+		String sql = "SELECT * FROM users WHERE email = ? and password_hash = ?";
 
 		try (PreparedStatement ps = connection.prepareStatement(sql)) {
 			ps.setString(1, userName);

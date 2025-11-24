@@ -1,245 +1,300 @@
-/* =============================================================
-   FINTRUST BANK – AUTH MODULE (SIGNUP + LOGIN)
-   Modern Banking UI + Premium Animation Pack
-   ============================================================= */
+/* ============================================================
+   FinTrust Bank - Unified Authentication Styles
+   Applies to: Signup + Login + OTP pages
+   Author: ChatGPT (Enterprise Banking UI Standard)
+   ============================================================ */
 
 /* GLOBAL RESET */
-* {
+body, .z-window {
+    font-family: "Poppins", sans-serif;
+    background: #f5f7fb;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    overflow-x: hidden;
 }
 
-/* TYPOGRAPHY */
-body, .z-window, .z-div {
-    font-family: "Poppins", sans-serif;
-    background: #f5f8ff;
+/* WRAPPERS (Signup + Login share same layout) */
+.signup-wrapper,
+.login-wrapper,
+.forgot-wrapper,
+.reset-wrapper {
+    width: 90%;
+    max-width: 1150px;
+    margin: 40px auto;
+    display: grid;
+    grid-template-columns: 45% 55%;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.08);
+    animation: smoothEntry 0.65s cubic-bezier(0.16,1,0.3,1);
 }
 
-/* WRAPPER */
-.auth-wrapper,
-.login-wrapper {
-    width: 100%;
-    min-height: 100vh;
-    display: flex;
-    padding: 60px 0;
-    justify-content: center;
-    align-items: center;
-    background: #f5f8ff;
-    animation: smoothEntry 0.45s cubic-bezier(0.16,1,0.3,1);
-}
+/* ============================================================
+   LEFT PANEL (shared)
+   ============================================================ */
 
-/* LEFT PANEL */
 .signup-left,
-.login-left {
-    flex: 0.48;
-    position: relative;
+.login-left,
+.forgot-left,
+.reset-left {
     background: linear-gradient(135deg, #004aad, #0066ff, #002d72, #005be0);
     background-size: 300% 300%;
     animation: gradientShift 8s ease infinite;
 
-    padding: 60px 20px;
-    border-radius: 18px 0 0 18px;
+    padding: 60px 25px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-/* FLOATING IMAGE */
 .signup-hero-img,
-.login-hero-img {
-    width: 85%;
-    max-width: 380px;
+.login-hero-img,
+.forgot-hero-img,
+.reset-hero-img {
+    width: 88%;
     animation: floatY 4s ease-in-out infinite;
 }
 
-/* TAGLINE */
 .signup-tagline,
-.login-tagline {
-    color: white;
-    font-size: 18px;
+.login-tagline,
+.forgot-tagline,
+.reset-tagline {
     margin-top: 20px;
-    opacity: 0.9;
-    text-align: center;
+    font-size: 18px;
+    font-weight: 500;
+    color: #fff;
+    opacity: .92;
 }
 
-/* RIGHT PANEL */
+/* ============================================================
+   RIGHT PANEL (both)
+   ============================================================ */
+
 .signup-right,
-.login-right {
-    flex: 0.52;
-    background: white;
-    padding: 50px 55px;
-    border-radius: 0 18px 18px 0;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-    animation: slideUp 0.5s ease-out;
+.login-right,
+.forgot-right,
+.reset-right {
+    padding: 50px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-/* TITLES */
+/* Titles */
 .signup-title,
-.login-title {
+.login-title,
+.forgot-title,
+.reset-title {
     font-size: 28px;
     font-weight: 700;
-    color: #01284f;
+    color: #012B61;
     margin-bottom: 6px;
-    text-align: center;
+    animation: slideUp 0.5s ease;
 }
 
 .signup-subtitle,
-.login-subtitle {
-    font-size: 14px;
-    color: #5d6d7e;
-    text-align: center;
-    margin-bottom: 28px;
+.login-subtitle,
+.forgot-subtitle,
+.reset-subtitle {
+    font-size: 15px;
+    color: #4e5e73;
+    margin-bottom: 30px;
+    animation: slideUp 0.8s ease;
 }
 
-/* FORM GRID (Signup) */
+/* ============================================================
+   FORM: Shared Styling
+   ============================================================ */
+
+/* GRID (Signup only uses this, login uses vlayout but same inputs) */
 .form-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 18px 26px;
-    margin-bottom: 22px;
-    animation: formReveal 0.6s ease-out;
+    gap: 18px 25px;
 }
 
-/* INPUT FIELDS */
+.confirm {
+    grid-column: span 2;
+}
+
+/* TEXTBOX */
 .input-field {
     width: 100% !important;
     padding: 12px !important;
-    border: 1.4px solid #cdd6e4 !important;
     border-radius: 8px !important;
-    font-size: 14px !important;
-    transition: all 0.25s ease;
-    background: #fefefe !important;
+    border: 1px solid #d4d9e3 !important;
+    background: #fafbff;
+    transition: all 0.25s ease !important;
+    font-size: 15px;
 }
 
 .input-field:focus {
-    border-color: #0052cc !important;
-    box-shadow: 0 0 8px rgba(0,82,204,0.28);
+    border-color: #0065D9 !important;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(0,101,217,0.15);
 }
 
-/* BUTTONS */
+/* ============================================================
+   BUTTONS (Shared)
+   ============================================================ */
+
 .signup-btn,
-.login-btn {
-    width: 100% !important;
-    padding: 13px 0;
-    background: #0052cc !important;
-    color: white !important;
+.login-btn,
+.forgot-btn,
+.reset-btn {
+    margin-top: 28px;
+    padding: 14px !important;
+    background: #0065D9 !important;
+    color: #fff !important;
+    font-size: 16px !important;
     border: none !important;
-    border-radius: 8px !important;
+    border-radius: 8px;
     font-weight: 600 !important;
-    font-size: 15px !important;
     cursor: pointer;
-    transition: 0.25s ease;
-    position: relative;
-    overflow: hidden;
+    width: 100%;
+    box-shadow: 0 5px 15px rgba(0,101,217,0.25);
+    transition: 0.23s ease !important;
 }
+
+/* Password reset btn */
+/* Wrapper ensures alignment */
+.pwd-wrapper {
+    width: 100%;
+    position: relative;
+}
+
+/* Main input field (100% width preserved) */
+.pwd-input {
+    width: 100% !important;
+    padding-right: 45px !important; /* space for eye icon */
+}
+
+/* Eye button positioned inside input */
+.pwd-toggle-btn {
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent !important;
+    border: none !important;
+    color: #4e5e73;
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    padding: 0 !important;
+    z-index: 10;
+}
+
+.pwd-toggle-btn:hover {
+    color: #0065D9;
+}
+
 
 .signup-btn:hover,
-.login-btn:hover {
+.login-btn:hover,
+.forgot-btn:hover,
+.reset-btn:hover {
+    background: #004fae !important;
     transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(0,82,204,0.35);
 }
 
-/* BUTTON RIPPLE EFFECT */
-.signup-btn:active::after,
-.login-btn:active::after {
-    content: "";
-    position: absolute;
-    left: var(--x);
-    top: var(--y);
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.8);
-    animation: ripple 0.6s ease-out;
-}
-@keyframes ripple {
-    to { transform: scale(22); opacity: 0; }
-}
+/* ============================================================
+   LINKS (Signup + Login)
+   ============================================================ */
 
-/* LOGIN OPTIONS */
-.login-options {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.forgot-link {
-    color: #0052cc;
-    font-size: 13px;
-}
-
-/* REDIRECT LINKS */
 .login-redirect,
 .signup-redirect {
     justify-content: center;
     margin-top: 15px;
-    font-size: 14px;
+    font-size: 15px;
 }
 
 .login-redirect a,
 .signup-redirect a {
-    margin-left: 5px;
-    color: #0052cc;
+    color: #0065D9;
+    font-weight: 600;
+    margin-left: 6px;
 }
 
-/* ============================
-   ANIMATIONS
-   ============================ */
+/* Login page remember/forgot section */
+.login-options {
+    justify-content: space-between;
+    align-items: center;
+}
+.remember-check {
+    font-size: 13px;
+}
+.forgot-link {
+    color: #0065D9;
+    font-size: 13px;
+}
 
-/* Smooth page load */
+/* ============================================================
+   ANIMATIONS (Premium Banking Animations)
+   ============================================================ */
+
+/* Page fade-in */
 @keyframes smoothEntry {
-    0% { opacity: 0; transform: translateY(20px) scale(0.98); }
+    0% { opacity: 0; transform: translateY(25px) scale(0.98); }
     100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+/* Title slide up */
 @keyframes slideUp {
     0% { opacity: 0; transform: translateY(16px); }
     100% { opacity: 1; transform: translateY(0); }
 }
 
+/* Soft floating bank illustration */
 @keyframes floatY {
     0% { transform: translateY(0); }
     50% { transform: translateY(-13px); }
     100% { transform: translateY(0); }
 }
 
+/* Gradient animation */
 @keyframes gradientShift {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
 
-@keyframes formReveal {
-    0% { opacity: 0; transform: translateY(15px); }
-    100% { opacity: 1; transform: translateY(0); }
-}
+/* ============================================================
+   RESPONSIVE DESIGN
+   ============================================================ */
 
-/* RESPONSIVE */
-@media(max-width: 900px) {
+@media (max-width: 900px) {
 
-    .auth-wrapper,
-    .login-wrapper {
-        flex-direction: column;
-        padding: 20px;
+    .signup-wrapper,
+.login-wrapper,
+.forgot-wrapper,
+.reset-wrapper {
+        grid-template-columns: 1fr;
+        width: 95%;
+        margin-top: 20px;
     }
 
     .signup-left,
-    .login-left {
-        border-radius: 18px;
-        width: 95%;
-        margin-bottom: 25px;
+    .login-left,
+    .forgot-left,
+    .reset-left {
+        display: none;
     }
 
     .signup-right,
-    .login-right {
-        border-radius: 18px;
-        width: 95%;
-        padding: 35px 25px;
+    .login-right,
+    .forgot-right,
+    .reset-right {
+        padding: 40px 24px;
     }
 
     .form-grid {
         grid-template-columns: 1fr;
+    }
+
+    .confirm {
+        grid-column: span 1;
     }
 }

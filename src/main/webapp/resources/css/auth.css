@@ -24,7 +24,7 @@ body, .z-window {
 
 
 /* LEFT SIDE */
-.signup-left {
+/* .signup-left {
     background: linear-gradient(145deg, #0065D9, #003B8E);
     padding: 40px;
     display: flex;
@@ -33,7 +33,22 @@ body, .z-window {
     justify-content: center;
     color: #fff;
       animation: gradientShift 8s ease infinite;
-}
+} */
+
+.signup-left{
+ flex: 0.48;
+    position: relative;
+    background: linear-gradient(135deg, #004aad, #0066ff, #002d72, #005be0);
+    background-size: 300% 300%;
+    animation: gradientShift 8s ease infinite;
+
+    padding: 60px 20px;
+    border-radius: 18px 0 0 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    }
 
 .signup-hero-img {
     width: 88%;

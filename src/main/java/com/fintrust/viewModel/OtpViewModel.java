@@ -49,10 +49,13 @@ public class OtpViewModel {
                 return;
             }
             otpService.generateAndSendOtp(email);
+            Sessions.getCurrent().setAttribute("otp_allowed", true);
             success = true;
-            statusMessage = "OTP sent to " + email;
+            statusMessage = "OTP sent to " + email.substring(0,3) + email.substring(3).replaceAll("[a-z0-9]", "x");
+            Executions.sendRedirect("/auth/verifyOtp.zul");
         } catch (Exception e) {
             statusMessage = "Failed to send OTP: " + e.getMessage();
+            e.printStackTrace();
         }
     }
 
@@ -61,13 +64,19 @@ public class OtpViewModel {
     public void verifyOtp() {
         if (otpService.verifyOtp(email, otpCode)) {
         		success = true;
-        		Sessions.getCurrent().setAttribute("currentUser", email);
-            statusMessage = "Verification successful!";
-            Executions.sendRedirect("/changePassword.zul"); // redirect after success
+        		 Sessions.getCurrent().removeAttribute("otp_allowed");
+        		 Sessions.getCurrent().setAttribute("resetPassword_allowed", true);
+        		 statusMessage = "Verification successful!";
+        		Executions.sendRedirect("/auth/resetPassword.zul"); // redirect after success
         } else {
         		success = false;
             statusMessage = "Invalid or expired OTP";
         }
+    }
+    
+    public static void main(String args[]) {
+   OtpViewModel om = new OtpViewModel();
+    	om.sendOtp();
     }
 }
 

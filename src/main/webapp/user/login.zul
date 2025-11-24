@@ -5,19 +5,26 @@
  Controller: UserLoginController.java
  ============================================================ -->
 <?page title="Login - FinTrust Bank" contentType="text/html;charset=UTF-8"?>
+<?page title="Login - FinTrust Bank" contentType="text/html;charset=UTF-8"?>
+
+<?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 <?link rel="stylesheet" type="text/css" href="/resources/css/auth-common.css"?>
 
 <zk xmlns:h="xhtml">
 
+    <!-- NAVBAR -->
     <include src="/WEB-INF/components/navbar.zul"/>
 
+    <!-- MAIN WRAPPER -->
     <div sclass="login-wrapper" apply="com.fintrust.controller.UserLoginController">
 
+        <!-- LEFT PANEL -->
         <div sclass="login-left">
             <image src="/resources/images/signup-rightSec.png" sclass="login-hero-img"/>
             <label value="Secure Access • Trusted Banking" sclass="login-tagline"/>
         </div>
 
+        <!-- RIGHT PANEL -->
         <div sclass="login-right">
 
             <label value="Welcome Back" sclass="login-title"/>
@@ -26,11 +33,12 @@
             <vlayout spacing="15px" width="100%" sclass="login-form">
 
                 <textbox id="email" placeholder="Email or Phone" sclass="input-field"/>
+
                 <textbox id="password" type="password" placeholder="Password" sclass="input-field"/>
 
                 <hlayout sclass="login-options">
-                    <checkbox label="Remember Me"/>
-                    <a href="/change-password.zul" class="forgot-link">Forgot Password?</a>
+                    <checkbox label="Remember Me" sclass="remember-check"/>
+                    <a href="/user/forgotPassword.zul" class="forgot-link">Forgot Password?</a>
                 </hlayout>
 
                 <button id="submit" label="Login" sclass="login-btn"/>
@@ -47,4 +55,5 @@
     </div>
 
 </zk>
+
 

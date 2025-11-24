@@ -6,6 +6,7 @@ import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
@@ -13,13 +14,13 @@ import org.zkoss.zul.Window;
 
 import zcom.finrust.dao_copy.UserDAOImpl;
 
-public class PasswordChangeController extends SelectorComposer<Window>{
+public class ResetPasswordController extends SelectorComposer<Window>{
 
 	@Wire Textbox password, conformPassword;
 	
 	@Wire Checkbox show;
 	
-	@Listen("onClick=#submit")
+	@Listen("onClick=#resetBtn")
 	public void submitPassword() {
 		if (password.getValue().isBlank() || !isPasswordMatched()) {
 				Messagebox.show(password.getValue().isBlank() ? "Password can't be empty" : "Password didn't matched..!");
@@ -34,15 +35,20 @@ public class PasswordChangeController extends SelectorComposer<Window>{
 			Clients.showNotification("Failed to change. Please try again!", "error", null, "top_center", 3000);
 	}
 	
-	@Listen("onCheck = #show")
+	@Listen("onClick = #togglePwd")
 	public void togglePassword() {
-	    if (show.isChecked()) {
-	        password.setType("text");
-	        conformPassword.setType("text");
-	    } else {
-	        password.setType("password");
-	        conformPassword.setType("password");
-	    }
+	   Textbox textbox = (Textbox) getSelf().getFellow("newPassword");
+	   Button toggleBtn = (Button) getSelf().getFellow("togglePwd");
+	   
+	   if (textbox.getType().equals("password")) {
+		   textbox.setType("text");
+		   toggleBtn.setIconSclass("z-icon-eye-slash");
+		   toggleBtn.setTooltiptext("Hide Password");
+	   } else {
+		   textbox.setType("password");
+		   toggleBtn.setIconSclass("z-icon-eye");
+		   toggleBtn.setTooltiptext("Show Password");
+	   }
 	}
 	
 	private boolean isPasswordMatched() {
