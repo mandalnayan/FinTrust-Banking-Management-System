@@ -6,7 +6,7 @@ import com.fintrust.model_copy.OtpRecord;
 
 	public class OtpRepository {
 
-	    private final ConcurrentHashMap<String, OtpRecord> store = new ConcurrentHashMap<>();
+	    private static final ConcurrentHashMap<String, OtpRecord> store = new ConcurrentHashMap<>();
 
 	    public void saveOtpForEmail(String email, String code, java.time.Instant expiry) {
 	        store.put(email, new OtpRecord(email, code, expiry));

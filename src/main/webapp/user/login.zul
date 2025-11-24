@@ -38,7 +38,7 @@
 
                 <hlayout sclass="login-options">
                     <checkbox label="Remember Me" sclass="remember-check"/>
-                    <a href="/user/forgotPassword.zul" class="forgot-link">Forgot Password?</a>
+                    <a href="/auth/forgotPassword.zul" class="forgot-link">Forgot Password?</a>
                 </hlayout>
 
                 <button id="submit" label="Login" sclass="login-btn"/>

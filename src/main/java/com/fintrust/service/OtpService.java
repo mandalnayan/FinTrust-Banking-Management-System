@@ -31,8 +31,12 @@ import jakarta.mail.MessagingException;
 
 	    public boolean verifyOtp(String email, String code) {
 	        OtpRecord rec = otpRepository.findLatestForEmail(email);
+	        System.out.println(rec + " outside verifyOtp");
 	        if (rec == null || rec.isUsed() || rec.getExpiry().isBefore(Instant.now()) || !rec.getCode().equals(code))
-	            return false;
+	        {
+	        	  System.out.println(rec.toString() + "inside verifyOtp");
+	        	return false;
+	        }
 
 	        rec.setUsed(true);
 	        otpRepository.update(rec);

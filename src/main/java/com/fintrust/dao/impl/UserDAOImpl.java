@@ -3,6 +3,8 @@ package com.fintrust.dao.impl;
 import java.sql.*;
 import java.util.*;
 
+import org.zkoss.zk.ui.Sessions;
+
 import com.fintrust.dao.UserDAO;
 import com.fintrust.db.DBConnection;
 import com.fintrust.model.User;
@@ -140,12 +142,13 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	@Override
-	public boolean updatePassword(long userId, String passwordHash) throws SQLException {
-		String sql = "UPDATE users SET password_hash = ? WHERE user_id = ?";
-
+	public boolean updatePassword(String passwordHash) throws SQLException {
+		String sql = "UPDATE users SET password_hash = ? WHERE email = ?";
+		String email = (String) Sessions.getCurrent().getAttribute("userEmail");
+		if (email == null) return false;
 		try (PreparedStatement ps = connection.prepareStatement(sql)) {
 			ps.setString(1, passwordHash);
-			ps.setLong(2, userId);
+			ps.setString(2, email);
 
 			return ps.executeUpdate() > 0;
 		}

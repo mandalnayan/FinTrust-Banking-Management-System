@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
         // user.setPassword(PasswordUtil.encrypt(user.getPassword()));
 
         // Saving password digest instead of actual password
-        String digestPassword = PasswordDigestion.digestPassword(user.getPassword());
+        String digestPassword = MessageDigestion.digestPassword(user.getPassword());
         user.setPassword(digestPassword);
         
         // Insert user to DB
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public boolean isAuthorize(String userName, String password) {
-		 String digestPassword = PasswordDigestion.digestPassword(password);
+		 String digestPassword = MessageDigestion.digestPassword(password);
 		 
 		// converting password into digest password 
 	   try {
@@ -84,6 +84,22 @@ public class UserServiceImpl implements UserService {
 		e.printStackTrace();
 		return false;
 	}
+	}
+	
+	/**
+	 * Update password
+	 * 
+	 */
+	@Override
+	public boolean updatePassword(String password) {
+		String digestedPassword = MessageDigestion.digestPassword(password);
+		try {
+			return userDAO.updatePassword(digestedPassword);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
 	}
     
 }

@@ -9,8 +9,8 @@
 <zk xmlns:h="xhtml">
 
     <include src="/WEB-INF/components/navbar.zul"/>
-<window zsclass="wnd"  viewModel="@id('vm') @init('com.fintrust.viewModel.OtpViewModel')" >
-    <div sclass="login-wrapper"> <!-- apply="com.fintrust.controller.VerifyOtpController" -->
+<window zclass="wnd"  viewModel="@id('vm') @init('com.fintrust.viewModel.OtpViewModel')" >
+    <div sclass="login-wrapper">
 
         <!-- LEFT PANEL -->
         <div class="login-left">
@@ -32,7 +32,8 @@
                          placeholder="Enter 6-digit OTP" 
                          maxlength="6"
                          sclass="input-field"
-                         constraint="no empty"/>
+                         constraint="no empty"
+                         value="@bind(vm.otpCode)"/>
 
                 <!-- VERIFY BUTTON -->
                 <button label="Verify OTP" 
@@ -44,7 +45,7 @@
                     <label value="Didn't receive the OTP?"/>
                     <a href="#" onClick="@command('resendOtp')">Resend OTP</a>
                 </hlayout>
- <label value="@bind(vm.statusMessage)" style="color:blue"/>
+ 			<label value="@bind(vm.statusMessage)" style="color:blue"/>
 
             </vlayout>
 

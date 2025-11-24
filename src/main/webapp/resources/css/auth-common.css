@@ -179,7 +179,7 @@ body, .z-window {
     transform: translateY(-50%);
     background: transparent !important;
     border: none !important;
-    color: #4e5e73;
+    color: #4e5e73 !important;
     cursor: pointer;
     width: 28px;
     height: 28px;
@@ -188,7 +188,7 @@ body, .z-window {
 }
 
 .pwd-toggle-btn:hover {
-    color: #0065D9;
+    color: #0065D9 !important;
 }
 
 

@@ -136,10 +136,10 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	public boolean updatePassword(String password) {
-		String sql = "SELECT password FROM customer WHERE email=?";
+		String sql = "SELECT password FROM user WHERE email=?";
 		String updateQ = "Update customer set password = ? where email = ?";
 		try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-			String email = (String) Sessions.getCurrent().getAttribute("currentUser");
+			String email = (String) Sessions.getCurrent().getAttribute("userEmail");
 			
 			ps.setString(1, email);
 			ResultSet rs = ps.executeQuery();

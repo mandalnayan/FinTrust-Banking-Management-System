@@ -4,7 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class PasswordDigestion {
+public class MessageDigestion {
 
 	public static String digestPassword(String password) {
 		

@@ -20,4 +20,11 @@ public class OtpRecord {
     public Instant getExpiry() { return expiry; }
     public boolean isUsed() { return used; }
     public void setUsed(boolean used) { this.used = used; }
+
+	@Override
+	public String toString() {
+		return "OtpRecord [email=" + email + ", code=" + code + ", expiry=" + expiry + ", used=" + used + "]";
+	}
+    
+    
 }

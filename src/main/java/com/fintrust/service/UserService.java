@@ -22,6 +22,13 @@ public interface UserService {
      * @return
      */
     boolean updateUser(User user);
+    
+    /**
+     * Updated user password
+     * @param user
+     * @return
+     */
+    boolean updatePassword(String newPassword);
 
     /**
      * Update 2FA

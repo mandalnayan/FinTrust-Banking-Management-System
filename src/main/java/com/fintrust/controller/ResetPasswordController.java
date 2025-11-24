@@ -8,26 +8,34 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
+import org.zkoss.zul.Div;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
-import zcom.finrust.dao_copy.UserDAOImpl;
+import com.fintrust.dao.impl.UserDAOImpl;
+import com.fintrust.service.UserServiceImpl;
 
-public class ResetPasswordController extends SelectorComposer<Window>{
+public class ResetPasswordController extends SelectorComposer<Div>{
 
-	@Wire Textbox password, conformPassword;
+	@Wire Textbox password, confirmPassword;
 	
 	@Wire Checkbox show;
+	
+	@Wire Label l_status_mes;
 	
 	@Listen("onClick=#resetBtn")
 	public void submitPassword() {
 		if (password.getValue().isBlank() || !isPasswordMatched()) {
-				Messagebox.show(password.getValue().isBlank() ? "Password can't be empty" : "Password didn't matched..!");
+				String statusMessage = password.getValue().isBlank() ? "Password can't be empty" : "Password didn't matched..!";
+				 Sessions.getCurrent().setAttribute("statusMessage", statusMessage);	
+				 l_status_mes.setStyle("color: red");
 		}
-		if (new UserDAOImpl().updatePassword(password.getValue())) {
+		else if (new UserServiceImpl().updatePassword(password.getValue())) {
 				Clients.showNotification("Password changed!", "info", null, "top_center", 3000);
-				Sessions.getCurrent().removeAttribute("currentUser");
+				Sessions.getCurrent().removeAttribute("userEmail");
+				Sessions.getCurrent().invalidate();
 				
 				Executions.sendRedirect("/user/login.zul");
 		}
@@ -37,7 +45,7 @@ public class ResetPasswordController extends SelectorComposer<Window>{
 	
 	@Listen("onClick = #togglePwd")
 	public void togglePassword() {
-	   Textbox textbox = (Textbox) getSelf().getFellow("newPassword");
+	   Textbox textbox = (Textbox) getSelf().getFellow("password");
 	   Button toggleBtn = (Button) getSelf().getFellow("togglePwd");
 	   
 	   if (textbox.getType().equals("password")) {
@@ -51,7 +59,23 @@ public class ResetPasswordController extends SelectorComposer<Window>{
 	   }
 	}
 	
+	@Listen("onClick = #togglePwd_confPwd")
+	public void toggleConfirmPassword() {
+	   Textbox textbox = (Textbox) getSelf().getFellow("confirmPassword");
+	   Button toggleBtn = (Button) getSelf().getFellow("togglePwd_confPwd");
+	   
+	   if (textbox.getType().equals("password")) {
+		   textbox.setType("text");
+		   toggleBtn.setIconSclass("z-icon-eye-slash");
+		   toggleBtn.setTooltiptext("Hide Password");
+	   } else {
+		   textbox.setType("password");
+		   toggleBtn.setIconSclass("z-icon-eye");
+		   toggleBtn.setTooltiptext("Show Password");
+	   }
+	}
+	
 	private boolean isPasswordMatched() {
-		return password.getValue().trim().equals(conformPassword.getValue().trim());
+		return password.getValue().trim().equals(confirmPassword.getValue().trim());
 	}
 }

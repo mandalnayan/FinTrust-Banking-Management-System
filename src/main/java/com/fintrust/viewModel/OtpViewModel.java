@@ -27,12 +27,13 @@ public class OtpViewModel {
             "smtp.gmail.com", "587", adminEmail, password);
 
         otpService = new OtpService(mailSender, repo);
+        email = (String) Sessions.getCurrent().getAttribute("userEmail");
+        statusMessage = (String) Sessions.getCurrent().getAttribute("statusMessage");
     }
     
     public boolean isSuccess() { return success; }
     public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-   
+    public void setEmail(String email) { this.email = email; }   
 
     public String getOtpCode() { return otpCode; }
     public void setOtpCode(String otpCode) { this.otpCode = otpCode; }
@@ -48,6 +49,10 @@ public class OtpViewModel {
                 statusMessage = "Enter a valid email";               
                 return;
             }
+            if (Sessions.getCurrent().getAttribute("userEmail") == null) {
+            		Sessions.getCurrent().setAttribute("userEmail", email);
+            }
+            
             otpService.generateAndSendOtp(email);
             Sessions.getCurrent().setAttribute("otp_allowed", true);
             success = true;
@@ -57,6 +62,7 @@ public class OtpViewModel {
             statusMessage = "Failed to send OTP: " + e.getMessage();
             e.printStackTrace();
         }
+        Sessions.getCurrent().setAttribute("statusMessage", statusMessage);
     }
 
     @Command
@@ -67,13 +73,19 @@ public class OtpViewModel {
         		 Sessions.getCurrent().removeAttribute("otp_allowed");
         		 Sessions.getCurrent().setAttribute("resetPassword_allowed", true);
         		 statusMessage = "Verification successful!";
+        		 
         		Executions.sendRedirect("/auth/resetPassword.zul"); // redirect after success
         } else {
         		success = false;
             statusMessage = "Invalid or expired OTP";
         }
+         Sessions.getCurrent().setAttribute("statusMessage", statusMessage);
     }
     
+    @Command
+    public void resendOtp() {
+    		sendOtp();
+    }
     public static void main(String args[]) {
    OtpViewModel om = new OtpViewModel();
     	om.sendOtp();
