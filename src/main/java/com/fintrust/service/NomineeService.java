@@ -1,8 +1,8 @@
 package com.fintrust.service;
 
-import com.fintrust.model_copy.Nominee;
+import com.fintrust.model.Nominee;
 
 public interface NomineeService {
-	boolean saveNominee(Nominee nominee);
+	Long saveNominee(Nominee nominee);
 	boolean isPresentNominee(long nomineeId);
 }

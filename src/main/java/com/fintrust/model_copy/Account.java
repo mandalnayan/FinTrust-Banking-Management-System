@@ -38,7 +38,7 @@ public class Account {
 	}
 	
 	public enum AccountType {
-		CURRENT,SAVING,SALARY
+		CURRENT,SAVINGS,SALARY
 	}
 	
 	public enum ModeOfOperation{

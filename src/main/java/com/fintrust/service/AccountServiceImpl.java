@@ -10,7 +10,7 @@ import org.zkoss.zk.ui.Sessions;
 import com.fintrust.model.Account;
 import com.fintrust.model.Account.AccountStatus;
 
-import zcom.finrust.dao_copy.AccountDaoImp;
+import com.fintrust.dao.impl.AccountDAOImpl;
 
 import com.fintrust.dao.AccountDAO;
 import com.fintrust.dao.impl.AccountDAOImpl;
@@ -37,6 +37,12 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public boolean openAccount(Account account) {
         try {
+        	// Unique account number generation (for demo)
+			long accountNo = generateAccountNo();
+			if (accountNo == -1) return false;
+			long user_id = (Long) Sessions.getCurrent().getAttribute("user_id");
+			account.setUserId(user_id);
+			account.setBankId(111l);
 			return accountDAO.create(account) != -1;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -87,7 +93,7 @@ public class AccountServiceImpl implements AccountService {
         if (acc == null || acc.getStatus() != AccountStatus.ACTIVE) return false;
 
         double newBalance = acc.getBalance() + amount;
-			return accountDAO.updateBalance(accountNo, newBalance);
+		return accountDAO.updateBalance(accountNo, newBalance);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -162,8 +168,8 @@ public class AccountServiceImpl implements AccountService {
     }
     
     public long generateAccountNo() {
-		long highest_accountNo = new AccountDaoImp().getHighestAccountNo();
-		return highest_accountNo+1;
+		long highest_accountNo = new AccountDAOImpl().getHighestAccountNo();
+		return highest_accountNo != -1 ? highest_accountNo+1 : -1;
     }
     
 

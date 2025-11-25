@@ -1,24 +1,32 @@
 package com.fintrust.service;
 
+import java.sql.SQLException;
+
 import org.zkoss.zhtml.Messagebox;
 
-import com.fintrust.model_copy.Nominee;
+import com.fintrust.model.Nominee;
 
-import zcom.finrust.dao_copy.NomineeDao;
+import com.fintrust.dao.impl.NomineeDAO;
 
 
 public class NomineeServiceImp implements NomineeService{
-	private final NomineeDao nomineeDao;
+	private final NomineeDAO nomineeDAO;
 	public NomineeServiceImp() {
-		nomineeDao = new NomineeDao();
+		nomineeDAO = new NomineeDAO();
 	}
 
-	public boolean saveNominee(Nominee nominee) {
-		return nomineeDao.createNominee(nominee);
+	public Long saveNominee(Nominee nominee) {
+		try {
+			return nomineeDAO.createNominee(nominee);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return -1l;
 	}
 	
 	public boolean isPresentNominee(long nomineeId) {
-		Nominee nominee = nomineeDao.getNominee(nomineeId);
+		Nominee nominee = nomineeDAO.getNominee(nomineeId);
 		if(nominee != null) {
 			return true;
 		}

@@ -102,9 +102,7 @@
                 <row>
                     <label value="Account Type:"/>
                     <combobox id="accountType" width="200px" readonly="true">
-                        <comboitem label="Saving"/>
-                        <comboitem label="Current"/>
-                        <comboitem label="Salary"/>
+                      <!-- Dynamic data rendering -->
                     </combobox>
                 </row>
 
@@ -123,13 +121,13 @@
                                placeholder="Min 1000"/>
                 </row>
 
-                <row>
-                    <label value="Mode of Operation:"/>
-                    <combobox id="modeOfOperation" width="200px" readonly="true">
-                        <comboitem label="Self"/>
-                        <comboitem label="Joint"/>
-                    </combobox>
-                </row>
+                <!-- Future purpose implementation -->
+            <row>
+                <label value="Mode of Operation:"/>
+                <combobox id="modeOfOperation" width="200px" readonly="true">
+                       <comboitem label="Self"/>
+                </combobox>
+            </row> 
 
                 <row>
                     <label value="Nominee Name:"/>

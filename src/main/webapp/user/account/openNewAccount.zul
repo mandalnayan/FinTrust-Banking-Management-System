@@ -109,9 +109,7 @@
         	<row>
                 <label value="Account Type:"/>
                 <combobox id="accountType" width="200px" readonly="true">
-                	<comboitem label="Savings"/>
-                 	<comboitem label="Current"/>
-                    <comboitem label="Salary"/>
+                <com
                 </combobox>
             </row>
             <row>
@@ -126,13 +124,14 @@
                 <label value="Initial Deposit:"/>
                 <doublebox id="initialDeposit" width="200px" format="###,###.##" placeholder="Min 1000"/>
             </row>
-            <row>
+             <!-- Future purpose implementation -->
+           <!--  <row>
                 <label value="Mode of Operation:"/>
                 <combobox id="modeOfOperation" width="200px" readonly="true">
                        <comboitem label="Self"/>
                        <comboitem label="Joint"/>
                 </combobox>
-            </row>
+            </row> -->
             <row>
                 <label value="Nominee Name:"/>
                 <textbox id="nomineeName" width="200px" placeholder="Enter Nominee Name"/>

@@ -14,10 +14,9 @@ import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.Messagebox;
 
 import com.fintrust.db.DBConnection;
-import com.fintrust.model_copy.Account;
-import com.fintrust.model_copy.Account.AccountStatus;
-import com.fintrust.model_copy.Account.AccountType;
-import com.fintrust.model_copy.Account.ModeOfOperation;
+import com.fintrust.model.Account;
+import com.fintrust.model.Account.AccountStatus;
+import com.fintrust.model.Account.AccountType;
 
 public class AccountDaoImp implements AccountDao {
 
@@ -71,15 +70,14 @@ public class AccountDaoImp implements AccountDao {
 				// System.out.println("account data fetched!!");
 				if (rs.next()) {
 					Account account = new Account();
-					account.setAccount_no(rs.getLong(1));
+					account.setAccountId(rs.getLong("account_id"));
+					account.setUserId(rs.getLong("user_id"));
+					account.setAccountNumber(rs.getString("account_number"));
 					account.setBalance(rs.getDouble(2));
-					account.setAccount_type(AccountType.valueOf(rs.getString(3)));
-					account.setAccount_status(AccountStatus.valueOf(rs.getString(4)));
-					account.setBranch_Name(rs.getString(5));
-					account.setMode_of_operation(ModeOfOperation.valueOf(rs.getString(6)));
-					account.setNominee_id(rs.getLong(7));
-					account.setCustomer_id(rs.getLong(8));
-					account.setCreated_at(rs.getTimestamp(9).toLocalDateTime());
+					account.setAccountType(rs.getString("account_type"));
+					account.setStatus(AccountStatus.valueOf(rs.getString("account_status")));				
+					
+					account.setOpenedAt(rs.getTimestamp("opened_at"));
 					return account;
 				}
 			}
@@ -326,8 +324,8 @@ public class AccountDaoImp implements AccountDao {
 		return false;
 	}
 
-	public long getHighestAccountNo() {
-		String query = "SELECT account_no FROM account ORDER BY account_no DESC LIMIT 1";
+	public Long getHighestAccountNo() {
+		String query = "SELECT account_no FROM accounts ORDER BY account_no DESC LIMIT 1";
 
 		try (PreparedStatement statement = DBConnection.getConnection().prepareStatement(query);
 				ResultSet resultSet = statement.executeQuery()) {
@@ -336,14 +334,11 @@ public class AccountDaoImp implements AccountDao {
 				long highestAccountNo = resultSet.getLong("account_no");
 				// System.out.println("Highest Account No: " + highestAccountNo);
 				return highestAccountNo;
-			} else {
-				return 10001000;
-			}
+			} 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			Messagebox.show(e.getMessage());
+			e.printStackTrace();			
 		}
-		return 10001000; // return 10001000 if no record found or error occurred
+		return -1l; // return -1 if no record found or error occurred
 	}
 
 	@Override

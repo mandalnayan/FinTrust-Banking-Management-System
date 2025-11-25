@@ -31,8 +31,8 @@ public class AccountDAOImpl implements AccountDAO {
     public long create(Account account) throws SQLException {    	
         String sql = """
             INSERT INTO accounts
-            (user_id, bank_id, account_number, account_type, balance, currency)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            (user_id, bank_id, account_number, account_type, balance)
+            VALUES (?, ?, ?, ?, ?, ?)
         """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -184,6 +184,27 @@ public class AccountDAOImpl implements AccountDAO {
         map.put("updated_at", rs.getTimestamp("updated_at"));
         return map;
     }
+    
+    /**
+     * To generate new account no
+     * @return
+     */
+    public Long getHighestAccountNo() {
+		String query = "SELECT account_no FROM accounts ORDER BY account_no DESC LIMIT 1";
+
+		try (PreparedStatement statement = DBConnection.getConnection().prepareStatement(query);
+				ResultSet resultSet = statement.executeQuery()) {
+
+			if (resultSet.next()) {
+				long highestAccountNo = resultSet.getLong("account_no");
+				// System.out.println("Highest Account No: " + highestAccountNo);
+				return highestAccountNo;
+			} 
+		} catch (SQLException e) {
+			e.printStackTrace();			
+		}
+		return -1l; // return -1 if no record found or error occurred
+	}
     
     /**
      * Mapping resultset to Account
