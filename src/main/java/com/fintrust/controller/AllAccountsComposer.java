@@ -7,14 +7,14 @@ import org.zkoss.zk.ui.select.annotation.*;
 import org.zkoss.zul.*;
 
 import com.fintrust.model_copy.Account;
-import com.fintrust.service.AccountServiceImp;
+import com.fintrust.service.AccountServiceImpl;
 import com.fintrust.service.NomineeServiceImp;
 import com.lowagie.text.Anchor;
 
 import java.util.*;
 
 public class AllAccountsComposer extends SelectorComposer<Window> {
-	private final AccountServiceImp acconntService = new AccountServiceImp();
+	private final AccountServiceImpl acconntService = new AccountServiceImpl();
 	private final NomineeServiceImp nomineeService = new NomineeServiceImp();
 
     @Wire private Listbox accountListbox;

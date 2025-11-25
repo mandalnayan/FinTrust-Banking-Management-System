@@ -20,12 +20,12 @@ public interface UserDAO {
      * @param User contains all information about user
      * @throws SQLException if database operation fails
      */
-    long create(User user);
+    Long create(User user) throws SQLException; 
     
     /**
      * Check either email already exist
      */    
-    boolean isEmailExists(String email);
+    Boolean isEmailExists(String email) throws SQLException; 
     
     /**
      * Authenticating user
@@ -34,7 +34,7 @@ public interface UserDAO {
      * @return
      * @throws SQLException
      */
-    boolean authenticate(String userName, String password) throws SQLException; 
+    User authenticate(String userName, String password) throws SQLException; 
 
     /**
      * Finds a user by ID.

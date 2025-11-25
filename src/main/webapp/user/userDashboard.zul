@@ -17,7 +17,7 @@
 
 
 <!-- Before loading page it ensuer page should not render -->
-<?init class = "com.fintrust.controller.AuthenticationController" ?>
+<?init class = "com.fintrust.security.AuthenticationController" ?>
 
 <zk xmlns:h="xhtml">
   <!-- Use borderlayout for predictable ZK structure -->

@@ -12,7 +12,7 @@ import org.zkoss.zul.Messagebox;
 
 import com.fintrust.model_copy.Account;
 import com.fintrust.model_copy.AccountUpdateRequest;
-import com.fintrust.service.AccountServiceImp;
+import com.fintrust.service.AccountServiceImpl;
 
 import zcom.finrust.dao_copy.AccountUpdateRequestDao;
 
@@ -23,7 +23,7 @@ public class UpdateAccountRequest extends SelectorComposer<Component> {
 	@Wire private Label accountNo,accountBalance,accountStatus;
 	@Wire private Combobox accountType, accountBranch , accountMode;
 	
-	private final AccountServiceImp acconntService = new AccountServiceImp();
+	private final AccountServiceImpl acconntService = new AccountServiceImpl();
 	Long accountNum;
 	
 	@Override

@@ -1,34 +1,44 @@
 package com.fintrust.model;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+
+import com.fintrust.model_copy.Account.AccountStatus;
 
 public class Account {
     private Long accountId;
     private Long userId;
+    private Long bankId;
     private String accountNumber;
     private String accountType;   // savings/current/salary/fixed_deposit
-    private BigDecimal balance;
+    private Double balance;
     private String currency;
-    private String status;
+    private AccountStatus account_status;
     private LocalDateTime openedAt;
     private LocalDateTime updatedAt;
+    
+    //** Account status
+	public enum AccountStatus {
+		ACTIVE,INACTIVE,CLOSED
+	}
     
     public Account() {
     	
     }
     
-	public Account(Long accountId, Long userId, String accountNumber, String accountType, BigDecimal balance,
-			String currency, String status, LocalDateTime openedAt, LocalDateTime updatedAt) {
+	public Account(Long accountId, Long userId, Long bankId, String accountNumber, String accountType, BigDecimal balance,
+			String currency, String status, Timestamp openedAt, Timestamp updatedAt) {
 		super();
 		this.accountId = accountId;
 		this.userId = userId;
+		this.bankId = bankId;
 		this.accountNumber = accountNumber;
 		this.accountType = accountType;
-		this.balance = balance;
+		this.balance = balance.doubleValue();
 		this.currency = currency;
-		this.status = status;
-		this.openedAt = openedAt;
-		this.updatedAt = updatedAt;
+		this.account_status = AccountStatus.valueOf(status.toUpperCase());		
+		this.openedAt = openedAt.toLocalDateTime();
+		this.updatedAt = updatedAt.toLocalDateTime();
 	}
 	
 	public Long getAccountId() {
@@ -40,8 +50,14 @@ public class Account {
 	public Long getUserId() {
 		return userId;
 	}
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setUserId(Long bankId) {
+		this.bankId = bankId;
+	}
+	public Long getBankId() {
+		return userId;
+	}
+	public void setBankId(Long bankId) {
+		this.bankId = bankId;
 	}
 	public String getAccountNumber() {
 		return accountNumber;
@@ -55,10 +71,10 @@ public class Account {
 	public void setAccountType(String accountType) {
 		this.accountType = accountType;
 	}
-	public BigDecimal getBalance() {
+	public Double getBalance() {
 		return balance;
 	}
-	public void setBalance(BigDecimal balance) {
+	public void setBalance(Double balance) {
 		this.balance = balance;
 	}
 	public String getCurrency() {
@@ -67,12 +83,13 @@ public class Account {
 	public void setCurrency(String currency) {
 		this.currency = currency;
 	}
-	public String getStatus() {
-		return status;
+	public AccountStatus getStatus() {
+		return account_status;
 	}
-	public void setStatus(String status) {
-		this.status = status;
+	public void setStatus(AccountStatus status) {
+		this.account_status = status;
 	}
+
 	public LocalDateTime getOpenedAt() {
 		return openedAt;
 	}

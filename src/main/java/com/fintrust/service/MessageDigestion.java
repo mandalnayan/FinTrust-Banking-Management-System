@@ -26,7 +26,7 @@ public class MessageDigestion {
 //			convert byte to hexa-decimal
 			digestPassword.append(Integer.toHexString(0xFF & digest[i]));			
 		}
-		System.out.println("\nDigested Password: " + digestPassword.toString());
+		
 		return digestPassword.toString();
 	}
 }

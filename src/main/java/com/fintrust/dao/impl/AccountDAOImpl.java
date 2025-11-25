@@ -4,15 +4,17 @@ package com.fintrust.dao.impl;
 import java.sql.*;
 import java.util.*;
 
-import com.fintrust.dao.AccountsDAO;
+import com.fintrust.dao.AccountDAO;
+import com.fintrust.db.DBConnection;
+import com.fintrust.model.Account;
 
 /**
- * JDBC implementation of AccountsDAO for banking systems.
+ * JDBC implementation of AccountDAO for banking systems.
  * <p>
  * All CRUD operations are implemented securely using PreparedStatements
  * and follow banking standards.
  */
-public class AccountsDAOImpl implements AccountsDAO {
+public class AccountDAOImpl implements AccountDAO {
 
     private final Connection connection;
 
@@ -21,29 +23,25 @@ public class AccountsDAOImpl implements AccountsDAO {
      *
      * @param connection JDBC connection managed externally
      */
-    public AccountsDAOImpl(Connection connection) {
-        this.connection = connection;
+    public AccountDAOImpl() {
+        this.connection = DBConnection.getConnection();
     }
 
     @Override
-    public long create(long userId, long bankId, String accountNumber,
-                       String accountType, double balance,
-                       String currency, String status) throws SQLException {
-
+    public long create(Account account) throws SQLException {    	
         String sql = """
             INSERT INTO accounts
-            (user_id, bank_id, account_number, account_type, balance, currency, status)
+            (user_id, bank_id, account_number, account_type, balance, currency)
             VALUES (?, ?, ?, ?, ?, ?, ?)
         """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setLong(1, userId);
-            ps.setLong(2, bankId);
-            ps.setString(3, accountNumber);
-            ps.setString(4, accountType.toLowerCase());
-            ps.setDouble(5, balance);
-            ps.setString(6, currency);
-            ps.setString(7, status != null ? status.toLowerCase() : "active");
+            ps.setLong(1, account.getUserId());
+            ps.setLong(2, account.getBankId());
+            ps.setString(3, account.getAccountNumber());
+            ps.setString(4, account.getAccountType().toLowerCase());
+            ps.setDouble(5, account.getBalance());
+            ps.setString(6, account.getCurrency());
 
             ps.executeUpdate();
 
@@ -56,18 +54,44 @@ public class AccountsDAOImpl implements AccountsDAO {
     }
 
     @Override
-    public Map<String, Object> findById(long accountId) throws SQLException {
+    public Account findByNumber(long accountNo) throws SQLException {
+        String sql = "SELECT * FROM accounts WHERE account_number = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setLong(1, accountNo);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return mapRowtoAccount(rs);
+            }
+        }
+        return null;
+    }
+    
+    @Override
+    public Account findById(long accountId) throws SQLException {
         String sql = "SELECT * FROM accounts WHERE account_id = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setLong(1, accountId);
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) return mapRow(rs);
+                if (rs.next()) return mapRowtoAccount(rs);
             }
         }
         return null;
     }
+    public Account findByType(long userId, String type) throws SQLException{
+    	   String sql = "SELECT * FROM accounts WHERE account_type = ? and user_id = ?";
 
+           try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        	   ps.setString(1, type);
+               ps.setLong(2, userId);
+               try (ResultSet rs = ps.executeQuery()) {
+                   if (rs.next()) return mapRowtoAccount(rs);
+               }
+           }
+           return null;
+       }
+        
+    
     @Override
     public List<Map<String, Object>> findByUserId(long userId) throws SQLException {
         String sql = "SELECT * FROM accounts WHERE user_id = ?";
@@ -160,4 +184,20 @@ public class AccountsDAOImpl implements AccountsDAO {
         map.put("updated_at", rs.getTimestamp("updated_at"));
         return map;
     }
+    
+    /**
+     * Mapping resultset to Account
+     * @param rs
+     * @return
+     * @throws SQLException
+     */
+	private Account mapRowtoAccount(ResultSet rs) throws SQLException {
+
+		Account account = new Account(rs.getLong("account_id"), rs.getLong("user_id"), rs.getLong("bank_id"),
+				rs.getString("account_number"), rs.getString("account_type"), rs.getBigDecimal("balance"),
+				rs.getString("currency"), rs.getString("status"), rs.getTimestamp("opened_at"),
+				rs.getTimestamp("updated_at"));
+
+		return account;
+	}
 }

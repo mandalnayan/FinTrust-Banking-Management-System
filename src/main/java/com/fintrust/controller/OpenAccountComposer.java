@@ -14,7 +14,7 @@ import com.fintrust.model_copy.Nominee;
 import com.fintrust.model_copy.Account.AccountStatus;
 import com.fintrust.model_copy.Account.AccountType;
 import com.fintrust.model_copy.Account.ModeOfOperation;
-import com.fintrust.service.AccountServiceImp;
+import com.fintrust.service.AccountServiceImpl;
 import com.fintrust.service.NomineeServiceImp;
 
 import java.time.LocalDateTime;
@@ -37,7 +37,7 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
     @Wire
     private Button btnSubmit, btnReset;
 
-    private final AccountServiceImp acconntService = new AccountServiceImp();
+    private final AccountServiceImpl acconntService = new AccountServiceImpl();
     private final NomineeServiceImp nomineeService = new NomineeServiceImp();
 
     @Override

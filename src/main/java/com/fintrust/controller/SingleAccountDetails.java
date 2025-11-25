@@ -6,11 +6,11 @@ import org.zkoss.zk.ui.select.annotation.*;
 import org.zkoss.zul.*;
 
 import com.fintrust.model_copy.Account;
-import com.fintrust.service.AccountServiceImp;
+import com.fintrust.service.AccountServiceImpl;
 
 
 public class SingleAccountDetails extends SelectorComposer<Window> {
-	private final AccountServiceImp acconntService = new AccountServiceImp();
+	private final AccountServiceImpl acconntService = new AccountServiceImpl();
 
     @Wire private Label accountNo, accountType, accountBalance, accountStatus, accountBranch, modeOfOperation, nomineeId;
 

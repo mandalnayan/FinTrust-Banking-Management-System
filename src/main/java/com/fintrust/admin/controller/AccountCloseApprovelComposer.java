@@ -14,7 +14,7 @@ import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Messagebox;
 
 import com.fintrust.model_copy.AccountCloseRequest;
-import com.fintrust.service.AccountServiceImp;
+import com.fintrust.service.AccountServiceImpl;
 
 import zcom.finrust.dao_copy.AccountCloseRequestDao;
 
@@ -68,7 +68,7 @@ public class AccountCloseApprovelComposer extends SelectorComposer<Component>{
         }
 		AccountCloseRequest req = requestList.getSelectedItem().getValue();
 		
-		if(new AccountServiceImp().checkBalance(req.getAccountNo()) > 0) {
+		if(new AccountServiceImpl().checkBalance(req.getAccountNo()) > 0) {
 			Messagebox.show("First of all withdrawal your balance then do request for account closing");
 //			EmailService email = new EmailService();
 //		        email.sendEmail(

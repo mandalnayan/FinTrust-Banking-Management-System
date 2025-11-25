@@ -1,5 +1,6 @@
 package com.fintrust.model;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 /**
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 
 public class User {
 
-    private Integer id;
+    private Long id;
     private String fullName;
     private String email;
     private String phone;
@@ -37,21 +38,20 @@ public class User {
     public User() {
     }
 
-	public User(Integer id, String name, String email, String phone, String password, Role role, Status status,
-                LocalDateTime createdAt, LocalDateTime updatedAt) {
+	public User(Long id, String name, String email, String phone, String role, String status,
+			Timestamp createdAt, Timestamp updatedAt) {
         this.id = id;
         this.fullName = name;
         this.email = email;
         this.phone = phone;
-        this.password = password;
-        this.role = role;
-        this.status = status;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.role = Role.valueOf(role.toUpperCase());
+        this.status = Status.valueOf(status.toUpperCase());
+        this.createdAt = createdAt.toLocalDateTime();
+        this.updatedAt = updatedAt.toLocalDateTime();
     }
 
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -64,7 +64,7 @@ public class User {
 		this.fullName = name;
 	}
     
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

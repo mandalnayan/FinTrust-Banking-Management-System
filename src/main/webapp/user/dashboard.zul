@@ -19,9 +19,9 @@
 
                     <vbox sclass="summary-card" style="text-align:center;" pack="center">
                         <label value="Available Balance" sclass="summary-title"/> 
-                        <label value="@load(vm.availableBalance)" 
+                        <label value="222" 
                                sclass="summary-value" style="font-weight:bold;"/>
-                        <label value="Account: @load(vm.defaultAccountNo)" sclass="summary-sub"/> 
+                        <label value="Account: " sclass="summary-sub"/> 
                     </vbox>
 
                     <vbox class="summary-card" style="text-align:center;" pack="center">

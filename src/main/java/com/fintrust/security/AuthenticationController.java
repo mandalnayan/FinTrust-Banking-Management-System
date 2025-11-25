@@ -1,4 +1,4 @@
-package com.fintrust.controller;
+package com.fintrust.security;
 
 import java.util.Map;
 
@@ -16,7 +16,7 @@ public class AuthenticationController implements Initiator{
 
 	@Override
 	public void doInit(Page page, Map<String, Object> args) throws Exception {
-		String user = (String) Sessions.getCurrent().getAttribute("userEmail");
+		String user = (String) Sessions.getCurrent().getAttribute("user_email");
 		if (user == null || user.isBlank()) {
 			Executions.sendRedirect("/home.zul");
 		}

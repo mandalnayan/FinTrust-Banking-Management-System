@@ -25,12 +25,12 @@ public class UserDAOImpl implements UserDAO {
 	 * @param connection JDBC connection managed externally
 	 */
 	public UserDAOImpl() {
-		this.connection = DBConnection.getConnection();
+		this.connection = DBConnection.getConnection();		
 	}
 
 	@Override
-	public long create(User user) {
-
+	public Long create(User user) throws SQLException {
+		
 		String sql = """
 				    INSERT INTO users (full_name, email, phone, password_hash, role)
 				    VALUES (?, ?, ?, ?, ?)
@@ -51,37 +51,46 @@ public class UserDAOImpl implements UserDAO {
 			} catch (SQLException ex) {
 				ex.printStackTrace();
 			}
-		} catch (SQLException ex) {
-			ex.printStackTrace();
 		}
 
-		return -1;
+		return -1l;
 	}
 
 	@Override
-	public boolean isEmailExists(String email) {
+	public Boolean isEmailExists(String email) throws SQLException {
+		
 		String sql = "SELECT * FROM users WHERE email = ?";
 
 		try (PreparedStatement ps = connection.prepareStatement(sql)) {
 			ps.setString(1, email);
 			ResultSet rs = ps.executeQuery();
 			return rs.next();
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-		}
-		return false;
+		} 
 	}
 
 	@Override
-	public boolean authenticate(String userName, String password) throws SQLException {
+	public User authenticate(String userName, String password) throws SQLException {
 		String sql = "SELECT * FROM users WHERE email = ? and password_hash = ?";
 
 		try (PreparedStatement ps = connection.prepareStatement(sql)) {
 			ps.setString(1, userName);
 			ps.setString(2, password);
 			try (ResultSet rs = ps.executeQuery()) {
-				return rs.next();
+				 if(rs.next()) {
+					 User user = new User(
+							 rs.getLong("user_id"),
+							 rs.getString("full_name"),
+							 rs.getString("email"),
+							 rs.getString("phone"),
+							 rs.getString("role"),
+							 rs.getString("status"),
+							 rs.getTimestamp("created_at"),
+							 rs.getTimestamp("updated_at")
+							 );
+					 return user;
+				 }
 			}
+			return null;
 		}
 	}
 

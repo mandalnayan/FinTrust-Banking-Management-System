@@ -1,16 +1,19 @@
 package com.fintrust.dao;
 
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+
+import com.fintrust.model.Account;
 
 /**
  * DAO interface for managing bank accounts in the banking system.
  * <p>
  * All operations follow banking-grade JDBC standards.
  */
-public interface AccountsDAO {
+public interface AccountDAO {
 
     /**
      * Creates a new account.
@@ -25,9 +28,7 @@ public interface AccountsDAO {
      * @return generated account_id
      * @throws SQLException if database operation fails
      */
-    long create(long userId, long bankId, String accountNumber,
-                String accountType, double balance,
-                String currency, String status) throws SQLException;
+    long create(Account account) throws SQLException;
 
     /**
      * Finds an account by account_id.
@@ -36,7 +37,16 @@ public interface AccountsDAO {
      * @return Map representing the account record or null
      * @throws SQLException if database operation fails
      */
-    Map<String, Object> findById(long accountId) throws SQLException;
+    Account findById(long accountId) throws SQLException;
+    
+    /**
+     * Finds an account by account_id.
+     *
+     * @param accountId primary key
+     * @return Map representing the account record or null
+     * @throws SQLException if database operation fails
+     */
+    Account findByNumber(long accountNo) throws SQLException;
 
     /**
      * Finds accounts by user_id.
@@ -46,6 +56,8 @@ public interface AccountsDAO {
      * @throws SQLException if database operation fails
      */
     List<Map<String, Object>> findByUserId(long userId) throws SQLException;
+    
+    Account findByType(long userId, String type) throws SQLException;
 
     /**
      * Retrieves all accounts.
@@ -86,3 +98,4 @@ public interface AccountsDAO {
      */
     boolean delete(long accountId) throws SQLException;
 }
+

@@ -30,7 +30,7 @@ public class UserDashboardController extends SelectorComposer<Borderlayout>{
     private int rewardPoints = 1200;
     private int activeCards = 2; 
     
-    @Wire Include userdashboard_sec, profile_sec, changePassword_sec, openAccount_sec, viewAllAccount_sec; 
+    @Wire Include main_content_sec; 
     
     @Wire Toolbarbutton userdashboard, profile, account, viewAccounts;
     
@@ -38,12 +38,7 @@ public class UserDashboardController extends SelectorComposer<Borderlayout>{
     private List<Toolbarbutton> buttons = new ArrayList<>();
     
     private void initialize() {
-    	if (!includes.isEmpty()) return;
-    	includes.add(userdashboard_sec);
-		includes.add(profile_sec);
-		includes.add(changePassword_sec);
-		includes.add(openAccount_sec);
-		includes.add(viewAllAccount_sec);
+    	if (!includes.isEmpty()) return;    	
 		
 		buttons.add(userdashboard);
 		buttons.add(profile);
@@ -56,17 +51,16 @@ public class UserDashboardController extends SelectorComposer<Borderlayout>{
     public void logout() {
 	   Session session = Sessions.getCurrent();
 	   session.removeAttribute("currentUser");
-	   session.invalidate();
+		session.removeAttribute("user_email");
+		session.removeAttribute("user_name");
+		session.removeAttribute("user_id");
+		session.invalidate();
        org.zkoss.zk.ui.Executions.sendRedirect("/home.zul");
     }   
    
    @Listen("onClick=#userdashboard")
    public void dashboard() {	   
-	   userdashboard_sec.setVisible(true);
-	   profile_sec.setVisible(false);
-	   changePassword_sec.setVisible(false);
-	   openAccount_sec.setVisible(false);
-	   viewAllAccount_sec.setVisible(false);
+	   main_content_sec.setSrc("/WEB-INF/components/dashboard.zul");
 	   
 	   userdashboard.addSclass("active");
 	   account.removeSclass("active");
@@ -76,25 +70,17 @@ public class UserDashboardController extends SelectorComposer<Borderlayout>{
    
    @Listen("onClick=#account")
    public void openAccount() {
-	   openAccount_sec.setVisible(true);
-	   userdashboard_sec.setVisible(false);
-	   profile_sec.setVisible(false);
-	   changePassword_sec.setVisible(false);
-	   viewAllAccount_sec.setVisible(false);
+	   main_content_sec.setSrc("/WEB-INF/components/openNewAccount.zul");
 	   
-	   userdashboard.removeSclass("active");
 	   account.addSclass("active");
+	   userdashboard.removeSclass("active");
 	   viewAccounts.removeSclass("active");
 	   profile.removeSclass("active");
    }
    
    @Listen("onClick=#viewAccounts")
    public void viewAccount() {
-	   viewAllAccount_sec.setVisible(true);
-	   openAccount_sec.setVisible(false);
-	   userdashboard_sec.setVisible(false);
-	   profile_sec.setVisible(false);
-	   changePassword_sec.setVisible(false);
+	   main_content_sec.setSrc("/WEB-INF/components/view_all_account.zul");	   
 	   
 	   viewAccounts.addSclass("active");
 	   userdashboard.removeSclass("active");
@@ -104,11 +90,7 @@ public class UserDashboardController extends SelectorComposer<Borderlayout>{
    
    @Listen("onClick=#profile")
    public void profile() {
-	   profile_sec.setVisible(true);
-	   viewAllAccount_sec.setVisible(false);
-	   openAccount_sec.setVisible(false);
-	   userdashboard_sec.setVisible(false);
-	   changePassword_sec.setVisible(false);
+	   main_content_sec.setSrc("/WEB-INF/components/userProfile.zul");
 	   
 	   profile.addSclass("active");
 	   viewAccounts.removeSclass("active");

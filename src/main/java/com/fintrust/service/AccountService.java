@@ -2,7 +2,7 @@ package com.fintrust.service;
 
 import java.util.List;
 
-import com.fintrust.model_copy.Account;
+import com.fintrust.model.Account;
 
 public interface AccountService {
 	// Account management
@@ -10,10 +10,9 @@ public interface AccountService {
     boolean closeAccount(long accountNo);
     boolean updateAccountDetails(Account account);
     Account getAccountDetails(long accountNo);
-    List<Account> listAllAccounts();
-    List<Account> listAllAccounts(long customer_id);
+    List<Account> getAllAccounts();
     
-    boolean isAccountExists(long customer_id, String accountType);
+    boolean isAccountExists(long user_id, String accountType);
 
     // Banking transactions
     boolean deposit(long accountNo, double amount);

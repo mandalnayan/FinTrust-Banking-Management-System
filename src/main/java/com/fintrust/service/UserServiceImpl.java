@@ -20,10 +20,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean registerUser(User user) {
         // Check if email already exists
-        if (userDAO.isEmailExists(user.getEmail())) {
-            System.out.println("Email already registered.");
-            return false;
-        }
+    	
+        try {
+			if (userDAO.isEmailExists(user.getEmail())) {
+			    System.out.println("Email already registered.");
+			    return false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
         // Encrypt password (optional, we will add later)
         // user.setPassword(PasswordUtil.encrypt(user.getPassword()));
@@ -33,8 +38,15 @@ public class UserServiceImpl implements UserService {
         user.setPassword(digestPassword);
         
         // Insert user to DB
-        Long userId = userDAO.create(user);
-        return userId != -1;
+        Long userId;
+		try {
+			userId = userDAO.create(user);
+			return userId != -1;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
     }
         
     public User getLoggedInUser() {
@@ -74,16 +86,22 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public boolean isAuthorize(String userName, String password) {
-		 String digestPassword = MessageDigestion.digestPassword(password);
-		 
-		// converting password into digest password 
-	   try {
-		return  userDAO.authenticate(userName, digestPassword);
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+		String digestPassword = MessageDigestion.digestPassword(password);
+
+		// converting password into digest password
+		try {
+			User user = userDAO.authenticate(userName, digestPassword);
+			if (user != null) {
+				Sessions.getCurrent().setAttribute("user_email", user.getEmail());
+				Sessions.getCurrent().setAttribute("user_name", user.getFullName());
+				Sessions.getCurrent().setAttribute("user_id", user.getId());
+				return true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return false;
-	}
 	}
 	
 	/**

@@ -21,9 +21,7 @@ public class UserLoginController extends SelectorComposer<Window>{
 		String userEmail = email.getText();
 		String pasw = password.getText();
 		
-		if(userSerivce.isAuthorize(userEmail, pasw)) {
-			// Set session for curren user
-			Sessions.getCurrent().setAttribute("userEmail", userEmail);
+		if(userSerivce.isAuthorize(userEmail, pasw)) {			
 			
 			Executions.sendRedirect("/user/userDashboard.zul");		
 		} else {

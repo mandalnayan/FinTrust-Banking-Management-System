@@ -3,10 +3,9 @@ package com.fintrust.viewModel;
 import org.zkoss.bind.annotation.*;
 import org.zkoss.zk.ui.Executions;
 
-import com.fintrust.model_copy.Account;
-
-import zcom.finrust.dao_copy.AccountDao;
-import zcom.finrust.dao_copy.AccountDaoImp;
+import com.fintrust.model.Account;
+import com.fintrust.service.AccountService;
+import com.fintrust.service.AccountServiceImpl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -15,15 +14,16 @@ import java.util.List;
 public class UserDashboardVM {
 
     private double availableBalance;
-    private Long defaultAccountNo;
+    private String defaultAccountNo;
     private int pendingCount;
     private int rewardPoints;
     private int activeCards;
     private Account defaultAccount;
     
-    private AccountDao accountDao;
+    private AccountService accountService;
 
     private List<Transaction> recentTransactions;
+    private List<Account> accounts;
 
     // ==========================
     // GETTERS (required for MVVM)
@@ -32,7 +32,7 @@ public class UserDashboardVM {
         return availableBalance;
     }
 
-    public Long getDefaultAccountNo() {
+    public String getDefaultAccountNo() {
         return defaultAccountNo;
     }
 
@@ -58,11 +58,17 @@ public class UserDashboardVM {
     @Init
     public void init() {
     	
-    	accountDao = new AccountDaoImp();
+    	accountService = new AccountServiceImpl();
 
         // TODO → Replace these with service/database calls
-        defaultAccount = accountDao.getDefaultAccount();
-        defaultAccountNo = defaultAccount.getAccount_no();
+    	
+        accounts = accountService.getAllAccounts();
+        if (accounts == null || accounts.size() == 0) {
+        	System.out.println("Failed to load accounts or Accounts doesn't exist ..!");
+        	return;
+        }
+        defaultAccount = accounts.get(0);
+        defaultAccountNo = defaultAccount.getAccountNumber();
         availableBalance = defaultAccount.getBalance();
         pendingCount = 5;
         rewardPoints = 125;
