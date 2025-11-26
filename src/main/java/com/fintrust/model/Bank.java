@@ -1,5 +1,6 @@
 package com.fintrust.model;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public class Bank {
@@ -7,7 +8,7 @@ public class Bank {
 	private Long bankId;
 	private String bankName;
 	private String bankCode;
-	private String ifscPrefix;
+	private String ifscCode;
 	private String branchName;
 	private String supportEmail;
 	private String supportPhone;
@@ -16,16 +17,16 @@ public class Bank {
 	public Bank() {}
 	
 	public Bank(Long bankId, String bankName, String bankCode, String ifscPrefix, String branchName,
-			String supportEmail, String supportPhone, LocalDateTime createdAt) {
+			String supportEmail, String supportPhone, Timestamp createdAt) {
 		super();
 		this.bankId = bankId;
 		this.bankName = bankName;
 		this.bankCode = bankCode;
-		this.ifscPrefix = ifscPrefix;
+		this.ifscCode = ifscPrefix;
 		this.branchName = branchName;
 		this.supportEmail = supportEmail;
 		this.supportPhone = supportPhone;
-		this.createdAt = createdAt;
+		this.createdAt = createdAt.toLocalDateTime();
 	}
 	public Long getBankId() {
 		return bankId;
@@ -45,11 +46,11 @@ public class Bank {
 	public void setBankCode(String bankCode) {
 		this.bankCode = bankCode;
 	}
-	public String getIfscPrefix() {
-		return ifscPrefix;
+	public String getIfscCode() {
+		return ifscCode;
 	}
-	public void setIfscPrefix(String ifscPrefix) {
-		this.ifscPrefix = ifscPrefix;
+	public void setIfscCode(String ifscCode) {
+		this.ifscCode = ifscCode;
 	}
 	public String getBranchName() {
 		return branchName;
@@ -72,8 +73,8 @@ public class Bank {
 	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
-	public void setCreatedAt(LocalDateTime createdAt) {
-		this.createdAt = createdAt;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt.toLocalDateTime();
 	}
 	
 	

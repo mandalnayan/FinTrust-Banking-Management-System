@@ -22,10 +22,12 @@ import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 import com.fintrust.db.DBConnection;
+import com.fintrust.service.AccountService;
+import com.fintrust.service.AccountServiceImpl;
 import com.fintrust.service.CardServices;
 
-import zcom.finrust.dao_copy.AccountDao;
-import zcom.finrust.dao_copy.AccountDaoImp;
+import com.fintrust.dao.AccountDAO;
+import com.fintrust.dao.impl.AccountDAOImpl;
 
 
 public class cardApplyPageController extends SelectorComposer<Window>{
@@ -54,15 +56,16 @@ public class cardApplyPageController extends SelectorComposer<Window>{
     Button submitApplyCard;
     
     CardServices cardService =new CardServices();
-    AccountDao accountDao;
+    AccountService accountService = new AccountServiceImpl();
+    AccountDAO accountDao;
     
      
     @Override
 	public  void doAfterCompose(Window comp) throws Exception {
 		// TODO Auto-generated method stub
 		super.doAfterCompose(comp);
-		accountDao = new AccountDaoImp();
-		List<Long> accounts= accountDao.getAccountsByUserId(null);
+		accountDao = new AccountDAOImpl();
+		List<Long> accounts= accountService.getAllAccountsNumber();
 		accounts.forEach(accountNo -> accountList.appendItem(accountNo+""));		
 	}
 

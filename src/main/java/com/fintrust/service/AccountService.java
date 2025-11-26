@@ -11,6 +11,7 @@ public interface AccountService {
     boolean updateAccountDetails(Account account);
     Account getAccountDetails(long accountNo);
     List<Account> getAllAccounts();
+    public List<Long> getAllAccountsNumber(); 
     
     boolean isAccountExists(long user_id, String accountType);
 

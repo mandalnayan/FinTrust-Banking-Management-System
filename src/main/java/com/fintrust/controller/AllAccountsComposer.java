@@ -6,7 +6,7 @@ import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.*;
 import org.zkoss.zul.*;
 
-import com.fintrust.model_copy.Account;
+import com.fintrust.model.Account;
 import com.fintrust.service.AccountServiceImpl;
 import com.fintrust.service.NomineeServiceImp;
 import com.lowagie.text.Anchor;
@@ -24,7 +24,7 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
         super.doAfterCompose(comp);
       
 
-        Long customerId = (Long)Sessions.getCurrent().getAttribute("customer_id");
+        Long userId = (Long)Sessions.getCurrent().getAttribute("user_id");
         
 //        if (customerId == null) {
 //            Messagebox.show("Session expired. Please log in again.", "Error", Messagebox.OK, Messagebox.ERROR);
@@ -32,13 +32,14 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
 //            return;
 //        }
 
-        List<Account> accounts = acconntService.listAllAccounts(customerId);
-
+        List<Account> accounts = acconntService.getAllAccounts();
+        if (accounts == null) return; 
         for (Account acc : accounts) {
             Listitem item = new Listitem();
-            item.appendChild(new Listcell(String.valueOf(acc.getAccount_no())));
+            item.appendChild(new Listcell(String.valueOf(acc.getAccountNumber())));
             item.appendChild(new Listcell(String.format("%.2f", acc.getBalance())));
-            item.appendChild(new Listcell(acc.getAccount_status().name()));
+            item.appendChild(new Listcell(acc.getAccountType()));
+            item.appendChild(new Listcell(acc.getStatus().name()));
             
             Listcell actions = new Listcell();
 
@@ -82,7 +83,7 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
     /** View account **/
     private void viewAccount(Account acc) {
     	// Store selected account number in session
-        Executions.getCurrent().getSession().setAttribute("selected_account_no", acc.getAccount_no());
+        Executions.getCurrent().getSession().setAttribute("selected_account_no", acc.getAccountNumber());
         // Redirect to details page
         Executions.sendRedirect("/user/account/view_spc_account.zul");
     }
@@ -90,7 +91,7 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
     /** Edit account **/
     private void editAccount(Account acc) {
     	// Store selected account number in session
-        Executions.getCurrent().getSession().setAttribute("selected_account_no", acc.getAccount_no());
+        Executions.getCurrent().getSession().setAttribute("selected_account_no", acc.getAccountNumber());
         // Redirect to details page
         Executions.sendRedirect("/user/account/update_account.zul");
     }
@@ -98,7 +99,7 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
     /** Close account **/
     private void closeAccount(Account acc) {
     	// Store selected account number in session
-        Executions.getCurrent().getSession().setAttribute("selected_account_no", acc.getAccount_no());
+        Executions.getCurrent().getSession().setAttribute("selected_account_no", acc.getAccountNumber());
         // Redirect to details page
         Executions.sendRedirect("/user/account/close_account.zul");
     }

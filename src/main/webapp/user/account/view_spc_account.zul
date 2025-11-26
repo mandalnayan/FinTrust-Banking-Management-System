@@ -64,6 +64,11 @@
                 	<label id="accountBranch"/>
                 </row>
                 <row>
+                	<label value="Branch:"/>
+                	<label id="ifscCode"/>
+                </row>
+                
+                <row>
                 	<label value="Mode of Operation:"/>
                 	<label id="modeOfOperation"/>
                 </row>

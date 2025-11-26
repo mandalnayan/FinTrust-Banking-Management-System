@@ -5,14 +5,16 @@ import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.*;
 import org.zkoss.zul.*;
 
-import com.fintrust.model_copy.Account;
+import com.fintrust.dao.impl.BankDAOImpl;
+import com.fintrust.model.Account;
+import com.fintrust.model.Bank;
 import com.fintrust.service.AccountServiceImpl;
 
 
 public class SingleAccountDetails extends SelectorComposer<Window> {
 	private final AccountServiceImpl acconntService = new AccountServiceImpl();
 
-    @Wire private Label accountNo, accountType, accountBalance, accountStatus, accountBranch, modeOfOperation, nomineeId;
+    @Wire private Label accountNo, accountType, ifscCode, accountBalance, accountStatus, accountBranch, modeOfOperation, nomineeId;
 
     @Override
     public void doAfterCompose(Window comp) throws Exception {
@@ -36,12 +38,16 @@ public class SingleAccountDetails extends SelectorComposer<Window> {
             return;
         }
 
-        accountNo.setValue(acc.getAccount_no()+"");
-        accountType.setValue(acc.getAccount_type().name());
+        accountNo.setValue(acc.getAccountNumber()+"");
+        accountType.setValue(acc.getAccountType());
         accountBalance.setValue(acc.getBalance()+"");
-        accountStatus.setValue(acc.getAccount_status().name());
-        accountBranch.setValue(acc.getBranch_Name());
-        modeOfOperation.setValue(acc.getMode_of_operation().name());
+        accountStatus.setValue(acc.getStatus().name());
+        Bank bank = new BankDAOImpl().findById(acc.getBankId());
+        if (bank != null) {
+        	accountBranch.setValue(bank.getBranchName());
+        	ifscCode.setValue(bank.getIfscCode());
+        }
+        modeOfOperation.setValue("self");
         nomineeId.setValue(acc.getNominee_id()+"");
     }
 

@@ -55,7 +55,16 @@ public interface AccountDAO {
      * @return list of account records
      * @throws SQLException if database operation fails
      */
-    List<Map<String, Object>> findByUserId(long userId) throws SQLException;
+    List<Account> findByUserId(long userId) throws SQLException;
+    
+    /**
+     * Finds accounts number by user_id.
+     *
+     * @param userId user ID
+     * @return list of account records
+     * @throws SQLException if database operation fails
+     */
+    List<Long> findByNumberUserId(long userId) throws SQLException;
     
     Account findByType(long userId, String type) throws SQLException;
 

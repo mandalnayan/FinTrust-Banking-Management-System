@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.zkoss.zk.ui.Sessions;
 
@@ -38,11 +39,11 @@ public class AccountServiceImpl implements AccountService {
     public boolean openAccount(Account account) {
         try {
         	// Unique account number generation (for demo)
-			long accountNo = generateAccountNo();
+			long accountNo = generateAccountNumber();
 			Long user_id = (Long) Sessions.getCurrent().getAttribute("user_id");
 			account.setUserId(user_id);			
-			account.setBankId(111l);
-			if (accountNo == -1 || user_id == null) return false;
+			account.setBankId(1l);
+			if (accountNo == -1 || user_id == null || isAccountExists(user_id, account.getAccountType())) return false;
 			account.setAccountNumber(accountNo);
 			return accountDAO.create(account) != -1;
 		} catch (SQLException e) {
@@ -77,7 +78,21 @@ public class AccountServiceImpl implements AccountService {
 	public List<Account> getAllAccounts() {
 		long user_id = (long) Sessions.getCurrent().getAttribute("user_id");
 		  try {
-			List<Map<String, Object>> accounts = accountDAO.findByUserId(user_id);			
+			List<Account> accounts = accountDAO.findByUserId(user_id);			
+			return accounts;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		  return null;
+	}
+	
+	@Override
+	public List<Long> getAllAccountsNumber() {
+		long user_id = (long) Sessions.getCurrent().getAttribute("user_id");
+		  try {
+			List<Long> accounts = accountDAO.findByNumberUserId(user_id);			
+			return accounts;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -168,10 +183,35 @@ public class AccountServiceImpl implements AccountService {
         return false;
     }
     
-    public long generateAccountNo() {
-//    	long highest_accountNo = new AccountDAOImpl().getHighestAccountNo();
-		long highest_accountNo = 100000000000l;
+    private long generateAccountNumber() {
+    	long highest_accountNo = new AccountDAOImpl().getHighestAccountNo();
+    	if (highest_accountNo == 0) {
+    		return generateRandomNumber();
+    	}
 		return highest_accountNo != -1 ? highest_accountNo+1 : -1;
+    }
+    
+    private long generateRandomNumber() {
+    	Random random = new Random();
+    	long min = 100000000000L;
+    	long max = 999999999999L;
+    	int maxTry = 5;
+    	while (maxTry-- > 0) {
+           long randomNo = GenerateRandomNumber.generateRandomNumber(min, max);
+
+            try {
+				if (accountDAO.findByNumber(randomNo) == null) {
+				    return randomNo;
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				System.out.println("ERROR to check account is present or not: " + e.getMessage());
+				e.printStackTrace();
+				return -1l;
+			}
+            // else loop — collision, try a new random again
+        }
+    	return -1l;
     }
     
 

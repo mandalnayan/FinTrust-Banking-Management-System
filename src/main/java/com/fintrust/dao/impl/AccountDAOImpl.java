@@ -92,20 +92,37 @@ public class AccountDAOImpl implements AccountDAO {
         
     
     @Override
-    public List<Map<String, Object>> findByUserId(long userId) throws SQLException {
+    public List<Account> findByUserId(long userId) throws SQLException {
         String sql = "SELECT * FROM accounts WHERE user_id = ?";
         List<Map<String, Object>> list = new ArrayList<>();
-
+        List<Account> accounts = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setLong(1, userId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    list.add(mapRow(rs));
+                	accounts.add(mapRowtoAccount(rs));
                 }
             }
         }
 
-        return list;
+        return accounts;
+    }
+    
+    @Override
+    public List<Long> findByNumberUserId(long userId) throws SQLException {
+        String sql = "SELECT account_number FROM accounts WHERE user_id = ?";
+        
+        List<Long> accounts = new ArrayList<>();
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setLong(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                	accounts.add(rs.getLong("account_number"));
+                }
+            }
+        }
+
+        return accounts;
     }
 
     @Override
@@ -161,6 +178,46 @@ public class AccountDAOImpl implements AccountDAO {
             return ps.executeUpdate() > 0;
         }
     }
+    
+    /**
+     * To generate new account no
+     * @return
+     */
+    public Long getHighestAccountNo() {
+		String query = "SELECT account_number FROM accounts ORDER BY account_number DESC LIMIT 1";
+
+		try (PreparedStatement statement = DBConnection.getConnection().prepareStatement(query);
+				ResultSet resultSet = statement.executeQuery()) {
+
+			if (resultSet.next()) {
+				long highestAccountNo = resultSet.getLong("account_number");
+				// System.out.println("Highest Account No: " + highestAccountNo);
+				return highestAccountNo;
+			} else {
+				return 0l;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();			
+		}
+		return -1l; // return -1 if no record found or error occurred
+	}
+    
+    /**
+     * Mapping resultset to Account
+     * @param rs
+     * @return
+     * @throws SQLException
+     */
+	private Account mapRowtoAccount(ResultSet rs) throws SQLException {
+
+		Account account = new Account(rs.getLong("account_id"), rs.getLong("user_id"), rs.getLong("bank_id"),
+				rs.getLong("account_number"), rs.getString("account_type"), rs.getBigDecimal("balance"),
+				rs.getString("currency"), rs.getString("status"), rs.getTimestamp("opened_at"),
+				rs.getTimestamp("updated_at"));
+
+		return account;
+	}
+	
 
     /**
      * Maps a ResultSet row into a Map representing the account record.
@@ -183,41 +240,5 @@ public class AccountDAOImpl implements AccountDAO {
         map.put("updated_at", rs.getTimestamp("updated_at"));
         return map;
     }
-    
-    /**
-     * To generate new account no
-     * @return
-     */
-    public Long getHighestAccountNo() {
-		String query = "SELECT account_number FROM accounts ORDER BY account_number DESC LIMIT 1";
-
-		try (PreparedStatement statement = DBConnection.getConnection().prepareStatement(query);
-				ResultSet resultSet = statement.executeQuery()) {
-
-			if (resultSet.next()) {
-				long highestAccountNo = resultSet.getLong("account_number");
-				// System.out.println("Highest Account No: " + highestAccountNo);
-				return highestAccountNo;
-			} 
-		} catch (SQLException e) {
-			e.printStackTrace();			
-		}
-		return -1l; // return -1 if no record found or error occurred
-	}
-    
-    /**
-     * Mapping resultset to Account
-     * @param rs
-     * @return
-     * @throws SQLException
-     */
-	private Account mapRowtoAccount(ResultSet rs) throws SQLException {
-
-		Account account = new Account(rs.getLong("account_id"), rs.getLong("user_id"), rs.getLong("bank_id"),
-				rs.getLong("account_number"), rs.getString("account_type"), rs.getBigDecimal("balance"),
-				rs.getString("currency"), rs.getString("status"), rs.getTimestamp("opened_at"),
-				rs.getTimestamp("updated_at"));
-
-		return account;
-	}
+	
 }

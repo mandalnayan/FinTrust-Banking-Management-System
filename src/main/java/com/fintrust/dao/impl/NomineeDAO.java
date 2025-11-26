@@ -32,7 +32,7 @@ public class NomineeDAO {
 	
 	
 	public Long createNominee(Nominee nominee) throws SQLException {
-	//	createNomineeSchema();
+		createNomineeSchema();
 		String q = "INSERT INTO nominee(nominee_id, nominee_name, nominee_relation) VALUES ( ?, ?, ?);";
 		try(PreparedStatement ps = DBConnection.getConnection().prepareStatement(q, Statement.RETURN_GENERATED_KEYS)){
 			
