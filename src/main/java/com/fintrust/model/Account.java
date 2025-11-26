@@ -11,7 +11,7 @@ public class Account {
     private Long userId;
     private Long bankId;
     private long nominee_id ;
-    private String accountNumber;
+    private Long accountNumber;
     private AccountType accountType;   // savings/current/salary/fixed_deposit
     private Double balance;
     private String currency;
@@ -33,7 +33,7 @@ public class Account {
     	
     }
     
-	public Account(Long accountId, Long userId, Long bankId, String accountNumber, String accountType, BigDecimal balance,
+	public Account(Long accountId, Long userId, Long bankId, Long accountNumber, String accountType, BigDecimal balance,
 			String currency, String status, Timestamp openedAt, Timestamp updatedAt) {
 		super();
 		this.accountId = accountId;
@@ -58,10 +58,10 @@ public class Account {
 		return userId;
 	}
 	public void setUserId(Long bankId) {
-		this.bankId = bankId;
+		this.userId = bankId;
 	}
 	public Long getBankId() {
-		return userId;
+		return bankId;
 	}
 	public void setBankId(Long bankId) {
 		this.bankId = bankId;
@@ -73,10 +73,10 @@ public class Account {
 	public void setNominee_id(long nominee_id) {
 		this.nominee_id = nominee_id;
 	}
-	public String getAccountNumber() {
+	public Long getAccountNumber() {
 		return accountNumber;
 	}
-	public void setAccountNumber(String accountNumber) {
+	public void setAccountNumber(Long accountNumber) {
 		this.accountNumber = accountNumber;
 	}
 	public String getAccountType() {

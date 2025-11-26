@@ -14,7 +14,7 @@ import com.fintrust.model.Nominee;
 public class NomineeDAO {
 	public static boolean createNomineeSchema() {
 		String q = "CREATE TABLE nominee (\r\n"
-				+ "id BIGINT UNSIGNED PRIMARY KEY,"
+				+ "id BIGINT UNSIGNED PRIMARY KEY auto_increment,"
 				+ "    nominee_id BIGINT UNSIGNED NOT NULL,\r\n"
 				+ "    nominee_name VARCHAR(100) NOT NULL,\r\n"
 				+ "    nominee_relation VARCHAR(50) NOT NULL\r\n"
@@ -22,19 +22,18 @@ public class NomineeDAO {
 		try {
 			Statement statement = DBConnection.getConnection().createStatement();
 			statement.executeUpdate(q);
-			System.out.println("customer table created");
+			System.out.println("nominee table created");
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			Messagebox.show(e.getMessage());
 		}
 		return false;
 	}
 	
 	
 	public Long createNominee(Nominee nominee) throws SQLException {
-		createNomineeSchema();
-		String q = "INSERT INTO nominee VALUES ( ?, ?, ?);";
+	//	createNomineeSchema();
+		String q = "INSERT INTO nominee(nominee_id, nominee_name, nominee_relation) VALUES ( ?, ?, ?);";
 		try(PreparedStatement ps = DBConnection.getConnection().prepareStatement(q, Statement.RETURN_GENERATED_KEYS)){
 			
 			ps.setLong(1, nominee.getNominee_id());

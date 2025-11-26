@@ -32,16 +32,15 @@ public class AccountDAOImpl implements AccountDAO {
         String sql = """
             INSERT INTO accounts
             (user_id, bank_id, account_number, account_type, balance)
-            VALUES (?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?)
         """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setLong(1, account.getUserId());
             ps.setLong(2, account.getBankId());
-            ps.setString(3, account.getAccountNumber());
+            ps.setLong(3, account.getAccountNumber());
             ps.setString(4, account.getAccountType().toLowerCase());
             ps.setDouble(5, account.getBalance());
-            ps.setString(6, account.getCurrency());
 
             ps.executeUpdate();
 
@@ -175,7 +174,7 @@ public class AccountDAOImpl implements AccountDAO {
         map.put("account_id", rs.getLong("account_id"));
         map.put("user_id", rs.getLong("user_id"));
         map.put("bank_id", rs.getLong("bank_id"));
-        map.put("account_number", rs.getString("account_number"));
+        map.put("account_number", rs.getLong("account_number"));
         map.put("account_type", rs.getString("account_type"));
         map.put("balance", rs.getBigDecimal("balance"));
         map.put("currency", rs.getString("currency"));
@@ -190,13 +189,13 @@ public class AccountDAOImpl implements AccountDAO {
      * @return
      */
     public Long getHighestAccountNo() {
-		String query = "SELECT account_no FROM accounts ORDER BY account_no DESC LIMIT 1";
+		String query = "SELECT account_number FROM accounts ORDER BY account_number DESC LIMIT 1";
 
 		try (PreparedStatement statement = DBConnection.getConnection().prepareStatement(query);
 				ResultSet resultSet = statement.executeQuery()) {
 
 			if (resultSet.next()) {
-				long highestAccountNo = resultSet.getLong("account_no");
+				long highestAccountNo = resultSet.getLong("account_number");
 				// System.out.println("Highest Account No: " + highestAccountNo);
 				return highestAccountNo;
 			} 
@@ -215,7 +214,7 @@ public class AccountDAOImpl implements AccountDAO {
 	private Account mapRowtoAccount(ResultSet rs) throws SQLException {
 
 		Account account = new Account(rs.getLong("account_id"), rs.getLong("user_id"), rs.getLong("bank_id"),
-				rs.getString("account_number"), rs.getString("account_type"), rs.getBigDecimal("balance"),
+				rs.getLong("account_number"), rs.getString("account_type"), rs.getBigDecimal("balance"),
 				rs.getString("currency"), rs.getString("status"), rs.getTimestamp("opened_at"),
 				rs.getTimestamp("updated_at"));
 

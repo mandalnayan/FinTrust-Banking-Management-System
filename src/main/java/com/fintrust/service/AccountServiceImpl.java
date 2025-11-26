@@ -39,10 +39,11 @@ public class AccountServiceImpl implements AccountService {
         try {
         	// Unique account number generation (for demo)
 			long accountNo = generateAccountNo();
-			if (accountNo == -1) return false;
-			long user_id = (Long) Sessions.getCurrent().getAttribute("user_id");
-			account.setUserId(user_id);
+			Long user_id = (Long) Sessions.getCurrent().getAttribute("user_id");
+			account.setUserId(user_id);			
 			account.setBankId(111l);
+			if (accountNo == -1 || user_id == null) return false;
+			account.setAccountNumber(accountNo);
 			return accountDAO.create(account) != -1;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -168,7 +169,8 @@ public class AccountServiceImpl implements AccountService {
     }
     
     public long generateAccountNo() {
-		long highest_accountNo = new AccountDAOImpl().getHighestAccountNo();
+//    	long highest_accountNo = new AccountDAOImpl().getHighestAccountNo();
+		long highest_accountNo = 100000000000l;
 		return highest_accountNo != -1 ? highest_accountNo+1 : -1;
     }
     

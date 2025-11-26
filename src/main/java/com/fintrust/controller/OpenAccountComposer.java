@@ -67,13 +67,13 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 			String nominee_name = nomineeName.getValue().trim();
 			String relation = nomineeRelation.getValue().trim();
 			long nomineeIdNum = nomineeId.longValue();
-			Long nom_id = null;
+			Long nom_id = nomineeIdNum;
 
 			Nominee nom = new Nominee(nomineeIdNum, nominee_name, relation);
 			if (!nomineeService.isPresentNominee(nomineeIdNum)) {
 				nom_id = nomineeService.saveNominee(nom);
 			}			
-			if (nom_id == -1) return;
+			if (nom_id == -1l) return;
 			
 		
 

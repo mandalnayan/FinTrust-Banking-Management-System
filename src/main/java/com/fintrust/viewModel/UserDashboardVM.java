@@ -14,7 +14,7 @@ import java.util.List;
 public class UserDashboardVM {
 
     private double availableBalance;
-    private String defaultAccountNo;
+    private Long defaultAccountNo;
     private int pendingCount;
     private int rewardPoints;
     private int activeCards;
