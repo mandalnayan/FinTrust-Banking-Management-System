@@ -13,10 +13,11 @@ import org.zkoss.zul.Messagebox;
 import com.fintrust.db.DBConnection;
 import com.fintrust.model.AccountUpdateRequest;
 
-
 public class AccountUpdateRequestDao {
 	
-	
+	public AccountUpdateRequestDao() {
+		createSchema();
+	}
 	public boolean createSchema() {
 		String query = """
 					CREATE TABLE IF NOT EXISTS account_update_request (
@@ -41,7 +42,6 @@ public class AccountUpdateRequestDao {
 				);
 
 								""";
-
 		try {
 			Statement statement = DBConnection.getConnection().createStatement();
 			statement.executeUpdate(query);
@@ -55,7 +55,6 @@ public class AccountUpdateRequestDao {
 	}
 
 	public boolean save(AccountUpdateRequest req) {
-		createSchema();
 	    String sql = "INSERT INTO account_update_request " +
 	                 "(account_number, new_account_type, new_branch_name, new_mode_of_operation, requested_by) " +
 	                 "VALUES (?, ?, ?, ?, ?)";

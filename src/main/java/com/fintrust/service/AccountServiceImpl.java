@@ -12,7 +12,7 @@ import com.fintrust.model.Account;
 import com.fintrust.model.Account.AccountStatus;
 
 import com.fintrust.dao.impl.AccountDAOImpl;
-
+import com.fintrust.dao.impl.BankDAOImpl;
 import com.fintrust.dao.AccountDAO;
 import com.fintrust.dao.impl.AccountDAOImpl;
 
@@ -43,6 +43,7 @@ public class AccountServiceImpl implements AccountService {
 			Long user_id = (Long) Sessions.getCurrent().getAttribute("user_id");
 			account.setUserId(user_id);			
 			account.setBankId(1l);
+		 	
 			if (accountNo == -1 || user_id == null || isAccountExists(user_id, account.getAccountType())) return false;
 			account.setAccountNumber(accountNo);
 			return accountDAO.create(account) != -1;

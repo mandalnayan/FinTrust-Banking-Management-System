@@ -42,7 +42,7 @@
 									sclass="hero-subheading" />
 								<div style="height:18px"></div>
 								<button label="Explore Your Account"
-									sclass="hero-cta" onClick="@command('goToDashboard')" />
+									sclass="hero-cta" onClick='Executions.sendRedirect("/user/login.zul")' />
 							</div>
 
 							<!-- right column: illustration inside a pale panel -->

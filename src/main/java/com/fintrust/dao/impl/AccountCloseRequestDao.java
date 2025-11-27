@@ -31,7 +31,8 @@ public class AccountCloseRequestDao {
                 requested_by BIGINT UNSIGNED NOT NULL,
                 review_by BIGINT UNSIGNED NOT NULL,        -- employee id
 				requested_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                review_date TIMESTAMP,
+                 -- Set automatically on UPDATE (only column allowed)
+				 review_date DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
                 remarks VARCHAR(255),              -- employee remarks
                 FOREIGN KEY (account_number) REFERENCES accounts(account_number),
                  FOREIGN KEY (requested_by) REFERENCES users(user_id),

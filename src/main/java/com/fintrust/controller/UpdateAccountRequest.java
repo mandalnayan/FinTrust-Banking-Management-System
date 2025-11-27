@@ -14,11 +14,11 @@ import com.fintrust.model.Account;
 import com.fintrust.model.AccountUpdateRequest;
 import com.fintrust.service.AccountServiceImpl;
 import com.fintrust.service.RequestUpdateService;
+import com.fintrust.util.NotificationUtil;
 import com.fintrust.dao.impl.AccountUpdateRequestDao;
 
 public class UpdateAccountRequest extends SelectorComposer<Component> {
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = 1L;	
 	
 	@Wire private Label accountNo,accountBalance,accountStatus;
 	@Wire private Combobox accountType, accountBranch , accountMode;
@@ -39,10 +39,12 @@ public class UpdateAccountRequest extends SelectorComposer<Component> {
     
 	}
 	
-
-	
+/**
+ * Taking updatable data
+ */
 	@Listen("onClick=#update")
 	public void sendUpdateAccountReq() {
+		alert("Entered");
 		 if (!isFormValid()) return;
 		
 		 //Messagebox.show("Request submitted successfully!");
@@ -60,14 +62,16 @@ public class UpdateAccountRequest extends SelectorComposer<Component> {
          req.setRequestedBy(user_id);
 
          if(new RequestUpdateService().updateRequest(req)) {
-        	 Messagebox.show("Request submitted successfully!");
-             //Executions.sendRedirect("view_all_account.zul");
+        	 		NotificationUtil.push("info", "Requested submitted successfully.\n your requested will be handled instantly.");
+        	 		Executions.sendRedirect("view_all_account.zul");
+         } else {
+        	 	NotificationUtil.showInstant("warning", "Requested is already submitted. Please check status");
          }
 	}
 	
 	@Listen("onClick=#cancel")
 	public void cancelUpdateAccountReq() {
-		Executions.sendRedirect("view_all_account.zul");
+		Executions.sendRedirect("/user/userDashboard.zul");
 	}
 	
 	public boolean isFormValid(){

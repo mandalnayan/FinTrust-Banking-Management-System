@@ -1,0 +1,40 @@
+
+	package com.fintrust.util;
+
+	import org.zkoss.zk.ui.Sessions;
+	import org.zkoss.zk.ui.util.Clients;
+
+	public class NotificationUtil {
+
+	    private static final String SESSION_MESSAGE = "GLOBAL_NOTIFICATION_MESSAGE";
+	    private static final String SESSION_TYPE = "GLOBAL_NOTIFICATION_TYPE";
+
+	    private NotificationUtil() {}
+
+	    // Save message for next page (during redirect)
+	    public static void push(String type, String message) {
+	        Sessions.getCurrent().setAttribute(SESSION_MESSAGE, message);
+	        Sessions.getCurrent().setAttribute(SESSION_TYPE, type);
+	    }
+
+	    // Show instantly (no redirect)
+	    public static void showInstant(String type, String message) {
+	        Clients.showNotification(message, type, null, "top_center", 3000);
+	    }
+
+	    // Called on page load to display pending session message
+	    public static void showIfExists() {
+	        var session = Sessions.getCurrent();
+	        String msg = (String) session.getAttribute(SESSION_MESSAGE);
+	        String type = (String) session.getAttribute(SESSION_TYPE);
+
+	        if (msg != null) {
+	            Clients.showNotification(msg, type, null, "top_center", 3000);
+
+	            // clear after showing
+	            session.removeAttribute(SESSION_MESSAGE);
+	            session.removeAttribute(SESSION_TYPE);
+	        }
+	    }
+	}
+

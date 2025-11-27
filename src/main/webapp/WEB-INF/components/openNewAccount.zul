@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zk xmlns="http://www.zkoss.org/2005/zul" xmlns:h="xhtml" xmlns:n="native">
 
+<!-- For showing session notification  -->
+<?init class="com.fintrust.util.PageInitNotifier" ?>
+
+
 <style>
     body {
         margin: 0;

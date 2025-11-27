@@ -16,6 +16,7 @@ import com.fintrust.model.Account.AccountType;
 import com.fintrust.model_copy.Account.ModeOfOperation;
 import com.fintrust.service.AccountServiceImpl;
 import com.fintrust.service.NomineeServiceImp;
+import com.fintrust.util.NotificationUtil;
 
 import java.time.LocalDateTime;
 
@@ -73,9 +74,7 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 			if (!nomineeService.isPresentNominee(nomineeIdNum)) {
 				nom_id = nomineeService.saveNominee(nom);
 			}			
-			if (nom_id == -1l) return;
-			
-		
+			if (nom_id == -1l) return;	
 
 			// Create Account object
 			Account account = new Account();
@@ -85,21 +84,24 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 			boolean success = acconntService.openAccount(account);
 
 			if (success) {
-				Messagebox.show("Account created successfully!", "Success", Messagebox.OK, Messagebox.INFORMATION);
+				String message = "Account created successfully!";
+				NotificationUtil.push("info", message);				
 				resetForm();
 				Executions.sendRedirect("");
 			} else {
-				Messagebox.show("Account creation failed! Please try again.", "Database Error", Messagebox.OK,
-						Messagebox.ERROR);
+				String message = "Server error. Failed to create Account. Please try again!";
+				NotificationUtil.push("error", message);	
 			}
 
 		} catch (IllegalArgumentException e) {
-			Messagebox.show("Invalid input: " + e.getMessage(), "Validation Error", Messagebox.OK,
-					Messagebox.EXCLAMATION);
-		} catch (Exception e) {
+			String message = "Please give valid input!";
+			NotificationUtil.push("error", message);	
 			e.printStackTrace();
-			Messagebox.show("Error while creating account: " + e.getMessage(), "Exception", Messagebox.OK,
-					Messagebox.ERROR);
+			
+		} catch (Exception e) {
+			String message = "Server error. Failed to create Account. Please try again!";
+			NotificationUtil.push("error", message);	
+			e.printStackTrace();
 		}
 	}
 

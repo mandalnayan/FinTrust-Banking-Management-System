@@ -19,6 +19,9 @@
 <!-- Before loading page it ensuer page should not render -->
 <?init class = "com.fintrust.security.AuthenticationController" ?>
 
+<?init class="com.fintrust.util.PageInitNotifier" ?>
+
+
 <zk xmlns:h="xhtml">
   <!-- Use borderlayout for predictable ZK structure -->
   <borderlayout  sclass="dashboard-window" apply="com.fintrust.controller.UserDashboardController">

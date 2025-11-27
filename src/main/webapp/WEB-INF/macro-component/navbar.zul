@@ -13,7 +13,7 @@
 				<div sclass="navbar-right" apply="com.fintrust.controller.NavbarController">
 						<label id = "homeId" sclass="nav-link active"  value = "Home" onClick='Executions.sendRedirect("/home.zul")'/>
 						<label id = "aboutId" sclass="nav-link"  value = "About"/>
-						<label id = "accountsId" sclass="nav-link"  value = "Open Account"/>
+						<label id = "accountsId" sclass="nav-link"  value = "Open Account" onClick='Executions.sendRedirect("/user/userSignup.zul")'/>
 						<label id = "transactionsId" sclass="nav-link" visible="false" value = "Transactions"/>
 						<label id = "cardsId" sclass="nav-link" visible="false" value = "Cards"/>
 						<!-- Label value will dynamically change Signup/Profile based on page  -->

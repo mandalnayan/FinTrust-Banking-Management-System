@@ -21,12 +21,12 @@ public class BankDAOImpl implements BankDAO{
 	
 	@Override
 	public long create(Bank bank) throws SQLException {
-		Statement st = connection.createStatement();
-		String query = """
-				INSERT INTO bank (bank_name, branch_name, ifsc_code, support_email, support_phone)
-				 VALUES ('Fintrust', 'Internet Banking', 'FINT0000000', 'support@fintrust.com', '1800-123-456');
-				""";
-		st.executeUpdate(query);
+//		Statement st = connection.createStatement();
+//		String query = """
+//				INSERT INTO banks (bank_name, branch_name, ifsc_code, support_email, support_phone)
+//				 VALUES ('Fintrust', 'Internet Banking', 'FINT0000000', 'support@fintrust.com', '1800-123-456');
+//				""";
+//		st.executeUpdate(query);
 		return 0;
 	}
 

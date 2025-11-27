@@ -28,7 +28,8 @@ public class AccountDAOImpl implements AccountDAO {
     }
 
     @Override
-    public long create(Account account) throws SQLException {    	
+    public long create(Account account) throws SQLException {  
+   
         String sql = """
             INSERT INTO accounts
             (user_id, bank_id, account_number, account_type, balance)
@@ -88,8 +89,7 @@ public class AccountDAOImpl implements AccountDAO {
                }
            }
            return null;
-       }
-        
+       }        
     
     @Override
     public List<Account> findByUserId(long userId) throws SQLException {
