@@ -64,6 +64,9 @@
 
         </style>
 
+<!-- Before loading page it ensuer page should not render -->
+<?init class = "com.fintrust.security.AuthenticationController" ?>
+
 <hbox align = "center" pack = "center" width="100%" height = "100%" style = " background-color: #B7AEC8;">
     <window border="normal" sclass= "form-container" apply="com.fintrust.controller.CloseAccountComposer">
     		<hbox align="center" pack="center" spacing="10px" height="50px" width="100%">

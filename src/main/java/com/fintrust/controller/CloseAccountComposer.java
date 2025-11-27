@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
@@ -12,7 +13,7 @@ import org.zkoss.zul.Label;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 
-import com.fintrust.model_copy.AccountCloseRequest;
+import com.fintrust.model.AccountCloseRequest;
 import com.fintrust.service.AccountCloseRequestService;
 
 
@@ -38,13 +39,13 @@ public class CloseAccountComposer extends SelectorComposer<Component>{
 		long accountNo = accountNum;
 		
 		long customerId;
-		//customerId = (Long) Executions.getCurrent().getSession().getAttribute("customer_id");	
-		customerId=1001L;
+		
+		long userId = (long) Sessions.getCurrent().getAttribute("user_id");
 		
 		AccountCloseRequest accReq = new AccountCloseRequest();
 		accReq.setAccountNo(accountNo);
 		accReq.setReason(reasonClose);
-		accReq.setRequestedBy(customerId);
+		accReq.setRequestedBy(userId);
 		
 		if(!confirmClose.isChecked()) {
 			Messagebox.show("Please confirm first!");
@@ -53,11 +54,12 @@ public class CloseAccountComposer extends SelectorComposer<Component>{
 		
 		if(closeRequetService.saveReq(accReq)) {
 			Messagebox.show("Request send Successfully for closing the account");
-		}
+		} 
+		
 	}
 	
 	@Listen("onClick=#btnReset")
 	public void resetRequest() {
-		Executions.sendRedirect("view_all_account.zul");
+		Executions.sendRedirect("/user/userDashboard.zul");
 	}
 }

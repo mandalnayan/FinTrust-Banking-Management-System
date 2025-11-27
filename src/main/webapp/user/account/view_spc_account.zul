@@ -33,6 +33,8 @@
     
 </style>
 
+<?init class = "com.fintrust.security.AuthenticationController" ?>
+
 <hbox align = "center" pack = "center" width="100%" height = "100%" style = " background-color: #B7AEC8;">
 <window border="normal" sclass="container" apply="com.fintrust.controller.SingleAccountDetails">
 

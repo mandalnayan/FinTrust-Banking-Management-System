@@ -15,11 +15,6 @@
 		@media (max-width: 600px) { .container { width: 100%; padding:
 		15px; } }
 
-
-
-
-
-
 		.action-icon { font-size: 21px; cursor: pointer; transition: all
 		0.2s ease; padding: 8px; border-radius: 50%; }
 
@@ -45,29 +40,23 @@
 		<window border="normal" sclass="container"
 			apply="com.fintrust.controller.AllAccountsComposer">
 
-			<vlayout spacing="15px">
-				<label value="Your Accounts"
-					style="font-weight:bold; font-size:23px;" />
+			 <vlayout spacing="15px">
+        <label value="Your Accounts" style="font-weight:bold; font-size:23px;"/>
 
-				<listbox id="accountListbox" mold="paging" pageSize="4"
-					width="100%" emptyMessage="No account created">
-					<listhead>
-						<listheader label="Account No" width="20%"
-							align="center" />
-						<listheader label="Balance" width="20%"
-							align="center" />
-						<listheader label="Status" width="15%"
-							align="center" />
-						<listheader label="Action" width="30%"
-							align="center" />
-					</listhead>
-				</listbox>
+        <listbox id="accountListbox" mold="paging" pageSize="5" width="100%" style="overflow-x: auto">
+            <listhead>
+                <listheader label="Account No" width="20%" align="center"/>
+                <listheader label="Balance" width="20%" align="center"/>
+                <listheader label="Type" width="20%" align="center"/>
+                <listheader label="Status" width="15%" align="center"/>
+                <listheader label="Action"  width="30%" align="center"/>
+            </listhead>
+        </listbox>
 
-				<hbox pack="center" style="margin-top:15px;">
-					<button id="backBtn" label="Back to Dashboard"
-						sclass="btn" />
-				</hbox>
-			</vlayout>
+        <hbox pack="center" style="margin-top:15px;">
+            <button id="backBtn" label="Back to Dashboard" href="/user/userDashboard.zul" sclass="btn"/>
+        </hbox>
+    </vlayout>
 		</window>
 	</hbox>
 </zk>

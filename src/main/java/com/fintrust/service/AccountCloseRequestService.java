@@ -1,8 +1,10 @@
 package com.fintrust.service;
 
-import com.fintrust.model_copy.AccountCloseRequest;
+import com.fintrust.model.AccountCloseRequest;
 
-import zcom.finrust.dao_copy.AccountCloseRequestDao;
+import org.zkoss.zul.Messagebox;
+
+import com.fintrust.dao.impl.AccountCloseRequestDao;
 
 public class AccountCloseRequestService {
 	AccountCloseRequestDao closeReqDao;
@@ -11,6 +13,16 @@ public class AccountCloseRequestService {
 	}
 	
 	public boolean saveReq(AccountCloseRequest req) {
-		return closeReqDao.saveRequest(req);
+		Boolean isExist = closeReqDao.isRequestExist(req.getAccountNo());
+//		Some DB error
+		if(isExist == null) {
+			System.out.println("DB error");
+		} else if(!isExist) {
+			return closeReqDao.saveRequest(req);
+		} else {
+			Messagebox.show("You have already requested!!");
+		}
+		return false;
+		
 	}
 }

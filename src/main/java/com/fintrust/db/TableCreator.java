@@ -82,7 +82,7 @@ public class TableCreator {
 	                account_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	                user_id BIGINT UNSIGNED NOT NULL,
 	                bank_id BIGINT UNSIGNED NOT NULL,
-	                account_number VARCHAR(32) NOT NULL UNIQUE,
+	                account_number BIGINT UNSIGNED NOT NULL UNIQUE,
 	                account_type ENUM('savings','current','salary','fixed_deposit') NOT NULL,
 	                balance DECIMAL(18,2) NOT NULL DEFAULT 0.00,
 	                currency VARCHAR(10) NOT NULL DEFAULT 'INR',

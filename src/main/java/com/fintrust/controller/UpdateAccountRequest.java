@@ -10,11 +10,11 @@ import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Messagebox;
 
-import com.fintrust.model_copy.Account;
-import com.fintrust.model_copy.AccountUpdateRequest;
+import com.fintrust.model.Account;
+import com.fintrust.model.AccountUpdateRequest;
 import com.fintrust.service.AccountServiceImpl;
-
-import zcom.finrust.dao_copy.AccountUpdateRequestDao;
+import com.fintrust.service.RequestUpdateService;
+import com.fintrust.dao.impl.AccountUpdateRequestDao;
 
 public class UpdateAccountRequest extends SelectorComposer<Component> {
 	private static final long serialVersionUID = 1L;
@@ -33,9 +33,9 @@ public class UpdateAccountRequest extends SelectorComposer<Component> {
 		accountNum = (Long) Executions.getCurrent().getSession().getAttribute("selected_account_no");
 		
         Account acc = acconntService.getAccountDetails(accountNum);
-        accountNo.setValue(acc.getAccount_no()+"");
+        accountNo.setValue(acc.getAccountNumber()+"");
         accountBalance.setValue(acc.getBalance()+"");
-        accountStatus.setValue(acc.getAccount_status().name());
+        accountStatus.setValue(acc.getStatus().name());
     
 	}
 	
@@ -56,11 +56,10 @@ public class UpdateAccountRequest extends SelectorComposer<Component> {
          req.setNewBranchName(accBranch);
          req.setNewModeOfOperation(accMode);
          
-         Long customerId = (Long) Executions.getCurrent().getSession().getAttribute("customer_id");
-         customerId=1001L;
-         req.setRequestedBy(customerId);
+         Long user_id = (Long) Executions.getCurrent().getSession().getAttribute("user_id");
+         req.setRequestedBy(user_id);
 
-         if(new AccountUpdateRequestDao().save(req)) {
+         if(new RequestUpdateService().updateRequest(req)) {
         	 Messagebox.show("Request submitted successfully!");
              //Executions.sendRedirect("view_all_account.zul");
          }
