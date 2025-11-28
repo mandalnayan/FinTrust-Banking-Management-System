@@ -29,10 +29,7 @@ public interface UserDetailsDAO {
      * @return generated details_id
      * @throws SQLException if database operation fails
      */
-    long create(long userId, String gender, java.sql.Date dob,
-                String aadhaarMask, String panMask,
-                String country, String state, String district,
-                String city, String pincode) throws SQLException;
+    long create(UserDetails userDetails) throws SQLException;
 
     /**
      * Finds a user details record by details_id.
@@ -60,26 +57,14 @@ public interface UserDetailsDAO {
      */
     List<Map<String, Object>> findAll() throws SQLException;
 
-    /**
-     * Updates user details.
-     *
-     * @param detailsId    ID of the details record
-     * @param gender       'male', 'female', 'other'
-     * @param dob          date of birth
-     * @param aadhaarMask  masked Aadhaar number
-     * @param panMask      masked PAN number
-     * @param country      country
-     * @param state        state
-     * @param district     district
-     * @param city         city
-     * @param pincode      postal code
-     * @return true if update successful
-     * @throws SQLException if database operation fails
-     */
-    boolean update(long detailsId, String gender, java.sql.Date dob,
-                   String aadhaarMask, String panMask,
-                   String country, String state, String district,
-                   String city, String pincode) throws SQLException;
+   
+     /**
+      * Update user details
+      * @param userDetails
+      * @return
+      * @throws SQLException
+      */
+    boolean update(UserDetails userDetails) throws SQLException;
     
     /**
      * Update primary account of users

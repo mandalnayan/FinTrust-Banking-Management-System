@@ -75,6 +75,16 @@ public class AccountServiceImpl implements AccountService {
         return null;
     }
     
+    @Override
+    public Account getAccountById(long accountId) {
+        try {
+			return accountDAO.findById(accountId);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return null;
+    }
 	@Override
 	public List<Account> getAllAccounts() {
 		long user_id = (long) Sessions.getCurrent().getAttribute("user_id");

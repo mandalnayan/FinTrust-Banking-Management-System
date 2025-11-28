@@ -31,28 +31,24 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
     }
 
     @Override
-    public long create(long userId, String gender, Date dob,
-                       String aadhaarMask, String panMask,
-                       String country, String state, String district,
-                       String city, String pincode) throws SQLException {
+    public long create(UserDetails ud) throws SQLException {
 
         String sql = """
             INSERT INTO user_details
-            (user_id, gender, dob, aadhaar_masked, pan_masked, country, state, district, city, pincode)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            (user_id, gender, dob, aadhaar_masked, pan_masked, country, state, city, pincode)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?,  ?)
         """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setLong(1, userId);
-            ps.setString(2, gender != null ? gender.toLowerCase() : null);
-            ps.setDate(3, dob);
-            ps.setString(4, aadhaarMask);
-            ps.setString(5, panMask);
-            ps.setString(6, country);
-            ps.setString(7, state);
-            ps.setString(8, district);
-            ps.setString(9, city);
-            ps.setString(10, pincode);
+            ps.setLong(1, ud.getUserId());
+            ps.setString(2, ud.getGender() != null ? ud.getGender().toLowerCase() : null);
+            ps.setDate(3, ud.getDob() != null ? Date.valueOf(ud.getDob()) : null);
+            ps.setString(4, ud.getAadhaarMasked());
+            ps.setString(5, ud.getPanMasked());
+            ps.setString(6, ud.getCountry());
+            ps.setString(7, ud.getState());
+            ps.setString(8, ud.getCity());
+            ps.setString(10, ud.getPincode());
 
             ps.executeUpdate();
 
@@ -63,38 +59,36 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
 
         return -1;
     }
-//
-//    public boolean insert() {
-//    	"""
-//    		INSERT INTO user_details (
-//    ->     user_id,
-//    ->     gender,
-//    ->     dob,
-//    ->     aadhaar_masked,
-//    ->     pan_masked,
-//    ->     country,
-//    ->     state,
-//    ->     district,
-//    ->     city,
-//    ->     pincode,
-//    ->     primary_account_id
-//    -> ) VALUES (
-//    ->     1,                        -- existing user_id
-//    ->     'male',
-//    ->     '1995-04-25',
-//    ->     'XXXX-XXXX-1234',
-//    ->     'XXXXX1234X',
-//    ->     'India',
-//    ->     'Maharashtra',
-//    ->     'Pune',
-//    ->     'Pune',
-//    ->     '411001',
-//    ->     3                     -- existing account_id
-//    -> );
-//
-//    		""";
-//    		return false;
-//    }
+
+    /**
+     * 
+     * @return
+     * @throws SQLException
+     */
+	public boolean insert() throws SQLException {
+		String sql = """
+					INSERT INTO user_details (
+				    user_id, gender, dob, aadhaar_masked, pan_masked, country, state,
+				    district, city, pincode, primary_account_id
+				) VALUES (
+				   1,                        -- existing user_id
+				    'male',
+				    '1995-04-25',
+				    'XXXX-XXXX-1234',
+				    'XXXXX1234X',
+				    'India',
+				    'Maharashtra',
+				    'Pune',
+				    'Pune',
+				    '411001',
+				   5                     -- existing account_id
+				);
+
+					""";
+		  try (Statement stmt = connection.createStatement()) {
+	            return stmt.executeUpdate(sql) > 0;
+	        }
+	}
     
     @Override
     public UserDetails findById(long detailsId) throws SQLException {
@@ -147,29 +141,20 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
     }
 
     @Override
-    public boolean update(long detailsId, String gender, Date dob,
-                          String aadhaarMask, String panMask,
-                          String country, String state, String district,
-                          String city, String pincode) throws SQLException {
+    public boolean update(UserDetails ud) throws SQLException {
 
         String sql = """
             UPDATE user_details SET
-                gender = ?, dob = ?, aadhaar_masked = ?, pan_masked = ?,
-                country = ?, state = ?, district = ?, city = ?, pincode = ?
+                country = ?, state = ?, city = ?, pincode = ?
             WHERE details_id = ?
         """;
 
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, gender != null ? gender.toLowerCase() : null);
-            ps.setDate(2, dob);
-            ps.setString(3, aadhaarMask);
-            ps.setString(4, panMask);
-            ps.setString(5, country);
-            ps.setString(6, state);
-            ps.setString(7, district);
-            ps.setString(8, city);
-            ps.setString(9, pincode);
-            ps.setLong(10, detailsId);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) { 
+            ps.setString(1, ud.getCountry());
+            ps.setString(2, ud.getState());
+            ps.setString(3, ud.getCity());
+            ps.setString(4, ud.getPincode());
+            ps.setLong(5, ud.getDetailsId());
 
             return ps.executeUpdate() > 0;
         }
@@ -182,7 +167,7 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
      */
     public Long findPrimaryAccount(Long userId) throws SQLException {
         String sql = "Select * from user_details WHERE user_id = ?";
-        
+       
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
         	ps.setLong(1, userId);
         	   ResultSet rs = ps.executeQuery();

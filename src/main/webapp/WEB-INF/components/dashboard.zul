@@ -21,25 +21,14 @@
                     	style="text-align:center;" pack="center">
                     	<label value="Account Number"
                     		sclass="summary-title" />
-                    	<combobox width="auto"
-                    		placeholder="Select account number"
-                    		model="@bind(vm.accountList)"
-                    		selectedItem="@bind(vm.selectedAccount, saveOnChange=true)"
-                    		autodrop="true">
-                    		<template name="model">
-                    			<comboitem
-                    				label="@load(each.accountNumber)"
-                    				value="@load(each)" />
-                    		</template>
-                    	</combobox>
-
-                    	
+                    		<label value="@bind(vm.selectedAccountNo)"
+                    		sclass="summary-value" style="font-weight:bold;" />                 
                     </vbox>
 
                     <vbox class="summary-card" style="text-align:center;" pack="center">
                         <label value="Available Balance"
                     		sclass="summary-title" />
-                    	<label value="@load(vm.availableBalance)"
+                    	<label value="@bind(vm.availableBalance)"
                     		sclass="summary-value" style="font-weight:bold;" />
                     </vbox>
 

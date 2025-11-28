@@ -1,5 +1,13 @@
 package com.fintrust.viewModel;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.List;
+
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Executions;
@@ -8,27 +16,48 @@ import org.zkoss.zk.ui.annotation.Command;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Messagebox;
 
+import com.fintrust.model.Account;
 import com.fintrust.model.User;
 import com.fintrust.model.UserDetails;
+import com.fintrust.service.AccountService;
+import com.fintrust.service.AccountServiceImpl;
 import com.fintrust.service.UserDetailsServiceImpl;
 import com.fintrust.service.UserService;
 import com.fintrust.service.UserServiceImpl;
+import com.fintrust.util.NotificationUtil;
 
 public class UserProfileVM {
 
 	private UserDetailsServiceImpl userService;
+	private AccountService accountService;
+	private UserDetails userDetails;
+	private Account selectedAccount;
     private boolean editMode = false;
-    private UserDetails userDetails;
+    
+    private List<Account> accountList;
 
     @Init
-    @NotifyChange("customer")
+    @NotifyChange("userDetails")
     public void init() {
+    		accountService = new AccountServiceImpl();
+       	accountList = accountService.getAllAccounts();
+       	if (accountList == null || accountList.size() == 0) {
+			NotificationUtil.showInstant("error", "Faild to load account details. Please refresh the page");
+			
+		}
         userService = new UserDetailsServiceImpl();
-        userDetails = userService.getLogedInDetails();
-        
+        userDetails = userService.getLogedInDetails();       
         Sessions.getCurrent().setAttribute("user", userDetails);
     }
     
+	@NotifyChange("selectedAccount")
+	public void setSelectedAccount(Account selectedAccount) {
+		if (selectedAccount != null) { 
+			this.selectedAccount = selectedAccount;
+			userService.updatePrimaryAccount(1, selectedAccount.getAccountId());
+		}
+	}
+	    
     @Command
     @NotifyChange("editMode")
     public void toggleEditMode() {
@@ -40,10 +69,9 @@ public class UserProfileVM {
     public void updateProfile() {
     	if(userService.updateDetails(userDetails)) {
         editMode = false;
-        Clients.showNotification("Profile updated successfully!", "info", null, "top_center", 3000);
+        NotificationUtil.showInstant("info", "User Details updated successfully");
     	} else {
-//    		user = (User) Sessions.getCurrent().getAttribute("user");
-    		 Clients.showNotification("Failed to updated. Please try again", "error", null, "top_center", 3000);
+ 		NotificationUtil.showInstant("error", "Failed to update. Please try again");
     	}
     }
 
@@ -59,15 +87,26 @@ public class UserProfileVM {
     @Command
     @NotifyChange("userDetails")
     public void toggle2FA() {
-    	userDetails.setTwoFactor(!userDetails.getTwoFactor());
-        userService.update2FA(userDetails);
-        Clients.showNotification("Two-Factor Authentication setting updated.", "info", null, "top_center", 3000);
+//    	userDetails.setTwoFactor(!userDetails.getTwoFactor());
+//        userService.update2FA(userDetails);
+//        Clients.showNotification("Two-Factor Authentication setting updated.", "info", null, "top_center", 3000);
+//   
     }
 
     // Getters and setters
-    public UserDetails getuserDetails() {
+    public UserDetails getUserDetails() {
         return userDetails;
     }
+    
+ // Return accountlist
+ 	public List<Account> getAccountList() {
+ 		return accountList;
+ 	}
+ 	
+ 	// Get Selected Account
+ 	public Account getSelectedAccount() {
+		return selectedAccount;
+	}
 
     public boolean isEditMode() {
         return editMode;
@@ -78,10 +117,36 @@ public class UserProfileVM {
      * @return
      */
     public String getRegisteredDateFormatted() {
-        if (userDetails == null || userDetails.getCreatedAt() == null) {
+        if (userDetails == null
+                || userDetails.getUser() == null
+                || userDetails.getUser().getCreatedAt() == null) {
             return "";
         }
-        return new java.text.SimpleDateFormat("yyyy-MM-dd")
-                .format(userDetails);
+
+        LocalDateTime ldt = userDetails.getUser().getCreatedAt();
+
+        return ldt.toLocalDate()
+                  .format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
+    
+    /**
+     * Getting DOB date in specific formate(dd-MM-YYY)
+     * @return
+     */
+    public Date getDob() {
+        if (userDetails == null
+                || userDetails.getDob() == null) {
+            return new Date();
+        }
+
+
+        LocalDate localDate = userDetails.getDob();
+
+        Date date = Date.from(
+                localDate.atStartOfDay(ZoneId.systemDefault()).toInstant()
+        );
+
+        return date;
+    }
+
 }

@@ -19,11 +19,12 @@ public class UserDetailsServiceImpl {
 	public void updatePrimaryAccount(long userId, long accountId) {
 
 		try {
-			userDAOImpl.updatePrimaryAccount(userId, accountId);
+			if(userDAOImpl.updatePrimaryAccount(userId, accountId)) NotificationUtil.showInstant("info", "Updated primary account"); 
 		} catch (SQLException e) {
 			NotificationUtil.showInstant("error", "Falied to updated primary account. please try again");
 			e.printStackTrace();
 		}
+		NotificationUtil.showInstant("error", "Failed to update. \nPlease try again!");
 	}
 
 	/**
@@ -51,6 +52,12 @@ public class UserDetailsServiceImpl {
 	 * @return
 	 */
 	public boolean updateDetails(UserDetails user) {
+		try {
+			 return userDAOImpl.update(user);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();			
+		}
 		return false;
 	}
 
@@ -62,6 +69,7 @@ public class UserDetailsServiceImpl {
 	public Long getPrimaryAccount(long userId) {
 
 		try {
+			
 			Long accountId = userDAOImpl.findPrimaryAccount(userId);
 			if (accountId != -1) {
 				return accountId;
@@ -73,4 +81,5 @@ public class UserDetailsServiceImpl {
 		NotificationUtil.push("warning", "You haven't created account yet. Please create account.");
 		return -1l;
 	}
+	
 }

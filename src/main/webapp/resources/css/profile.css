@@ -29,8 +29,8 @@
 .profile-header { background:#fff; padding:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.08); }
 .profile-avatar { width:90px; height:90px; border-radius:50%; border:3px solid #0052cc; }
 .profile-name { font-size:20px; font-weight:700; color:#003366; }
-.profile-email { font-size:14px; color:#555; }
-.profile-date { font-size:13px; color:#777; }
+.profile-email { font-size:14px; color:#555; font-weight:700; }
+.profile-date { font-size:14px; color:#0052cc; font-weight:700; }
 
 /* Profile Form */
 .profile-form { background:#fff; padding:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.06); }

@@ -50,27 +50,33 @@ public class TableCreator {
 	        // -----------------------------
 	        // 3) user_details
 	        // -----------------------------
-	        st.execute("""
-	            CREATE TABLE IF NOT EXISTS user_details (
-	                details_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-	                user_id BIGINT UNSIGNED NOT NULL,
-	                gender ENUM('male','female','other'),
-	                dob DATE,
-	                aadhaar_masked VARCHAR(20),
-	                pan_masked VARCHAR(20),
-	                country VARCHAR(50),
-	                state VARCHAR(50),
-	                district VARCHAR(50),
-	                city VARCHAR(50),
-	                pincode VARCHAR(10),
-	                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-	                CONSTRAINT fk_ud_user FOREIGN KEY (user_id)
-	                    REFERENCES users(user_id)
-	                    ON UPDATE CASCADE
-	                    ON DELETE RESTRICT
-	            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-	        """);
+			st.execute("""
+					         CREATE TABLE IF NOT EXISTS user_details (
+					             details_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+					             user_id BIGINT UNSIGNED NOT NULL,
+					             primary_account_id BIGINT UNSIGNED NULL,
+					             gender ENUM('male','female','other'),
+					             dob DATE,
+					             aadhaar_masked VARCHAR(20),
+					             pan_masked VARCHAR(20),
+					             country VARCHAR(50),
+					             state VARCHAR(50),
+					             district VARCHAR(50),
+					             city VARCHAR(50),
+					             pincode VARCHAR(10),
+					             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+					             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+					             CONSTRAINT fk_ud_user FOREIGN KEY (user_id)
+					                 REFERENCES users(user_id)
+					                 ON UPDATE CASCADE
+					                 ON DELETE RESTRICT,
+					            CONSTRAINT fk_userdetails_primary_account
+					FOREIGN KEY (primary_account_id)
+					REFERENCES accounts(account_id)
+					ON UPDATE CASCADE
+					ON DELETE SET NULL;
+					         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+					     """);
 
 	    //    st.execute("CREATE UNIQUE INDEX IF NOT EXISTS ux_ud_userid ON user_details(user_id);");
 

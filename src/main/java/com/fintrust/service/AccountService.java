@@ -10,6 +10,7 @@ public interface AccountService {
     boolean closeAccount(long accountNo);
     boolean updateAccountDetails(Account account);
     Account getAccountDetails(long accountNo);
+    Account getAccountById(long accountId);
     List<Account> getAllAccounts();
     public List<Long> getAllAccountsNumber(); 
     
