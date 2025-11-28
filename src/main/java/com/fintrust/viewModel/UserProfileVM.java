@@ -8,24 +8,25 @@ import org.zkoss.zk.ui.annotation.Command;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Messagebox;
 
-import com.fintrust.model_copy.Customer;
-import com.fintrust.model_copy.User;
+import com.fintrust.model.User;
+import com.fintrust.model.UserDetails;
+import com.fintrust.service.UserDetailsServiceImpl;
 import com.fintrust.service.UserService;
 import com.fintrust.service.UserServiceImpl;
 
 public class UserProfileVM {
 
-    private Customer customer;
+	private UserDetailsServiceImpl userService;
     private boolean editMode = false;
-    private UserService userService;
+    private UserDetails userDetails;
 
     @Init
     @NotifyChange("customer")
     public void init() {
-        userService = new UserServiceImpl();
-        customer = userService.getLoggedInUser();
+        userService = new UserDetailsServiceImpl();
+        userDetails = userService.getLogedInDetails();
         
-        Sessions.getCurrent().setAttribute("customer", customer);
+        Sessions.getCurrent().setAttribute("user", userDetails);
     }
     
     @Command
@@ -35,9 +36,9 @@ public class UserProfileVM {
     }
 
     @Command
-    @NotifyChange("customer")
+    @NotifyChange("userDetails")
     public void updateProfile() {
-    	if(userService.updateUser(customer)) {
+    	if(userService.updateDetails(userDetails)) {
         editMode = false;
         Clients.showNotification("Profile updated successfully!", "info", null, "top_center", 3000);
     	} else {
@@ -56,16 +57,16 @@ public class UserProfileVM {
     }
 
     @Command
-    @NotifyChange("user")
+    @NotifyChange("userDetails")
     public void toggle2FA() {
-    	customer.setTwoFactor(!customer.getTwoFactor());
-        userService.update2FA(customer);
+    	userDetails.setTwoFactor(!userDetails.getTwoFactor());
+        userService.update2FA(userDetails);
         Clients.showNotification("Two-Factor Authentication setting updated.", "info", null, "top_center", 3000);
     }
 
     // Getters and setters
-    public Customer getCustomer() {
-        return customer;
+    public UserDetails getuserDetails() {
+        return userDetails;
     }
 
     public boolean isEditMode() {
@@ -77,10 +78,10 @@ public class UserProfileVM {
      * @return
      */
     public String getRegisteredDateFormatted() {
-        if (customer == null || customer.getRegisteredDate() == null) {
+        if (userDetails == null || userDetails.getCreatedAt() == null) {
             return "";
         }
         return new java.text.SimpleDateFormat("yyyy-MM-dd")
-                .format(customer.getRegisteredDate());
+                .format(userDetails);
     }
 }

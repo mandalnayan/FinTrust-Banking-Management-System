@@ -1,6 +1,7 @@
 package com.fintrust.service;
 
 import com.fintrust.model.User;
+import com.fintrust.model.UserDetails;
 
 public interface UserService {
 /**
@@ -34,7 +35,7 @@ public interface UserService {
      * Update 2FA
      * @param user
      */
-	void update2FA(User user);
+	void update2FA(UserDetails user);
 	
 	/**
 	 * Authenticating the user

@@ -7,6 +7,9 @@ import java.sql.Date;
 import java.util.*;
 
 import com.fintrust.dao.UserDetailsDAO;
+import com.fintrust.db.DBConnection;
+import com.fintrust.model.User;
+import com.fintrust.model.UserDetails;
 
 /**
  * JDBC implementation of UserDetailsDAO for banking systems.
@@ -23,8 +26,8 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
      *
      * @param connection managed externally
      */
-    public UserDetailsDAOImpl(Connection connection) {
-        this.connection = connection;
+    public UserDetailsDAOImpl() {
+        this.connection = DBConnection.getConnection();
     }
 
     @Override
@@ -60,28 +63,69 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
 
         return -1;
     }
-
+//
+//    public boolean insert() {
+//    	"""
+//    		INSERT INTO user_details (
+//    ->     user_id,
+//    ->     gender,
+//    ->     dob,
+//    ->     aadhaar_masked,
+//    ->     pan_masked,
+//    ->     country,
+//    ->     state,
+//    ->     district,
+//    ->     city,
+//    ->     pincode,
+//    ->     primary_account_id
+//    -> ) VALUES (
+//    ->     1,                        -- existing user_id
+//    ->     'male',
+//    ->     '1995-04-25',
+//    ->     'XXXX-XXXX-1234',
+//    ->     'XXXXX1234X',
+//    ->     'India',
+//    ->     'Maharashtra',
+//    ->     'Pune',
+//    ->     'Pune',
+//    ->     '411001',
+//    ->     3                     -- existing account_id
+//    -> );
+//
+//    		""";
+//    		return false;
+//    }
+    
     @Override
-    public Map<String, Object> findById(long detailsId) throws SQLException {
+    public UserDetails findById(long detailsId) throws SQLException {
         String sql = "SELECT * FROM user_details WHERE details_id = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setLong(1, detailsId);
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) return mapRow(rs);
+                if (rs.next()) return mapRowWithUserDetails(rs);
             }
         }
         return null;
     }
 
+    /**
+     * Find user complete details by joining User and user_details table
+     */
     @Override
-    public Map<String, Object> findByUserId(long userId) throws SQLException {
-        String sql = "SELECT * FROM user_details WHERE user_id = ?";
+    public UserDetails findByUserId(long userId) throws SQLException {
+		String sql = """
+				     SELECT ud.*, us.*
+				FROM user_details ud
+				INNER JOIN users us ON ud.user_id = us.user_id
+				WHERE ud.user_id = ?;
+
+				        		""";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setLong(1, userId);
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) return mapRow(rs);
+                if (rs.next()) return mapRowWithUserDetails(rs);
             }
         }
         return null;
@@ -130,6 +174,40 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
             return ps.executeUpdate() > 0;
         }
     }
+    
+    /**
+     * Find PrimaryAccount of user
+     * @param userId
+     * @throws SQLException 
+     */
+    public Long findPrimaryAccount(Long userId) throws SQLException {
+        String sql = "Select * from user_details WHERE user_id = ?";
+        
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        	ps.setLong(1, userId);
+        	   ResultSet rs = ps.executeQuery();
+        	   if (rs.next()) {
+        		   return rs.getLong("primary_account_id");
+        	   }
+        }  
+        return -1l;
+    }
+    
+    /**
+     * Update PrimaryAccount of user
+     * @param userId
+     * @param accountId
+     * @throws SQLException 
+     */
+    public boolean updatePrimaryAccount(Long userId, Long accountId) throws SQLException {
+        String sql = "UPDATE user_details SET primary_account_id = ? WHERE user_id = ?";
+        
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setLong(1, accountId);
+            ps.setLong(2, userId);
+            return ps.executeUpdate() > 0;
+        }       
+    }
 
     @Override
     public boolean delete(long detailsId) throws SQLException {
@@ -141,6 +219,33 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
         }
     }
 
+    private UserDetails mapRowWithUserDetails(ResultSet rs) throws SQLException {
+    	 UserDetails ud = new UserDetails();
+    	 // Fetching user data
+    	 User user = new User(
+				 rs.getLong("user_id"),
+				 rs.getString("full_name"),
+				 rs.getString("email"),
+				 rs.getString("phone"),
+				 rs.getString("role"),
+				 rs.getString("status"),
+				 rs.getTimestamp("created_at"),
+				 rs.getTimestamp("updated_at")
+				 );
+    	 ud.setUser(user);
+         ud.setDetailsId(rs.getLong("details_id"));         
+         ud.setGender(rs.getString("gender"));
+         ud.setDob(rs.getDate("dob").toLocalDate());
+         ud.setAadhaarMasked(rs.getString("aadhaar_masked"));
+         ud.setPanMasked(rs.getString("pan_masked"));
+         ud.setCountry(rs.getString("country"));
+         ud.setState(rs.getString("state"));
+         ud.setDistrict(rs.getString("district"));
+         ud.setCity(rs.getString("city"));
+         ud.setPincode(rs.getString("pincode"));
+         ud.setPrimaryAccountId(rs.getLong("primary_account_id"));
+         return ud;
+    }
     /**
      * Maps a ResultSet row into a Map representing the user_details record.
      *

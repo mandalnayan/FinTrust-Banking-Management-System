@@ -1,4 +1,4 @@
-<?page title="customer Profile - FinTrust Bank" contentType="text/html;charset=UTF-8"?>
+<?page title="user Profile - FinTrust Bank" contentType="text/html;charset=UTF-8"?>
 <?link rel="stylesheet" type="text/css" href="/resources/css/profile.css"?>
 <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 
@@ -16,9 +16,9 @@
 					<image src="/resources/images/default.jpg"
 						sclass="profile-avatar" />
 					<vbox hflex="1">
-						<label value="@load(vm.customer.name)"
+						<label value="@load(vm.user.name)"
 							sclass="profile-name" />
-						<label value="@load(vm.customer.email)"
+						<label value="@load(vm.user.email)"
 							sclass="profile-email" />
 						<hbox>
 							<label value="Joined on:"
@@ -39,42 +39,42 @@
 						<rows>
 							<row>
 								<label value="Full Name:" />
-								<textbox value="@bind(vm.customer.name)"
+								<textbox value="@bind(vm.user.name)"
 									hflex="1" placeholder="Enter full name" />
 							</row>
 							<row>
 								<label value="Email:" />
-								<textbox value="@load(vm.customer.email)"
+								<textbox value="@load(vm.user.email)"
 									hflex="1" readonly="true" />
 							</row>
 							<row>
 								<label value="Phone:" />
-								<textbox value="@bind(vm.customer.phone)"
+								<textbox value="@bind(vm.user.phone)"
 									hflex="1" placeholder="Enter phone number" />
 							</row>
 							<row>
 								<label value="Date of Birth:" />
-								<datebox value="@bind(vm.customer.dob)"
+								<datebox value="@bind(vm.user.dob)"
 									hflex="1" format="yyyy-MM-dd" readonly="true" disabled="true"/>
 							</row>
 							<row>
 								<label value="Country:" />
-								<textbox value="@bind(vm.customer.country)"
+								<textbox value="@bind(vm.user.country)"
 									hflex="1" />
 							</row>
 							<row>
 								<label value="State:" />
-								<textbox value="@bind(vm.customer.state)"
+								<textbox value="@bind(vm.user.state)"
 									hflex="1" />
 							</row>
 							<row>
 								<label value="City:" />
-								<textbox value="@bind(vm.customer.city)"
+								<textbox value="@bind(vm.user.city)"
 									hflex="1" />
 							</row>
 							<row>
 								<label value="Pincode:" />
-								<textbox value="@bind(vm.customer.pincode)"
+								<textbox value="@bind(vm.user.pincode)"
 									hflex="1" />
 							</row>
 						</rows>
@@ -98,7 +98,7 @@
 					<hbox spacing="10px" align="center">
 						<label value="Two-Factor Authentication:" />
 						<checkbox label="Enable"
-							checked="@bind(vm.customer.twoFactor)"
+							checked="@bind(vm.user.twoFactor)"
 							onCheck="@command('toggle2FA')" />
 					</hbox>
 				</vbox>

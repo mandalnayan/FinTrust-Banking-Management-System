@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.fintrust.model.User;
+import com.fintrust.model.UserDetails;
 
 /**
  * DAO interface for managing users in the banking system.

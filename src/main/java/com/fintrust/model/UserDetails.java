@@ -5,7 +5,8 @@ import java.time.LocalDateTime;
 
 public class UserDetails {
     private Long detailsId;
-    private Long userId;
+    private User user;
+    private Long primaryAccountId;
     private String gender;
     private LocalDate dob;
     private String aadhaarMasked;
@@ -27,7 +28,7 @@ public class UserDetails {
 			LocalDateTime createdAt, LocalDateTime updatedAt) {
 		super();
 		this.detailsId = detailsId;
-		this.userId = userId;
+		this.user = user;
 		this.gender = gender;
 		this.dob = dob;
 		this.aadhaarMasked = aadhaarMasked;
@@ -41,6 +42,16 @@ public class UserDetails {
 		this.updatedAt = updatedAt;
 	}
 
+	
+	
+	public Long getPrimaryAccountId() {
+		return primaryAccountId;
+	}
+
+	public void setPrimaryAccountId(Long primaryAccountId) {
+		this.primaryAccountId = primaryAccountId;
+	}
+
 	public Long getDetailsId() {
 		return detailsId;
 	}
@@ -49,12 +60,15 @@ public class UserDetails {
 		this.detailsId = detailsId;
 	}
 
+	public void setUser(User user) {
+		this.user = user;
+	}
 	public Long getUserId() {
-		return userId;
+		return user.getId();
 	}
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public User getUser() {
+		return user;
 	}
 
 	public String getGender() {

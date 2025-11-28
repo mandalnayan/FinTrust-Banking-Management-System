@@ -44,7 +44,6 @@ public class UpdateAccountRequest extends SelectorComposer<Component> {
  */
 	@Listen("onClick=#update")
 	public void sendUpdateAccountReq() {
-		alert("Entered");
 		 if (!isFormValid()) return;
 		
 		 //Messagebox.show("Request submitted successfully!");

@@ -5,16 +5,21 @@ import java.sql.SQLException;
 import org.zkoss.zk.ui.Sessions;
 
 import com.fintrust.dao.UserDAO;
+import com.fintrust.dao.UserDetailsDAO;
 import com.fintrust.dao.impl.UserDAOImpl;
+import com.fintrust.dao.impl.UserDetailsDAOImpl;
 import com.fintrust.model.User;
+import com.fintrust.model.UserDetails;
 
 
 public class UserServiceImpl implements UserService {
 
     private UserDAO userDAO = null;
+    private UserDetailsDAO userDetailsDAO = null;
     
     public UserServiceImpl() {
     	userDAO = new UserDAOImpl();
+    	userDetailsDAO = new UserDetailsDAOImpl();
     }
     
     @Override
@@ -72,8 +77,11 @@ public class UserServiceImpl implements UserService {
 			}
     }
 
+    /**
+     * Future implementatin
+     */
 	@Override
-	public void update2FA(User user) {
+	public void update2FA(UserDetails user) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import com.fintrust.model.UserDetails;
+
 /**
  * DAO interface for managing user details in the banking system.
  * <p>
@@ -39,7 +41,7 @@ public interface UserDetailsDAO {
      * @return Map representing the record, or null if not found
      * @throws SQLException if database operation fails
      */
-    Map<String, Object> findById(long detailsId) throws SQLException;
+    UserDetails findById(long detailsId) throws SQLException;
 
     /**
      * Finds details by user_id.
@@ -48,7 +50,7 @@ public interface UserDetailsDAO {
      * @return Map representing the record, or null if not found
      * @throws SQLException if database operation fails
      */
-    Map<String, Object> findByUserId(long userId) throws SQLException;
+    UserDetails findByUserId(long userId) throws SQLException;
 
     /**
      * Retrieves all user details records.
@@ -78,6 +80,23 @@ public interface UserDetailsDAO {
                    String aadhaarMask, String panMask,
                    String country, String state, String district,
                    String city, String pincode) throws SQLException;
+    
+    /**
+     * Update primary account of users
+     * @param userId
+     * @return
+     * @throws SQLException
+     */
+    Long findPrimaryAccount(Long userId) throws SQLException;
+    
+    /**
+     * Update primary account of users
+     * @param userId
+     * @param accountId
+     * @return
+     * @throws SQLException
+     */
+    boolean updatePrimaryAccount(Long userId, Long accountId) throws SQLException;
 
     /**
      * Deletes a user details record by details_id.

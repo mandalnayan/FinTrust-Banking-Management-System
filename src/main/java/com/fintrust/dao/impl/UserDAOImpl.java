@@ -25,12 +25,12 @@ public class UserDAOImpl implements UserDAO {
 	 * @param connection JDBC connection managed externally
 	 */
 	public UserDAOImpl() {
-		this.connection = DBConnection.getConnection();		
+		this.connection = DBConnection.getConnection();
 	}
 
 	@Override
 	public Long create(User user) throws SQLException {
-		
+
 		String sql = """
 				    INSERT INTO users (full_name, email, phone, password_hash, role)
 				    VALUES (?, ?, ?, ?, ?)
@@ -58,14 +58,14 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public Boolean isEmailExists(String email) throws SQLException {
-		
+
 		String sql = "SELECT * FROM users WHERE email = ?";
 
 		try (PreparedStatement ps = connection.prepareStatement(sql)) {
 			ps.setString(1, email);
 			ResultSet rs = ps.executeQuery();
 			return rs.next();
-		} 
+		}
 	}
 
 	@Override
@@ -76,19 +76,12 @@ public class UserDAOImpl implements UserDAO {
 			ps.setString(1, userName);
 			ps.setString(2, password);
 			try (ResultSet rs = ps.executeQuery()) {
-				 if(rs.next()) {
-					 User user = new User(
-							 rs.getLong("user_id"),
-							 rs.getString("full_name"),
-							 rs.getString("email"),
-							 rs.getString("phone"),
-							 rs.getString("role"),
-							 rs.getString("status"),
-							 rs.getTimestamp("created_at"),
-							 rs.getTimestamp("updated_at")
-							 );
-					 return user;
-				 }
+				if (rs.next()) {
+					User user = new User(rs.getLong("user_id"), rs.getString("full_name"), rs.getString("email"),
+							rs.getString("phone"), rs.getString("role"), rs.getString("status"),
+							rs.getTimestamp("created_at"), rs.getTimestamp("updated_at"));
+					return user;
+				}
 			}
 			return null;
 		}
@@ -154,7 +147,8 @@ public class UserDAOImpl implements UserDAO {
 	public boolean updatePassword(String passwordHash) throws SQLException {
 		String sql = "UPDATE users SET password_hash = ? WHERE email = ?";
 		String email = (String) Sessions.getCurrent().getAttribute("userEmail");
-		if (email == null) return false;
+		if (email == null)
+			return false;
 		try (PreparedStatement ps = connection.prepareStatement(sql)) {
 			ps.setString(1, passwordHash);
 			ps.setString(2, email);

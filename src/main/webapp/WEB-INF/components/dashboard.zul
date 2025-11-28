@@ -17,16 +17,30 @@
             <north sclass="card-sec">
                 <hlayout class="summary-row" spacing="18px">
 
-                    <vbox sclass="summary-card" style="text-align:center;" pack="center">
-                        <label value="Available Balance" sclass="summary-title"/> 
-                        <label value="@load(vm.availableBalance)" 
-                               sclass="summary-value" style="font-weight:bold;"/>
-                        <label value="Account: @load(vm.defaultAccountNo)" sclass="summary-sub"/> 
+                    <vbox sclass="summary-card"
+                    	style="text-align:center;" pack="center">
+                    	<label value="Account Number"
+                    		sclass="summary-title" />
+                    	<combobox width="auto"
+                    		placeholder="Select account number"
+                    		model="@bind(vm.accountList)"
+                    		selectedItem="@bind(vm.selectedAccount, saveOnChange=true)"
+                    		autodrop="true">
+                    		<template name="model">
+                    			<comboitem
+                    				label="@load(each.accountNumber)"
+                    				value="@load(each)" />
+                    		</template>
+                    	</combobox>
+
+                    	
                     </vbox>
 
                     <vbox class="summary-card" style="text-align:center;" pack="center">
-                        <label value="Pending Transactions" sclass="summary-title"/> 
-                        <label value="@load(vm.pendingCount)" sclass="summary-value"/>
+                        <label value="Available Balance"
+                    		sclass="summary-title" />
+                    	<label value="@load(vm.availableBalance)"
+                    		sclass="summary-value" style="font-weight:bold;" />
                     </vbox>
 
                     <vbox class="summary-card" style="text-align:center;" pack="center">
