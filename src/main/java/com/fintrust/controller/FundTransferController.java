@@ -9,13 +9,15 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.*;
 
-import com.fintrust.model_copy.Account;
-import com.fintrust.model_copy.BeneficiaryModel;
-
-import zcom.finrust.dao_copy.AccountDao;
-import zcom.finrust.dao_copy.AccountDaoImp;
-import zcom.finrust.dao_copy.BeneficiaryDao;
-import zcom.finrust.dao_copy.FundTransferDao;
+import com.fintrust.model.Account;
+import com.fintrust.model.BeneficiaryModel;
+import com.fintrust.service.AccountService;
+import com.fintrust.service.AccountServiceImpl;
+import com.fintrust.util.NotificationUtil;
+import com.fintrust.dao.AccountDAO;
+import com.fintrust.dao.impl.AccountDAOImpl;
+import com.fintrust.dao.impl.BeneficiaryDAO;
+import com.fintrust.dao.impl.FundTransferDAO;
 
 
 public class FundTransferController extends SelectorComposer<Component> {
@@ -30,27 +32,26 @@ public class FundTransferController extends SelectorComposer<Component> {
     
     private Long fromAccount;
 
-    AccountDao accountDao;
+    AccountDAO accountDao;
+    AccountService accountService;
     private List<BeneficiaryModel> beneficiaries;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         
-        accountDao = new AccountDaoImp();
-		List<Long> accounts = accountDao.getAccountsByUserId(null);
+        accountDao = new AccountDAOImpl();
+        accountService = new AccountServiceImpl();
+		List<Account> accounts = accountService.getAllAccounts();
 		
-		if (accounts == null) {
-			Clients.showNotification("Internal server error!", "error", null, "top_center", 3000);
-		} else if(accounts.isEmpty()) {
-			Clients.showNotification("Please open accounts before transfer money...!", "warning", null, "top_center", 3000);
-		}else {
-			accounts.forEach(accountNo -> accountList.appendItem(accountNo+""));
-		    
+		if (accounts == null || accounts.size() == 0) {
+			NotificationUtil.showInstant("error", "Internal server error!");
+		} else {
+			accounts.forEach(accountNo -> accountList.appendItem(accountNo+""));		    
 	        Long userId = (Long)Sessions.getCurrent().getAttribute("customer_id"); 
 	        alert(userId + "");
 	        
-	        beneficiaries = BeneficiaryDao.getBeneficiariesByUserId(userId);
+	       // beneficiaries = BeneficiaryDao.getBeneficiariesByUserId(userId);
 
 	        for (BeneficiaryModel b : beneficiaries) {
 	            Comboitem item = new Comboitem(b.getName() + " (" + b.getBankName() + ")");
@@ -67,7 +68,7 @@ public class FundTransferController extends SelectorComposer<Component> {
         Comboitem selected = accountList.getSelectedItem();
         if (selected != null) {
             Account account = selected.getValue();
-            fromAccount = account.getAccount_no();
+            fromAccount = account.getAccountNumber();
         }
     }
 
@@ -94,7 +95,7 @@ public class FundTransferController extends SelectorComposer<Component> {
             return;
         }
 
-        boolean result = FundTransferDao.transferFunds(fromAcc, toAcc, amt);
+        boolean result = FundTransferDAO.transferFunds(fromAcc, toAcc, amt);
         Clients.showNotification("from=" + fromAcc + ", to=" + toAcc + ", amount=" + amt);
         if (result) {
    		 Clients.showNotification("Transfer successfull!", "info", null, "top_center", 3000);

@@ -190,7 +190,9 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setLong(1, accountId);
             ps.setLong(2, userId);
-            return ps.executeUpdate() > 0;
+            int rs = ps.executeUpdate();
+            System.out.println(rs);
+            return rs > 0;
         }       
     }
 

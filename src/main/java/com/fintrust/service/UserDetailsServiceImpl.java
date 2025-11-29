@@ -20,8 +20,9 @@ public class UserDetailsServiceImpl {
 
 		try {
 			if(userDAOImpl.updatePrimaryAccount(userId, accountId)) NotificationUtil.showInstant("info", "Updated primary account"); 
+			return;
 		} catch (SQLException e) {
-			NotificationUtil.showInstant("error", "Falied to updated primary account. please try again");
+			
 			e.printStackTrace();
 		}
 		NotificationUtil.showInstant("error", "Failed to update. \nPlease try again!");

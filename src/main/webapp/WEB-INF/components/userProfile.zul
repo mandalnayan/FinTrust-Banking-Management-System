@@ -28,7 +28,7 @@
 						</hbox>
 					</vbox>
 					<vbox hflex = "1">
-					<label value="Set Primary Account"
+					<label value="Update Primary Account"
 							sclass="profile-name" />
 						<combobox width="auto"
                     		placeholder="Select account number"

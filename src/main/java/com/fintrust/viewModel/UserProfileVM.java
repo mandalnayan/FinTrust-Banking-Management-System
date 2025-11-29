@@ -44,6 +44,8 @@ public class UserProfileVM {
        	if (accountList == null || accountList.size() == 0) {
 			NotificationUtil.showInstant("error", "Faild to load account details. Please refresh the page");
 			
+		} else {
+			selectedAccount = accountList.get(0);
 		}
         userService = new UserDetailsServiceImpl();
         userDetails = userService.getLogedInDetails();       
