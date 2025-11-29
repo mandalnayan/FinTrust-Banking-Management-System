@@ -4,16 +4,15 @@
     <?init class="com.fintrust.util.PageInitNotifier" ?>
  <style src="/resources/css/bankingForms.css" />
 
-    <window border="none" width="100%" height="100%"
-     zclass="open-account-page" apply="com.fintrust.controller.OpenAccountComposer">
+    <window border="none" width="100%" height="100vh" sclass="open-account-page">
 
-        <vlayout width="100%" sclass="form-container" height="auto" >
-			<hbox hflex="1" pack="center" align="center">
+        <vlayout width="100%" sclass="form-container">
+			<hbox hflex="1" pack="center">
             <label value="Open New Bank Account" sclass="form-title"/>
 			</hbox>
             <separator/>
 
-            <grid >
+            <grid width="100%">
                 <rows>
 
                     <row>
@@ -72,6 +71,7 @@
                 <button label="Submit" id="btnSubmit" sclass="primary-btn"/>
                 <button label="Reset" id="btnReset" sclass="secondary-btn"/>
             </hbox>
+
         </vlayout>
     </window>
 

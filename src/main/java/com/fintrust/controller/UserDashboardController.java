@@ -37,8 +37,15 @@ public class UserDashboardController extends SelectorComposer<Borderlayout>{
     private List<Include> includes = new ArrayList<>();
     private List<Toolbarbutton> buttons = new ArrayList<>();
     
-    private void initialize() {
-    	if (!includes.isEmpty()) return;    	
+    @Override
+    public void doAfterCompose(Borderlayout comp) throws Exception {
+    	
+    	super.doAfterCompose(comp);
+    	
+    	Sessions.getCurrent().setAttribute("main_content_sec", main_content_sec);
+    }
+    
+    private void initialize() {	
 		
 		buttons.add(userdashboard);
 		buttons.add(profile);
@@ -50,10 +57,11 @@ public class UserDashboardController extends SelectorComposer<Borderlayout>{
    @Listen("onClick=#logout")
     public void logout() {
 	   Session session = Sessions.getCurrent();
-	   session.removeAttribute("currentUser");
+	   session.removeAttribute("user");
 		session.removeAttribute("user_email");
 		session.removeAttribute("user_name");
 		session.removeAttribute("user_id");
+		session.removeAttribute("");
 		session.invalidate();
        org.zkoss.zk.ui.Executions.sendRedirect("/home.zul");
     }   

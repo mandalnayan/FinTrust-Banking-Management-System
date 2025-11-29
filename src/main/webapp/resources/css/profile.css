@@ -11,6 +11,13 @@
   padding:10px 24px; color:#fff;
 }
 
+/* Works for modern browsers */
+.hide-scrollbar {
+    overflow: auto;          /* still scrollable */
+    scrollbar-width: none;   /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+}
+
 .top-logo { width:36px; height:auto; }
 .top-title { font-size:18px; font-weight:700; color:#fff; }
 .top-right { display:flex; align-items:center; gap:12px; }
@@ -23,18 +30,41 @@
 .menu-item.active, .menu-item:hover { color:#fff; font-weight:600; }
 
 /* Profile Container */
-.profile-container { padding:10px 40px; background:#f5f8fc; height:calc(100vh - 70px); overflow:auto; }
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 10px 40px;
+    background: #f5f8fc;
+}
 
 /* Profile Header */
-.profile-header { background:#fff; padding:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.08); }
+.profile-header {
+    flex: 0 0 auto; /* fixed height */
+    z-index: 10;
+    width: 100%;
+}
+
+.profile-form-wrapper {
+    flex: 1 1 auto; /* takes remaining height */
+    overflow-y: auto !important;
+    padding-top: 20px;
+}
+
 .profile-avatar { width:90px; height:90px; border-radius:50%; border:3px solid #0052cc; }
 .profile-name { font-size:20px; font-weight:700; color:#003366; }
+.profile-updateAccount { font-size:20px; font-weight:700; color:#003366; }
 .profile-email { font-size:14px; color:#555; font-weight:700; }
 .profile-date { font-size:14px; color:#0052cc; font-weight:700; }
 
 /* Profile Form */
-.profile-form { background:#fff; padding:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.06); }
-.section-title { font-size:16px; font-weight:700; color:#003366; margin-bottom:10px; }
+.profile-form {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+}
+.section-title { font-size:18px; font-weight:700; color:#003366; }
 .info-grid label { font-weight:600; color:#333; }
 .info-grid textbox, .info-grid datebox {
   border:1px solid #ccc !important; border-radius:6px !important; padding:6px !important;

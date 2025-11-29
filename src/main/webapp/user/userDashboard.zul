@@ -69,17 +69,18 @@
 
     <!-- CENTER: Main content area -->
    
-    <center sclass = "zero-padding">
+    <center sclass = "zero-padding" vflex="1">
     <!-- User dashboard content -->
-    <h:div >
-     <include id = "main_content_sec" src="/WEB-INF/components/dashboard.zul" visible="true"/> 
+    
+     <include id = "main_content_sec" src="/WEB-INF/components/dashboard.zul" visible="true" zclass="d"/> 
+     
       <!-- <include id = "profile_sec" src = "userProfile.zul" visible="false"/>
       <include id = "otp_sec" src = "/WEB-INF/components/otpPage.zul" visible="false" />
        <include id = "changePassword_sec" src = "/WEB-INF/components/otpPage.zul"  visible="false"/>
       <include id = "openAccount_sec" src = "/WEB-INF/components/openNewAccount.zul" visible="false" />   
       <include id = "viewAllAccount_sec" src = "/WEB-INF/components/view_all_account.zul" visible="false" />   
         -->
-      </h:div>
+     
     </center>
 
   </borderlayout>

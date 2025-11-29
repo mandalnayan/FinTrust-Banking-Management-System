@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk>
+    <style src="/resources/css/bankingForms.css" />
+
+    <window border="none" width="100%" sclass="kyc-page">
+
+        <vlayout width="100%" sclass="form-container">
+
+            <label value="Customer KYC Verification" sclass="form-title"/>
+            <label value="Complete your KYC to activate your account fully."
+                   style="color:#666;"/>
+
+            <separator/>
+
+            <grid width="100%">
+                <rows>
+
+                    <row>
+                        <label value="Full Name:"/>
+                        <textbox id="customerName" width="250px" placeholder="As per ID proof"/>
+                    </row>
+
+                    <row>
+                        <label value="Mobile Number:"/>
+                        <longbox id="mobile" width="250px" placeholder="10-digit number"/>
+                    </row>
+
+                    <row>
+                        <label value="Email Address:"/>
+                        <textbox id="email" width="250px" placeholder="example@mail.com"/>
+                    </row>
+
+                    <row>
+                        <label value="Date of Birth:"/>
+                        <datebox id="dob" width="250px"/>
+                    </row>
+
+                    <row>
+                        <label value="Gender:"/>
+                        <radiogroup id="gender">
+                            <radio label="Male"/>
+                            <radio label="Female"/>
+                            <radio label="Other"/>
+                        </radiogroup>
+                    </row>
+
+                    <row>
+                        <label value="Aadhar Number:"/>
+                        <longbox id="aadhar" width="250px" placeholder="12-digit Aadhar"/>
+                    </row>
+
+                    <row>
+                        <label value="PAN Number:"/>
+                        <textbox id="pan" width="250px" placeholder="ABCDE1234F"/>
+                    </row>
+
+                    <row>
+                        <label value="Address Proof:"/>
+                        <fileupload id="addressProof" label="Upload File" />
+                    </row>
+
+                    <row>
+                        <label value="Photo:"/>
+                        <fileupload id="photo" label="Upload Photo" />
+                    </row>
+
+                </rows>
+            </grid>
+
+            <separator/>
+
+            <hbox pack="center" spacing="20px">
+                <button label="Submit KYC" id="btnKycSubmit" sclass="primary-btn"/>
+            </hbox>
+
+        </vlayout>
+
+    </window>
+
+</zk>

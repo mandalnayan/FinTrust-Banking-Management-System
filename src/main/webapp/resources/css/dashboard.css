@@ -3,6 +3,18 @@
 /* reset a few defaults ZK may inject */
 .z-viewport, .z-body, body { margin:0; padding:0; box-sizing:border-box; }
 
+.z-viewport, .z-body, html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.vlayout_scrollable {
+    flex: 1 1 auto;
+    min-height: 0; /* crucial */
+    overflow-y: auto;
+}
+
 /* Topbar (fixed height) */
 .topbar {
   height:72px;
@@ -62,9 +74,14 @@
 .main-content { width:100%; max-width:1400px; margin:0 auto; }
 
 .zero-padding {
-	padding: 0px !important;
-	height : 100% !important;
+    padding: 0 !important;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto; /* allows growing and shrinking */
+    min-height: 0; /* crucial for inner scroll */
+    overflow-y: auto; /* scroll if content overflows */
 }
+
 
 /* Summary row - responsive grid */
 .summary-row {
@@ -110,13 +127,19 @@
 
 
 /* Top card-section for  */
-.card-sec{
-	width: 100% !important;
-	overflow: auto !important;
+.card-sec {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* parent hides extra scroll */
 }
 
-.card-sec-padding{
-	 padding-bottom: 60px !important;
+.card-sec-padding {
+    padding-bottom: 20px;
+}
+
+.center-scroll {
+    flex: 1 1 auto;
+    overflow-y: auto;
 }
 
 .vlayout_sec{

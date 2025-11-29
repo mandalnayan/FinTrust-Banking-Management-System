@@ -5,7 +5,7 @@
  Controller: UserDashboardController.java
  ============================================================ -->
 <?page title="User Dashboard"?>
-
+<?link rel="stylesheet" type="text/css" href="/resources/css/global.css"?>
 <zk>
     <!-- Attach ViewModel -->
     <window viewModel="@id('vm') @init('com.fintrust.viewModel.UserDashboardVM')" 
@@ -48,7 +48,7 @@
 
             <!-- CENTER -->
             <center sclass="card-sec card-sec-padding">
-                <vlayout vflex="1" style="padding:0; overflow:auto;">
+                <vlayout vflex="1" sclass="hide-scrollbar" style="padding:0; overflow: auto; scrollbar-width: none; -ms-overflow-style: none;  ">
 
                     <!-- Widgets -->
                     <hlayout sclass="widgets-row">

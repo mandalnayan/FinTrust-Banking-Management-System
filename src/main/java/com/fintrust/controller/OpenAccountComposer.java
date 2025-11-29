@@ -81,6 +81,8 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 			account.setAccountType(accType);
 			account.setBalance(deposit);			
 			account.setNominee_id(nom_id);
+			
+			
 			boolean success = acconntService.openAccount(account);
 
 			if (success) {

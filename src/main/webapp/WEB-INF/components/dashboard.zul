@@ -6,12 +6,12 @@
  ============================================================ -->
 <?page title="User Dashboard"?>
 
-<zk>
+<zk height="100%" width="100%"> <!-- set height on root -->
     <!-- Attach ViewModel -->
     <window viewModel="@id('vm') @init('com.fintrust.viewModel.UserDashboardVM')" 
-            width="100%" height="100%" border="none">
+            width="100%" vflex="1" border="none" zclass="wind">
 
-        <borderlayout width="100%" height="700px">
+        <borderlayout width="100%" vflex="1">
 
             <!-- NORTH: Summary -->
             <north sclass="card-sec">
@@ -50,8 +50,8 @@
             </north>
 
             <!-- CENTER -->
-            <center sclass="card-sec card-sec-padding">
-                <vlayout vflex="1" style="padding:0; overflow:auto;">
+            <center sclass="card-sec card-sec-padding" vflex="1">
+                <vlayout vflex="1" style="overflow-y:auto; min-height:0; padding:0;">
 
                     <!-- Widgets -->
                     <hlayout sclass="widgets-row">
@@ -106,7 +106,7 @@
                             </rows>
                         </grid>
 
-                        <hbox style="justify-content:flex-end; margin-top:12px;">
+                        <hbox style="justify-content:flex-end; ">
                             <button label="View All Transactions"
                                     class="view-all-btn"
                                     onClick="@command('go', page='transactions')"/>
