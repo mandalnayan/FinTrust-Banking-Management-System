@@ -69,7 +69,7 @@ public class UserProfileVM {
     @Command
     @NotifyChange("userDetails")
     public void updateProfile() {
-    	if(userService.updateDetails(userDetails)) {
+    	if(userService.updateProfile(userDetails)) {
         editMode = false;
         NotificationUtil.showInstant("info", "User Details updated successfully");
     	} else {

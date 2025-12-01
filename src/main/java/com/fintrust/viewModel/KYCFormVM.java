@@ -30,7 +30,7 @@ public class KYCFormVM {
 
     @Init
     public void init() {
-        userDetails = new UserDetails();
+        userDetails = userDetailsService.getLogedInDetails();
         user = userDetails.getUser();
     }
 
@@ -85,7 +85,7 @@ public class KYCFormVM {
     @Command
     public void submitKyc() {
      
-        boolean updated = userDetailsService.updateDetails(userDetails);
+        boolean updated = userDetailsService.updateKyc(userDetails);
 
         if (updated) {
             Messagebox.show("KYC submitted successfully!", "Success", Messagebox.OK, Messagebox.INFORMATION);
