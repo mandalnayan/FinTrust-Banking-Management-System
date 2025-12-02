@@ -16,7 +16,7 @@
     <include src="/WEB-INF/components/navbar.zul"/>
 
     <!-- MAIN WRAPPER -->
-    <div sclass="login-wrapper">
+    <div sclass="login-wrapper" apply="com.fintrust.controller.UserLoginController">
 
         <!-- LEFT PANEL -->
         <div sclass="login-left">
@@ -30,28 +30,18 @@
             <label value="Welcome Back" sclass="login-title"/>
             <label value="Login to your FinTrust digital banking account" sclass="login-subtitle"/>
 
-            <vlayout spacing="15px" width="100%" sclass="login-form" xmlns:n="native">
-            
-            <n:form name="loginForm" action="j_spring_security_check"
-			method="POST">
-			<n:input type="text" name='j_username' value='' sclass="input-field" placeholder="Email or Phone" style="margin-bottom: 10px;"/> 
-			 
-			<n:input type="password" name='j_password' value='' sclass="input-field" placeholder="Password" />
-			<n:input name="submit" type="submit" value="Login" sclass="login-btn" />
+            <vlayout spacing="15px" width="100%" sclass="login-form">
 
-			<!-- <n:input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-			-->
-		</n:form>
+                <textbox id="email" placeholder="Email or Phone" sclass="input-field"/>
 
-              <!--   <textbox id="email" placeholder="Email or Phone" sclass="input-field"/>
-                <textbox id="password" type="password" placeholder="Password" sclass="input-field"/> -->
+                <textbox id="password" type="password" placeholder="Password" sclass="input-field"/>
 
                 <hlayout sclass="login-options">
-                    <checkbox label="Remember Me"/>
-                    <a href="/change-password.zul" class="forgot-link">Forgot Password?</a>
+                    <checkbox label="Remember Me" sclass="remember-check"/>
+                    <a href="/auth/forgotPassword.zul" class="forgot-link">Forgot Password?</a>
                 </hlayout>
 
-              <!--   <button id="submit" label="Login" sclass="login-btn"/> -->
+                <button id="submit" label="Login" sclass="login-btn"/>
 
                 <hlayout sclass="signup-redirect">
                     <label value="Don't have an account?"/>

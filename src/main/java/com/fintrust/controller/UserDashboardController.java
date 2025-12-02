@@ -21,7 +21,7 @@ import org.zkoss.zul.Borderlayout;
 import org.zkoss.zul.Include;
 import org.zkoss.zul.Toolbarbutton;
 
-public class UserDashboardController extends SelectorComposer<Borderlayout>{
+public class UserDashboardController extends SelectorComposer<Component>{
 
     // sample properties; replace with actual service calls
     private String availableBalance = "₹ 1,25,000.00";
@@ -38,7 +38,7 @@ public class UserDashboardController extends SelectorComposer<Borderlayout>{
     private List<Toolbarbutton> buttons = new ArrayList<>();
     
     @Override
-    public void doAfterCompose(Borderlayout comp) throws Exception {
+    public void doAfterCompose(Component comp) throws Exception {
     	
     	super.doAfterCompose(comp);
     	

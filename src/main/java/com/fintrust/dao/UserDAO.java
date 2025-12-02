@@ -44,7 +44,15 @@ public interface UserDAO {
      * @return a Map representing column names and values, or null if not found
      * @throws SQLException if database operation fails
      */
-    User findById(long userId) throws SQLException;
+    User findById(long Id) throws SQLException;
+    
+    /**
+     * Find user by email
+     * @param eamil
+     * @return
+     * @throws SQLException
+     */
+    User findByEmail(String eamil) throws SQLException;
 
     /**
      * Retrieves all users.

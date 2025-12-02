@@ -44,5 +44,7 @@ public interface UserService {
 	 * @return
 	 */
 	boolean isAuthorize(String userName, String password);
+	
+	User getUserByUserName(String userName);
     
 }

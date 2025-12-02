@@ -95,7 +95,21 @@ public class UserDAOImpl implements UserDAO {
 			ps.setLong(1, userId);
 			try (ResultSet rs = ps.executeQuery()) {
 				if (rs.next())
-					return (User) mapRow(rs).get("userId");
+					return mapRowToUser(rs);
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public User findByEmail(String email) throws SQLException {
+		String sql = "SELECT * FROM users WHERE email = ?";
+
+		try (PreparedStatement ps = connection.prepareStatement(sql)) {
+			ps.setString(1, email);
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next())
+					return mapRowToUser(rs);
 			}
 		}
 		return null;
@@ -185,5 +199,24 @@ public class UserDAOImpl implements UserDAO {
 		userMap.put("created_at", rs.getTimestamp("created_at"));
 		userMap.put("updated_at", rs.getTimestamp("updated_at"));
 		return userMap;
+	}
+	
+	/**
+	 * Converting Row to User
+	 * @param rs
+	 * @return
+	 * @throws SQLException
+	 */
+	private User mapRowToUser(ResultSet rs) throws SQLException {
+	    return new User(
+	        rs.getLong("user_id"),
+	        rs.getString("full_name"),
+	        rs.getString("email"),
+	        rs.getString("phone"),
+	        rs.getString("role"),
+	        rs.getString("status"),
+	        rs.getTimestamp("created_at"),
+	        rs.getTimestamp("updated_at")
+	    );
 	}
 }

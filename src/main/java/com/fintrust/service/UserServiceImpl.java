@@ -113,6 +113,26 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	/**
+	 * Authenticating the user
+	 * @param userName
+	 * @param password
+	 * @return
+	 */
+	@Override
+	public User getUserByUserName(String userName) {		
+
+		// converting password into digest password
+		try {
+			User user = userDAO.findByEmail(userName);
+			return user;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
 	 * Update password
 	 * 
 	 */
