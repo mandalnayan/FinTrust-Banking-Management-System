@@ -8,9 +8,30 @@
 	 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
 	 http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
 	
-	 <bean id = "userService" class = "com.fintrust.security.MyUserService"/> 
-	
-<import resource="applicationContext-security.xml"/>
+  <!-- DB connection -->
+    <bean id="dbConnection" class="com.fintrust.db.DBConnection" factory-method="getConnection"/>
+
+    <!-- DAO beans -->
+    <bean id="userDao" class="com.fintrust.dao.impl.UserDAOImpl">
+        <constructor-arg ref="dbConnection"/>
+    </bean>
+    
+    <bean id="userDetailsDao" class="com.fintrust.dao.impl.UserDetailsDAOImpl">
+        <constructor-arg ref="dbConnection"/>
+    </bean>
+
+    <!-- Service beans -->
+    <bean id="userService" class="com.fintrust.service.UserServiceImpl">
+        <property name="userDAO" ref="userDao"/>
+        <property name="userDetailsDAO" ref="userDetailsDao"/>
+    </bean>
+
+    <!-- UserDetailsService for Spring Security -->
+    <bean id="myUserDetailsService" class="com.fintrust.security.MyUserService">
+        <property name="userService" ref="userService"/>
+    </bean>
+
+    <import resource="applicationContext-security.xml"/>
 
 </beans>
 	

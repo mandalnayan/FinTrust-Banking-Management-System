@@ -17,6 +17,7 @@ import com.fintrust.model_copy.Account.ModeOfOperation;
 import com.fintrust.service.AccountServiceImpl;
 import com.fintrust.service.NomineeServiceImp;
 import com.fintrust.util.NotificationUtil;
+import com.fintrust.viewModel.Notification;
 
 import java.time.LocalDateTime;
 
@@ -53,7 +54,7 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 	}
 
 	// 🔹 Handle Submit button click
-	@Listen("onClick = #btnSubmit")
+	@Listen("onClick = #btnAccountSubmit")
 	public void onSubmit() {
 		if (!isFormValid())
 			return;
@@ -80,8 +81,7 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 			Account account = new Account();
 			account.setAccountType(accType);
 			account.setBalance(deposit);			
-			account.setNominee_id(nom_id);
-			
+			account.setNominee_id(nom_id);			
 			
 			boolean success = acconntService.openAccount(account);
 
@@ -89,7 +89,7 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 				String message = "Account created successfully!";
 				NotificationUtil.push("info", message);				
 				resetForm();
-				Executions.sendRedirect("");
+				Executions.sendRedirect("");				
 			} else {
 				String message = "Server error. Failed to create Account. Please try again!";
 				NotificationUtil.push("error", message);	
@@ -103,12 +103,13 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 		} catch (Exception e) {
 			String message = "Server error. Failed to create Account. Please try again!";
 			NotificationUtil.push("error", message);	
+			
 			e.printStackTrace();
 		}
 	}
 
 	// Handle Reset button click
-	@Listen("onClick = #btnReset")
+	@Listen("onClick = #btnAccountReset")
 	public void onReset() {
 		resetForm();
 	}

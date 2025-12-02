@@ -26,8 +26,8 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
      *
      * @param connection managed externally
      */
-    public UserDetailsDAOImpl() {
-        this.connection = DBConnection.getConnection();
+    public UserDetailsDAOImpl(Connection connection) {
+        this.connection = connection;
     }
 
     @Override
@@ -65,6 +65,25 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
      * @return
      * @throws SQLException
      */
+    public Long createEmptyUserDetails(Long userId) throws SQLException {
+        String sql = """
+            INSERT INTO user_details (user_id, created_at)
+            VALUES (?, NOW())
+        """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setLong(1, userId);
+            ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getLong(1); // return details_id
+            }
+        }
+        return -1l;
+    }
+
+    /*
 	public boolean insert() throws SQLException {
 		String sql = """
 					INSERT INTO user_details (
@@ -89,6 +108,7 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
 	            return stmt.executeUpdate(sql) > 0;
 	        }
 	}
+	*/
     
     @Override
     public UserDetails findById(long detailsId) throws SQLException {
@@ -141,7 +161,7 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
     }
 
     @Override
-    public boolean update(UserDetails ud) throws SQLException {
+    public boolean updateProfile(UserDetails ud) throws SQLException {
 
         String sql = """
             UPDATE user_details SET
@@ -158,6 +178,44 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
 
             return ps.executeUpdate() > 0;
         }
+    }
+
+    	@Override
+    	public boolean updateKyc(UserDetails ud) throws SQLException {
+
+    	    String sql = """
+    	        UPDATE user_details SET
+    	            gender = ?,
+    	            dob = ?,
+    	            aadhaar_masked = ?,
+    	            pan_masked = ?,
+    	            country = ?,
+    	            state = ?,
+    	            district = ?,
+    	            city = ?,
+    	            pincode = ?,
+    	            primary_account_id = ?,
+    	            updated_at = NOW()
+    	        WHERE details_id = ?
+    	    """;
+
+    	    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+    	        ps.setString(1, ud.getGender());
+    	        ps.setDate(2, Date.valueOf(ud.getDob()));
+    	        ps.setString(3, ud.getAadhaarMasked());
+    	        ps.setString(4, ud.getPanMasked());
+    	        ps.setString(5, ud.getCountry());
+    	        ps.setString(6, ud.getState());
+    	        ps.setString(7, ud.getDistrict());
+    	        ps.setString(8, ud.getCity());
+    	        ps.setString(9, ud.getPincode());
+    	        ps.setObject(10, ud.getPrimaryAccountId(), java.sql.Types.BIGINT);
+    	        ps.setLong(11, ud.getDetailsId());
+
+    	        return ps.executeUpdate() > 0;
+    	    }
+
     }
     
     /**

@@ -24,8 +24,8 @@ public class UserDAOImpl implements UserDAO {
 	 *
 	 * @param connection JDBC connection managed externally
 	 */
-	public UserDAOImpl() {
-		this.connection = DBConnection.getConnection();
+	public UserDAOImpl(Connection connection) {
+		this.connection = connection;
 	}
 
 	@Override

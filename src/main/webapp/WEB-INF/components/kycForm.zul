@@ -1,81 +1,165 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <zk>
-    <style src="/resources/css/bankingForms.css" />
+	<style src="/resources/css/bankingForms.css" />
 
-    <window border="none" width="100%" sclass="kyc-page">
+	<window border="none" width="100%" sclass="kyc-page"
+		viewModel="@id('vm') @init('com.fintrust.viewModel.KYCFormVM')">
 
-        <vlayout width="100%" sclass="form-container">
+		<vlayout width="100%" sclass="form-container">
 
-            <label value="Customer KYC Verification" sclass="form-title"/>
-            <label value="Complete your KYC to activate your account fully."
-                   style="color:#666;"/>
+			<!-- Header -->
+			<vbox pack="center" align="center" hflex="1">
+				<label value="Customer KYC Verification"
+					sclass="form-title" />
+				<label
+					value="Please fill the KYC details correctly to activate your account."
+					style="color:#666;margin-bottom:10px;" />
+			</vbox>
 
-            <separator/>
+			<separator />
 
-            <grid width="100%">
-                <rows>
+			<!-- TWO COLUMN GRID -->
+			<grid width="100%">
+				<columns>
+					<column width="50%" />
+					<column width="50%" />
+				</columns>
 
-                    <row>
-                        <label value="Full Name:"/>
-                        <textbox id="customerName" width="250px" placeholder="As per ID proof"/>
-                    </row>
+				<rows>
 
-                    <row>
-                        <label value="Mobile Number:"/>
-                        <longbox id="mobile" width="250px" placeholder="10-digit number"/>
-                    </row>
+					<!-- NAME + PHONE -->
+					<row>
+						<vlayout>
+							<label value="Full Name:" />
+							<textbox width="90%"
+								value="@bind(vm.userDetails.user.fullName)"
+								placeholder="As per ID proof" />
+						</vlayout>
 
-                    <row>
-                        <label value="Email Address:"/>
-                        <textbox id="email" width="250px" placeholder="example@mail.com"/>
-                    </row>
+						<vlayout>
+							<label value="Mobile Number:" />
+							<longbox width="90%"
+								value="@bind(vm.userDetails.user.phone)"
+								placeholder="10-digit mobile" />
+						</vlayout>
+					</row>
 
-                    <row>
-                        <label value="Date of Birth:"/>
-                        <datebox id="dob" width="250px"/>
-                    </row>
+					<!-- EMAIL + DOB -->
+					<row>
+						<vlayout>
+							<label value="Email Address:" />
+							<textbox width="90%"
+								value="@bind(vm.userDetails.user.email)"
+								placeholder="example@mail.com" />
+						</vlayout>
 
-                    <row>
-                        <label value="Gender:"/>
-                        <radiogroup id="gender">
-                            <radio label="Male"/>
-                            <radio label="Female"/>
-                            <radio label="Other"/>
-                        </radiogroup>
-                    </row>
+						<vlayout>
+								
+								<label value="Date of Birth:" />
+								<datebox value="@load(vm.dob)"
+									hflex="1" format="yyyy-MM-dd" readonly="true" disabled="true"/>
+							
+						</vlayout>
+					</row>
 
-                    <row>
-                        <label value="Aadhar Number:"/>
-                        <longbox id="aadhar" width="250px" placeholder="12-digit Aadhar"/>
-                    </row>
+					<!-- GENDER + AADHAAR -->
+					<row>
+						<vlayout>
+							<label value="Gender:" />
+							<radiogroup
+								selectedItem="@bind(vm.userDetails.gender)">
+								<hbox spacing="10px">
+									<radio label="Male" value="Male" />
+									<radio label="Female"
+										value="Female" />
+									<radio label="Other" value="Other" />
+								</hbox>
+							</radiogroup>
+						</vlayout>
 
-                    <row>
-                        <label value="PAN Number:"/>
-                        <textbox id="pan" width="250px" placeholder="ABCDE1234F"/>
-                    </row>
+						<vlayout>
+							<label value="Aadhaar Number:" />
+							<longbox width="90%"
+								value="@bind(vm.userDetails.aadhaarMasked)"
+								placeholder="12-digit Aadhaar" />
+						</vlayout>
+					</row>
 
-                    <row>
-                        <label value="Address Proof:"/>
-                        <fileupload id="addressProof" label="Upload File" maxsize="5120"/>
-                    </row>
+					<!-- PAN + COUNTRY -->
+					<row>
+						<vlayout>
+							<label value="PAN Number:" />
+							<textbox width="90%"
+								value="@bind(vm.userDetails.panMasked)"
+								placeholder="ABCDE1234F" />
+						</vlayout>
 
-                    <row>
-                        <label value="Photo:"/>
-                        <fileupload id="photo" label="Upload Photo" maxsize="4096"/>
-                    </row>
+						<vlayout>
+							<label value="Country:" />
+							<textbox width="90%"
+								value="@bind(vm.userDetails.country)" placeholder="Country" />
+						</vlayout>
+					</row>
 
-                </rows>
-            </grid>
+					<!-- STATE + DISTRICT -->
+					<row>
+						<vlayout>
+							<label value="State:" />
+							<textbox width="90%"
+								value="@bind(vm.userDetails.state)" placeholder="State" />
+						</vlayout>
 
-            <separator/>
+						<vlayout>
+							<label value="District:" />
+							<textbox width="90%"
+								value="@bind(vm.userDetails.district)" placeholder="District" />
+						</vlayout>
+					</row>
 
-            <hlayout pack="center" spacing="20px">
-                <button label="Submit KYC" id="btnKycSubmit" sclass="primary-btn"/>
-            </hlayout>
+					<!-- CITY + PINCODE -->
+					<row>
+						<vlayout>
+							<label value="City:" />
+							<textbox width="90%"
+								value="@bind(vm.userDetails.city)" placeholder="City" />
+						</vlayout>
 
-        </vlayout>
+						<vlayout>
+							<label value="Pincode:" />
+							<longbox width="90%"
+								value="@bind(vm.userDetails.pincode)"
+								placeholder="6-digit pincode" />
+						</vlayout>
+					</row>
 
-    </window>
+					<!-- FILE UPLOADS -->
+					<row>
+						<vlayout>
+							<label value="Address Proof:" />
+							<fileupload label="Upload (PDF/JPG)"
+								onUpload="@command('uploadAddressProof', file=event.media)" />
+						</vlayout>
+
+						<vlayout>
+							<label value="Photo:" />
+							<fileupload label="Upload Photo"
+								onUpload="@command('uploadPhoto', file=event.media)" />
+						</vlayout>
+					</row>
+
+				</rows>
+			</grid>
+
+			<separator />
+
+			<!-- Submit Button -->
+			<hbox pack="center" spacing="20px" hflex="1">
+				<button label="Submit KYC"
+					onClick="@command('submitKyc')" sclass="primary-btn" />
+			</hbox>
+
+		</vlayout>
+
+	</window>
 
 </zk>

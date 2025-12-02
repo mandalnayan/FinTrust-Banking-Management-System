@@ -32,6 +32,13 @@ public interface UserDetailsDAO {
     long create(UserDetails userDetails) throws SQLException;
 
     /**
+     * Creating empty user details
+     * @param userId
+     * @return
+     * @throws SQLException
+     */
+    Long createEmptyUserDetails(Long userId) throws SQLException;
+    /**
      * Finds a user details record by details_id.
      *
      * @param detailsId primary key
@@ -64,7 +71,15 @@ public interface UserDetailsDAO {
       * @return
       * @throws SQLException
       */
-    boolean update(UserDetails userDetails) throws SQLException;
+    boolean updateProfile(UserDetails userDetails) throws SQLException;
+    
+    /**
+     * Saving or updating kyc form
+     * @param userDetails
+     * @return
+     * @throws SQLException
+     */
+   boolean updateKyc(UserDetails userDetails) throws SQLException;
     
     /**
      * Update primary account of users

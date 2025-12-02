@@ -13,7 +13,7 @@
 			</hbox>
             <separator/>
 
-            <grid >
+            <grid>
                 <rows>
 
                     <row>
@@ -69,8 +69,8 @@
             <separator/>
 
             <hbox sclass="button-row" pack="center" spacing="20px">
-                <button label="Submit" id="btnSubmit" sclass="primary-btn"/>
-                <button label="Reset" id="btnReset" sclass="secondary-btn"/>
+                <button label="Submit" id="btnAccountSubmit" sclass="primary-btn"/>
+                <button label="Reset" id="btnAccountReset" sclass="secondary-btn"/>
             </hbox>
         </vlayout>
     </window>

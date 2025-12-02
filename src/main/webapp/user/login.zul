@@ -16,7 +16,7 @@
     <include src="/WEB-INF/components/navbar.zul"/>
 
     <!-- MAIN WRAPPER -->
-    <div sclass="login-wrapper">
+    <div sclass="login-wrapper" >
 
         <!-- LEFT PANEL -->
         <div sclass="login-left">
@@ -32,8 +32,10 @@
 
             <vlayout spacing="15px" width="100%" sclass="login-form" xmlns:n="native">
             
-            <n:form name="loginForm" action="j_spring_security_check"
-			method="POST">
+           	<n:form name="loginForm"
+        action="/FinTrust-Banking_Management_System/j_spring_security_check"
+        method="POST">
+				
 			<n:input type="text" name='j_username' value='' sclass="input-field" placeholder="Email or Phone" style="margin-bottom: 10px;"/> 
 			 
 			<n:input type="password" name='j_password' value='' sclass="input-field" placeholder="Password" />

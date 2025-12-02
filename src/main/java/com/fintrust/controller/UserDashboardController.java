@@ -40,9 +40,8 @@ public class UserDashboardController extends SelectorComposer<Component>{
     @Override
     public void doAfterCompose(Component comp) throws Exception {
     	
+ //   	Sessions.getCurrent().setAttribute("main_content_sec", main_content_sec);
     	super.doAfterCompose(comp);
-    	
-    	Sessions.getCurrent().setAttribute("main_content_sec", main_content_sec);
     }
     
     private void initialize() {	
@@ -78,7 +77,7 @@ public class UserDashboardController extends SelectorComposer<Component>{
    
    @Listen("onClick=#account")
    public void openAccount() {
-	   main_content_sec.setSrc("/WEB-INF/components/openNewAccount.zul");
+	   main_content_sec.setSrc("/WEB-INF/components/kycForm.zul");
 	   
 	   account.addSclass("active");
 	   userdashboard.removeSclass("active");

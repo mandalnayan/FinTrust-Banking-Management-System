@@ -11,7 +11,12 @@
     <security:http auto-config="true">
     
     <!-- Customized login page -->
-  <security:form-login login-page="/user/login.zul" authentication-failure-url="/error.zul" default-target-url="/index.zul" /> 
+  <!-- <security:form-login login-page="/user/login.zul" authentication-failure-url="/error.zul" default-target-url="/index.zul" />  -->
+ <security:form-login
+    login-processing-url="/j_spring_security_check"
+    login-page="/user/login.zul"
+    default-target-url="/index.zul"
+    authentication-failure-url="/error.zul"/>
  
     
         <!-- ZK AU requests -->
@@ -28,8 +33,16 @@
         <security:access-denied-handler error-page="/error.zul"/>
     </security:http>
 
+<!-- Authentication via userService class or DB -->
+<security:authentication-manager>
+    <security:authentication-provider user-service-ref="myUserDetailsService">
+        <security:password-encoder hash="plaintext" />
+    </security:authentication-provider>
+</security:authentication-manager>
+
+
     <!-- In-memory authentication -->
-    <security:authentication-manager>
+   <!-- <security:authentication-manager>
         <security:authentication-provider>
             <security:user-service>
                 <security:user name="aaa" password="aaa" authorities="ROLE_USER, ROLE_EDITOR"/>
@@ -38,7 +51,7 @@
                 <security:user name="peter" password="aaa" authorities="ROLE_USER"/>
             </security:user-service>
         </security:authentication-provider>
-    </security:authentication-manager>
+    </security:authentication-manager>  -->
 
     <!-- Enable annotation-based method security -->
     <security:global-method-security secured-annotations="enabled"/>

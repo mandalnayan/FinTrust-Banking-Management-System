@@ -1,5 +1,6 @@
 package com.fintrust.model;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -18,9 +19,13 @@ public class UserDetails {
     private String pincode;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    
+    // File paths or blob IDs
+    private String addressProof;
+    private String photo;
 
     public UserDetails() {
-    	
+    		user = new User();
     }
 
 	public UserDetails(Long detailsId, Long userId, String gender, LocalDate dob, String aadhaarMasked,
@@ -40,10 +45,24 @@ public class UserDetails {
 		this.pincode = pincode;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
+	}	
+	
+	public String getAddressProof() {
+		return addressProof;
 	}
 
-	
-	
+	public void setAddressProof(String addressProof) {
+		this.addressProof = addressProof;
+	}
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
+
 	public Long getPrimaryAccountId() {
 		return primaryAccountId;
 	}
@@ -83,8 +102,8 @@ public class UserDetails {
 		return dob;
 	}
 
-	public void setDob(LocalDate dob) {
-		this.dob = dob;
+	public void setDob(LocalDate date) {
+		this.dob = date;
 	}
 
 	public String getAadhaarMasked() {
