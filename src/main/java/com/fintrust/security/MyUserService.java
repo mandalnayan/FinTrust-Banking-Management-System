@@ -1,18 +1,17 @@
 package com.fintrust.security;
 
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.authority.AuthorityUtils;
 
 import com.fintrust.service.UserService;
-import org.springframework.security.core.authority.AuthorityUtils;
+import com.fintrust.model.User;
 
 public class MyUserService implements UserDetailsService {
 
     private UserService userService;
 
-    // Injected by Spring XML
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
@@ -20,21 +19,21 @@ public class MyUserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        com.fintrust.model.User u = userService.getUserByUserName(username);
-
-        if (u == null) {
-            throw new UsernameNotFoundException("User not found: " + username);
+    	System.out.println("Inside method " + username);
+        User user = userService.getUserByUserName(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
         }
-
-        String role = u.getRole().name();
+        System.out.println("after method " + user);
+        String role = user.getRole().name();
         if (!role.startsWith("ROLE_")) {
             role = "ROLE_" + role;
         }
 
-        return new User(
-                u.getEmail(),
-                u.getPassword(),
-                AuthorityUtils.createAuthorityList(role)
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),        // MUST be BCrypt encrypted
+                AuthorityUtils.createAuthorityList("ROLE_USER")
         );
     }
 }

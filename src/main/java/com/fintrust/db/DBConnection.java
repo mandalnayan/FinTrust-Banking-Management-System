@@ -26,10 +26,10 @@ public class DBConnection {
                 System.out.println("✅ Database Connected Successfully");             
             }
         } catch (ClassNotFoundException e) {
-        		Clients.showNotification("JDBC Driver not found", Clients.NOTIFICATION_TYPE_ERROR, null, 100, 100, 2000);
+        	//	Clients.showNotification("JDBC Driver not found", Clients.NOTIFICATION_TYPE_ERROR, null, 100, 100, 2000);
         		System.err.println("❌ JDBC Driver not found: " + e.getMessage());
         } catch (SQLException e) {
-        	Clients.showNotification("❌ Database Connection Error:", Clients.NOTIFICATION_TYPE_ERROR, null, 100, 100, 2000);
+       // 	Clients.showNotification("❌ Database Connection Error:", Clients.NOTIFICATION_TYPE_ERROR, null, 100, 100, 2000);
             System.err.println("❌ Database Connection Error: " + e.getMessage());
         }
         return connection;

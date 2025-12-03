@@ -10,13 +10,13 @@
 <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 <?link rel="stylesheet" type="text/css" href="/resources/css/auth-common.css"?>
 
-<zk xmlns:h="xhtml">
+<zk xmlns:h="xhtml" xmlns:n="native">
 
     <!-- NAVBAR -->
     <include src="/WEB-INF/components/navbar.zul"/>
 
     <!-- MAIN WRAPPER -->
-    <div sclass="login-wrapper" >
+    <div sclass="login-wrapper">
 
         <!-- LEFT PANEL -->
         <div sclass="login-left">
@@ -30,30 +30,34 @@
             <label value="Welcome Back" sclass="login-title"/>
             <label value="Login to your FinTrust digital banking account" sclass="login-subtitle"/>
 
-            <vlayout spacing="15px" width="100%" sclass="login-form" xmlns:n="native">
-            
-           	<n:form name="loginForm"
-        action="/FinTrust-Banking_Management_System/j_spring_security_check"
-        method="POST">
-				
-			<n:input type="text" name='j_username' value='' sclass="input-field" placeholder="Email or Phone" style="margin-bottom: 10px;"/> 
-			 
-			<n:input type="password" name='j_password' value='' sclass="input-field" placeholder="Password" />
-			<n:input name="submit" type="submit" value="Login" sclass="login-btn" />
+            <vlayout spacing="15px" width="100%" sclass="login-form">
 
-			<!-- <n:input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-			-->
-		</n:form>
+                <!-- HTML FORM for Spring Security 5.x -->
+             <n:form method="POST" action="${pageContext.request.contextPath}/login" xmlns:n="native">
 
-              <!--   <textbox id="email" placeholder="Email or Phone" sclass="input-field"/>
-                <textbox id="password" type="password" placeholder="Password" sclass="input-field"/> -->
+                    <n:input 
+                        type="text" 
+                        name="username" 
+                        placeholder="Email or Phone"
+                        class="input-field"
+                        style="margin-bottom:10px;" />
+
+                    <n:input 
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        class="input-field" />
+
+                    <n:input 
+                        type="submit"
+                        value="Login"
+                        class="login-btn" />
+                </n:form>
 
                 <hlayout sclass="login-options">
                     <checkbox label="Remember Me"/>
                     <a href="/change-password.zul" class="forgot-link">Forgot Password?</a>
                 </hlayout>
-
-              <!--   <button id="submit" label="Login" sclass="login-btn"/> -->
 
                 <hlayout sclass="signup-redirect">
                     <label value="Don't have an account?"/>
@@ -67,5 +71,6 @@
     </div>
 
 </zk>
+
 
 

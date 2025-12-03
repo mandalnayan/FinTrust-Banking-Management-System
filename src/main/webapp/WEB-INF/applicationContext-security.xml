@@ -3,56 +3,50 @@
        xmlns:security="http://www.springframework.org/schema/security"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="
-           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-           http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+           http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/security https://www.springframework.org/schema/security/spring-security.xsd">
 
 
-    <!-- HTTP security configuration -->
-    <security:http auto-config="true">
-    
-    <!-- Customized login page -->
-  <!-- <security:form-login login-page="/user/login.zul" authentication-failure-url="/error.zul" default-target-url="/index.zul" />  -->
- <security:form-login
-    login-processing-url="/j_spring_security_check"
-    login-page="/user/login.zul"
-    default-target-url="/index.zul"
-    authentication-failure-url="/error.zul"/>
- 
-    
-        <!-- ZK AU requests -->
-        <!-- Un-Secure pages -->
-        <security:intercept-url pattern="/zkau/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-<security:intercept-url pattern="/user/login.zul" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+    <!-- =============================
+         HTTP SECURITY CONFIG
+       ============================= -->
+    <security:http use-expressions="true" auto-config="true" pattern="/**" >
+    <security:csrf disabled="true"/>
 
- 		<security:intercept-url pattern="/home.zul" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
- 		
-        <!-- Secure pages -->
-       <security:intercept-url pattern="/user/**" access="ROLE_USER"/>
+        <!-- Custom Login Page -->
+        <security:form-login 
+        login-page="/user/login.zul"
+        login-processing-url="/login"
+        default-target-url="/dashboard.zul"
+        authentication-failure-url="/user/login.zul?error=true"
+        username-parameter="username"
+        password-parameter="password" />
+
+        <!-- Pages that do NOT require login -->
+        <security:intercept-url pattern="/zkau/**" access="permitAll"/>
+        <security:intercept-url pattern="/user/login.zul" access="permitAll"/>        
+        <security:intercept-url pattern="/home.zul" access="permitAll"/>
+
+        <!-- Protected Pages -->
+        <security:intercept-url pattern="/user/**" access="hasRole('ROLE_USER')"/>
+
         <!-- Logout -->
         <security:logout logout-success-url="/home.zul" invalidate-session="true"/>
-        <security:access-denied-handler error-page="/error.zul"/>
+
     </security:http>
 
-<!-- Authentication via userService class or DB -->
-<security:authentication-manager>
-    <security:authentication-provider user-service-ref="myUserDetailsService">
-        <security:password-encoder hash="plaintext" />
-    </security:authentication-provider>
-</security:authentication-manager>
 
-
-    <!-- In-memory authentication -->
-   <!-- <security:authentication-manager>
-        <security:authentication-provider>
-            <security:user-service>
-                <security:user name="aaa" password="aaa" authorities="ROLE_USER, ROLE_EDITOR"/>
-                <security:user name="eee" password="aaa" authorities="ROLE_EDITOR"/>
-                <security:user name="uuu" password="aaa" authorities="ROLE_USER"/>
-                <security:user name="peter" password="aaa" authorities="ROLE_USER"/>
-            </security:user-service>
+    <!-- =============================
+         AUTHENTICATION MANAGER
+       ============================= -->
+    <security:authentication-manager>
+        <security:authentication-provider user-service-ref="myUserDetailsService">
+            <security:password-encoder ref="bcryptEncoder"/>
         </security:authentication-provider>
-    </security:authentication-manager>  -->
+    </security:authentication-manager>
 
-    <!-- Enable annotation-based method security -->
-    <security:global-method-security secured-annotations="enabled"/>
+
+    <!-- BCrypt Password Encoder -->
+    <bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
 </beans>

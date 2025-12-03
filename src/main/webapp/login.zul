@@ -1,0 +1,17 @@
+<zk>
+    <window title="Login" border="normal" width="400px">
+
+        <form action="/login" method="POST">
+
+            <vlayout spacing="10px">
+
+                <textbox name="username" placeholder="Email" width="95%" />
+                <textbox name="password" type="password" placeholder="Password" width="95%" />
+
+                <button label="Login" />
+            </vlayout>
+
+        </form>
+
+    </window>
+</zk>
