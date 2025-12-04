@@ -16,6 +16,7 @@ import com.fintrust.model.User;
 import com.fintrust.model.UserDetails;
 import com.fintrust.service.UserDetailsServiceImpl;
 import com.fintrust.service.UserServiceImpl;
+import com.fintrust.util.NotificationUtil;
 
 public class KYCFormVM {
 
@@ -24,6 +25,7 @@ public class KYCFormVM {
 
     private byte[] addressProofFile;
     private byte[] photoFile;
+    private Date dob;
 
     private UserServiceImpl userService = new UserServiceImpl();
     private UserDetailsServiceImpl userDetailsService = new UserDetailsServiceImpl();
@@ -55,11 +57,32 @@ public class KYCFormVM {
 
         LocalDate localDate = userDetails.getDob();
 
-        Date date = Date.from(
+        dob = Date.from(
                 localDate.atStartOfDay(ZoneId.systemDefault()).toInstant()
         );
-
-        return date;
+        
+        return dob;
+    }
+    
+    /**
+     * Setting DOB date in specific formate(dd-MM-YYY)
+     * @return
+     */
+    @NotifyChange("dob")
+    public void setDob(Date dob) {
+    		System.out.println("Hii, updating dob");
+        if (userDetails == null
+                || dob == null) {
+            return ;
+        }  
+       
+        LocalDate newDob = dob.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        System.out.println("Hii, updating dob" + newDob);
+        userDetails.setDob(newDob);
+        NotificationUtil.showInstant("info", newDob.toString());
+      
     }
 
     // --------------------------
@@ -84,13 +107,13 @@ public class KYCFormVM {
     // --------------------------
     @Command
     public void submitKyc() {
-     
+    		
         boolean updated = userDetailsService.updateKyc(userDetails);
 
         if (updated) {
-            Messagebox.show("KYC submitted successfully!", "Success", Messagebox.OK, Messagebox.INFORMATION);
+           	NotificationUtil.showInstant("info", "KYC submitted successfully!");
         } else {
-            Messagebox.show("Failed to save KYC details!", "Error", Messagebox.OK, Messagebox.ERROR);
+        	NotificationUtil.showInstant("error", "Failed to save KYC details!");
         }
     }
 

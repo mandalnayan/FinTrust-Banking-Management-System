@@ -78,7 +78,7 @@ public class UserDAOImpl implements UserDAO {
 			try (ResultSet rs = ps.executeQuery()) {
 				if (rs.next()) {
 					User user = new User(rs.getLong("user_id"), rs.getString("full_name"), rs.getString("email"),
-							rs.getString("phone"), rs.getString("role"), rs.getString("status"),rs.getString("password_hash"),
+							rs.getString("phone"), rs.getString("role"), rs.getString("status"),
 							rs.getTimestamp("created_at"), rs.getTimestamp("updated_at"));
 					return user;
 				}
@@ -208,16 +208,17 @@ public class UserDAOImpl implements UserDAO {
 	 * @throws SQLException
 	 */
 	private User mapRowToUser(ResultSet rs) throws SQLException {
-	    return new User(
+	    User user = new User(
 	        rs.getLong("user_id"),
 	        rs.getString("full_name"),
 	        rs.getString("email"),
 	        rs.getString("phone"),
 	        rs.getString("role"),
 	        rs.getString("status"),
-	        rs.getString("password_hash"),
 	        rs.getTimestamp("created_at"),
 	        rs.getTimestamp("updated_at")
 	    );
+	    user.setPassword(rs.getString("password_hash"));
+	    return user;
 	}
 }

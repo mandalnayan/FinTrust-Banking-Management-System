@@ -48,15 +48,20 @@ public class UserDetailsServiceImpl {
 
 			if (userId != null) {
 				UserDetails ud = userDAOImpl.findByUserId(userId);
-				
+				String aadharUnmasked = EncryptUtil.decrypt(ud.getAadhaarMasked(), secretKey);
+				ud.setAadhaarMasked(aadharUnmasked);
+				String panUnmasked = EncryptUtil.decrypt(ud.getPanMasked(), secretKey);
+				ud.setAadhaarMasked(panUnmasked);
 				if (ud != null)
 					return ud;
 			}
 		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		NotificationUtil.push("error", "Faild to load user details. Please refresh the page.");
+		NotificationUtil.showInstant("error", "Faild to load user details. Please refresh the page.");
 		return new UserDetails();
 	}
 
@@ -84,13 +89,14 @@ public class UserDetailsServiceImpl {
 	public boolean updateKyc(UserDetails ud) {
 		try {
 			// Encryptng aadhar no
+			
 			String aadharMasked = EncryptUtil.encrypt(ud.getAadhaarMasked(), secretKey);
 			ud.setAadhaarMasked(aadharMasked);
 			
 			// Encryptng pan no
 			String panMasked = EncryptUtil.encrypt(ud.getPanMasked(), secretKey);
 			ud.setAadhaarMasked(panMasked);
-			
+			System.out.println(aadharMasked + " \n" + panMasked);
 			return userDAOImpl.updateKyc(ud);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

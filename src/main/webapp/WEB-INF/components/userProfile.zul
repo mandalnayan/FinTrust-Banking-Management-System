@@ -24,10 +24,10 @@
         <vbox hflex="1">
             <label value="Update Primary Account" sclass="profile-updateAccount" />
             <combobox width="auto"
-                placeholder="Select account number"
+                placeholder="@bind(vm.placeholderMsg)"
                 model="@bind(vm.accountList)"
                 selectedItem="@bind(vm.selectedAccount, saveOnChange=true)"
-                autodrop="true">
+                autodrop="true" emptySearchMessage="Account is not available">
                 <template name="model">
                     <comboitem label="@load(each.accountNumber)" value="@load(each)" />
                 </template>

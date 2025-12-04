@@ -2,10 +2,11 @@
 <zk>
 	<style src="/resources/css/bankingForms.css" />
 
-	<window border="none" width="100%" sclass="kyc-page"
-		viewModel="@id('vm') @init('com.fintrust.viewModel.KYCFormVM')">
+	<window border="none" width="100%" zclass="kyc-page"
+		viewModel="@id('vm') @init('com.fintrust.viewModel.KYCFormVM')"
+		vflex="1">
 
-		<vlayout width="100%" sclass="form-container">
+		<vlayout width="100%" vflex="1" sclass="form-container">
 
 			<!-- Header -->
 			<vbox pack="center" align="center" hflex="1">
@@ -19,7 +20,7 @@
 			<separator />
 
 			<!-- TWO COLUMN GRID -->
-			<grid width="100%">
+			<grid width="100%" vflex="1">
 				<columns>
 					<column width="50%" />
 					<column width="50%" />
@@ -54,11 +55,11 @@
 						</vlayout>
 
 						<vlayout>
-								
-								<label value="Date of Birth:" />
-								<datebox value="@load(vm.dob)"
-									hflex="1" format="yyyy-MM-dd" readonly="true" disabled="true"/>
-							
+
+							<label value="Date of Birth:" />
+							<datebox value="@bind(vm.dob)" hflex="1"
+								format="yyyy-MM-dd" />
+
 						</vlayout>
 					</row>
 

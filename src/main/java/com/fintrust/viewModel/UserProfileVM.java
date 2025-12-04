@@ -32,6 +32,7 @@ public class UserProfileVM {
 	private AccountService accountService;
 	private UserDetails userDetails;
 	private Account selectedAccount;
+	private String placeholderMsg;
     private boolean editMode = false;
     
     private List<Account> accountList;
@@ -40,15 +41,17 @@ public class UserProfileVM {
     @NotifyChange("userDetails")
     public void init() {
     		accountService = new AccountServiceImpl();
+    		
        	accountList = accountService.getAllAccounts();
        	if (accountList == null || accountList.size() == 0) {
-			NotificationUtil.showInstant("error", "Faild to load account details. Please refresh the page");
-			
+			NotificationUtil.showInstant("error", "Faild to load account details. \nPlease refresh the page");
+			placeholderMsg = "Account is not available";
 		} else {
 			selectedAccount = accountList.get(0);
+			placeholderMsg = "Select account";
 		}
         userService = new UserDetailsServiceImpl();
-        userDetails = userService.getLogedInDetails();       
+        userDetails = userService.getLogedInDetails();  
         Sessions.getCurrent().setAttribute("user", userDetails);
     }
     
@@ -113,6 +116,9 @@ public class UserProfileVM {
     public boolean isEditMode() {
         return editMode;
     }
+    public String getplaceholderMsg() {
+    		return placeholderMsg;
+    }
     
     /**
      * Getting registered date in specific formate(YYY-MM-dd)
@@ -138,7 +144,7 @@ public class UserProfileVM {
     public Date getDob() {
         if (userDetails == null
                 || userDetails.getDob() == null) {
-            return new Date();
+            return null;
         }
 
 

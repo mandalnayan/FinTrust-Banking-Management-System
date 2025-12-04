@@ -10,8 +10,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.Sessions;
 
 import com.fintrust.model.User;
 import com.fintrust.service.UserService;
@@ -28,18 +26,24 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler {
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-			Authentication authentication) throws IOException, ServletException {
+	                                    Authentication authentication) throws IOException, ServletException {
 
-		String email = authentication.getName();
-		User user = userService.getUserByUserName(email);
-		if (user != null) {
-			Session session = Sessions.getCurrent();
-			session.setAttribute("user_id", user.getId());
-			session.setAttribute("user_name", user.getFullName());
-			NotificationUtil.push("info", "Welocme back " + user.getFullName());
-		}
+	    System.out.println("Successfully login");
 
-		// Redirect to dashboard or home page
-		response.sendRedirect(request.getContextPath() + "/user/userDashboard.zul");
+	    String email = authentication.getName();
+	    User user = userService.getUserByUserName(email);
+
+	    if (user != null) {
+	        // Use HttpSession instead of ZK Session
+	        HttpSession httpSession = request.getSession(true);
+	        httpSession.setAttribute("user_id", user.getId());
+	        httpSession.setAttribute("user_name", user.getFullName());
+	    }
+
+	    // notification via ZK requires ZK session, so delay it to ZUL page
+	    // NotificationUtil.push("info", "Welcome back " + user.getFullName());
+
+	    response.sendRedirect(request.getContextPath() + "/user/userDashboard.zul");
 	}
+
 }

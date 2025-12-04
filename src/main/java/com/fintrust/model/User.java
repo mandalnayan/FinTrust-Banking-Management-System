@@ -39,14 +39,13 @@ public class User {
     }
 
 	public User(Long id, String name, String email, String phone, String role, String status,
-			String password_hash,Timestamp createdAt, Timestamp updatedAt) {
+			Timestamp createdAt, Timestamp updatedAt) {
         this.id = id;
         this.fullName = name;
         this.email = email;
         this.phone = phone;
         this.role = Role.valueOf(role.toUpperCase());
         this.status = Status.valueOf(status.toUpperCase());
-        this.password = password_hash;
         this.createdAt = createdAt.toLocalDateTime();
         this.updatedAt = updatedAt.toLocalDateTime();
     }

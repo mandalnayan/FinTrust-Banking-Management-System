@@ -17,6 +17,7 @@
         login-page="/user/login.zul"
         login-processing-url="/login"
         authentication-success-handler-ref="customAuthSuccessHandler"
+        authentication-failure-handler-ref="customAuthFailureHandler"
         authentication-failure-url="/user/login.zul?error=true"
         username-parameter="username"
         password-parameter="password"/>

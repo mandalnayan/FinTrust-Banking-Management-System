@@ -55,7 +55,7 @@ public class UserSignupController extends SelectorComposer<Component> {
         user.setFullName(name.getValue());
         user.setEmail(email.getValue());
         user.setPhone(phoneNumber.getValue());
-        user.setRole(User.Role.USER);
+        user.setRole(User.Role.ROLE_USER);
         user.setPassword(password.getValue());
         
 

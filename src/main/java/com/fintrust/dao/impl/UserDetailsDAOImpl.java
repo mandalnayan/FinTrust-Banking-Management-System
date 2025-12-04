@@ -194,7 +194,6 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
     	            district = ?,
     	            city = ?,
     	            pincode = ?,
-    	            primary_account_id = ?,
     	            updated_at = NOW()
     	        WHERE details_id = ?
     	    """;
@@ -202,6 +201,7 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
     	    try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
     	        ps.setString(1, ud.getGender());
+    	        if (ud.getDob() == null) return false;
     	        ps.setDate(2, Date.valueOf(ud.getDob()));
     	        ps.setString(3, ud.getAadhaarMasked());
     	        ps.setString(4, ud.getPanMasked());
@@ -209,9 +209,8 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
     	        ps.setString(6, ud.getState());
     	        ps.setString(7, ud.getDistrict());
     	        ps.setString(8, ud.getCity());
-    	        ps.setString(9, ud.getPincode());
-    	        ps.setObject(10, ud.getPrimaryAccountId(), java.sql.Types.BIGINT);
-    	        ps.setLong(11, ud.getDetailsId());
+    	        ps.setString(9, ud.getPincode());    	        
+    	        ps.setLong(10, ud.getDetailsId());
 
     	        return ps.executeUpdate() > 0;
     	    }
@@ -266,8 +265,22 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
 
     private UserDetails mapRowWithUserDetails(ResultSet rs) throws SQLException {
     	 UserDetails ud = new UserDetails();
-    	 // Fetching user data
-    	 User user = new User(
+    	 // Fetching user data    	 
+         ud.setDetailsId(rs.getLong("details_id"));         
+         ud.setGender(rs.getString("gender"));
+         Date dob = rs.getDate("dob");
+         if (dob != null)
+         ud.setDob(dob.toLocalDate());
+         ud.setAadhaarMasked(rs.getString("aadhaar_masked"));
+         ud.setPanMasked(rs.getString("pan_masked"));
+         ud.setCountry(rs.getString("country"));
+         ud.setState(rs.getString("state"));
+         ud.setDistrict(rs.getString("district"));
+         ud.setCity(rs.getString("city"));
+         ud.setPincode(rs.getString("pincode"));
+         
+         ud.setPrimaryAccountId(rs.getLong("primary_account_id"));
+         User user = new User(
 				 rs.getLong("user_id"),
 				 rs.getString("full_name"),
 				 rs.getString("email"),
@@ -278,17 +291,6 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
 				 rs.getTimestamp("updated_at")
 				 );
     	 ud.setUser(user);
-         ud.setDetailsId(rs.getLong("details_id"));         
-         ud.setGender(rs.getString("gender"));
-         ud.setDob(rs.getDate("dob").toLocalDate());
-         ud.setAadhaarMasked(rs.getString("aadhaar_masked"));
-         ud.setPanMasked(rs.getString("pan_masked"));
-         ud.setCountry(rs.getString("country"));
-         ud.setState(rs.getString("state"));
-         ud.setDistrict(rs.getString("district"));
-         ud.setCity(rs.getString("city"));
-         ud.setPincode(rs.getString("pincode"));
-         ud.setPrimaryAccountId(rs.getLong("primary_account_id"));
          return ud;
     }
     /**

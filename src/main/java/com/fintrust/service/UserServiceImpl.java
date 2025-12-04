@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
 	 * Fetching logined user details
 	 */
 	public User getLoggedInUser() {
-		Long userId = (Long) Sessions.getCurrent().getAttribute("currentUserId");
+		Long userId = (Long) Sessions.getCurrent().getAttribute("user_id");
 		try {
 			return userDAO.findById(userId);
 		} catch (SQLException e) {
