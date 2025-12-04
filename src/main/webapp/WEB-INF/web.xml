@@ -18,6 +18,11 @@
 		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
 	</listener>
 	
+	<!-- Registering MyAppContextListener is a servlet context listener -->
+	<listener>
+    <listener-class>com.fintrust.listener.MyAppContextListener</listener-class>
+</listener>
+	
 	<filter>
     <filter-name>springSecurityFilterChain</filter-name>
     <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>

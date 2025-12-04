@@ -37,7 +37,7 @@ public class TableCreator {
 	                email VARCHAR(120) NOT NULL UNIQUE,
 	                phone VARCHAR(20),
 	                password_hash VARCHAR(255) NOT NULL,
-	                role ENUM('user','admin','super_admin') NOT NULL DEFAULT 'user',
+	                role ENUM('ROLE_USER','ROLE_ADMIN','ROLE_SUPER_ADMIN') NOT NULL DEFAULT 'ROLE_USER',
 	                status ENUM('active','inactive','blocked') NOT NULL DEFAULT 'active',
 	                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

@@ -17,7 +17,7 @@ import com.fintrust.model.User;
  */
 public class UserDAOImpl implements UserDAO {
 
-	private final Connection connection;
+	private Connection connection;
 
 	/**
 	 * Constructor for dependency injection.
@@ -30,7 +30,7 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public Long create(User user) throws SQLException {
-
+		if (connection == null || connection.isClosed()) connection = DBConnection.getConnection();
 		String sql = """
 				    INSERT INTO users (full_name, email, phone, password_hash, role)
 				    VALUES (?, ?, ?, ?, ?)
@@ -59,8 +59,8 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public Boolean isEmailExists(String email) throws SQLException {
 
+		if (connection == null || connection.isClosed()) connection = DBConnection.getConnection();
 		String sql = "SELECT * FROM users WHERE email = ?";
-
 		try (PreparedStatement ps = connection.prepareStatement(sql)) {
 			ps.setString(1, email);
 			ResultSet rs = ps.executeQuery();
@@ -78,7 +78,7 @@ public class UserDAOImpl implements UserDAO {
 			try (ResultSet rs = ps.executeQuery()) {
 				if (rs.next()) {
 					User user = new User(rs.getLong("user_id"), rs.getString("full_name"), rs.getString("email"),
-							rs.getString("phone"), rs.getString("role"), rs.getString("status"),
+							rs.getString("phone"), rs.getString("role"), rs.getString("status"),rs.getString("password_hash"),
 							rs.getTimestamp("created_at"), rs.getTimestamp("updated_at"));
 					return user;
 				}
@@ -215,6 +215,7 @@ public class UserDAOImpl implements UserDAO {
 	        rs.getString("phone"),
 	        rs.getString("role"),
 	        rs.getString("status"),
+	        rs.getString("password_hash"),
 	        rs.getTimestamp("created_at"),
 	        rs.getTimestamp("updated_at")
 	    );

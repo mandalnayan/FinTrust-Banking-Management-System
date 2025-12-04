@@ -17,7 +17,7 @@
 						<label id = "transactionsId" sclass="nav-link" visible="false" value = "Transactions"/>
 						<label id = "cardsId" sclass="nav-link" visible="false" value = "Cards"/>
 						<!-- Label value will dynamically change Signup/Profile based on page  -->
-						<label id = "signupId" sclass="nav-link"  value = "Signup" onClick='Executions.sendRedirect("/user/userSignup.zul")'/>
+						<label id = "signupId" sclass="nav-link"  value = "Signup" onClick='Executions.sendRedirect("/user/signup.zul")'/>
 						<!-- Label value will dynamically change login/logout based on page  -->
 						<label id = "loginId" sclass="logout-btn"  value = "login" onClick='Executions.sendRedirect("/user/userLogin.zul")'/>
 				</div>

@@ -24,9 +24,9 @@ public class User {
     private LocalDateTime updatedAt;
 
     public enum Role {
-        USER,
-        ADMIN,
-        SUPER_ADMIN
+        ROLE_USER,
+        ROLE_ADMIN,
+        ROLE_SUPER_ADMIN
     }
 
     public enum Status {
@@ -39,13 +39,14 @@ public class User {
     }
 
 	public User(Long id, String name, String email, String phone, String role, String status,
-			Timestamp createdAt, Timestamp updatedAt) {
+			String password_hash,Timestamp createdAt, Timestamp updatedAt) {
         this.id = id;
         this.fullName = name;
         this.email = email;
         this.phone = phone;
         this.role = Role.valueOf(role.toUpperCase());
         this.status = Status.valueOf(status.toUpperCase());
+        this.password = password_hash;
         this.createdAt = createdAt.toLocalDateTime();
         this.updatedAt = updatedAt.toLocalDateTime();
     }
@@ -135,6 +136,7 @@ public class User {
                 ", status=" + status +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
+                ", password=" + password +
                 '}';
     }
 }

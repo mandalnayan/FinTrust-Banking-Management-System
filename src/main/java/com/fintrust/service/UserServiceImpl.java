@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.zkoss.zk.ui.Sessions;
 
@@ -19,47 +20,51 @@ import com.fintrust.model.UserDetails;
 public class UserServiceImpl implements UserService {
 
 	private Connection connection = DBConnection.getConnection();
-	 private UserDAO userDAO;
-	 private UserDetailsDAO userDetailsDAO;
+	private UserDAO userDAO = new UserDAOImpl(connection);
+	private UserDetailsDAO userDetailsDAO = new UserDetailsDAOImpl(connection);
 
-	    @Autowired
-	    public void setUserDAO(UserDAO userDAO) {
-	        this.userDAO = userDAO;
-	    }
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-	    @Autowired
-	    public void setUserDetailsDAO(UserDetailsDAO userDetailsDAO) {
-	        this.userDetailsDAO = userDetailsDAO;
-	    }
+	@Autowired
+	public void setUserDAO(UserDAO userDAO) {
+		this.userDAO = userDAO;
+	}
 
-    
-    @Override
-    public boolean registerUser(User user) {
-        // Check if email already exists
-        try {
+	@Autowired
+	public void setUserDetailsDAO(UserDetailsDAO userDetailsDAO) {
+		this.userDetailsDAO = userDetailsDAO;
+	}
+
+	@Override
+	public boolean registerUser(User user) {
+		// Check if email already exists
+		try {
 			if (userDAO.isEmailExists(user.getEmail())) {
-			    System.out.println("Email already registered.");
-			    return false;
+				System.out.println("Email already registered.");
+				return false;
+			} else {
+				System.out.println("Email not registered.");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
-        // Encrypt password (optional, we will add later)
-        // user.setPassword(PasswordUtil.encrypt(user.getPassword()));
+		// Encrypt password (optional, we will add later)
+		// user.setPassword(PasswordUtil.encrypt(user.getPassword()));
 
-        // Saving password digest instead of actual password
-        String digestPassword = MessageDigestion.digestPassword(user.getPassword());
-        user.setPassword(digestPassword);
-        
-        // Insert user to DB
-        Long userId;
+		// Encrypted the password
+		String encrypted = passwordEncoder.encode(user.getPassword());
+		user.setPassword(encrypted);
+
+		// Insert user to DB
+		Long userId;
 		try {
 			// Setting auto commit false either both will create or no one
 			connection.setAutoCommit(false);
 			userId = userDAO.create(user);
 //			Inserting empty userDetails
-			
+
 			if (userId != -1 && userDetailsDAO.createEmptyUserDetails(userId) != -1) {
 				connection.commit();
 				return true;
@@ -67,7 +72,7 @@ public class UserServiceImpl implements UserService {
 			return userId != -1;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			// Roll-back 
+			// Roll-back
 			try {
 				connection.rollback();
 			} catch (SQLException e1) {
@@ -76,56 +81,56 @@ public class UserServiceImpl implements UserService {
 			}
 		}
 		return false;
-    }
-        
-    /**
-     * Fetching logined user details
-     */
-    public User getLoggedInUser() {
-    		Long userId = (Long)Sessions.getCurrent().getAttribute("currentUserId");
-    		try {
-				return userDAO.findById(userId);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return new User();
-			}
-    }
-    
-    
-    public boolean updateUser(User user) {
-    		
-    	    try {
-				return userDAO.update(user);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return false;
-			}
-    }
+	}
 
-    /**
-     * Future implementatin
-     */
+	/**
+	 * Fetching logined user details
+	 */
+	public User getLoggedInUser() {
+		Long userId = (Long) Sessions.getCurrent().getAttribute("currentUserId");
+		try {
+			return userDAO.findById(userId);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return new User();
+		}
+	}
+
+	public boolean updateUser(User user) {
+
+		try {
+			return userDAO.update(user);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	/**
+	 * Future implementatin
+	 */
 	@Override
 	public void update2FA(UserDetails user) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	/**
 	 * Authenticating the user
+	 * 
 	 * @param userName
 	 * @param password
 	 * @return
 	 */
 	@Override
 	public boolean isAuthorize(String userName, String password) {
-		String digestPassword = MessageDigestion.digestPassword(password);
+		// String digestPassword = MessageDigestion.digestPassword(password);
 
 		// converting password into digest password
 		try {
-			User user = userDAO.authenticate(userName, digestPassword);
+			User user = userDAO.authenticate(userName, password);
 			if (user != null) {
 				Sessions.getCurrent().setAttribute("user_email", user.getEmail());
 				Sessions.getCurrent().setAttribute("user_name", user.getFullName());
@@ -138,15 +143,16 @@ public class UserServiceImpl implements UserService {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Authenticating the user
+	 * 
 	 * @param userName
 	 * @param password
 	 * @return
 	 */
 	@Override
-	public User getUserByUserName(String userName) {		
+	public User getUserByUserName(String userName) {
 
 		// converting password into digest password
 		try {
@@ -158,7 +164,7 @@ public class UserServiceImpl implements UserService {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Update password
 	 * 
@@ -174,5 +180,5 @@ public class UserServiceImpl implements UserService {
 		}
 		return false;
 	}
-    
+
 }

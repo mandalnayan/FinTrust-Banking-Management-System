@@ -10,30 +10,32 @@
     <!-- =============================
          HTTP SECURITY CONFIG
        ============================= -->
-    <security:http use-expressions="true" auto-config="true" pattern="/**" >
+    <security:http auto-config="true">
     <security:csrf disabled="true"/>
-
-        <!-- Custom Login Page -->
-        <security:form-login 
+    <!-- Custom Login Page -->
+    <security:form-login 
         login-page="/user/login.zul"
         login-processing-url="/login"
-        default-target-url="/dashboard.zul"
+        authentication-success-handler-ref="customAuthSuccessHandler"
         authentication-failure-url="/user/login.zul?error=true"
         username-parameter="username"
-        password-parameter="password" />
+        password-parameter="password"/>
 
-        <!-- Pages that do NOT require login -->
-        <security:intercept-url pattern="/zkau/**" access="permitAll"/>
-        <security:intercept-url pattern="/user/login.zul" access="permitAll"/>        
-        <security:intercept-url pattern="/home.zul" access="permitAll"/>
+    <!-- Logout -->
+   <security:logout 
+    logout-url="/logout"
+    logout-success-url="/user/login.zul?logout=true"
+    invalidate-session="true"/>
 
-        <!-- Protected Pages -->
-        <security:intercept-url pattern="/user/**" access="hasRole('ROLE_USER')"/>
+    <!-- Pages that do NOT require login -->
+    <security:intercept-url pattern="/zkau/**" access="permitAll"/>
+    <security:intercept-url pattern="/user/login.zul" access="permitAll"/> 
+    <security:intercept-url pattern="/user/signup.zul" access="permitAll"/>         
+    <security:intercept-url pattern="/home.zul" access="permitAll"/>
 
-        <!-- Logout -->
-        <security:logout logout-success-url="/home.zul" invalidate-session="true"/>
-
-    </security:http>
+    <!-- Protected Pages -->
+    <security:intercept-url pattern="/user/**" access="hasRole('ROLE_USER')"/>
+</security:http>
 
 
     <!-- =============================

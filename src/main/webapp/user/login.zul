@@ -61,7 +61,7 @@
 
                 <hlayout sclass="signup-redirect">
                     <label value="Don't have an account?"/>
-                    <a href="/user/userSignup.zul">Sign Up</a>
+                    <a href="/user/signup.zul">Sign Up</a>
                 </hlayout>
 
             </vlayout>

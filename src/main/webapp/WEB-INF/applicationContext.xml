@@ -1,39 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
             http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
             http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
 
 
-    <!-- DB CONNECTION -->
-    <bean id="dbConnection" class="com.fintrust.db.DBConnection" factory-method="getConnection"/>
+	<!-- DB CONNECTION -->
+	<bean id="dbConnection" class="com.fintrust.db.DBConnection"
+		factory-method="getConnection" />
 
-    <!-- DAO BEANS -->
-    <bean id="userDao" class="com.fintrust.dao.impl.UserDAOImpl">
-        <constructor-arg ref="dbConnection"/>
-    </bean>
+	<!-- DAO BEANS -->
+	<bean id="userDao" class="com.fintrust.dao.impl.UserDAOImpl">
+		<constructor-arg ref="dbConnection" />
+	</bean>
 
-    <bean id="userDetailsDao" class="com.fintrust.dao.impl.UserDetailsDAOImpl">
-        <constructor-arg ref="dbConnection"/>
-    </bean>
-
-
-    <!-- SERVICE BEANS -->
-    <bean id="userService" class="com.fintrust.service.UserServiceImpl">
-        <property name="userDAO" ref="userDao"/>
-        <property name="userDetailsDAO" ref="userDetailsDao"/>
-    </bean>
+	<bean id="userDetailsDao"
+		class="com.fintrust.dao.impl.UserDetailsDAOImpl">
+		<constructor-arg ref="dbConnection" />
+	</bean>
 
 
-    <!-- SPRING SECURITY USERDETAILS SERVICE -->
-    <bean id="myUserDetailsService" class="com.fintrust.security.MyUserService">
-        <property name="userService" ref="userService"/>
-    </bean>
+	<!-- SERVICE BEANS -->
+	<bean id="userService"
+		class="com.fintrust.service.UserServiceImpl">
+		<property name="userDAO" ref="userDao" />
+		<property name="userDetailsDAO" ref="userDetailsDao" />
+	</bean>
 
 
-    <!-- IMPORT SECURITY CONFIG -->
-    <import resource="applicationContext-security.xml"/>
+	<!-- SPRING SECURITY USERDETAILS SERVICE -->
+	<bean id="myUserDetailsService"
+		class="com.fintrust.security.MyUserService">
+		<property name="userService" ref="userService" />
+	</bean>
+
+	<!-- SPRING Authentiaction failure handler -->
+	<bean id="customAuthFailureHandler"
+		class="com.fintrust.security.CustomAuthFailureHandler" />
+
+	<!-- SPRING Authentiaction success handler -->
+	<bean id="customAuthSuccessHandler"
+		class="com.fintrust.security.CustomAuthSuccessHandler">
+		<constructor-arg ref="userService" />
+	</bean>
+
+	<!-- SPRING Authentiaction logout handler -->
+<!-- 	<bean id="customLogoutSuccessHandler"
+		class="com.fintrust.security.CustomLogoutSuccessHandler" /> -->
+
+	<!-- Password encoder -->
+	<bean id="bcryptEncoder"
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+
+	<!-- IMPORT SECURITY CONFIG -->
+	<import resource="applicationContext-security.xml" />
 
 </beans>

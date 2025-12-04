@@ -22,6 +22,7 @@ public class MyUserService implements UserDetailsService {
     	System.out.println("Inside method " + username);
         User user = userService.getUserByUserName(username);
         if (user == null) {
+          	System.out.println("user not found");
             throw new UsernameNotFoundException("User not found");
         }
         System.out.println("after method " + user);
