@@ -1,0 +1,18 @@
+@charset "UTF-8";
+
+.error-msg {
+    color: red;
+    font-weight: bold;
+}
+
+.success-msg {
+    color: green;
+    font-weight: bold;
+}
+
+/* Works for modern browsers */
+.hide-scrollbar {
+    overflow: auto;          /* still scrollable */
+    scrollbar-width: none;   /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+}

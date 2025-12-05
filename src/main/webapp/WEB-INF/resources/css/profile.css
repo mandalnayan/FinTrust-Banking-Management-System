@@ -1,0 +1,93 @@
+@charset "UTF-8";
+
+/* FinTrust - Profile Page Styles */
+
+.profile-window { font-family: 'Poppins', sans-serif; padding: 0px; background:#f5f8fc; height:100vh; }
+
+/* Topbar */
+.topbar {
+  display:flex; justify-content:space-between; align-items:center;
+  background: linear-gradient(90deg, #003366, #0052cc);
+  padding:10px 24px; color:#fff;
+}
+
+/* Works for modern browsers */
+.hide-scrollbar {
+    overflow: auto;          /* still scrollable */
+    scrollbar-width: none;   /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+}
+
+.top-logo { width:36px; height:auto; }
+.top-title { font-size:18px; font-weight:700; color:#fff; }
+.top-right { display:flex; align-items:center; gap:12px; }
+.logout-btn { background:#ff4d4d; color:#fff; border:none; padding:8px 16px; border-radius:6px; font-weight:600; cursor:pointer; }
+
+/* Sidebar */
+.sidebar { background:#003366; color:#fff; height:100%; padding:20px; box-sizing:border-box; display:flex; flex-direction:column; }
+.sidebar-title { font-size:18px; font-weight:700; margin-bottom:16px; color:#fff; }
+.menu-item { color:#cfe3f9; background:transparent; border:none; text-align:left; padding:10px 0; cursor:pointer; }
+.menu-item.active, .menu-item:hover { color:#fff; font-weight:600; }
+
+/* Profile Container */
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 10px 40px;
+    background: #f5f8fc;
+}
+
+/* Profile Header */
+.profile-header {
+    flex: 0 0 auto; /* fixed height */
+    z-index: 10;
+    width: 100%;
+}
+
+.profile-form-wrapper {
+    flex: 1 1 auto; /* takes remaining height */
+    overflow-y: auto !important;
+    padding-top: 20px;
+}
+
+.profile-avatar { width:90px; height:90px; border-radius:50%; border:3px solid #0052cc; }
+.profile-name { font-size:20px; font-weight:700; color:#003366; }
+.profile-updateAccount { font-size:20px; font-weight:700; color:#003366; }
+.profile-email { font-size:14px; color:#555; font-weight:700; }
+.profile-date { font-size:14px; color:#0052cc; font-weight:700; }
+
+/* Profile Form */
+.profile-form {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+}
+.section-title { font-size:18px; font-weight:700; color:#003366; }
+.info-grid label { font-weight:600; color:#333; }
+.info-grid textbox, .info-grid datebox {
+  border:1px solid #ccc !important; border-radius:6px !important; padding:6px !important;
+}
+.profile-btn-row { margin-top:10px; justify-content:center; }
+.update-btn {
+  background:#0052cc; color:#fff; border:none; border-radius:6px;
+  padding:10px 18px; font-weight:700; cursor:pointer;
+}
+.secondary-btn {
+  background:#fff; color:#0052cc; border:1px solid #0052cc;
+  border-radius:6px; padding:10px 18px; font-weight:700; cursor:pointer;
+}
+.update-btn:hover { background:#003d99; }
+.secondary-btn:hover { background:#0052cc; color:#fff; }
+
+/* Security Section */
+.security-section { background:#fff; padding:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.06); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .profile-container { padding:20px; }
+  .profile-header { flex-direction:column; align-items:center; text-align:center; }
+  .profile-avatar { margin-bottom:12px; }
+  west { width:60px !important; }
+}

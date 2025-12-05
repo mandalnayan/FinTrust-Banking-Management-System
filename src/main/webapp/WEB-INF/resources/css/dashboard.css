@@ -1,0 +1,181 @@
+/* dashboard.css - Modern FinTrust dashboard (overwrite old file) */
+
+/* reset a few defaults ZK may inject */
+.z-viewport, .z-body, body { margin:0; padding:0; box-sizing:border-box; }
+
+.z-viewport, .z-body, html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.vlayout_scrollable {
+    flex: 1 1 auto;
+    min-height: 0; /* crucial */
+    overflow-y: auto;
+}
+
+/* Topbar (fixed height) */
+.topbar {
+  height:72px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 0 20px;
+  background: linear-gradient(90deg,#013a6b 0%, #0066cc 100%);
+  color:#fff;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+  box-sizing:border-box;
+}
+
+.top-left { display:flex; align-items:center; gap:12px; }
+.top-logo { width:40px; height:auto; }
+.top-title { font-weight:700; font-size:18px; color:#fff; }
+.top-right { display:flex; align-items:center; gap:12px; }
+
+/* small icon button */
+.icon-btn { background:transparent; border:none; color:#fff; font-size:18px; padding:6px 8px; cursor:pointer; position:relative; }
+
+/* Logout */
+.logout-btn { background:#ff5b5b; color:#fff; border:none; padding:8px 14px; border-radius:8px; font-weight:700; cursor:pointer; }
+
+/* Sidebar */
+.sidebar {
+  background: linear-gradient(180deg,#012a5c 0%, #004c97 100%);
+  color:#fff;
+  padding:22px 16px;
+  height:100%;
+  box-sizing:border-box;
+  display:flex;
+  flex-direction:column;
+}
+
+.sidebar-brand { display:flex; align-items:center; gap:10px; margin-bottom:18px; }
+.sidebar-logo-img { width:34px; }
+.sidebar-title { font-size:20px; font-weight:700; color:#fff; }
+
+.sidebar-menu { display:flex; flex-direction:column; gap:8px; margin-top:6px; flex:1; }
+.menu-item {
+  background:transparent;
+  color:#cfe3f9;
+  padding:12px 10px;
+  border-radius:8px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.menu-item:hover, .menu-item.active { background: rgba(255,255,255,0.06); color:#fff; transform:translateX(6px); }
+
+/* Sidebar footer */
+.sidebar-footer { margin-top:auto; padding-top:12px; border-top:1px solid rgba(255,255,255,0.06); }
+.support-btn { background:#ffd400; color:#00254a; padding:10px 12px; border-radius:10px; border:none; font-weight:700; cursor:pointer; }
+
+/* Main content container (padding handled by vlayout) */
+.main-content { width:100%; max-width:1400px; margin:0 auto; }
+
+.zero-padding {
+    padding: 0 !important;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto; /* allows growing and shrinking */
+    min-height: 0; /* crucial for inner scroll */
+    overflow-y: auto; /* scroll if content overflows */
+}
+
+
+/* Summary row - responsive grid */
+.summary-row {
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap:18px;
+  align-items: stretch;
+}
+.summary-card {
+  background: linear-gradient(180deg,#ffffff,#f6fbff);
+  border-radius:14px;
+  padding:18px;
+  box-shadow:0 12px 26px rgba(2,40,80,0.06);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.summary-card:hover { transform:translateY(-6px); box-shadow:0 18px 36px rgba(2,40,80,0.08); }
+.summary-title { font-size:14px; color:#6e7e8f; padding-bottom:8px; font-weight:700;}
+.summary-value { font-size:20px; color:#01284f; font-weight:800; }
+
+/* quick actions alignment */
+.quick-actions { display:flex; gap:12px; justify-self:end; align-self:center; }
+
+/* widgets grid */
+.widgets-row {
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap:18px;
+  margin-top:8px;
+}
+.widget {
+  background:#fff;
+  border-radius:12px;
+  padding:18px;
+  box-shadow:0 10px 22px rgba(2,40,80,0.04);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+.widget-title { font-weight:700; color:#01284f; margin-bottom:8px; }
+.widget-desc { color:#6b7a8b; margin-bottom:12px; }
+.widget-btn { background: linear-gradient(90deg,#0066d6,#0052cc); color:#fff; border:none; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer; align-self:start; }
+
+
+/* Top card-section for  */
+.card-sec {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* parent hides extra scroll */
+}
+
+.card-sec-padding {
+    padding-bottom: 20px;
+}
+
+.center-scroll {
+    flex: 1 1 auto;
+    overflow-y: auto;
+}
+
+.vlayout_sec{
+	overflow: auto !important;
+}
+
+/* Space under transaction section */
+.transactions-grid {
+    margin-bottom: 20px !important;
+}
+
+/* Fix bottom button visibility */
+.view-all-btn {
+    margin-bottom: 20px !important;
+    position: relative;
+    z-index: 10;
+}
+
+/* transactions */
+.transactions-grid { margin-top:12px; border-radius:12px; padding:14px; background:#fff; box-shadow:0 12px 24px rgba(2,40,80,0.04); }
+.section-title { font-size:18px; font-weight:700; color:#01284f; margin-bottom:12px; }
+
+/* responsive tweaks */
+@media (max-width: 1100px) {
+  .top-title { display:none; } /* compact header */
+}
+
+@media (max-width: 800px) {
+  /* stack sidebar horizontally */
+  .z-west, .z-east { width:100% !important; }
+  /* single column content */
+  .summary-row, .widgets-row { grid-template-columns: 1fr; }
+  .quick-actions { justify-self:center; }
+  .main-content { padding:12px; }
+}
+
+/* utility fixes to avoid nested scrollbars (ZK often wraps with inner panels) */
+.z-center .z-scrollview .z-inner { overflow:visible !important; }
+.scrollview-content { box-sizing:border-box; }

@@ -24,8 +24,6 @@ import org.zkoss.zul.Toolbarbutton;
 public class UserDashboardController extends SelectorComposer<Component>{
 
     // sample properties; replace with actual service calls
-    private String availableBalance = "₹ 1,25,000.00";
-    private String defaultAccount = "Savings - 1234567890";
     private int pendingCount = 3;
     private int rewardPoints = 1200;
     private int activeCards = 2; 
@@ -62,7 +60,7 @@ public class UserDashboardController extends SelectorComposer<Component>{
 		session.removeAttribute("user_id");
 		session.removeAttribute("");
 		session.invalidate();
-       org.zkoss.zk.ui.Executions.sendRedirect("/home.zul");
+       Executions.sendRedirect("/logout");
     }   
    
    @Listen("onClick=#userdashboard")
@@ -168,9 +166,7 @@ public class UserDashboardController extends SelectorComposer<Component>{
 		   }
 	   });
    }
-    // getters for data binding if you bind via MVVM (optional)
-    public String getAvailableBalance() { return availableBalance; }
-    public String getDefaultAccount() { return defaultAccount; }
+    // getters for data binding if you bind via MVVM (optional)   
     public int getPendingCount() { return pendingCount; }
     public int getRewardPoints() { return rewardPoints; }
     public int getActiveCards() { return activeCards; }

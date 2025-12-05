@@ -3,6 +3,9 @@ package com.fintrust.service;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.zkoss.zk.ui.Sessions;
 
 import com.fintrust.dao.UserDetailsDAO;
@@ -13,15 +16,13 @@ import com.fintrust.util.EncryptUtil;
 import com.fintrust.util.KeyUtil;
 import com.fintrust.util.NotificationUtil;
 
+@Service
 public class UserDetailsServiceImpl {
-	private UserDetailsDAO userDAOImpl = null;
-	private Connection connection = DBConnection.getConnection();
-	private String secretKey;
-	
-	public UserDetailsServiceImpl() {
-		userDAOImpl = new UserDetailsDAOImpl(connection);
-		secretKey = KeyUtil.getKey();
-	}
+	 @Autowired
+	    private UserDetailsDAO userDAOImpl;
+
+	    @Value("${fintrust.secretKey}")
+	    private String secretKey;	
 
 	public void updatePrimaryAccount(long userId, long accountId) {
 
@@ -43,15 +44,19 @@ public class UserDetailsServiceImpl {
 	 */
 	public UserDetails getLogedInDetails() {
 		try {
-
+			System.out.println("Sec Key: " + secretKey);
 			Long userId = (Long) Sessions.getCurrent().getAttribute("user_id");
 
 			if (userId != null) {
 				UserDetails ud = userDAOImpl.findByUserId(userId);
-				String aadharUnmasked = EncryptUtil.decrypt(ud.getAadhaarMasked(), secretKey);
-				ud.setAadhaarMasked(aadharUnmasked);
-				String panUnmasked = EncryptUtil.decrypt(ud.getPanMasked(), secretKey);
-				ud.setAadhaarMasked(panUnmasked);
+				if (ud.getAadhaarMasked() != null) {
+					String aadharUnmasked = EncryptUtil.decrypt(ud.getAadhaarMasked(), secretKey);
+					ud.setAadhaarMasked(aadharUnmasked);
+				}
+				if (ud.getPanMasked() != null) {
+					String panUnmasked = EncryptUtil.decrypt(ud.getPanMasked(), secretKey);
+					ud.setPanMasked(panUnmasked);
+				}
 				if (ud != null)
 					return ud;
 			}
@@ -89,14 +94,14 @@ public class UserDetailsServiceImpl {
 	public boolean updateKyc(UserDetails ud) {
 		try {
 			// Encryptng aadhar no
-			
+			if (userDAOImpl == null) return false;
 			String aadharMasked = EncryptUtil.encrypt(ud.getAadhaarMasked(), secretKey);
 			ud.setAadhaarMasked(aadharMasked);
 			
 			// Encryptng pan no
 			String panMasked = EncryptUtil.encrypt(ud.getPanMasked(), secretKey);
-			ud.setAadhaarMasked(panMasked);
-			System.out.println(aadharMasked + " \n" + panMasked);
+			ud.setPanMasked(panMasked);
+	
 			return userDAOImpl.updateKyc(ud);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -113,7 +118,7 @@ public class UserDetailsServiceImpl {
 	public Long getPrimaryAccount(long userId) {
 
 		try {
-
+			if (userDAOImpl == null) return -1l;
 			Long accountId = userDAOImpl.findPrimaryAccount(userId);
 			if (accountId != -1) {
 				return accountId;

@@ -1,0 +1,176 @@
+@charset "UTF-8";
+
+/* ============================================================
+   FINTRUST BANK – COMMON AUTH UI 
+   Used by: Login + Signup pages
+   Style Type: Modern Banking Grade UI
+   ============================================================ */
+
+/* GLOBAL STYLING */
+body, .z-window {
+    font-family: "Poppins", sans-serif;
+    background: #f5f7fb;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: #0065D9;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+/* MAIN AUTH WRAPPER (Grid Layout) */
+.auth-wrapper {
+    width: 90%;
+    max-width: 1100px;
+    margin: 50px auto;
+    display: grid;
+    grid-template-columns: 45% 55%;
+    background: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.08);
+    animation: fadeUp 0.5s ease;
+}
+
+@keyframes fadeUp {
+    0% { transform: translateY(25px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+/* LEFT VISUAL SECTION */
+.auth-left {
+    background: linear-gradient(145deg, #0065D9, #003B8E);
+    padding: 45px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-left-img {
+    width: 85%;
+    animation: float 3s infinite ease-in-out;
+}
+
+@keyframes float {
+    0%,100% { transform: translateY(0);}
+    50% { transform: translateY(-8px);}
+}
+
+.auth-left-text {
+    margin-top: 25px;
+    font-size: 18px;
+    color: #fff;
+    opacity: 0.92;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* RIGHT CONTENT SECTION */
+.auth-right {
+    padding: 50px 55px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* PAGE HEADINGS */
+.auth-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #012B61;
+    margin-bottom: 6px;
+}
+
+.auth-subtitle {
+    font-size: 15px;
+    color: #556176;
+    margin-bottom: 25px;
+}
+
+/* FORM STYLING */
+.input-field {
+    width: 100% !important;
+    padding: 12px !important;
+    border: 1px solid #d4d9e3 !important;
+    border-radius: 8px !important;
+    background: #fafbff;
+    transition: 0.25s ease !important;
+    font-size: 15px;
+    height: 42px;
+}
+
+.input-field:focus {
+    border-color: #0065D9 !important;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(0,101,217,0.15);
+}
+
+/* FORM GRID — used in signup only */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px 25px;
+}
+
+/* LOGIN OPTIONS */
+.auth-options {
+    justify-content: space-between;
+    margin-top: 5px;
+}
+
+.auth-remember {
+    font-size: 13px;
+}
+
+/* BUTTON */
+.auth-btn {
+    margin-top: 20px;
+    padding: 14px !important;
+    background: #0065D9 !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: 0.25s ease !important;
+    box-shadow: 0 5px 15px rgba(0,101,217,0.25);
+}
+
+.auth-btn:hover {
+    background: #004fae !important;
+    transform: translateY(-2px);
+}
+
+/* REDIRECT TEXT (login/signup link row) */
+.auth-redirect {
+    justify-content: center;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.auth-redirect a {
+    font-weight: 600;
+    margin-left: 4px;
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 900px) {
+    .auth-wrapper {
+        grid-template-columns: 1fr;
+    }
+    .auth-left {
+        display: none;
+    }
+    .auth-right {
+        padding: 35px 25px;
+    }
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}

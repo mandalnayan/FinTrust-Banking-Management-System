@@ -1,0 +1,300 @@
+/* ============================================================
+   FinTrust Bank - Unified Authentication Styles
+   Applies to: Signup + Login + OTP pages
+   Author: ChatGPT (Enterprise Banking UI Standard)
+   ============================================================ */
+
+/* GLOBAL RESET */
+body, .z-window {
+    font-family: "Poppins", sans-serif;
+    background: #f5f7fb;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* WRAPPERS (Signup + Login share same layout) */
+.signup-wrapper,
+.login-wrapper,
+.forgot-wrapper,
+.reset-wrapper {
+    width: 90%;
+    max-width: 1150px;
+    margin: 40px auto;
+    display: grid;
+    grid-template-columns: 45% 55%;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.08);
+    animation: smoothEntry 0.65s cubic-bezier(0.16,1,0.3,1);
+}
+
+/* ============================================================
+   LEFT PANEL (shared)
+   ============================================================ */
+
+.signup-left,
+.login-left,
+.forgot-left,
+.reset-left {
+    background: linear-gradient(135deg, #004aad, #0066ff, #002d72, #005be0);
+    background-size: 300% 300%;
+    animation: gradientShift 8s ease infinite;
+
+    padding: 60px 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.signup-hero-img,
+.login-hero-img,
+.forgot-hero-img,
+.reset-hero-img {
+    width: 88%;
+    animation: floatY 4s ease-in-out infinite;
+}
+
+.signup-tagline,
+.login-tagline,
+.forgot-tagline,
+.reset-tagline {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #fff;
+    opacity: .92;
+}
+
+/* ============================================================
+   RIGHT PANEL (both)
+   ============================================================ */
+
+.signup-right,
+.login-right,
+.forgot-right,
+.reset-right {
+    padding: 50px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Titles */
+.signup-title,
+.login-title,
+.forgot-title,
+.reset-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #012B61;
+    margin-bottom: 6px;
+    animation: slideUp 0.5s ease;
+}
+
+.signup-subtitle,
+.login-subtitle,
+.forgot-subtitle,
+.reset-subtitle {
+    font-size: 15px;
+    color: #4e5e73;
+    margin-bottom: 30px;
+    animation: slideUp 0.8s ease;
+}
+
+/* ============================================================
+   FORM: Shared Styling
+   ============================================================ */
+
+/* GRID (Signup only uses this, login uses vlayout but same inputs) */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px 25px;
+}
+
+.confirm {
+    grid-column: span 2;
+}
+
+/* TEXTBOX */
+.input-field {
+    width: 100% !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+    border: 1px solid #d4d9e3 !important;
+    background: #fafbff;
+    transition: all 0.25s ease !important;
+    font-size: 15px;
+}
+
+.input-field:focus {
+    border-color: #0065D9 !important;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(0,101,217,0.15);
+}
+
+/* ============================================================
+   BUTTONS (Shared)
+   ============================================================ */
+
+.signup-btn,
+.login-btn,
+.forgot-btn,
+.reset-btn {
+    margin-top: 28px;
+    padding: 14px !important;
+    background: #0065D9 !important;
+    color: #fff !important;
+    font-size: 16px !important;
+    border: none !important;
+    border-radius: 8px;
+    font-weight: 600 !important;
+    cursor: pointer;
+    width: 100%;
+    box-shadow: 0 5px 15px rgba(0,101,217,0.25);
+    transition: 0.23s ease !important;
+}
+
+/* Password reset btn */
+/* Wrapper ensures alignment */
+.pwd-wrapper {
+    width: 100%;
+    position: relative;
+}
+
+/* Main input field (100% width preserved) */
+.pwd-input {
+    width: 100% !important;
+    padding-right: 45px !important; /* space for eye icon */
+}
+
+/* Eye button positioned inside input */
+.pwd-toggle-btn {
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent !important;
+    border: none !important;
+    color: #4e5e73 !important;
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    padding: 0 !important;
+    z-index: 10;
+}
+
+.pwd-toggle-btn:hover {
+    color: #0065D9 !important;
+}
+
+
+.signup-btn:hover,
+.login-btn:hover,
+.forgot-btn:hover,
+.reset-btn:hover {
+    background: #004fae !important;
+    transform: translateY(-2px);
+}
+
+/* ============================================================
+   LINKS (Signup + Login)
+   ============================================================ */
+
+.login-redirect,
+.signup-redirect {
+    justify-content: center;
+    margin-top: 15px;
+    font-size: 15px;
+}
+
+.login-redirect a,
+.signup-redirect a {
+    color: #0065D9;
+    font-weight: 600;
+    margin-left: 6px;
+}
+
+/* Login page remember/forgot section */
+.login-options {
+    justify-content: space-between;
+    align-items: center;
+}
+.remember-check {
+    font-size: 13px;
+}
+.forgot-link {
+    color: #0065D9;
+    font-size: 13px;
+}
+
+/* ============================================================
+   ANIMATIONS (Premium Banking Animations)
+   ============================================================ */
+
+/* Page fade-in */
+@keyframes smoothEntry {
+    0% { opacity: 0; transform: translateY(25px) scale(0.98); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Title slide up */
+@keyframes slideUp {
+    0% { opacity: 0; transform: translateY(16px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Soft floating bank illustration */
+@keyframes floatY {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-13px); }
+    100% { transform: translateY(0); }
+}
+
+/* Gradient animation */
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ============================================================
+   RESPONSIVE DESIGN
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    .signup-wrapper,
+.login-wrapper,
+.forgot-wrapper,
+.reset-wrapper {
+        grid-template-columns: 1fr;
+        width: 95%;
+        margin-top: 20px;
+    }
+
+    .signup-left,
+    .login-left,
+    .forgot-left,
+    .reset-left {
+        display: none;
+    }
+
+    .signup-right,
+    .login-right,
+    .forgot-right,
+    .reset-right {
+        padding: 40px 24px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .confirm {
+        grid-column: span 1;
+    }
+}

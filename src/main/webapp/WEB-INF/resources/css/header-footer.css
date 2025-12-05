@@ -1,0 +1,129 @@
+ /* ========== FinTrust Home Page (stable, ZK-friendly) ========== */
+
+/* reset basics */
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+/* top navbar */
+.navbar {
+  background: linear-gradient(90deg, #003366, #0052cc);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 28px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.navbar-left { display: flex; align-items: center; gap: 10px; }
+.navbar-logo { width: 40px; height: 40px; object-fit: contain; }
+.navbar-title {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+	cursor: pointer;
+  color: #f0f4ff;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 6px 4px;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: #fff;
+  font-weight: 600;
+  border-bottom: 2px solid rgba(255,255,255,0.15);
+}
+
+/* logout button */
+.logout-btn {
+	cursor: pointer;
+  background-color: #ff4d4d;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.logout-btn:hover { background-color: #e33b3b; }
+
+@media (max-width: 520px){
+  .hero-card{ padding: 18px; }
+  .hero-img{ max-width: 300px; }
+  .hero-heading{ font-size: 22px; }
+  .hero-subheading{ font-size: 14px; }
+  .hero-cta{ padding: 12px 18px; }
+}
+
+/* Admin top nav bar */
+
+.topbar {
+  display:flex; justify-content:space-between; align-items:center;
+  background: linear-gradient(90deg, #003366, #0052cc);
+  padding:10px 24px; color:#fff;
+}
+
+.top-logo { width:36px; height:auto; }
+.top-title { font-size:18px; font-weight:700; color:#fff; }
+.top-right { display:flex; align-items:center; gap:12px; }
+.icon-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 6px 10px;
+  position: relative;
+}
+
+.icon-btn:hover {
+  color: #ffd700;
+}
+
+/* Notification badge */
+.icon-btn::after {
+  content: "3"; /* change dynamically via Java if needed */
+  position: absolute;
+  top: 3px;
+  right: 6px;
+  background: #ff4d4d;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 5px;
+  border-radius: 50%;
+}
+
+/* footer */
+.footer {
+  background-color: #003366;
+  color: #fff;
+  padding: 14px 10px;
+  text-align: center;
+  font-size: 13px;
+  margin-top: 12px;
+}
+
+/* SMALL-SCREEN tweaks */
+@media (max-width: 992px) {
+  .navbar { padding: 10px 18px; }  
+}
+
+@media (max-width: 600px) {
+  .navbar-right { justify-content: center; gap: 12px; }
+}

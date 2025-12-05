@@ -68,12 +68,9 @@
 
     <!-- CENTER: Main content area -->
    
-    <center sclass = "zero-padding" vflex="1">
-    <!-- User dashboard content -->
-    
-     <include vflex="1" id = "main_content_sec" src="/WEB-INF/components/dashboard.zul" visible="true" zclass="d"/> 
-     
-    </center>
+    <center vflex="1">
+    <include vflex="1" id="main_content_sec" src="/WEB-INF/components/dashboard.zul" />
+</center>
 
   </borderlayout>
 </zk>
