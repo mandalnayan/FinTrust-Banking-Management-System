@@ -23,8 +23,12 @@ public class AccountDAOImpl implements AccountDAO {
      *
      * @param connection JDBC connection managed externally
      */
+    public AccountDAOImpl(Connection connection) {
+        this.connection = connection;
+    }
+    
     public AccountDAOImpl() {
-        this.connection = DBConnection.getConnection();
+    		this(DBConnection.getConnection());
     }
 
     @Override
