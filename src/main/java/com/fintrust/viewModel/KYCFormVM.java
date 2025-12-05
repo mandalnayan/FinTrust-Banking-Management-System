@@ -33,6 +33,7 @@ public class KYCFormVM {
     @Init
     public void init() {
         userDetails = userDetailsService.getLogedInDetails();
+        System.out.println(userDetails);
         user = userDetails.getUser();
     }
 

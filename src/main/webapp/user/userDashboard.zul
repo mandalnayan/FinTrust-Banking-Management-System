@@ -43,8 +43,9 @@
         <vbox sclass="sidebar-menu" vflex="1" spacing="6px" >
           <toolbarbutton label="Dashboard" sclass="menu-item active" id = "userdashboard"/>
           <toolbarbutton label="open Accounts" sclass="menu-item" id = "account"/>
+           <toolbarbutton label="Update Kyc" sclass="menu-item" id = "kyc"/>
           <toolbarbutton label="view Accounts" sclass="menu-item" id = "viewAccounts"/>
-          <toolbarbutton label="Transactions" sclass="menu-item" id = "transactions"/>
+      <!--     <toolbarbutton label="Transactions" sclass="menu-item" id = "transactions"/> -->
           <toolbarbutton label="Cards" sclass="menu-item" id = "cards"/>
           <toolbarbutton label="Profile" sclass="menu-item" id = "profile"/>
         </vbox>

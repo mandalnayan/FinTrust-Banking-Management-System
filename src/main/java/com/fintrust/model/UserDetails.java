@@ -177,6 +177,15 @@ public class UserDetails {
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+
+	@Override
+	public String toString() {
+		return "UserDetails [detailsId=" + detailsId + ", user=" + user + ", primaryAccountId=" + primaryAccountId
+				+ ", gender=" + gender + ", dob=" + dob + ", aadhaarMasked=" + aadhaarMasked + ", panMasked="
+				+ panMasked + ", country=" + country + ", state=" + state + ", district=" + district + ", city=" + city
+				+ ", pincode=" + pincode + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", addressProof="
+				+ addressProof + ", photo=" + photo + "]";
+	}
     
     
 }

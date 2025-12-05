@@ -20,9 +20,13 @@ import com.fintrust.util.NotificationUtil;
 public class UserDetailsServiceImpl {
 	 @Autowired
 	    private UserDetailsDAO userDAOImpl;
-
-	    @Value("${fintrust.secretKey}")
-	    private String secretKey;	
+	 	private Connection connection = DBConnection.getConnection();
+	 	private final String secretKey = "fgso98/uasjX4kblCr/YSD0UW31DOmAslKZnvC6Rxfg=";
+	   	
+	   	
+	 	public UserDetailsServiceImpl() {
+	 		userDAOImpl = new UserDetailsDAOImpl(connection);	 		
+	 	}
 
 	public void updatePrimaryAccount(long userId, long accountId) {
 
@@ -43,8 +47,7 @@ public class UserDetailsServiceImpl {
 	 * @return
 	 */
 	public UserDetails getLogedInDetails() {
-		try {
-			System.out.println("Sec Key: " + secretKey);
+		try {			
 			Long userId = (Long) Sessions.getCurrent().getAttribute("user_id");
 
 			if (userId != null) {
@@ -76,8 +79,7 @@ public class UserDetailsServiceImpl {
 	 * @return
 	 */
 	public boolean updateProfile(UserDetails user) {
-		try {
-			
+		try {			
 			return userDAOImpl.updateProfile(user);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
