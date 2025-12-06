@@ -1,167 +1,38 @@
-/************************************************
-   COMMON STYLES APPLIED TO BOTH FORMS
-************************************************/
-.form-container {
-    width: 90%;
-    max-width: 750px;
-    background: #ffffff;
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0px 8px 25px rgba(0,0,0,0.25);
-    animation: fadeIn .5s ease;
-    box-sizing: border-box;
+/* KYC Form - FinTrust */
+.kyc-container { display:flex; flex-direction:column; height:100%; padding:10px 40px; background:#f5f8fc; }
+
+.kyc-header { flex:0 0 auto; width:100%; margin-bottom:15px; }
+.kyc-title { font-size:20px !important; font-weight:700; color:#003366 !important; text-align:center; }
+.kyc-subtitle { font-size:14px !important; color:#555; text-align:center; margin-top:5px; }
+
+.kyc-form-wrapper { flex:1 1 auto; overflow-y:auto !important; padding-top:20px; }
+.hide-scrollbar { scrollbar-width:none; -ms-overflow-style:none; }
+
+.kyc-form {
+    background:#fff;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.06);
+    width:100%;
+}
+.form-row { width:100%; display:flex; }
+.form-row > vlayout { flex:1;  padding: 0 8px; /* horizontal spacing between columns */}
+
+.form-row label { font-weight:600; color:#333; margin-bottom:5px; }
+.form-row textbox, .form-row longbox, .form-row datebox {
+    border:1px solid #ccc !important; border-radius:6px !important; padding:6px !important;
 }
 
-.form-title {
-    color: #003366;
-    font-size: 24px !important;
-    font-weight: bold !important;
-    text-align: center !important;
-    margin-bottom: 15px;
-}
-
-/************************************************
-   PAGE BACKGROUNDS
-************************************************/
-.open-account-page,
-.kyc-page {
-    height: 100% !important;
-    padding: 20px 0;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    box-sizing: border-box;
-}
-
-.open-account-page {
-    background: linear-gradient(135deg,#0052D4,#4364F7,#6FB1FC);
-}
-
-.kyc-page {
-    background: linear-gradient(135deg,#003399,#0055ff);
-}
-
-/************************************************
-   BUTTONS
-************************************************/
-.primary-btn, 
-.secondary-btn {
-    border-radius: 10px;
-    padding: 12px 25px;
-    border: none;
-    font-size: 15px;
-    cursor: pointer;
-    transition: .3s;
-}
+.kyc-btn-row { margin-top:15px; justify-content:center; }
 
 .primary-btn {
-    background: #0066ff;
-    color: #fff;
+    background:#0052cc; color:#fff; border:none; border-radius:6px;
+    padding:10px 20px; font-weight:700; cursor:pointer;
 }
+.primary-btn:hover { background:#003d99; }
 
-.primary-btn:hover {
-    background: #004fcc;
-}
-
-.secondary-btn {
-    background: #d3d3d3;
-    color: #000;
-}
-
-.secondary-btn:hover {
-    background: #c2c2c2;
-}
-
-.button-row {
-    margin-top: 20px;
-    text-align: center;
-}
-
-/************************************************
-   RESPONSIVE RULES
-************************************************/
-
-/* 📱 Mobile Phones (up to 480px) */
-@media (max-width: 480px) {
-
-    .form-container {
-        width: 94%;
-        padding: 20px;
-    }
-
-    .form-title {
-        font-size: 20px;
-    }
-
-    .z-grid {
-        width: 100% !important;
-    }
-
-    .z-grid-row > label {
-        font-size: 14px;
-    }
-
-    .z-combobox,
-    .z-textbox,
-    .z-doublebox,
-    .z-longbox,
-    .z-datebox {
-        width: 100% !important;
-    }
-
-    .button-row {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .primary-btn,
-    .secondary-btn {
-        width: 100%;
-    }
-}
-
-/* 📱 Tablets (481 – 768px) */
-@media (max-width: 768px) {
-
-    .form-container {
-        width: 90%;
-        padding: 25px;
-    }
-
-    .z-combobox,
-    .z-textbox,
-    .z-doublebox,
-    .z-longbox,
-    .z-datebox {
-        width: 95% !important;
-    }
-
-    .button-row {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-    }
-}
-
-/* 💻 Small Laptops (769 – 1200px) */
-@media (max-width: 1200px) {
-    .form-container {
-        width: 80%;
-    }
-}
-
-/* 🖥 Large Desktops (1201px and above) */
-@media (min-width: 1201px) {
-    .form-container {
-        max-width: 700px;
-    }
-}
-
-/************************************************
-   ANIMATION
-************************************************/
-@keyframes fadeIn {
-    from { opacity:0; transform: translateY(20px); }
-    to { opacity:1; transform: translateY(0); }
+/* Responsive: single column on mobile */
+@media (max-width:768px) {
+    .form-row { flex-direction:column !important; }
+    .form-row > vlayout { width:100% !important; margin-bottom:10px; }
 }

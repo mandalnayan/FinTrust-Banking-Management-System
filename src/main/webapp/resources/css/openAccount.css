@@ -1,0 +1,111 @@
+/* Open Account Form Styles */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 20px 40px;
+    background: #f5f8fc;
+    box-sizing: border-box;
+}
+
+/* Header */
+.form-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #003366;
+    text-align: center;
+}
+
+/* Scrollable form wrapper */
+.form-wrapper {
+    flex: 1 1 auto;
+    overflow-y: auto !important;
+}
+
+/* Form content box */
+.form-content {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+}
+
+/* Form rows spacing */
+.form-row > vlayout {
+    flex: 1;
+}
+
+/* Labels & inputs */
+.form-row label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.form-row textbox,
+.form-row longbox,
+.form-row doublebox,
+.form-row combobox {
+    width: 100% !important;
+    border: 1px solid #ccc !important;
+    border-radius: 6px !important;
+    padding: 6px !important;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+/* Single full-width field */
+.vlayout > longbox,
+.vlayout > textbox,
+.vlayout > doublebox,
+.vlayout > combobox {
+    margin-bottom: 10px;
+}
+
+/* Buttons */
+.button-row button {
+    padding: 10px 20px;
+    font-weight: 700;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.primary-btn {
+    background: #0052cc;
+    color: #fff;
+    border: none;
+}
+
+.primary-btn:hover {
+    background: #003d99;
+}
+
+.secondary-btn {
+    background: #fff;
+    color: #0052cc;
+    border: 1px solid #0052cc;
+}
+
+.secondary-btn:hover {
+    background: #0052cc;
+    color: #fff;
+}
+
+/* Hide default scrollbar but keep scrollable */
+.hide-scrollbar {
+    overflow: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+}
+
+/* Responsive for mobile */
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column !important;
+    }
+    .form-row > vlayout {
+        width: 100% !important;
+        margin: 0 0 10px 0;
+    }
+}

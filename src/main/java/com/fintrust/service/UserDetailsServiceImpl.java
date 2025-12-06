@@ -28,12 +28,15 @@ public class UserDetailsServiceImpl {
 	 		userDAOImpl = new UserDetailsDAOImpl(connection);	 		
 	 	}
 
-	public void updatePrimaryAccount(long userId, long accountId) {
+	public void updatePrimaryAccount(long accountId) {
 
 		try {
+			Long userId = (Long) Sessions.getCurrent().getAttribute("user_id");
+			if (userId != null) {
 			if (userDAOImpl.updatePrimaryAccount(userId, accountId))
 				NotificationUtil.showInstant("info", "Updated primary account");
-			return;
+				return;
+			}
 		} catch (SQLException e) {
 
 			e.printStackTrace();

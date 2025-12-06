@@ -59,7 +59,7 @@ public class UserProfileVM {
 	public void setSelectedAccount(Account selectedAccount) {
 		if (selectedAccount != null) { 
 			this.selectedAccount = selectedAccount;
-			userService.updatePrimaryAccount(1, selectedAccount.getAccountId());
+			userService.updatePrimaryAccount(selectedAccount.getAccountId());
 		}
 	}
 	    
