@@ -4,88 +4,84 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
-import org.zkoss.bind.ValidationContext;
-import org.zkoss.bind.Validator;
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.event.UploadEvent;
-import org.zkoss.zul.Messagebox;
 
-import com.fintrust.model.User;
 import com.fintrust.model.UserDetails;
+import com.fintrust.model.User;
+import com.fintrust.model.UserKycDTO;
 import com.fintrust.service.UserDetailsServiceImpl;
 import com.fintrust.service.UserServiceImpl;
 import com.fintrust.util.NotificationUtil;
 
-public class KYCFormVM {
+public class KycFormVM {
 
+    private UserKycDTO userKycDTO; // DTO for form binding
     private UserDetails userDetails;
     private User user;
+    
+    private String genderSelected;
 
     private byte[] addressProofFile;
     private byte[] photoFile;
-    private Date dob;
 
     private UserServiceImpl userService = new UserServiceImpl();
     private UserDetailsServiceImpl userDetailsService = new UserDetailsServiceImpl();
 
     @Init
     public void init() {
+        // Load logged-in user's KYC details
         userDetails = userDetailsService.getLogedInDetails();
-        System.out.println(userDetails);
+        if (userDetails == null) {
+        	NotificationUtil.showInstant("error", "Server error. Failed to load userdetails");
+            userDetails = new UserDetails(); // safety
+        }     
+
         user = userDetails.getUser();
+
+        // Map entity to DTO
+        userKycDTO = mapEntityToDTO(userDetails);
+        userKycDTO.setGender(
+        	    userDetails.getGender() != null ? userDetails.getGender() : ""
+        	);
     }
 
-    public UserDetails getUserDetails() {
-        return userDetails;
+    public UserKycDTO getUserKycDTO() {
+        return userKycDTO;
     }
 
     public User getUser() {
         return user;
     }
     
+    public String getGenderSelected() { return genderSelected; }
+    public void setGenderSelected(String genderSelected) { this.genderSelected = genderSelected; }
+
     /**
-     * Getting DOB date in specific formate(dd-MM-YYY)
-     * @return
+     * DOB conversion for ZK datebox (java.util.Date)
      */
     public Date getDob() {
-        if (userDetails == null
-                || userDetails.getDob() == null) {
-            return null;
-        }  
-
-
-        LocalDate localDate = userDetails.getDob();
-
-        dob = Date.from(
-                localDate.atStartOfDay(ZoneId.systemDefault()).toInstant()
-        );
-        
-        return dob;
+        if (userKycDTO.getDob() == null) return null;
+        return Date.from(userKycDTO.getDob().atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
-    
-    /**
-     * Setting DOB date in specific formate(dd-MM-YYY)
-     * @return
-     */
+
     @NotifyChange("dob")
     public void setDob(Date dob) {
-    		System.out.println("Hii, updating dob");
-        if (userDetails == null
-                || dob == null) {
-            return ;
-        }  
-       
-        LocalDate newDob = dob.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
-        System.out.println("Hii, updating dob" + newDob);
-        userDetails.setDob(newDob);
-        NotificationUtil.showInstant("info", newDob.toString());
-      
+        if (dob != null) {
+            LocalDate localDate = dob.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            userKycDTO.setDob(localDate);
+        }
     }
 
+    @Command
+    @NotifyChange("userKycDTO")
+    public void updateGender(@BindingParam("gender") String gender) {
+        userKycDTO.setGender(gender);
+    }
+    
     // --------------------------
     // FILE UPLOAD
     // --------------------------
@@ -93,14 +89,14 @@ public class KYCFormVM {
     @NotifyChange("*")
     public void uploadAddressProof(@org.zkoss.bind.annotation.BindingParam("event") UploadEvent event) {
         addressProofFile = event.getMedia().getByteData();
-        userDetails.setAddressProof(event.getMedia().getName());
+        userKycDTO.setAddressProofFileName(event.getMedia().getName());
     }
 
     @Command
     @NotifyChange("*")
     public void uploadPhoto(@org.zkoss.bind.annotation.BindingParam("event") UploadEvent event) {
         photoFile = event.getMedia().getByteData();
-        userDetails.setPhoto(event.getMedia().getName());
+        userKycDTO.setPhotoFileName(event.getMedia().getName());
     }
 
     // --------------------------
@@ -108,54 +104,114 @@ public class KYCFormVM {
     // --------------------------
     @Command
     public void submitKyc() {
-    		
-        boolean updated = userDetailsService.updateKyc(userDetails);
+        // Validate manually (can also use Hibernate Validator programmatically)
+        String validationError = validateKycDTO(userKycDTO);
+        if (validationError != null) {
+            NotificationUtil.showInstant("error", validationError);
+            return;
+        }
 
+        // Map DTO back to entity
+        userDetails = mapDTOToEntity(userKycDTO, userDetails);
+
+        boolean updated = userDetailsService.updateKyc(userDetails);
         if (updated) {
-           	NotificationUtil.showInstant("info", "KYC submitted successfully!");
+            NotificationUtil.showInstant("info", "KYC submitted successfully!");
         } else {
-        	NotificationUtil.showInstant("error", "Failed to save KYC details!");
+            NotificationUtil.showInstant("error", "Failed to save KYC details!");
         }
     }
 
     // --------------------------
-    // VALIDATION
+    // UTILITY: Mapping Methods
     // --------------------------
-    public Validator getKycValidator() {
+    private UserKycDTO mapEntityToDTO(UserDetails entity) {
+        UserKycDTO dto = new UserKycDTO();
+        if (entity == null) return dto;
 
-        return ctx -> {
+        if (entity.getUser() != null) {
+            dto.setFullName(entity.getUser().getFullName());
+            dto.setPhone(entity.getUser().getPhone());
+            dto.setEmail(entity.getUser().getEmail());
+        }
 
-            String name = (String) ctx.getProperties("user.fullName")[0].getValue();
-            String phone = (String) ctx.getProperties("user.phone")[0].getValue();
-            String email = (String) ctx.getProperties("user.email")[0].getValue();
+        dto.setDob(entity.getDob());
+        if (entity.getGender() != null) {
+            dto.setGender(entity.getGender());
+        }
+        dto.setAadhaarNumber(entity.getAadhaarMasked());
+        dto.setPanNumber(entity.getPanMasked());
+        dto.setCountry(entity.getCountry());
+        dto.setState(entity.getState());
+        dto.setDistrict(entity.getDistrict());
+        dto.setCity(entity.getCity());
+        dto.setPincode(entity.getPincode());
 
-            Date dob = (Date) ctx.getProperties("userDetails.dob")[0].getValue();
-
-            String aadhar = (String) ctx.getProperties("aadhaarMasked")[0].getValue();
-            String pan = (String) ctx.getProperties("panMasked")[0].getValue();
-
-            if (name == null || name.isEmpty())
-                addError(ctx, "user.fullName", "Full Name is required");
-
-            if (phone == null || !phone.matches("^[0-9]{10}$"))
-                addError(ctx, "user.phone", "Enter a valid 10-digit mobile");
-
-            if (email == null || !email.matches("^[A-Za-z0-9+_.-]+@(.+)$"))
-                addError(ctx, "user.email", "Enter valid email");
-
-            if (dob == null)
-                addError(ctx, "userDetails.dob", "Date of Birth required");
-
-            if (aadhar == null || !aadhar.matches("^[0-9]{12}$"))
-                addError(ctx, "aadhaarMasked", "Enter valid 12-digit Aadhar");
-
-            if (pan == null || !pan.matches("[A-Z]{5}[0-9]{4}[A-Z]"))
-                addError(ctx, "panMasked", "Enter valid PAN");
-        };
+        return dto;
     }
 
-    private void addError(ValidationContext ctx, String field, String message) {
-        ctx.setInvalid();
-    //    ctx.getInvalidMessages().addFieldError(field, message);
+    private UserDetails mapDTOToEntity(UserKycDTO dto, UserDetails entity) {
+        if (entity == null) entity = new UserDetails();
+        if (entity.getUser() == null) entity.setUser(user);
+
+        entity.getUser().setFullName(dto.getFullName());
+        entity.getUser().setPhone(dto.getPhone());
+        entity.getUser().setEmail(dto.getEmail());
+
+        entity.setDob(dto.getDob());
+        entity.setGender(dto.getGender());
+        entity.setAadhaarMasked(dto.getAadhaarNumber());
+        entity.setPanMasked(dto.getPanNumber());
+        entity.setCountry(dto.getCountry());
+        entity.setState(dto.getState());
+        entity.setDistrict(dto.getDistrict());
+        entity.setCity(dto.getCity());
+        entity.setPincode(dto.getPincode());
+
+        return entity;
     }
+
+    // --------------------------
+    // Manual Validation (alternative to Hibernate Validator in ZK 10)
+    // --------------------------
+    private String validateKycDTO(UserKycDTO dto) {
+        if (dto.getFullName() == null || dto.getFullName().trim().isEmpty())
+            return "Full Name is required";
+
+        if (dto.getPhone() == null || !dto.getPhone().trim().matches("^[0-9]{10}$"))
+            return "Phone must be 10 digits";
+
+        if (dto.getEmail() == null || !dto.getEmail().trim().matches("^[A-Za-z0-9+_.-]+@(.+)$"))
+            return "Invalid email";
+
+        if (dto.getDob() == null)
+            return "Date of Birth required";
+
+        if (dto.getGender() == null || dto.getGender().trim().isEmpty())
+            return "Gender is required";
+
+        if (dto.getAadhaarNumber() == null || !dto.getAadhaarNumber().matches("^[0-9]{12}$"))
+            return "Aadhaar must be 12 digits";
+
+        if (dto.getPanNumber() == null || !dto.getPanNumber().matches("^[A-Z]{5}[0-9]{4}[A-Z]$"))
+            return "Invalid PAN format";
+
+        if (dto.getCountry() == null || dto.getCountry().trim().isEmpty())
+            return "Country is required";
+
+        if (dto.getState() == null || dto.getState().trim().isEmpty())
+            return "State is required";
+
+        if (dto.getDistrict() == null || dto.getDistrict().trim().isEmpty())
+            return "District is required";
+
+        if (dto.getCity() == null || dto.getCity().trim().isEmpty())
+            return "City is required";
+
+        if (dto.getPincode() == null || !dto.getPincode().matches("^[0-9]{6}$"))
+            return "Pincode must be 6 digits";
+
+        return null;
+    }
+
 }

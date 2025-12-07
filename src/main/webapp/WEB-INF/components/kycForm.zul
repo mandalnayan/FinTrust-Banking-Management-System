@@ -2,116 +2,158 @@
 <?link rel="stylesheet" type="text/css" href="/resources/css/bankingForms.css"?>
 
 <zk xmlns:h="xhtml">
-    <window width="100%" vflex="1" zclass="wnd"
-        viewModel="@id('vm') @init('com.fintrust.viewModel.KYCFormVM')">
+	<window width="100%" vflex="1" zclass="wnd"
+		viewModel="@id('vm') @init('com.fintrust.viewModel.KycFormVM')">
 
-        <!-- CENTER: Main KYC Content -->
-        <vlayout sclass="kyc-container" width="100%" height="100%" style="display:flex; flex-direction:column;">
+		<vlayout sclass="kyc-container" width="100%" height="100%"
+			style="display:flex; flex-direction:column;">
 
-            <!-- Header (fixed) -->
-            <hbox align="center" sclass="kyc-header" spacing="16px" hflex="1">
-                <vbox hflex="1" align="center">
-                    <label value="Customer KYC Verification" sclass="kyc-title"/>
-                    <label value="Please fill in your KYC details to activate your account." sclass="kyc-subtitle"/>
-                </vbox>
-            </hbox>
+			<hbox align="center" sclass="kyc-header" spacing="16px"
+				hflex="1">
+				<vbox hflex="1" align="center">
+					<label value="Customer KYC Verification"
+						sclass="kyc-title" />
+					<label
+						value="Please fill in your KYC details to activate your account."
+						sclass="kyc-subtitle" />
+				</vbox>
+			</hbox>
 
-            <!-- Scrollable Form Section -->
-            <vlayout vflex="1" sclass="kyc-form-wrapper hide-scrollbar" style="padding-top:20px;">
+			<vlayout vflex="1" sclass="kyc-form-wrapper hide-scrollbar"
+				style="padding-top:20px;">
+				<vbox sclass="kyc-form" spacing="15px" width="100%">
 
-                <vbox sclass="kyc-form" spacing="15px" width="100%">
+					<!-- Full Name & Mobile -->
+					<hbox width="100%" spacing="15px"
+						class="form-row">
+						<vlayout hflex="1">
+							<label value="Full Name" />
+							<textbox width="100%"
+								value="@bind(vm.userKycDTO.fullName)"
+								placeholder="As per ID proof" />
+						</vlayout>
+						<vlayout hflex="1">
+							<label value="Mobile Number" />
+							<textbox width="100%"
+								value="@bind(vm.userKycDTO.phone)"
+								placeholder="10-digit mobile" />
+						</vlayout>
+					</hbox>
 
-                    <!-- KYC Form Fields -->
-                    <hbox width="100%" spacing="15px" class="form-row">
-                        <vlayout hflex="1">
-                            <label value="Full Name"/>
-                            <textbox width="100%" value="@bind(vm.userDetails.user.fullName)" placeholder="As per ID proof"/>
-                        </vlayout>
-                        <vlayout hflex="1">
-                            <label value="Mobile Number"/>
-                            <longbox width="100%" value="@bind(vm.userDetails.user.phone)" placeholder="10-digit mobile"/>
-                        </vlayout>
-                    </hbox>
+					<!-- Email & DOB -->
+					<hbox width="100%" spacing="15px"
+						class="form-row">
+						<vlayout hflex="1">
+							<label value="Email Address" />
+							<textbox width="100%"
+								value="@bind(vm.userKycDTO.email)"
+								placeholder="example@mail.com" />
+						</vlayout>
+						<vlayout hflex="1">
+							<label value="Date of Birth" />
+							<datebox width="100%" value="@bind(vm.dob)"
+								format="yyyy-MM-dd" />
+						</vlayout>
+					</hbox>
 
-                    <hbox width="100%" spacing="15px" class="form-row">
-                        <vlayout hflex="1">
-                            <label value="Email Address"/>
-                            <textbox width="100%" value="@bind(vm.userDetails.user.email)" placeholder="example@mail.com"/>
-                        </vlayout>
-                        <vlayout hflex="1">
-                            <label value="Date of Birth"/>
-                            <datebox width="100%" value="@bind(vm.dob)" format="yyyy-MM-dd"/>
-                        </vlayout>
-                    </hbox>
+					<!-- Gender & Aadhaar -->
+					<hbox width="100%" spacing="15px"
+						class="form-row">
+						<vlayout hflex="1">
+							<label value="Gender" />
 
-                    <hbox width="100%" spacing="15px" class="form-row">
-                        <vlayout hflex="1">
-                            <label value="Gender"/>
-                            <radiogroup selectedItem="@bind(vm.userDetails.gender)">
-                                <hbox spacing="10px">
-                                    <radio label="Male" value="Male"/>
-                                    <radio label="Female" value="Female"/>
-                                    <radio label="Other" value="Other"/>
-                                </hbox>
-                            </radiogroup>
-                        </vlayout>
-                        <vlayout hflex="1">
-                            <label value="Aadhaar Number"/>
-                            <longbox width="100%" value="@bind(vm.userDetails.aadhaarMasked)" placeholder="12-digit Aadhaar"/>
-                        </vlayout>
-                    </hbox>
+							<radiogroup 
+    selectedItem="@bind(vm.genderSelected)"
+    onCheck="@command('updateGender', gender=event.selectedItem.value)">
+    
+    <radio label="Male" value="Male" />
+    <radio label="Female" value="Female" />
+    <radio label="Other" value="Other" />
+</radiogroup>
 
-                    <hbox width="100%" spacing="15px" class="form-row">
-                        <vlayout hflex="1">
-                            <label value="PAN Number"/>
-                            <textbox width="100%" value="@bind(vm.userDetails.panMasked)" placeholder="ABCDE1234F"/>
-                        </vlayout>
-                        <vlayout hflex="1">
-                            <label value="Country"/>
-                            <textbox width="100%" value="@bind(vm.userDetails.country)" placeholder="Country"/>
-                        </vlayout>
-                    </hbox>
+<!-- Debug -->
+<label style="color:red" value="@bind(vm.userKycDTO.gender)"/>
 
-                    <hbox width="100%" spacing="15px" class="form-row">
-                        <vlayout hflex="1">
-                            <label value="State"/>
-                            <textbox width="100%" value="@bind(vm.userDetails.state)" placeholder="State"/>
-                        </vlayout>
-                        <vlayout hflex="1">
-                            <label value="District"/>
-                            <textbox width="100%" value="@bind(vm.userDetails.district)" placeholder="District"/>
-                        </vlayout>
-                    </hbox>
+						</vlayout>
 
-                    <hbox width="100%" spacing="15px" class="form-row">
-                        <vlayout hflex="1">
-                            <label value="City"/>
-                            <textbox width="100%" value="@bind(vm.userDetails.city)" placeholder="City"/>
-                        </vlayout>
-                        <vlayout hflex="1">
-                            <label value="Pincode"/>
-                            <longbox width="100%" value="@bind(vm.userDetails.pincode)" placeholder="6-digit pincode"/>
-                        </vlayout>
-                    </hbox>
+						<vlayout hflex="1">
+							<label value="Aadhaar Number" />
+							<longbox width="100%"
+								value="@bind(vm.userKycDTO.aadhaarNumber)"
+								placeholder="12-digit Aadhaar" />
+						</vlayout>
+					</hbox>
 
-                    <hbox width="100%" spacing="15px" class="form-row">
-                        <vlayout hflex="1">
-                            <label value="Address Proof"/>
-                            <fileupload label="Upload (PDF/JPG)" onUpload="@command('uploadAddressProof', file=event.media)"/>
-                        </vlayout>
-                        <vlayout hflex="1">
-                            <label value="Photo"/>
-                            <fileupload label="Upload Photo" onUpload="@command('uploadPhoto', file=event.media)"/>
-                        </vlayout>
-                    </hbox>
+					<!-- PAN & Country -->
+					<hbox width="100%" spacing="15px"
+						class="form-row">
+						<vlayout hflex="1">
+							<label value="PAN Number" />
+							<textbox width="100%"
+								value="@bind(vm.userKycDTO.panNumber)" placeholder="ABCDE1234F" />
+						</vlayout>
+						<vlayout hflex="1">
+							<label value="Country" />
+							<textbox width="100%"
+								value="@bind(vm.userKycDTO.country)" placeholder="Country" />
+						</vlayout>
+					</hbox>
 
-                    <!-- Submit Button -->
-                    <hbox pack="center" sclass="kyc-btn-row">
-                        <button label="Submit KYC" sclass="primary-btn" onClick="@command('submitKyc')"/>
-                    </hbox>
+					<!-- State & District -->
+					<hbox width="100%" spacing="15px"
+						class="form-row">
+						<vlayout hflex="1">
+							<label value="State" />
+							<textbox width="100%"
+								value="@bind(vm.userKycDTO.state)" placeholder="State" />
+						</vlayout>
+						<vlayout hflex="1">
+							<label value="District" />
+							<textbox width="100%"
+								value="@bind(vm.userKycDTO.district)" placeholder="District" />
+						</vlayout>
+					</hbox>
 
-                </vbox>
-            </vlayout>
-        </vlayout>
-    </window>
+					<!-- City & Pincode -->
+					<hbox width="100%" spacing="15px"
+						class="form-row">
+						<vlayout hflex="1">
+							<label value="City" />
+							<textbox width="100%"
+								value="@bind(vm.userKycDTO.city)" placeholder="City" />
+						</vlayout>
+						<vlayout hflex="1">
+							<label value="Pincode" />
+							<longbox width="100%"
+								value="@bind(vm.userKycDTO.pincode)"
+								placeholder="6-digit pincode" />
+						</vlayout>
+					</hbox>
+
+					<!-- Address Proof & Photo -->
+					<hbox width="100%" spacing="15px"
+						class="form-row">
+						<vlayout hflex="1">
+							<label value="Address Proof" />
+							<fileupload label="Upload (PDF/JPG)"
+								onUpload="@command('uploadAddressProof', event=event)" />
+						</vlayout>
+						<vlayout hflex="1">
+							<label value="Photo" />
+							<fileupload label="Upload Photo"
+								onUpload="@command('uploadPhoto', event=event)" />
+						</vlayout>
+					</hbox>
+
+					<!-- Submit Button -->
+					<hbox pack="center" sclass="kyc-btn-row"
+						hflex="1">
+						<button label="Submit KYC" sclass="primary-btn"
+							onClick="@command('submitKyc')" />
+					</hbox>
+
+				</vbox>
+			</vlayout>
+		</vlayout>
+	</window>
 </zk>
