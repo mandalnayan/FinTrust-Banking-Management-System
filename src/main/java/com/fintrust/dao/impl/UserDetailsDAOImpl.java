@@ -200,16 +200,16 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
 
     	    try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
-    	        ps.setString(1, ud.getGender());
+    	        ps.setString(1, ud.getGender().trim());
     	        if (ud.getDob() == null) return false;
     	        ps.setDate(2, Date.valueOf(ud.getDob()));
-    	        ps.setString(3, ud.getAadhaarMasked());
-    	        ps.setString(4, ud.getPanMasked());
-    	        ps.setString(5, ud.getCountry());
-    	        ps.setString(6, ud.getState());
-    	        ps.setString(7, ud.getDistrict());
-    	        ps.setString(8, ud.getCity());
-    	        ps.setString(9, ud.getPincode());    	        
+    	        ps.setString(3, ud.getAadhaarMasked().trim());
+    	        ps.setString(4, ud.getPanMasked().trim());
+    	        ps.setString(5, ud.getCountry().trim());
+    	        ps.setString(6, ud.getState().trim());
+    	        ps.setString(7, ud.getDistrict().trim());
+    	        ps.setString(8, ud.getCity().trim());
+    	        ps.setString(9, ud.getPincode().trim());    	        
     	        ps.setLong(10, ud.getDetailsId());
 
     	        return ps.executeUpdate() > 0;

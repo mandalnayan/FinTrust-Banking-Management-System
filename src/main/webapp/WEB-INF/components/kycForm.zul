@@ -62,17 +62,16 @@
 						<vlayout hflex="1">
 							<label value="Gender" />
 
-							<radiogroup 
-    selectedItem="@bind(vm.genderSelected)"
-    onCheck="@command('updateGender', gender=event.selectedItem.value)">
-    
-    <radio label="Male" value="Male" />
-    <radio label="Female" value="Female" />
-    <radio label="Other" value="Other" />
-</radiogroup>
+							<radiogroup
+								selectedItem="@bind(vm.userKycDTO.gender)">
+								<radio label="Male" value="Male" />
+								<radio label="Female" value="Female" />
+								<radio label="Other" value="Other" />
+							</radiogroup>
 
-<!-- Debug -->
-<label style="color:red" value="@bind(vm.userKycDTO.gender)"/>
+							<!-- Debug -->
+							<label style="color:red"
+								value="@bind(vm.userKycDTO.gender)" />
 
 						</vlayout>
 

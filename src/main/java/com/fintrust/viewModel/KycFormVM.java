@@ -23,7 +23,7 @@ public class KycFormVM {
     private UserDetails userDetails;
     private User user;
     
-    private String genderSelected;
+    private String gender;
 
     private byte[] addressProofFile;
     private byte[] photoFile;
@@ -39,14 +39,16 @@ public class KycFormVM {
         	NotificationUtil.showInstant("error", "Server error. Failed to load userdetails");
             userDetails = new UserDetails(); // safety
         }     
-
+        gender = userDetails.getGender();
         user = userDetails.getUser();
+        System.out.println(userDetails);
 
         // Map entity to DTO
         userKycDTO = mapEntityToDTO(userDetails);
         userKycDTO.setGender(
-        	    userDetails.getGender() != null ? userDetails.getGender() : ""
+        	    userDetails.getGender() != null ? userDetails.getGender().trim() : ""
         	);
+        System.out.println("gender " + userKycDTO.getGender());
     }
 
     public UserKycDTO getUserKycDTO() {
@@ -57,8 +59,8 @@ public class KycFormVM {
         return user;
     }
     
-    public String getGenderSelected() { return genderSelected; }
-    public void setGenderSelected(String genderSelected) { this.genderSelected = genderSelected; }
+    public String getGender() { return gender; }
+    public void setGender(String genderSelected) { this.gender = genderSelected; }
 
     /**
      * DOB conversion for ZK datebox (java.util.Date)
@@ -76,11 +78,6 @@ public class KycFormVM {
         }
     }
 
-    @Command
-    @NotifyChange("userKycDTO")
-    public void updateGender(@BindingParam("gender") String gender) {
-        userKycDTO.setGender(gender);
-    }
     
     // --------------------------
     // FILE UPLOAD
@@ -113,6 +110,7 @@ public class KycFormVM {
 
         // Map DTO back to entity
         userDetails = mapDTOToEntity(userKycDTO, userDetails);
+        System.out.println("submitting " + userDetails);
 
         boolean updated = userDetailsService.updateKyc(userDetails);
         if (updated) {

@@ -92,7 +92,7 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 				Executions.sendRedirect("");				
 			} else {
 				String message = "Server error. Failed to create Account. Please try again!";
-				NotificationUtil.push("error", message);	
+				NotificationUtil.showInstant(accType, message);	
 			}
 
 		} catch (IllegalArgumentException e) {
