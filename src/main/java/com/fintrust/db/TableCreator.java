@@ -330,6 +330,57 @@ public class TableCreator {
 					    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 					""");
 
+			// -----------------------------
+			// 13) Account closer request
+			// -----------------------------
+			st.execute(
+					"""
+							CREATE TABLE `account_closer_request` (
+									  `request_id` bigint unsigned NOT NULL AUTO_INCREMENT,
+									  `account_number` bigint unsigned NOT NULL,
+									  `reason` varchar(100) DEFAULT NULL,
+									  `status` enum('PENDING','REJECT','APPROVED') DEFAULT 'PENDING',
+									  `requested_by` bigint unsigned NOT NULL,
+									  `review_by` bigint unsigned DEFAULT NULL,
+									  `requested_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+									  `review_date` timestamp NULL DEFAULT NULL,
+									  `remarks` varchar(255) DEFAULT NULL,
+									  PRIMARY KEY (`request_id`),
+									  KEY `account_number` (`account_number`),
+									  KEY `requested_by` (`requested_by`),
+									  KEY `review_by` (`review_by`),
+									  CONSTRAINT `account_closer_request_ibfk_1` FOREIGN KEY (`account_number`) REFERENCES `accounts` (`account_number`),
+									  CONSTRAINT `account_closer_request_ibfk_2` FOREIGN KEY (`requested_by`) REFERENCES `users` (`user_id`),
+									  CONSTRAINT `account_closer_request_ibfk_3` FOREIGN KEY (`review_by`) REFERENCES `users` (`user_id`)
+									)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+									""");
+
+			// -----------------------------
+			// 13) Account Update request
+			// -----------------------------
+			st.execute(
+					"""
+													CREATE TABLE `account_update_request` (
+							  `request_id` bigint unsigned NOT NULL AUTO_INCREMENT,
+							  `account_number` bigint unsigned NOT NULL,
+							  `new_account_type` enum('SAVINGS','CURRENT','SALARY') DEFAULT NULL,
+							  `new_branch_name` varchar(100) DEFAULT NULL,
+							  `new_mode_of_operation` enum('SELF','JOINT') DEFAULT 'SELF',
+							  `status` enum('PENDING','APPROVED','REJECTED') DEFAULT 'PENDING',
+							  `requested_by` bigint unsigned DEFAULT NULL,
+							  `reviewed_by` bigint unsigned DEFAULT NULL,
+							  `request_date` datetime DEFAULT CURRENT_TIMESTAMP,
+							  `review_date` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+							  PRIMARY KEY (`request_id`),
+							  KEY `account_number` (`account_number`),
+							  KEY `requested_by` (`requested_by`),
+							  KEY `reviewed_by` (`reviewed_by`),
+							  CONSTRAINT `account_update_request_ibfk_1` FOREIGN KEY (`account_number`) REFERENCES `accounts` (`account_number`),
+							  CONSTRAINT `account_update_request_ibfk_2` FOREIGN KEY (`requested_by`) REFERENCES `users` (`user_id`),
+							  CONSTRAINT `account_update_request_ibfk_3` FOREIGN KEY (`reviewed_by`) REFERENCES `users` (`user_id`)
+							)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+															""");
+
 			System.out.println("✅ All banking tables created successfully for Workbench!");
 
 		} catch (Exception e) {
