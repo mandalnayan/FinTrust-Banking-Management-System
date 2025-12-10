@@ -48,6 +48,8 @@ public class UserKycDTO {
     @Pattern(regexp = "^[0-9]{6}$", message = "Pincode must be 6 digits")
     private String pincode;
     
+ // getters & setters ...
+    
     private String photoFileName;
     private String addressProofFileName;
 
@@ -163,6 +165,12 @@ public class UserKycDTO {
 		this.pincode = pincode;
 	}
 
-    // getters & setters ...
+	@Override
+	public String toString() {
+		return "UserKycDTO [fullName=" + fullName + ", phone=" + phone + ", email=" + email + ", dob=" + dob
+				+ ", gender=" + gender + ", aadhaarNumber=" + aadhaarNumber + ", panNumber=" + panNumber + ", country="
+				+ country + ", state=" + state + ", district=" + district + ", city=" + city + ", pincode=" + pincode
+				+ ", photoFileName=" + photoFileName + ", addressProofFileName=" + addressProofFileName + "]";
+	}    
     
 }

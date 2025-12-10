@@ -4,11 +4,18 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
+import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.ContextParam;
+import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.event.UploadEvent;
+import org.zkoss.zk.ui.select.Selectors;
+import org.zkoss.zul.Radio;
 
 import com.fintrust.model.UserDetails;
 import com.fintrust.model.User;
@@ -19,36 +26,33 @@ import com.fintrust.util.NotificationUtil;
 
 public class KycFormVM {
 
-    private UserKycDTO userKycDTO; // DTO for form binding
+    private UserKycDTO userKycDTO = new UserKycDTO(); // DTO for form binding
     private UserDetails userDetails;
     private User user;
-    
-    private String gender;
-
+        
     private byte[] addressProofFile;
     private byte[] photoFile;
+    
 
     private UserServiceImpl userService = new UserServiceImpl();
-    private UserDetailsServiceImpl userDetailsService = new UserDetailsServiceImpl();
-
+    private UserDetailsServiceImpl userDetailsService = new UserDetailsServiceImpl();  
+   
     @Init
     public void init() {
         // Load logged-in user's KYC details
         userDetails = userDetailsService.getLogedInDetails();
         if (userDetails == null) {
-        	NotificationUtil.showInstant("error", "Server error. Failed to load userdetails");
-            userDetails = new UserDetails(); // safety
+        	NotificationUtil.showInstant("error", "Server error. Failed to load userdetails");            
+            return;
         }     
-        gender = userDetails.getGender();
+       
         user = userDetails.getUser();
         System.out.println(userDetails);
 
         // Map entity to DTO
         userKycDTO = mapEntityToDTO(userDetails);
-        userKycDTO.setGender(
-        	    userDetails.getGender() != null ? userDetails.getGender().trim() : ""
-        	);
-        System.out.println("gender " + userKycDTO.getGender());
+        System.out.println(userKycDTO);
+        
     }
 
     public UserKycDTO getUserKycDTO() {
@@ -59,9 +63,15 @@ public class KycFormVM {
         return user;
     }
     
-    public String getGender() { return gender; }
-    public void setGender(String genderSelected) { this.gender = genderSelected; }
+    public String getGender() {
+        return userKycDTO.getGender();
+    }
 
+    public void setGender(String gender) {
+    	System.out.println("Updating gender");
+        userKycDTO.setGender(gender);
+    }
+    
     /**
      * DOB conversion for ZK datebox (java.util.Date)
      */
@@ -76,6 +86,14 @@ public class KycFormVM {
             LocalDate localDate = dob.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             userKycDTO.setDob(localDate);
         }
+    }
+    
+    // --------------------------
+    // Gender changed
+    // --------------------------
+    @NotifyChange("userKycDTO.gender")
+    public void updateGender() {
+    	System.out.println("Updating..");
     }
 
     
