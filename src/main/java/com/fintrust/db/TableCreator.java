@@ -360,7 +360,7 @@ public class TableCreator {
 			// -----------------------------
 			st.execute(
 					"""
-													CREATE TABLE `account_update_request` (
+											CREATE TABLE fintrust_bank.`account_update_request` (
 							  `request_id` bigint unsigned NOT NULL AUTO_INCREMENT,
 							  `account_number` bigint unsigned NOT NULL,
 							  `new_account_type` enum('SAVINGS','CURRENT','SALARY') DEFAULT NULL,
@@ -368,16 +368,16 @@ public class TableCreator {
 							  `new_mode_of_operation` enum('SELF','JOINT') DEFAULT 'SELF',
 							  `status` enum('PENDING','APPROVED','REJECTED') DEFAULT 'PENDING',
 							  `requested_by` bigint unsigned DEFAULT NULL,
-							  `reviewed_by` bigint unsigned DEFAULT NULL,
+							  `reviewed_by` bigint unsigned NULL,
 							  `request_date` datetime DEFAULT CURRENT_TIMESTAMP,
 							  `review_date` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
 							  PRIMARY KEY (`request_id`),
 							  KEY `account_number` (`account_number`),
 							  KEY `requested_by` (`requested_by`),
 							  KEY `reviewed_by` (`reviewed_by`),
-							  CONSTRAINT `account_update_request_ibfk_1` FOREIGN KEY (`account_number`) REFERENCES `accounts` (`account_number`),
-							  CONSTRAINT `account_update_request_ibfk_2` FOREIGN KEY (`requested_by`) REFERENCES `users` (`user_id`),
-							  CONSTRAINT `account_update_request_ibfk_3` FOREIGN KEY (`reviewed_by`) REFERENCES `users` (`user_id`)
+							  CONSTRAINT `account_update_request_ibfk_1` FOREIGN KEY (`account_number`) REFERENCES accounts(`account_number`),
+							  CONSTRAINT `account_update_request_ibfk_2` FOREIGN KEY (`requested_by`) REFERENCES users(`user_id`),
+							  CONSTRAINT `account_update_request_ibfk_3` FOREIGN KEY (`reviewed_by`) REFERENCES users(`user_id`)
 							)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 															""");
 
@@ -387,5 +387,9 @@ public class TableCreator {
 			e.printStackTrace();
 			System.err.println("❌ Error creating tables: " + e.getMessage());
 		}
+	}
+	
+	public static void main(String[] args) {
+		createAllTables();
 	}
 }
