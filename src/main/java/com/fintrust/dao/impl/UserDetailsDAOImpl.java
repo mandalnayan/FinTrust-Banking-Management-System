@@ -181,8 +181,8 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
     }
 
     	@Override
-    	public boolean updateKyc(UserDetails ud) throws SQLException {
-
+    	public boolean updateKyc(UserDetails ud) throws SQLException {    		
+    		
     	    String sql = """
     	        UPDATE user_details SET
     	            gender = ?,
@@ -199,7 +199,6 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
     	            updated_at = NOW()
     	        WHERE details_id = ?
     	    """;
-
     	    try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
     	        ps.setString(1, ud.getGender().trim());
@@ -282,7 +281,8 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
          ud.setDistrict(rs.getString("district"));
          ud.setCity(rs.getString("city"));
          ud.setPincode(rs.getString("pincode"));
-         
+         ud.setAddressProofFileName(rs.getString("address_proof_name"));
+         ud.setPhotoFileName(rs.getString("photo_name"));
          ud.setPrimaryAccountId(rs.getLong("primary_account_id"));
          User user = new User(
 				 rs.getLong("user_id"),

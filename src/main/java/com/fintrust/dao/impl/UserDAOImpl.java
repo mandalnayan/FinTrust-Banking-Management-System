@@ -135,26 +135,21 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public boolean update(User user) throws SQLException {
 
-//    	String sql = """
-//            UPDATE users SET
-//        		full_name = ?,
-//                phone = ?,
-//                role = ?,
-//                status = ?
-//            WHERE user_id = ?
-//        """;
-//
-//        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-//        	
-//            ps.setString(1, user.getPhone());
-//            ps.setString(3, role.toLowerCase());
-//            ps.setString(4, status.toLowerCase());
-//            ps.setLong(5, userId);
-//
-//            return ps.executeUpdate() > 0;
-//        }
+    	String sql = """
+            UPDATE users SET
+        		full_name = ?,
+                phone = ?,
+            WHERE user_id = ?
+        """;
 
-		return false;
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        	
+            ps.setString(1, user.getFullName());
+            ps.setString(2, user.getPhone());
+            ps.setLong(3, user.getId());
+
+            return ps.executeUpdate() > 0;
+        }
 	}
 
 	@Override

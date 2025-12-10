@@ -54,8 +54,9 @@ public class KycFormVM {
 
         // Map entity to DTO
         userKycDTO = mapEntityToDTO(userDetails);    
-        System.out.println(userKycDTO);
-        
+        addressProofLabel = userKycDTO.getAddressProofFileName();
+        photoLabel = userKycDTO.getPhotoFileName();  
+        System.out.println("KYC " + userKycDTO);
     }
 
     public UserKycDTO getUserKycDTO() {
@@ -76,6 +77,7 @@ public class KycFormVM {
     }
     
     public String getAddressProofLabel() {
+    		System.out.println("invoked " + userKycDTO.getAddressProofFileName());
         if (userKycDTO.getAddressProofFileName() == null 
             || userKycDTO.getAddressProofFileName().isBlank()) {
             return "Upload address";
@@ -84,13 +86,13 @@ public class KycFormVM {
     }
 
     public String getPhotoLabel() {
+    	System.out.println("invoked photo " + userKycDTO.getPhotoFileName());
         if (userKycDTO.getPhotoFileName() == null 
             || userKycDTO.getPhotoFileName().isBlank()) {
             return "Upload photo";
         }
         return userKycDTO.getPhotoFileName();
     }
-
     
     /**
      * DOB conversion for ZK datebox (java.util.Date)
@@ -115,7 +117,6 @@ public class KycFormVM {
     public void updateGender() {
     	System.out.println("Updating..");
     }
-
     
     // --------------------------
     // FILE UPLOAD
@@ -144,7 +145,7 @@ public class KycFormVM {
     // --------------------------
     @Command
     public void submitKyc() {
-        // Validate manually (can also use Hibernate Validator programmatically)
+        // Validate manually 
         String validationError = validateKycDTO(userKycDTO);
         if (validationError != null) {
             NotificationUtil.showInstant("error", validationError);
@@ -187,8 +188,8 @@ public class KycFormVM {
         dto.setDistrict(entity.getDistrict());
         dto.setCity(entity.getCity());
         dto.setPincode(entity.getPincode());
+        dto.setAddressProofFileName(entity.getAddressProofFileName());
         dto.setPhotoFileName(entity.getPhotoFileName());
-        photoLabel = entity.getPhotoFileName();
         return dto;
     }
 

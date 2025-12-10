@@ -3,6 +3,7 @@ package com.fintrust.db;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import org.zkoss.zk.ui.util.Clients;
 
@@ -11,7 +12,7 @@ public class DBConnection {
     // Database configuration constants
     private static final String URL = "jdbc:mysql://localhost:3306/fintrust_bank";
     private static final String USER = "root";
-    private static final String PASSWORD = "root123";
+    private static final String PASSWORD = "Nayan@2002";
     private static Connection connection = null;
 
     // Private constructor to prevent external instantiation
@@ -23,6 +24,13 @@ public class DBConnection {
             if (connection == null || connection.isClosed()) {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 connection = DriverManager.getConnection(URL, USER, PASSWORD);
+                Statement stmt = connection.createStatement();
+                String query = """
+                		ALTER TABLE user_details
+ADD COLUMN address_proof_name VARCHAR(255) DEFAULT NULL AFTER pincode,
+ADD COLUMN photo_name VARCHAR(255) DEFAULT NULL AFTER address_proof_name;
+                		""";
+                stmt.executeUpdate(query);
                 System.out.println("✅ Database Connected Successfully");             
             }
         } catch (ClassNotFoundException e) {
