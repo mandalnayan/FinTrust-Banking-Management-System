@@ -194,6 +194,8 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
     	            district = ?,
     	            city = ?,
     	            pincode = ?,
+    	            address_proof_name = ?,
+    	            photo_name = ?,
     	            updated_at = NOW()
     	        WHERE details_id = ?
     	    """;
@@ -209,8 +211,10 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
     	        ps.setString(6, ud.getState().trim());
     	        ps.setString(7, ud.getDistrict().trim());
     	        ps.setString(8, ud.getCity().trim());
-    	        ps.setString(9, ud.getPincode().trim());    	        
-    	        ps.setLong(10, ud.getDetailsId());
+    	        ps.setString(9, ud.getPincode().trim());   
+    	        ps.setString(10, ud.getAddressProofFileName());
+    	        ps.setString(11, ud.getPhotoFileName());
+    	        ps.setLong(12, ud.getDetailsId());
 
     	        return ps.executeUpdate() > 0;
     	    }

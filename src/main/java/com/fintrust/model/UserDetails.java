@@ -21,8 +21,8 @@ public class UserDetails {
     private LocalDateTime updatedAt;
     
     // File paths or blob IDs
-    private String addressProof;
-    private String photo;
+    private String addressProofFileName;
+    private String photoFileName;
 
     public UserDetails() {
     		user = new User();
@@ -46,22 +46,6 @@ public class UserDetails {
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 	}	
-	
-	public String getAddressProof() {
-		return addressProof;
-	}
-
-	public void setAddressProof(String addressProof) {
-		this.addressProof = addressProof;
-	}
-
-	public String getPhoto() {
-		return photo;
-	}
-
-	public void setPhoto(String photo) {
-		this.photo = photo;
-	}
 
 	public Long getPrimaryAccountId() {
 		return primaryAccountId;
@@ -177,6 +161,22 @@ public class UserDetails {
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+	
+	public String getAddressProofFileName() {
+		return addressProofFileName;
+	}
+
+	public void setAddressProofFileName(String addressProofFileName) {
+		this.addressProofFileName = addressProofFileName;
+	}
+
+	public String getPhotoFileName() {
+		return photoFileName;
+	}
+
+	public void setPhotoFileName(String photoFileName) {
+		this.photoFileName = photoFileName;
+	}
 
 	@Override
 	public String toString() {
@@ -184,7 +184,7 @@ public class UserDetails {
 				+ ", gender=" + gender + ", dob=" + dob + ", aadhaarMasked=" + aadhaarMasked + ", panMasked="
 				+ panMasked + ", country=" + country + ", state=" + state + ", district=" + district + ", city=" + city
 				+ ", pincode=" + pincode + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", addressProof="
-				+ addressProof + ", photo=" + photo + "]";
+				+ addressProofFileName + ", photo=" + photoFileName + "]";
 	}
     
     

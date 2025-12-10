@@ -90,6 +90,8 @@ public class TableCreator {
 					        district VARCHAR(50),
 					        city VARCHAR(50),
 					        pincode VARCHAR(10),
+					        address_proof_name VARCHAR(255) DEFAULT NULL,
+					        photo_name VARCHAR(255) DEFAULT NULL,
 					        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 					        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 					        CONSTRAINT fk_ud_user FOREIGN KEY (user_id)

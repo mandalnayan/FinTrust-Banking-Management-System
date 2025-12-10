@@ -130,12 +130,12 @@
 						class="form-row">
 						<vlayout hflex="1">
 							<label value="Address Proof" />
-							<fileupload label="Upload (PDF/JPG)"
+							<fileupload label="@bind(vm.addressProofLabel)"
 								onUpload="@command('uploadAddressProof', event=event)" />
 						</vlayout>
 						<vlayout hflex="1">
 							<label value="Photo" />
-							<fileupload label="Upload Photo"
+							<fileupload label="@bind(vm.photoLabel)"
 								onUpload="@command('uploadPhoto', event=event)" />
 						</vlayout>
 					</hbox>

@@ -30,7 +30,10 @@ public class KycFormVM {
     private UserDetails userDetails;
     private User user;
         
+    private String addressProofLabel;
     private byte[] addressProofFile;
+    
+    private String photoLabel;
     private byte[] photoFile;
     
 
@@ -50,7 +53,7 @@ public class KycFormVM {
         System.out.println(userDetails);
 
         // Map entity to DTO
-        userKycDTO = mapEntityToDTO(userDetails);
+        userKycDTO = mapEntityToDTO(userDetails);    
         System.out.println(userKycDTO);
         
     }
@@ -71,6 +74,23 @@ public class KycFormVM {
     	System.out.println("Updating gender");
         userKycDTO.setGender(gender);
     }
+    
+    public String getAddressProofLabel() {
+        if (userKycDTO.getAddressProofFileName() == null 
+            || userKycDTO.getAddressProofFileName().isBlank()) {
+            return "Upload address";
+        }
+        return userKycDTO.getAddressProofFileName();
+    }
+
+    public String getPhotoLabel() {
+        if (userKycDTO.getPhotoFileName() == null 
+            || userKycDTO.getPhotoFileName().isBlank()) {
+            return "Upload photo";
+        }
+        return userKycDTO.getPhotoFileName();
+    }
+
     
     /**
      * DOB conversion for ZK datebox (java.util.Date)
@@ -104,14 +124,19 @@ public class KycFormVM {
     @NotifyChange("*")
     public void uploadAddressProof(@org.zkoss.bind.annotation.BindingParam("event") UploadEvent event) {
         addressProofFile = event.getMedia().getByteData();
-        userKycDTO.setAddressProofFileName(event.getMedia().getName());
+        addressProofLabel = event.getMedia().getName();
+        userKycDTO.setAddressProofFileName(addressProofLabel);
+         
+        System.out.println(addressProofLabel);
     }
 
     @Command
     @NotifyChange("*")
     public void uploadPhoto(@org.zkoss.bind.annotation.BindingParam("event") UploadEvent event) {
         photoFile = event.getMedia().getByteData();
-        userKycDTO.setPhotoFileName(event.getMedia().getName());
+        photoLabel = event.getMedia().getName();
+        userKycDTO.setPhotoFileName(photoLabel);
+        System.out.println(photoLabel);
     }
 
     // --------------------------
@@ -162,7 +187,8 @@ public class KycFormVM {
         dto.setDistrict(entity.getDistrict());
         dto.setCity(entity.getCity());
         dto.setPincode(entity.getPincode());
-
+        dto.setPhotoFileName(entity.getPhotoFileName());
+        photoLabel = entity.getPhotoFileName();
         return dto;
     }
 
@@ -183,6 +209,8 @@ public class KycFormVM {
         entity.setDistrict(dto.getDistrict());
         entity.setCity(dto.getCity());
         entity.setPincode(dto.getPincode());
+        entity.setAddressProofFileName(addressProofLabel);
+        entity.setPhotoFileName(photoLabel);
 
         return entity;
     }
