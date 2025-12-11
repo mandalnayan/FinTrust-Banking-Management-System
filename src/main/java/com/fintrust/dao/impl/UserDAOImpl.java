@@ -138,7 +138,7 @@ public class UserDAOImpl implements UserDAO {
     	String sql = """
             UPDATE users SET
         		full_name = ?,
-                phone = ?,
+                phone = ?
             WHERE user_id = ?
         """;
 

@@ -111,14 +111,17 @@ public class UserDetailsServiceImpl {
 			ud.setPanMasked(panMasked);
 			
 //			Make connection auto commit false. To make sure either both will update or nore
-//			Update user details 
+			connection.setAutoCommit(false);
+			System.out.println(ud.getUser());
+			//			Update user details 
 			if (userDAOImpl.update(ud.getUser()) && userDetailsDAOImpl.updateKyc(ud)) {
 				connection.commit();
+				return true;
 			}
 		} catch (Exception e) {
 //			Do rollback
 			try {
-				connection.rollback();
+				connection.rollback();				
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
