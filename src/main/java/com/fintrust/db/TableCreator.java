@@ -161,21 +161,29 @@ public class TableCreator {
 			// 6) beneficiaries
 			// -----------------------------
 			st.execute("""
-					    CREATE TABLE IF NOT EXISTS beneficiaries (
-					        beneficiary_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-					        user_id BIGINT UNSIGNED NOT NULL,
-					        name VARCHAR(120) NOT NULL,
-					        account_number CHAR(16) NOT NULL,
-					        bank_name VARCHAR(150),
-					        ifsc_code CHAR(11),
-					        added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-					        CONSTRAINT fk_benef_user FOREIGN KEY (user_id)
-					            REFERENCES users(user_id)
-					            ON UPDATE CASCADE
-					            ON DELETE RESTRICT,
-					        INDEX idx_benef_user(user_id)
-					    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-					""");
+										    CREATE TABLE beneficiaries (
+					    beneficiary_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+
+					    user_id BIGINT UNSIGNED NOT NULL,
+					    account_number BIGINT UNSIGNED NOT NULL,
+
+					    name VARCHAR(120) NOT NULL,
+					    bank_name VARCHAR(150),
+					    ifsc_code VARCHAR(20),
+
+					    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+					    KEY (user_id),
+					    KEY (account_number),
+
+					    CONSTRAINT fk_beneficiary_user
+					        FOREIGN KEY (user_id) REFERENCES users(user_id),
+
+					    CONSTRAINT fk_beneficiary_account
+					        FOREIGN KEY (account_number) REFERENCES accounts(account_number)
+					) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+										""");
 
 			// -----------------------------
 			// 6) transactions

@@ -5,12 +5,14 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import com.fintrust.model.Beneficiary;
+
 /**
  * DAO interface for managing user beneficiaries in the banking system.
  * <p>
  * All methods follow banking-grade secure JDBC standards.
  */
-public interface BeneficiariesDAO {
+public interface BeneficiaryDAO {
 
     /**
      * Adds a new beneficiary for a user.
@@ -23,8 +25,7 @@ public interface BeneficiariesDAO {
      * @return generated beneficiary_id
      * @throws SQLException if database operation fails
      */
-    long create(long userId, String name, String accountNumber,
-                String bankName, String ifscCode) throws SQLException;
+    long create(Beneficiary beneficiaries) throws SQLException;
 
     /**
      * Finds a beneficiary by beneficiary_id.
@@ -33,7 +34,7 @@ public interface BeneficiariesDAO {
      * @return Map representing the beneficiary record or null
      * @throws SQLException if database operation fails
      */
-    Map<String, Object> findById(long beneficiaryId) throws SQLException;
+    Beneficiary findById(long beneficiaryId) throws SQLException;
 
     /**
      * Finds all beneficiaries of a user.
@@ -42,7 +43,7 @@ public interface BeneficiariesDAO {
      * @return list of beneficiary records
      * @throws SQLException if database operation fails
      */
-    List<Map<String, Object>> findByUserId(long userId) throws SQLException;
+    List<Beneficiary> findByUserId(long userId) throws SQLException;
 
     /**
      * Retrieves all beneficiaries.
@@ -50,7 +51,7 @@ public interface BeneficiariesDAO {
      * @return list of all beneficiary records
      * @throws SQLException if database operation fails
      */
-    List<Map<String, Object>> findAll() throws SQLException;
+    List<Beneficiary> findAll() throws SQLException;
 
     /**
      * Updates beneficiary information.

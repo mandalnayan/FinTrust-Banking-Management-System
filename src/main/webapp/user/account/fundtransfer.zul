@@ -1,6 +1,6 @@
 
 <!-- Make sure page shouln't render without login -->
-<?init class = "com.fintrust.security.AuthenticationController" ?>
+<!-- <?init class = "com.fintrust.security.AuthenticationController" ?> -->
 
 <!-- head footer csss -->
 <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
@@ -24,9 +24,9 @@
             <grid width="80%" sclass="form-grid">
                 <rows>
                     <row>
-                        <label value="From Account:" style="font-weight:bold; color:#374151;"/>
+                        <label value="From Account:" style="font-weight:bold; color:#374151;" />
                         <combobox id="accountList" width="300px" 
-								placeholder="Select account number" autodrop="true" />
+								placeholder="Select account number" autodrop="true" readonly="true"/>
                        
                     </row>
 
@@ -38,7 +38,8 @@
 
                     <row>
                         <label value="To Account:" style="font-weight:bold; color:#374151;"/>
-                        <textbox id="toAccount" width="300px" value="10001004"/>
+                        <longbox id="toAccount" width="300px" value="10001004"/>
+                    
                     </row>
 
                     <row>

@@ -3,6 +3,7 @@ package com.fintrust.dao.impl;
 import java.sql.*;
 
 import com.fintrust.db.DBConnection;
+import com.fintrust.util.NotificationUtil;
 
 public class FundTransferDAO {
 
@@ -10,14 +11,9 @@ public class FundTransferDAO {
      * Transfers amount from fromAcc to toAcc in a single transactional operation.
      * Returns true if transfer committed successfully, false otherwise.
      */
-    public static boolean transferFunds(Long fromAcc, String toAcc, double amount) {
-        if (fromAcc == null || toAcc == null || fromAcc == null|| toAcc.trim().isEmpty() || amount <= 0) {
-            System.out.println(" Invalid parameters for transfer.");
-            return false;
-        }
-
-        toAcc = toAcc.trim();
-
+    public static boolean transferFunds(Long fromAcc, Long toAcc, double amount) {
+       
+       
         Connection conn = null;
 
         try {
@@ -31,7 +27,7 @@ public class FundTransferDAO {
 
             
             double senderBalance = 0;
-            String sqlCheckSender = "SELECT balance FROM account WHERE account_no = ?";
+            String sqlCheckSender = "SELECT balance FROM accounts WHERE account_no = ?";
             try (PreparedStatement ps = conn.prepareStatement(sqlCheckSender)) {
                 ps.setLong(1, fromAcc);
                 try (ResultSet rs = ps.executeQuery()) {
@@ -46,16 +42,16 @@ public class FundTransferDAO {
             }
 
             if (senderBalance < amount) {
-                System.out.println(" Insufficient balance in account: " + fromAcc);
+            	NotificationUtil.showInstant("warning", " Insufficient balance in account: ");
                 conn.rollback();
                 return false;
             }
 
             
-            String sqlCheckReceiver = "SELECT 1 FROM account WHERE account_no = ?";
+            String sqlCheckReceiver = "SELECT 1 FROM accounts WHERE account_no = ?";
             boolean receiverExists = false;
             try (PreparedStatement ps = conn.prepareStatement(sqlCheckReceiver)) {
-            	 ps.setLong(1, Long.parseLong(toAcc));
+            	 ps.setLong(1, toAcc);
                 try (ResultSet rs = ps.executeQuery()) {
                     receiverExists = rs.next();
                 }
@@ -67,7 +63,7 @@ public class FundTransferDAO {
             }
 
             
-            String sqlDebit = "UPDATE account SET balance = balance - ? WHERE account_no = ?";
+            String sqlDebit = "UPDATE accounts SET balance = balance - ? WHERE account_no = ?";
             int debitRows;
             try (PreparedStatement ps = conn.prepareStatement(sqlDebit)) {
                 ps.setDouble(1, amount);
@@ -83,11 +79,11 @@ public class FundTransferDAO {
             }
 
             
-            String sqlCredit = "UPDATE account SET balance = balance + ? WHERE account_no = ?";
+            String sqlCredit = "UPDATE accounts SET balance = balance + ? WHERE account_no = ?";
             int creditRows;
             try (PreparedStatement ps = conn.prepareStatement(sqlCredit)) {
                 ps.setDouble(1, amount);
-                ps.setLong(2, Long.parseLong(toAcc));
+                ps.setLong(2, toAcc);
                 creditRows = ps.executeUpdate();
             }
             System.out.println(" Credit rows affected = " + creditRows);
@@ -97,7 +93,7 @@ public class FundTransferDAO {
             String sqlTxn = "INSERT INTO transactions(from_account, to_account, amount, status) VALUES (?, ?, ?, ?)";
             try (PreparedStatement ps = conn.prepareStatement(sqlTxn)) {
                 ps.setLong(1, fromAcc);
-                ps.setString(2, toAcc);
+                ps.setLong(2, toAcc);
                 ps.setDouble(3, amount);
                 ps.setString(4, status);
                 ps.executeUpdate();
