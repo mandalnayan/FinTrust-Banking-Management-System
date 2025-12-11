@@ -37,7 +37,7 @@
                     <hbox sclass="quick-actions" spacing="12px">
                         <button label="Transfer"
                                 sclass="action-btn"
-                                onClick="@command('go', page='account/fundtransfer')"/>
+                                onClick="@command('go', page='/account/fundtransfer')"/>
                         <button label="Pay Bill"
                                 sclass="action-btn"
                                 onClick="@command('go', page='payBill')"/>
@@ -57,7 +57,7 @@
                             <label value="Transfer to saved beneficiaries" class="widget-desc"/>
                             <button label="Transfer Now"
                                     class="widget-btn"
-                                    onClick="@command('go', page='account/fundtransfer')"/>
+                                    onClick="@command('go', page='/account/fundtransfer')"/>
                         </vbox>
 
                         <vbox class="widget widget-card">
@@ -65,7 +65,7 @@
                             <label value="@load(vm.activeCards) + ' Active'" class="widget-desc"/>
                             <button label="Manage Cards"
                                     class="widget-btn"
-                                    onClick="@command('go', page='Card/cardHome')"/>
+                                    onClick="@command('go', page='/card/cardHome.zul')"/>
                         </vbox>
 
                         <vbox class="widget widget-chart">
@@ -106,7 +106,7 @@
                         <hbox style="justify-content:flex-end; margin-top:12px;">
                             <button label="View All Transactions"
                                     class="view-all-btn"
-                                    onClick="@command('go', page='transactions')"/>
+                                    onClick="@command('go', page='/transactions')"/>
                         </hbox>
                     </vbox>
 
