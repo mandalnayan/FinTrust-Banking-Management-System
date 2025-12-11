@@ -25,7 +25,7 @@ import com.fintrust.db.DBConnection;
 import com.fintrust.service.AccountService;
 import com.fintrust.service.AccountServiceImpl;
 import com.fintrust.service.CardServices;
-
+import com.fintrust.util.NotificationUtil;
 import com.fintrust.dao.AccountDAO;
 import com.fintrust.dao.impl.AccountDAOImpl;
 
@@ -102,18 +102,19 @@ public class cardApplyPageController extends SelectorComposer<Window>{
         if (!isMarkCheck) {
             Clients.showNotification("⚠️ Please accept the Terms and Conditions.", "warning", null, "top_center", 3000);
             return;
-        }
-
-       
+        }       
 
         try {
-//            if (cardService.isCardAlreadyRequested(accNumber)) {
-//                Clients.showNotification("A card is already requested for this account.", "error", null, "middle_center", 4000);
-//                return;
-//            }
+            if (cardService.isCardAlreadyRequested(accNumber)) {
+            	NotificationUtil.showInstant("error", "A card is already requested for this account.");          	
 
-            cardService.submitCardRequest(accNumber, cardTypes, cardCat, addresss, remark);
-            Clients.showNotification("Card request submitted successfully!", "info", null, "top_center", 3000);
+                return;
+            }
+
+            boolean isApplied = cardService.submitCardRequest(accNumber, cardTypes, cardCat, addresss, remark);
+            if (isApplied) {
+            	NotificationUtil.showInstant("info", "Card request submitted successfully!");          	
+            }
 
             // Clear form
             accountList.setValue("");

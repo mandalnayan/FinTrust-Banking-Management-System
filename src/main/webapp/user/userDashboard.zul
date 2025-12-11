@@ -24,6 +24,7 @@
 <!-- Before loading page it ensuer page should not render -->
 <?init class = "com.fintrust.security.AuthenticationController" ?>
 
+<!-- Show notification if any exist  -->
 <?init class="com.fintrust.util.PageInitNotifier" ?>
 
 <zk xmlns:h="xhtml">

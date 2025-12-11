@@ -78,7 +78,7 @@ public class manageCardController extends SelectorComposer<Window> {
         List<List<String>> cardData = new ArrayList<>();
 
         try (Connection con = DBConnection.getConnection()) {
-            String sql = "SELECT * FROM card where customer_id=?";
+            String sql = "SELECT * FROM cards where user_id=?";
             PreparedStatement ps = con.prepareStatement(sql);
             Long custId= 1l;                                     //take it from session**(((((((((((
 
@@ -88,7 +88,7 @@ public class manageCardController extends SelectorComposer<Window> {
             while (rs.next()) {
                 List<String> row = new ArrayList<>();
                 row.add(String.valueOf(rs.getLong("card_number")));
-                row.add(rs.getLong("customer_id")+"");
+                row.add(rs.getLong("user_id")+"");
                 row.add(rs.getLong("account_no")+"");
                 row.add(rs.getString("cvv"));
                 row.add(rs.getString("pin"));

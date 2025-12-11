@@ -38,7 +38,7 @@ public class CardDetailsComposer extends SelectorComposer<Window> {
 		
 
 		Connection connection = DBConnection.getConnection();
-		String sql = "select * from card where card_number=?";
+		String sql = "select * from cards where card_number_masked=?"; 
 		PreparedStatement ptsm = connection.prepareStatement(sql);
 		ptsm.setString(1, atmCardNumber);
 

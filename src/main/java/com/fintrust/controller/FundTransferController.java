@@ -62,9 +62,7 @@ public class FundTransferController extends SelectorComposer<Component> {
 	            item.setValue(b);
 	            beneficiaryCombo.appendChild(item);
 	        }
-		}
-		
-        
+		}		
     }
     
     @Listen("onSelect=#accountList")
@@ -84,7 +82,7 @@ public class FundTransferController extends SelectorComposer<Component> {
             Beneficiary b = selected.getValue();
             toAccount.setValue(b.getAccountNumber());
             ifsccode.setValue(b.getIfscCode());
-            Clients.showNotification("Beneficiary selected: " + b.getName());
+          //  Clients.showNotification("Beneficiary selected: " + b.getName());
         }
     }
 
@@ -94,9 +92,9 @@ public class FundTransferController extends SelectorComposer<Component> {
         Long toAcc = toAccount.getValue();
         Double amt = amount.getValue();
         System.out.println(fromAcc + " To " + toAcc + " amt " + amt);
-        if (fromAcc == null || toAcc == null || String.valueOf(toAcc).length() != 12 || amt == null || amt <= 0) {
-            Clients.showNotification("Please enter valid transfer details!", "error", null, "top_center", 3000);
-
+        if (fromAcc == null || toAcc == null || String.valueOf(toAcc).length() != 12 || amt == null || amt <= 0 || fromAcc == toAcc) {
+          
+         	NotificationUtil.showInstant("error", "Please enter valid transfer details!");
             return;
         }
 

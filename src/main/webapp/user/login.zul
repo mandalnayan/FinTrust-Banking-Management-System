@@ -10,6 +10,9 @@
 <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 <?link rel="stylesheet" type="text/css" href="/resources/css/auth-common.css"?>
 
+<!-- Show notification if any exist  -->
+<!-- <?init class="com.fintrust.util.PageInitNotifier" ?> -->
+
 <zk xmlns:h="xhtml" xmlns:n="native">
 
     <!-- NAVBAR -->
