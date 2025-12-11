@@ -27,7 +27,7 @@ public class FundTransferDAO {
 
             
             double senderBalance = 0;
-            String sqlCheckSender = "SELECT balance FROM accounts WHERE account_no = ?";
+            String sqlCheckSender = "SELECT balance FROM accounts WHERE account_number = ?";
             try (PreparedStatement ps = conn.prepareStatement(sqlCheckSender)) {
                 ps.setLong(1, fromAcc);
                 try (ResultSet rs = ps.executeQuery()) {
@@ -48,7 +48,7 @@ public class FundTransferDAO {
             }
 
             
-            String sqlCheckReceiver = "SELECT 1 FROM accounts WHERE account_no = ?";
+            String sqlCheckReceiver = "SELECT 1 FROM accounts WHERE account_number = ?";
             boolean receiverExists = false;
             try (PreparedStatement ps = conn.prepareStatement(sqlCheckReceiver)) {
             	 ps.setLong(1, toAcc);
@@ -63,7 +63,7 @@ public class FundTransferDAO {
             }
 
             
-            String sqlDebit = "UPDATE accounts SET balance = balance - ? WHERE account_no = ?";
+            String sqlDebit = "UPDATE accounts SET balance = balance - ? WHERE account_number = ?";
             int debitRows;
             try (PreparedStatement ps = conn.prepareStatement(sqlDebit)) {
                 ps.setDouble(1, amount);
@@ -79,7 +79,7 @@ public class FundTransferDAO {
             }
 
             
-            String sqlCredit = "UPDATE accounts SET balance = balance + ? WHERE account_no = ?";
+            String sqlCredit = "UPDATE accounts SET balance = balance + ? WHERE account_number = ?";
             int creditRows;
             try (PreparedStatement ps = conn.prepareStatement(sqlCredit)) {
                 ps.setDouble(1, amount);
@@ -90,7 +90,7 @@ public class FundTransferDAO {
 
            
             String status = (creditRows > 0) ? "SUCCESS" : "FAILED";
-            String sqlTxn = "INSERT INTO transactions(from_account, to_account, amount, status) VALUES (?, ?, ?, ?)";
+            String sqlTxn = "INSERT INTO transactions(counterparty_account_id, account_id, amount, status) VALUES (?, ?, ?, ?)";
             try (PreparedStatement ps = conn.prepareStatement(sqlTxn)) {
                 ps.setLong(1, fromAcc);
                 ps.setLong(2, toAcc);
