@@ -54,7 +54,7 @@ public class TableCreator {
 					        account_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 					        user_id BIGINT UNSIGNED NOT NULL,
 					        bank_id BIGINT UNSIGNED NOT NULL,
-					        account_number CHAR(16) NOT NULL UNIQUE,
+					        account_number BIGINT UNSIGNED NOT NULL UNIQUE,
 					        account_type ENUM('savings','current','salary','fixed_deposit') NOT NULL,
 					        balance DECIMAL(18,2) NOT NULL DEFAULT 0.00,
 					        currency VARCHAR(10) NOT NULL DEFAULT 'INR',
@@ -358,7 +358,7 @@ public class TableCreator {
 									""");
 
 			// -----------------------------
-			// 13) Account Update request
+			// 14) Account Update request
 			// -----------------------------
 			st.execute(
 					"""
@@ -382,6 +382,33 @@ public class TableCreator {
 							  CONSTRAINT `account_update_request_ibfk_3` FOREIGN KEY (`reviewed_by`) REFERENCES `users` (`user_id`)
 							)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 															""");
+
+			// -----------------------------
+			// 15) Account Update request
+			// -----------------------------
+			st.execute("""
+						CREATE TABLE card_request (
+					    request_no BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+					    card_type VARCHAR(30) NOT NULL,
+					    card_category VARCHAR(30) NOT NULL,
+					    address VARCHAR(255),
+					    remarks VARCHAR(255),
+					    card_request_status ENUM('PENDING','APPROVED','REJECTED','ISSUED') DEFAULT 'PENDING',
+					    user_id BIGINT UNSIGNED NOT NULL,
+					    account_no  BIGINT UNSIGNED NOT NULL,
+					    requested_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+					    approved_at DATETIME NULL,
+
+					    KEY (customer_id),
+					    KEY (account_no),
+
+					    CONSTRAINT fk_card_request_customer
+					        FOREIGN KEY (user_id) REFERENCES users(user_id),
+
+					    CONSTRAINT fk_card_request_account
+					        FOREIGN KEY (account_no) REFERENCES accounts(account_number)
+					) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+																				""");
 
 			System.out.println("✅ All banking tables created successfully for Workbench!");
 
