@@ -9,6 +9,7 @@ import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.*;
 
+import com.fintrust.dao.impl.BranchDao;
 import com.fintrust.model.Account;
 import com.fintrust.model.Nominee;
 import com.fintrust.model.Account.AccountStatus;
@@ -40,11 +41,13 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 
 	private final AccountServiceImpl acconntService = new AccountServiceImpl();
 	private final NomineeServiceImp nomineeService = new NomineeServiceImp();
+	private final BranchDao BranchDao = new BranchDao();
 
 	@Override
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
 		modeOfOperation.setSelectedIndex(0); // Default value
+		
 		AccountType accountTypes[] = Account.AccountType.values();
 		System.out.println("Types: " + accountTypes.length);
 		for (AccountType at : accountTypes) {
@@ -71,17 +74,25 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 			long nomineeIdNum = nomineeId.longValue();
 			Long nom_id = nomineeIdNum;
 
+			//check given nominee id already exist in db or not?
 			Nominee nom = new Nominee(nomineeIdNum, nominee_name, relation);
 			if (!nomineeService.isPresentNominee(nomineeIdNum)) {
 				nom_id = nomineeService.saveNominee(nom);
 			}			
 			if (nom_id == -1l) return;	
-
+			
+			
+			//GET THE Brach_id using branch name
+			long branchId = BranchDao.findByBranchName(branchName).getBranchId();
+			
+			
+			
 			// Create Account object
 			Account account = new Account();
-			account.setAccountType(accType);
+			account.setAccountType(AccountType.valueOf(accType));
 			account.setBalance(deposit);			
-			account.setNominee_id(nom_id);			
+			account.setNominee_id(nom_id);	
+			account.setBranchId(branchId);
 			
 			boolean success = acconntService.openAccount(account);
 
@@ -93,7 +104,7 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 			} else {
 				String message = "Server error. Failed to create Account. Please try again!";
 				NotificationUtil.showInstant(accType, message);	
-			}
+			}	
 
 		} catch (IllegalArgumentException e) {
 			String message = "Please give valid input!";
@@ -170,5 +181,4 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 		nomineeId.setText("");
 		nomineeRelation.setValue("");
 	}
-
 }

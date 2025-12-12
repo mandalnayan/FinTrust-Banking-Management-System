@@ -4,9 +4,14 @@ package com.fintrust.dao.impl;
 import java.sql.*;
 import java.util.*;
 
+import org.zkoss.zk.ui.util.Clients;
+
 import com.fintrust.dao.AccountDAO;
 import com.fintrust.db.DBConnection;
 import com.fintrust.model.Account;
+import com.fintrust.model.Account.AccountStatus;
+import com.fintrust.model.Account.AccountType;
+
 
 /**
  * JDBC implementation of AccountDAO for banking systems.
@@ -36,19 +41,20 @@ public class AccountDAOImpl implements AccountDAO {
    
         String sql = """
             INSERT INTO accounts
-            (user_id, bank_id, account_number, account_type, balance)
-            VALUES (?, ?, ?, ?, ?)
+            (user_id, branch_id, account_number, account_type, balance, nominee_id)
+            VALUES (?, ?, ?, ?, ?,?)
         """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setLong(1, account.getUserId());
-            ps.setLong(2, account.getBankId());
+            ps.setLong(2, account.getBranchId());
             ps.setLong(3, account.getAccountNumber());
-            ps.setString(4, account.getAccountType().toLowerCase());
+            ps.setString(4, account.getAccountType().toString());
             ps.setDouble(5, account.getBalance());
+            ps.setLong(6, account.getNominee_id());
 
             ps.executeUpdate();
-
+          
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) return rs.getLong(1);
             }
@@ -214,10 +220,10 @@ public class AccountDAOImpl implements AccountDAO {
      */
 	private Account mapRowtoAccount(ResultSet rs) throws SQLException {
 
-		Account account = new Account(rs.getLong("account_id"), rs.getLong("user_id"), rs.getLong("bank_id"),
-				rs.getLong("account_number"), rs.getString("account_type"), rs.getBigDecimal("balance"),
-				rs.getString("currency"), rs.getString("status"), rs.getTimestamp("opened_at"),
-				rs.getTimestamp("updated_at"));
+		Account account = new Account(rs.getLong("account_id"), rs.getLong("user_id"), rs.getLong("branch_id"),rs.getLong("nominee_id"),
+				rs.getLong("account_number"), AccountType.valueOf(rs.getString("account_type").toUpperCase()), rs.getBigDecimal("balance").doubleValue(),
+				rs.getString("currency"),AccountStatus.valueOf(rs.getString("status").toUpperCase()), rs.getTimestamp("opened_at").toLocalDateTime(),
+				rs.getTimestamp("updated_at").toLocalDateTime());
 
 		return account;
 	}
@@ -234,7 +240,7 @@ public class AccountDAOImpl implements AccountDAO {
         Map<String, Object> map = new HashMap<>();
         map.put("account_id", rs.getLong("account_id"));
         map.put("user_id", rs.getLong("user_id"));
-        map.put("bank_id", rs.getLong("bank_id"));
+        map.put("branch_id", rs.getLong("branch_id"));
         map.put("account_number", rs.getLong("account_number"));
         map.put("account_type", rs.getString("account_type"));
         map.put("balance", rs.getBigDecimal("balance"));

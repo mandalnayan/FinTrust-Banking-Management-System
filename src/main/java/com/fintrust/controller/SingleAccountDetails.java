@@ -1,5 +1,6 @@
 package com.fintrust.controller;
 
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.*;
@@ -39,9 +40,9 @@ public class SingleAccountDetails extends SelectorComposer<Window> {
         }
 
         accountNo.setValue(acc.getAccountNumber()+"");
-        accountType.setValue(acc.getAccountType());
+        accountType.setValue(acc.getAccountType().toString());
         accountBalance.setValue(acc.getBalance()+"");
-        accountStatus.setValue(acc.getStatus().name());
+        accountStatus.setValue(acc.getAccount_status().name());
         Bank bank = new BankDAOImpl().findById(acc.getBankId());
         if (bank != null) {
         	accountBranch.setValue(bank.getBranchName());
@@ -49,10 +50,14 @@ public class SingleAccountDetails extends SelectorComposer<Window> {
         }
         modeOfOperation.setValue("self");
         nomineeId.setValue(acc.getNominee_id()+"");
+        //System.out.println(acc.getNominee_id());
     }
 
     @Listen("onClick = #backBtn")
     public void onBackClick() {
-        Executions.sendRedirect("/user/userDashboard.zul");
+        //Executions.sendRedirect("/user/userDashboard.zul");
+    	Component root = getSelf();
+		Include inc = (Include) root.getPage().getFellow("main_content_sec");
+		inc.setSrc("/WEB-INF/components/view_all_account.zul");
     }
 }

@@ -12,18 +12,18 @@ public class TableCreator {
 			st.execute("SET SESSION sql_mode = 'STRICT_ALL_TABLES';");
 
 			// -----------------------------
-			// 1) banks
+			// 1) branches
 			// -----------------------------
 			st.execute("""
-					    CREATE TABLE IF NOT EXISTS banks (
-					        bank_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-					        bank_name VARCHAR(120) NOT NULL,
-					        branch_name VARCHAR(120) NOT NULL,
-					        ifsc_code CHAR(11) NOT NULL UNIQUE,
-					        support_email VARCHAR(120),
-					        support_phone VARCHAR(20),
-					        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-					    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+					  	CREATE TABLE branches (
+					   		branch_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+							branch_name VARCHAR(120) NOT NULL,
+							ifsc_code VARCHAR(12) NOT NULL UNIQUE,
+							support_email VARCHAR(120),
+							support_phone VARCHAR(20),
+							created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+							PRIMARY KEY (branch_id)
+						);
 					""");
 
 			// -----------------------------
@@ -38,18 +38,30 @@ public class TableCreator {
 					        password_hash VARCHAR(255) NOT NULL,
 					        role ENUM('ROLE_USER','ROLE_ADMIN','ROLE_SUPER_ADMIN') NOT NULL DEFAULT 'ROLE_USER',
 					        status ENUM('active','inactive','blocked') NOT NULL DEFAULT 'active',
-					        kycStatus ENUM('pendnig','upated','expired') NOT NULL DEFAULT 'pending',
+					        kycStatus ENUM('pending','upated','expired') NOT NULL DEFAULT 'pending',
 					        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 					        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 					        INDEX idx_users_email(email),
 					        INDEX idx_users_phone(phone)
 					    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 					""");
+			
+			// -----------------------------
+			// 3) nominee_details
+			// -----------------------------
+			st.execute("""
+					CREATE TABLE nominee_details (
+						nominee_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+						nominee_name VARCHAR(100),
+						nominee_relation VARCHAR(50)
+					);
+				""");
 
 			// -----------------------------
 			// 3) accounts
 			// -----------------------------
 			st.execute("""
+<<<<<<< HEAD
 					    CREATE TABLE IF NOT EXISTS accounts (
 					        account_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 					        user_id BIGINT UNSIGNED NOT NULL,
@@ -72,7 +84,44 @@ public class TableCreator {
 					        INDEX idx_accounts_user(user_id)
 					    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 					""");
+=======
+					CREATE TABLE IF NOT EXISTS accounts (
+					    account_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+					    user_id BIGINT UNSIGNED NOT NULL,
+					    branch_id BIGINT UNSIGNED NOT NULL,
+					    account_number BIGINT UNSIGNED NOT NULL UNIQUE,
+					    account_type ENUM('savings','current','salary','fixed_deposit') NOT NULL,
+					    balance DECIMAL(18,2) NOT NULL DEFAULT 0.00,
+					    currency VARCHAR(10) NOT NULL DEFAULT 'INR',
+					    status ENUM('active','inactive','frozen','closed') DEFAULT 'active',
+					    nominee_id BIGINT UNSIGNED NOT NULL,
+					    opened_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+					    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+>>>>>>> acount
 
+					    CONSTRAINT fk_accounts_user FOREIGN KEY (user_id)
+					        REFERENCES users(user_id)
+					        ON UPDATE CASCADE
+					        ON DELETE RESTRICT,
+
+					    CONSTRAINT fk_accounts_branch FOREIGN KEY (branch_id)
+					        REFERENCES branches(branch_id)
+					        ON UPDATE CASCADE
+					        ON DELETE RESTRICT,
+
+					    CONSTRAINT fk_accounts_nominee FOREIGN KEY (nominee_id)
+					        REFERENCES nominee_details(nominee_id)
+					        ON UPDATE CASCADE
+					        ON DELETE RESTRICT,
+
+					    INDEX idx_accounts_user(user_id)
+					) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+					""");
+			
+			
+			
+			
 			// -----------------------------
 			// 4) user_details
 			// -----------------------------
@@ -370,7 +419,7 @@ public class TableCreator {
 			// -----------------------------
 			st.execute(
 					"""
-													CREATE TABLE `account_update_request` (
+											CREATE TABLE fintrust_bank.`account_update_request` (
 							  `request_id` bigint unsigned NOT NULL AUTO_INCREMENT,
 							  `account_number` bigint unsigned NOT NULL,
 							  `new_account_type` enum('SAVINGS','CURRENT','SALARY') DEFAULT NULL,
@@ -378,16 +427,16 @@ public class TableCreator {
 							  `new_mode_of_operation` enum('SELF','JOINT') DEFAULT 'SELF',
 							  `status` enum('PENDING','APPROVED','REJECTED') DEFAULT 'PENDING',
 							  `requested_by` bigint unsigned DEFAULT NULL,
-							  `reviewed_by` bigint unsigned DEFAULT NULL,
+							  `reviewed_by` bigint unsigned NULL,
 							  `request_date` datetime DEFAULT CURRENT_TIMESTAMP,
 							  `review_date` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
 							  PRIMARY KEY (`request_id`),
 							  KEY `account_number` (`account_number`),
 							  KEY `requested_by` (`requested_by`),
 							  KEY `reviewed_by` (`reviewed_by`),
-							  CONSTRAINT `account_update_request_ibfk_1` FOREIGN KEY (`account_number`) REFERENCES `accounts` (`account_number`),
-							  CONSTRAINT `account_update_request_ibfk_2` FOREIGN KEY (`requested_by`) REFERENCES `users` (`user_id`),
-							  CONSTRAINT `account_update_request_ibfk_3` FOREIGN KEY (`reviewed_by`) REFERENCES `users` (`user_id`)
+							  CONSTRAINT `account_update_request_ibfk_1` FOREIGN KEY (`account_number`) REFERENCES accounts(`account_number`),
+							  CONSTRAINT `account_update_request_ibfk_2` FOREIGN KEY (`requested_by`) REFERENCES users(`user_id`),
+							  CONSTRAINT `account_update_request_ibfk_3` FOREIGN KEY (`reviewed_by`) REFERENCES users(`user_id`)
 							)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 															""");
 
@@ -424,5 +473,9 @@ public class TableCreator {
 			e.printStackTrace();
 			System.err.println("❌ Error creating tables: " + e.getMessage());
 		}
+	}
+	
+	public static void main(String[] args) {
+		createAllTables();
 	}
 }

@@ -9,6 +9,7 @@ import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Checkbox;
+import org.zkoss.zul.Include;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
@@ -60,6 +61,9 @@ public class CloseAccountComposer extends SelectorComposer<Component>{
 	
 	@Listen("onClick=#btnReset")
 	public void resetRequest() {
-		Executions.sendRedirect("/user/userDashboard.zul");
+		//Executions.sendRedirect("/user/userDashboard.zul");
+		Component root = getSelf();
+		Include inc = (Include) root.getPage().getFellow("main_content_sec");
+		inc.setSrc("/WEB-INF/components/view_all_account.zul");
 	}
 }
