@@ -9,7 +9,8 @@ import org.zkoss.zk.ui.Sessions;
 
 import com.fintrust.model.Account;
 import com.fintrust.model.Account.AccountStatus;
-
+import com.fintrust.model.Notification;
+import com.fintrust.util.NotificationUtil;
 import com.fintrust.dao.impl.AccountDAOImpl;
 import com.fintrust.dao.impl.UserDetailsDAOImpl;
 import com.fintrust.db.DBConnection;
@@ -39,7 +40,7 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public boolean openAccount(Account account) {
+	public Notification openAccount(Account account) {
 		try {
 			// Unique account number generation (for demo)
 			connection.setAutoCommit(false);
@@ -47,8 +48,12 @@ public class AccountServiceImpl implements AccountService {
 			Long user_id = (Long) Sessions.getCurrent().getAttribute("user_id");
 			account.setUserId(user_id);
 
-			if (accountNo == -1 || user_id == null || isAccountExists(user_id, account.getAccountType().toString()))
-				return false;
+			if (accountNo == -1 || user_id == null) {
+				return new Notification("error", "Server error. \nPlease try again!!");
+			} else if(isAccountExists(user_id, account.getAccountType().toString())) {
+				return new Notification("warning", "Same type of account already exist. \n Sorry you can't create same account!!");
+			}	
+						
 			account.setAccountNumber(accountNo);
 			long account_id = accountDAO.create(account);
 			List<Account> accounts = accountDAO.findByUserId(user_id);
@@ -56,7 +61,7 @@ public class AccountServiceImpl implements AccountService {
 				userDetailsDAO.updatePrimaryAccount(user_id, account_id);
 			}
 			connection.commit();
-			return true;
+			return new Notification("info", "Account created successfully!!");
 		} catch (SQLException e) {
 			try {
 				connection.rollback(); // Roll back if either any (account creation / primary account updation) fail
@@ -66,7 +71,7 @@ public class AccountServiceImpl implements AccountService {
 			}
 			e.printStackTrace();
 		}
-		return false;
+		return new Notification("error", "Server error. \nPlease try again!!");
 	}
 
 	@Override
@@ -232,14 +237,13 @@ public class AccountServiceImpl implements AccountService {
 		long max = 999999999999L;
 		int maxTry = 5;
 		while (maxTry-- > 0) {
-			long randomNo = GenerateRandomNumber.generateRandomNumber(min, max);
+			long randomNo = GenerateRandomNumber.generateRandomNumber(min, max);  
 
 			try {
 				if (accountDAO.findByNumber(randomNo) == null) {
 					return randomNo;
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				System.out.println("ERROR to check account is present or not: " + e.getMessage());
 				e.printStackTrace();
 				return -1l;

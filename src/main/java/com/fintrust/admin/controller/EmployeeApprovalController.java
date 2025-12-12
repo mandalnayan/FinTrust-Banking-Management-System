@@ -6,9 +6,9 @@ import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.*;
 
-import com.fintrust.model_copy.AccountUpdateRequest;
-
-import zcom.finrust.dao_copy.AccountUpdateRequestDao;
+import com.fintrust.model.AccountUpdateRequest;
+import com.fintrust.util.NotificationUtil;
+import com.fintrust.dao.impl.AccountUpdateRequestDao;
 
 import java.util.*;
 
@@ -49,14 +49,15 @@ public class EmployeeApprovalController extends SelectorComposer<Component> {
 
     @Listen("onClick = #approveBtn")
     public void approveRequest() throws Exception {
-    	if(requestList.getSelectedItem()==null) {
-        	Messagebox.show("Please select one account first!" );
+    	if(requestList.getSelectedItem()==null) {        	
+        	 NotificationUtil.showInstant("warning", "Please select one account first!");
         	return;
         }
         AccountUpdateRequest req = requestList.getSelectedItem().getValue();
         dao.approveRequest(req.getRequestId(), currentEmployeeId);
         loadPendingRequests();
-        Messagebox.show("Request approved successfully!");
+        NotificationUtil.showInstant("info", "Request approved successfully!");
+      
     }
 
     @Listen("onClick = #rejectBtn")
@@ -68,7 +69,7 @@ public class EmployeeApprovalController extends SelectorComposer<Component> {
         AccountUpdateRequest req = requestList.getSelectedItem().getValue();
         dao.rejectRequest(req.getRequestId(), currentEmployeeId);
         loadPendingRequests();
-        Messagebox.show("Request rejected.");
+        NotificationUtil.showInstant("info", "Request rejected!");
     }
 }
 

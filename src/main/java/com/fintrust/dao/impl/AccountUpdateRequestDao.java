@@ -108,7 +108,7 @@ public class AccountUpdateRequestDao {
 	        while (rs.next()) {
 	            AccountUpdateRequest r = new AccountUpdateRequest();
 	            r.setRequestId(rs.getLong("request_id"));
-	            r.setAccountNo(rs.getLong("account_no"));
+	            r.setAccountNo(rs.getLong("account_number"));
 	            r.setNewAccountType(rs.getString("new_account_type"));
 	            r.setNewBranchName(rs.getString("new_branch_name"));
 	            r.setNewModeOfOperation(rs.getString("new_mode_of_operation"));
@@ -127,7 +127,7 @@ public class AccountUpdateRequestDao {
 
 	public void approveRequest(long reqId, long empId) {
 	    String fetchSql = "SELECT * FROM account_update_request WHERE request_id = ?";
-	    String updateAccSql = "UPDATE account SET account_type = ?, branch_name = ?, mode_of_operation = ? WHERE account_no = ?";
+	    String updateAccSql = "UPDATE accounts SET account_type = ?, branch_name = ?, mode_of_operation = ? WHERE account_number = ?";
 	    String updateReqSql = "UPDATE account_update_request SET status = 'APPROVED', reviewed_by = ?, review_date = NOW() WHERE request_id = ?";
 
 	    try (Connection conn = DBConnection.getConnection()) {
@@ -138,7 +138,7 @@ public class AccountUpdateRequestDao {
 	            ps.setLong(1, reqId);
 	            try (ResultSet rs = ps.executeQuery()) {
 	                if (rs.next()) {
-	                    long accNo = rs.getLong("account_no");
+	                    long accNo = rs.getLong("account_number");
 	                    String type = rs.getString("new_account_type");
 	                    String branch = rs.getString("new_branch_name");
 	                    String mode = rs.getString("new_mode_of_operation");
