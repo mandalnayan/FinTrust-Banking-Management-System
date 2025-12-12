@@ -38,7 +38,7 @@ public class UpdateAccountRequest extends SelectorComposer<Component> {
         System.out.println("Acc No: " + acc.getAccountNumber());
         accountNo.setValue(acc.getAccountNumber()+"");
         accountBalance.setValue(acc.getBalance()+"");
-        accountStatus.setValue(acc.getStatus().name());
+        accountStatus.setValue(acc.getAccount_status().name());
     
 	}
 	

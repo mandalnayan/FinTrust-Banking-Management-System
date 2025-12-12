@@ -38,8 +38,8 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
             Listitem item = new Listitem();
             item.appendChild(new Listcell(String.valueOf(acc.getAccountNumber())));
             item.appendChild(new Listcell(String.format("%.2f", acc.getBalance())));
-            item.appendChild(new Listcell(acc.getAccountType()));
-            item.appendChild(new Listcell(acc.getStatus().name()));
+            item.appendChild(new Listcell(acc.getAccountType().toString()));
+            item.appendChild(new Listcell(acc.getAccount_status().name()));
             
             Listcell actions = new Listcell();
 
