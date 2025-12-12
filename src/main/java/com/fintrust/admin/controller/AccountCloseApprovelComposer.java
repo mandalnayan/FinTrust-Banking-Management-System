@@ -18,10 +18,6 @@ import com.fintrust.service.AccountServiceImpl;
 
 import zcom.finrust.dao_copy.AccountCloseRequestDao;
 
-
-
-
-
 public class AccountCloseApprovelComposer extends SelectorComposer<Component>{
 	private final AccountCloseRequestDao accountCloseDao = new AccountCloseRequestDao();
 	
