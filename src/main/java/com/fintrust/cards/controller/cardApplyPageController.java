@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
@@ -28,6 +29,7 @@ import com.fintrust.service.CardServices;
 import com.fintrust.util.NotificationUtil;
 import com.fintrust.dao.AccountDAO;
 import com.fintrust.dao.impl.AccountDAOImpl;
+
 
 
 public class cardApplyPageController extends SelectorComposer<Window>{
@@ -70,6 +72,41 @@ public class cardApplyPageController extends SelectorComposer<Window>{
 		List<Long> accounts= accountService.getAllAccountsNumber();
 		accounts.forEach(accountNo -> accountList.appendItem(accountNo+""));		
 	}
+    
+    
+    @Listen("onSelect=#accountList")
+    public void cardTypeVisible(Event e)
+    {   
+    	cardCategory.setValue("");
+    	dCardItem.setVisible(true);
+    	 cCardItem.setVisible(true);
+    	 pCardItem.setVisible(true);
+    	String selectedAct=accountList.getValue();
+    	System.out.println(selectedAct);
+    	 AccountDAO accountDao=new AccountDAOImpl();
+    	    
+    	List<String> issuedCardForAct=accountDao.issuedCardTypeByAct(Long.parseLong(selectedAct));
+    	System.out.println(issuedCardForAct);
+    	
+    	cardCategory.setButtonVisible(true);
+    	
+    	
+    	issuedCardForAct.forEach(cType->{
+    		System.out.println(cType);
+    		
+    	
+    		if(cType.equals("Debit"))
+    			dCardItem.setVisible(false);
+    		if(cType.equals("Credit"))
+    		     cCardItem.setVisible(false);
+    		if(cType.equals("prepaid"))
+    			  pCardItem.setVisible(false);
+    	});
+    	
+    } 
+    
+    
+    
 
     @Listen("onClick=#submitApplyCard")
     public void submitCardRequest() {
@@ -107,11 +144,11 @@ public class cardApplyPageController extends SelectorComposer<Window>{
         }       
 
         try {
-            if (cardService.isCardAlreadyRequested(accNumber)) {
-            	NotificationUtil.showInstant("error", "A card is already requested for this account.");          	
-
-                return;
-            }
+//            if (cardService.isCardAlreadyRequested(accNumber)) {
+//            	NotificationUtil.showInstant("error", "A card is already requested for this account.");          	
+//
+//                return;
+//            }
 
             boolean isApplied = cardService.submitCardRequest(accNumber, cardTypes, cardCat, addresss, remark);
             if (isApplied) {

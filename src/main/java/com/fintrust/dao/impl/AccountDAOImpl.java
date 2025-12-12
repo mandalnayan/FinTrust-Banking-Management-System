@@ -5,6 +5,7 @@ import java.sql.*;
 import java.util.*;
 
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Messagebox;
 
 import com.fintrust.dao.AccountDAO;
 import com.fintrust.db.DBConnection;
@@ -21,7 +22,30 @@ import com.fintrust.model.Account.AccountType;
  */
 public class AccountDAOImpl implements AccountDAO {
 
-    private final Connection connection;
+    @Override	
+	public List<String> issuedCardTypeByAct(long actNumber)
+	{
+		List<String> cardTypeList=new ArrayList();
+		String q="select card_type from cards where account_no=? and card_status <> ? ";
+		try (PreparedStatement statement = DBConnection.getConnection().prepareStatement(q)) {
+
+			statement.setLong(1, actNumber);
+		    statement.setString(2, "Expired");
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+				cardTypeList.add(rs.getString("card_type"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			Messagebox.show(e.getMessage());
+		}
+		System.out.println(cardTypeList);
+		return cardTypeList;
+		
+	}
+
+
+	private final Connection connection;
 
     /**
      * Constructor for dependency injection.
@@ -149,7 +173,7 @@ public class AccountDAOImpl implements AccountDAO {
         }
         return list;
     }
-
+che
     @Override
     public boolean update(long accountId, String accountType, String status, String currency) throws SQLException {
         String sql = """
