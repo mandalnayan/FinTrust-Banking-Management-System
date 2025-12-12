@@ -1,9 +1,9 @@
+<!-- 
 
 
-<!-- head footer csss -->
 <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 
-<!-- Before loading page it ensuer page should not render -->
+Before loading page it ensuer page should not render
 <?init class = "com.fintrust.security.AuthenticationController" ?>
 <zk>
     <window  border="none" 
@@ -11,7 +11,7 @@
             width="100%" height="100%" sclass="p-4">
 
      <include src = "/WEB-INF/components/privateNavbar.zul" /> 
-      <!--   <div sclass="navbar" 
+        <div sclass="navbar" 
              style="background-color:#004080;color:white;
                     padding:15px;display:flex;
                     align-items:center;justify-content:space-between;">
@@ -28,7 +28,7 @@
                    style="color:white;text-decoration:none;font-weight:800;" />
             </hlayout>
         </div>
- -->
+
       
         <div style="display:flex;flex-direction:column;align-items:center;padding:30px;">
             <label value="💳 ATM Card Management Portal"
@@ -102,4 +102,102 @@
             }
         </style>
     </window>
-</zk>   
+</zk>    -->
+
+
+
+
+<!-- head footer css -->
+<?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
+
+<!-- Ensure page should not render before login -->
+<?init class="com.fintrust.security.AuthenticationController" ?>
+
+<zk>
+    <window border="none" width="100%" height="100%" sclass="p-4">
+
+        <!-- Navbar -->
+        <include src="/WEB-INF/components/privateNavbar.zul" /> 
+
+        <!-- Main Content -->
+        <div style="display:flex;flex-direction:column;align-items:center;padding:30px; height:100vh; overflow-y:auto;">
+            <label value="💳 ATM Card Management Portal"
+                   style="font-weight:bold;font-size:24px;color:#004080;margin-bottom:20px;" />
+            <separator />
+
+            <!-- Flex container for cards -->
+            <div class="cards-container">
+                <div class="card-box" onClick='Executions.sendRedirect("/Card/ApplyNewCard.zul")'>
+                    <label value="💳 Apply for New Card" />
+                </div>
+                <div class="card-box" onClick='Executions.sendRedirect("/Card/manageCard.zul")'>
+                    <label value="🧾 Manage Existing Card" />
+                </div>
+                <div class="card-box" onClick='Executions.sendRedirect("/Card/cardDetails.zul")'>
+                    <label value="📈 Set Card Limit" />
+                </div>
+                <div class="card-box" onClick='Executions.sendRedirect("/Card/Card_status.zul")'>
+                    <label value="📦 Track Card Request" />
+                </div>
+            </div>
+        </div>
+
+        <style>
+            /* Card styles - Increased size */
+            .card-box {
+                width: 400px;      /* Increased from 300px */
+                height: 160px;     /* Increased from 120px */
+                background: white;
+                border-radius: 15px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                font-weight: bold;
+                color: #004080;
+                font-size: 18px;   /* Slightly bigger text */
+                transition: all 0.3s ease;
+                text-align: center;
+                margin: 15px;
+            }
+
+            .card-box:hover {
+                background: #004080;
+                color: white;
+                transform: translateY(-5px);
+                box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            }
+
+            /* Flex container for cards */
+            .cards-container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 25px;
+                width: 80%;
+                max-width: 1200px;
+            }
+
+            /* STACK ONLY BELOW 600px */
+            @media screen and (max-width: 600px) {
+                .cards-container {
+                    flex-direction: column;
+                    width: 100%;
+                    align-items: center;
+                }
+
+                .card-box {
+                    width: 95%;   /* Adjusted for mobile */
+                    margin: 10px 0;
+                }
+            }
+
+            /* Ensure the main container is scrollable if content overflows */
+            div[style*="overflow-y:auto"] {
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+        </style>
+    </window>
+</zk>

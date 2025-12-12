@@ -6,9 +6,9 @@ import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.*;
 import org.zkoss.zul.*;
 
-import com.fintrust.dao.impl.BankDAOImpl;
+import com.fintrust.dao.impl.BranchDao;
 import com.fintrust.model.Account;
-import com.fintrust.model.Bank;
+import com.fintrust.model.Branch;
 import com.fintrust.service.AccountServiceImpl;
 
 
@@ -43,7 +43,7 @@ public class SingleAccountDetails extends SelectorComposer<Window> {
         accountType.setValue(acc.getAccountType().toString());
         accountBalance.setValue(acc.getBalance()+"");
         accountStatus.setValue(acc.getAccount_status().name());
-        Bank bank = new BankDAOImpl().findById(acc.getBankId());
+        Branch bank = new BranchDao().findById(acc.getBranchId());
         if (bank != null) {
         	accountBranch.setValue(bank.getBranchName());
         	ifscCode.setValue(bank.getIfscCode());
