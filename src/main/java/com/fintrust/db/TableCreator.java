@@ -61,30 +61,6 @@ public class TableCreator {
 			// 3) accounts
 			// -----------------------------
 			st.execute("""
-<<<<<<< HEAD
-					    CREATE TABLE IF NOT EXISTS accounts (
-					        account_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-					        user_id BIGINT UNSIGNED NOT NULL,
-					        bank_id BIGINT UNSIGNED NOT NULL,
-					        account_number BIGINT UNSIGNED NOT NULL UNIQUE,
-					        account_type ENUM('savings','current','salary','fixed_deposit') NOT NULL,
-					        balance DECIMAL(18,2) NOT NULL DEFAULT 0.00,
-					        currency VARCHAR(10) NOT NULL DEFAULT 'INR',
-					        status ENUM('active','inactive','frozen','closed') DEFAULT 'active',
-					        opened_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-					        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-					        CONSTRAINT fk_accounts_user FOREIGN KEY (user_id)
-					            REFERENCES users(user_id)
-					            ON UPDATE CASCADE
-					            ON DELETE RESTRICT,
-					        CONSTRAINT fk_accounts_bank FOREIGN KEY (bank_id)
-					            REFERENCES banks(bank_id)
-					            ON UPDATE CASCADE
-					            ON DELETE RESTRICT,
-					        INDEX idx_accounts_user(user_id)
-					    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-					""");
-=======
 					CREATE TABLE IF NOT EXISTS accounts (
 					    account_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 					    user_id BIGINT UNSIGNED NOT NULL,
@@ -97,7 +73,7 @@ public class TableCreator {
 					    nominee_id BIGINT UNSIGNED NOT NULL,
 					    opened_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 					    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
->>>>>>> acount
+
 
 					    CONSTRAINT fk_accounts_user FOREIGN KEY (user_id)
 					        REFERENCES users(user_id)
@@ -117,9 +93,7 @@ public class TableCreator {
 					    INDEX idx_accounts_user(user_id)
 					) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-					""");
-			
-			
+					""");		
 			
 			
 			// -----------------------------
