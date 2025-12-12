@@ -16,18 +16,18 @@ import com.fintrust.db.DBConnection;
 import com.fintrust.dao.AccountDAO;
 import com.fintrust.dao.UserDetailsDAO;
 
-
 public class AccountServiceImpl implements AccountService {
 
-    private final AccountDAO accountDAO;
-    private final UserDetailsDAO userDetailsDAO;
-    private Connection connection = DBConnection.getConnection();
-    public AccountServiceImpl() {    		
-        this.accountDAO = new AccountDAOImpl(connection);
-        this.userDetailsDAO = new UserDetailsDAOImpl(connection);
-    }
-    
-    @Override
+	private final AccountDAO accountDAO;
+	private final UserDetailsDAO userDetailsDAO;
+	private Connection connection = DBConnection.getConnection();
+
+	public AccountServiceImpl() {
+		this.accountDAO = new AccountDAOImpl(connection);
+		this.userDetailsDAO = new UserDetailsDAOImpl(connection);
+	}
+
+	@Override
 	public boolean isAccountExists(long user_id, String accountType) {
 		try {
 			return accountDAO.findByType(user_id, accountType) != null;
@@ -38,16 +38,17 @@ public class AccountServiceImpl implements AccountService {
 		return false;
 	}
 
-    @Override
-    public boolean openAccount(Account account) {
-        try {
-        	// Unique account number generation (for demo)
-        	connection.setAutoCommit(false);
+	@Override
+	public boolean openAccount(Account account) {
+		try {
+			// Unique account number generation (for demo)
+			connection.setAutoCommit(false);
 			long accountNo = generateAccountNumber();
 			Long user_id = (Long) Sessions.getCurrent().getAttribute("user_id");
-			account.setUserId(user_id);			
-		 	
-			if (accountNo == -1 || user_id == null || isAccountExists(user_id, account.getAccountType().toString())) return false;
+			account.setUserId(user_id);
+
+			if (accountNo == -1 || user_id == null || isAccountExists(user_id, account.getAccountType().toString()))
+				return false;
 			account.setAccountNumber(accountNo);
 			long account_id = accountDAO.create(account);
 			List<Account> accounts = accountDAO.findByUserId(user_id);
@@ -56,119 +57,125 @@ public class AccountServiceImpl implements AccountService {
 			}
 			connection.commit();
 			return true;
-		} catch (SQLException e) {	
+		} catch (SQLException e) {
 			try {
-				connection.rollback();  // Roll back if either any (account creation / primary account updation) fail
+				connection.rollback(); // Roll back if either any (account creation / primary account updation) fail
 			} catch (SQLException e1) {
-				
+
 				e1.printStackTrace();
 			}
-			e.printStackTrace();			
+			e.printStackTrace();
 		}
-        return false;
-    }
+		return false;
+	}
 
-    @Override
-    public boolean closeAccount(long accountNo) {
-        return false;
-    }
+	@Override
+	public boolean closeAccount(long accountNo) {
+		return false;
+	}
 
-    @Override
-    public boolean updateAccountDetails(Account account) {
-        return false;
-    }
+	@Override
+	public boolean updateAccountDetails(Account account) {
+		return false;
+	}
 
-    @Override
-    public Account getAccountDetails(long accountNo) {
-        try {
+	@Override
+	public Account getAccountDetails(long accountNo) {
+		try {
 			return accountDAO.findByNumber(accountNo);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        return null;
-    }
-    
-    @Override
-    public Account getAccountById(long accountId) {
-        try {
+		return null;
+	}
+
+	@Override
+	public Account getAccountById(long accountId) {
+		try {
 			return accountDAO.findById(accountId);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        return null;
-    }
+		return null;
+	}
+
 	@Override
 	public List<Account> getAllAccounts() {
 		long user_id = (long) Sessions.getCurrent().getAttribute("user_id");
-		  try {
-			List<Account> accounts = accountDAO.findByUserId(user_id);			
+		try {
+			List<Account> accounts = accountDAO.findByUserId(user_id);
 			return accounts;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		  return null;
+		return null;
 	}
-	
+
 	@Override
 	public List<Long> getAllAccountsNumber() {
 		long user_id = (long) Sessions.getCurrent().getAttribute("user_id");
-		  try {
-			List<Long> accounts = accountDAO.findByNumberUserId(user_id);			
+		try {
+			List<Long> accounts = accountDAO.findByNumberUserId(user_id);
 			return accounts;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		  return null;
+		return null;
 	}
 
-    @Override
-    public boolean deposit(long accountNo, double amount) {
-        if (amount <= 0) return false;
+	@Override
+	public boolean deposit(long accountNo, double amount) {
+		if (amount <= 0)
+			return false;
 
-        try {
-        Account acc = accountDAO.findById(accountNo);
-        if (acc == null || acc.getAccount_status() != AccountStatus.ACTIVE) return false;
+		try {
+			Account acc = accountDAO.findById(accountNo);
+			if (acc == null || acc.getAccount_status() != AccountStatus.ACTIVE)
+				return false;
 
-        double newBalance = acc.getBalance() + amount;
-		return accountDAO.updateBalance(accountNo, newBalance);
+			double newBalance = acc.getBalance() + amount;
+			return accountDAO.updateBalance(accountNo, newBalance);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        return false;
-    }
+		return false;
+	}
 
-    @Override
-    public boolean withdraw(long accountNo, double amount) {
-        if (amount <= 0) return false;
+	@Override
+	public boolean withdraw(long accountNo, double amount) {
+		if (amount <= 0)
+			return false;
 
-        Account acc = null;
+		Account acc = null;
 		try {
 			acc = accountDAO.findById(accountNo);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        if (acc == null || acc.getAccount_status() != AccountStatus.ACTIVE) return false;
-        if (acc.getBalance() < amount) return false;
+		if (acc == null || acc.getAccount_status() != AccountStatus.ACTIVE)
+			return false;
+		if (acc.getBalance() < amount)
+			return false;
 
-        double newBalance = acc.getBalance() - amount;
-        try {
+		double newBalance = acc.getBalance() - amount;
+		try {
 			return accountDAO.updateBalance(accountNo, newBalance);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        return false;
-    }
+		return false;
+	}
 
-    @Override
-    public double checkBalance(long accountNo) {
-        Account acc = null;
+	@Override
+	public double checkBalance(long accountNo) {
+		Account acc = null;
 		try {
 			acc = accountDAO.findByNumber(accountNo);
 		} catch (SQLException e) {
@@ -176,14 +183,15 @@ public class AccountServiceImpl implements AccountService {
 			e.printStackTrace();
 		}
 		return (acc != null) ? acc.getBalance() : 0.0;
-    }
+	}
 
-    @Override
-    public boolean transfer(long fromAccountNo, long toAccountNo, double amount) {
-        if (amount <= 0) return false;
+	@Override
+	public boolean transfer(long fromAccountNo, long toAccountNo, double amount) {
+		if (amount <= 0)
+			return false;
 
-        Account fromAcc = null, toAcc = null;
-        
+		Account fromAcc = null, toAcc = null;
+
 		try {
 			fromAcc = accountDAO.findById(fromAccountNo);
 			toAcc = accountDAO.findById(toAccountNo);
@@ -192,41 +200,43 @@ public class AccountServiceImpl implements AccountService {
 			e.printStackTrace();
 		}
 
-        if (fromAcc == null || toAcc == null) return false;
-        if (fromAcc.getBalance() < amount) return false;
+		if (fromAcc == null || toAcc == null)
+			return false;
+		if (fromAcc.getBalance() < amount)
+			return false;
 
-        double newFromBal = fromAcc.getBalance() - amount;
-        double newToBal = toAcc.getBalance() + amount;
+		double newFromBal = fromAcc.getBalance() - amount;
+		double newToBal = toAcc.getBalance() + amount;
 
-        try {
+		try {
 			return accountDAO.updateBalance(fromAccountNo, newFromBal)
-			        && accountDAO.updateBalance(toAccountNo, newToBal);
+					&& accountDAO.updateBalance(toAccountNo, newToBal);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        return false;
-    }
-    
-    private long generateAccountNumber() {
-    	long highest_accountNo = new AccountDAOImpl().getHighestAccountNo();
-    	if (highest_accountNo == 0) {
-    		return generateRandomNumber();
-    	}
-		return highest_accountNo != -1 ? highest_accountNo+1 : -1;
-    }
-    
-    private long generateRandomNumber() {
-    	Random random = new Random();
-    	long min = 100000000000L;
-    	long max = 999999999999L;
-    	int maxTry = 5;
-    	while (maxTry-- > 0) {
-           long randomNo = GenerateRandomNumber.generateRandomNumber(min, max);
+		return false;
+	}
 
-            try {
+	private long generateAccountNumber() {
+		long highest_accountNo = new AccountDAOImpl().getHighestAccountNo();
+		if (highest_accountNo == 0) {
+			return generateRandomNumber();
+		}
+		return highest_accountNo != -1 ? highest_accountNo + 1 : -1;
+	}
+
+	private long generateRandomNumber() {
+		Random random = new Random();
+		long min = 100000000000L;
+		long max = 999999999999L;
+		int maxTry = 5;
+		while (maxTry-- > 0) {
+			long randomNo = GenerateRandomNumber.generateRandomNumber(min, max);
+
+			try {
 				if (accountDAO.findByNumber(randomNo) == null) {
-				    return randomNo;
+					return randomNo;
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -234,10 +244,9 @@ public class AccountServiceImpl implements AccountService {
 				e.printStackTrace();
 				return -1l;
 			}
-            // else loop — collision, try a new random again
-        }
-    	return -1l;
-    }
-    
+			// else loop — collision, try a new random again
+		}
+		return -1l;
+	}
 
 }

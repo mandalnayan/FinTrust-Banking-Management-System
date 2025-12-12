@@ -41,7 +41,7 @@ public class AccountDAOImpl implements AccountDAO {
    
         String sql = """
             INSERT INTO accounts
-            (user_id, branch_id, account_number, account_type, balance,nominee_id)
+            (user_id, branch_id, account_number, account_type, balance, nominee_id)
             VALUES (?, ?, ?, ?, ?,?)
         """;
 
@@ -54,7 +54,7 @@ public class AccountDAOImpl implements AccountDAO {
             ps.setLong(6, account.getNominee_id());
 
             ps.executeUpdate();
-            Clients.alert("created");
+          
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) return rs.getLong(1);
             }
@@ -220,7 +220,7 @@ public class AccountDAOImpl implements AccountDAO {
      */
 	private Account mapRowtoAccount(ResultSet rs) throws SQLException {
 
-		Account account = new Account(rs.getLong("account_id"), rs.getLong("user_id"), rs.getLong("bank_id"),rs.getLong("nominee_id"),
+		Account account = new Account(rs.getLong("account_id"), rs.getLong("user_id"), rs.getLong("branch_id"),rs.getLong("nominee_id"),
 				rs.getLong("account_number"), AccountType.valueOf(rs.getString("account_type").toUpperCase()), rs.getBigDecimal("balance").doubleValue(),
 				rs.getString("currency"),AccountStatus.valueOf(rs.getString("status").toUpperCase()), rs.getTimestamp("opened_at").toLocalDateTime(),
 				rs.getTimestamp("updated_at").toLocalDateTime());
@@ -240,7 +240,7 @@ public class AccountDAOImpl implements AccountDAO {
         Map<String, Object> map = new HashMap<>();
         map.put("account_id", rs.getLong("account_id"));
         map.put("user_id", rs.getLong("user_id"));
-        map.put("bank_id", rs.getLong("bank_id"));
+        map.put("branch_id", rs.getLong("branch_id"));
         map.put("account_number", rs.getLong("account_number"));
         map.put("account_type", rs.getString("account_type"));
         map.put("balance", rs.getBigDecimal("balance"));
