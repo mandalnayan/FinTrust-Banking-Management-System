@@ -100,11 +100,10 @@
                     </combobox>
                 </row>
 
-                <row>
+              <row>
                     <label value="Mode of Operation:" />
                     <combobox placeholder="Select new mode" width="90%" id="accountMode" readonly="true">
                     	<comboitem label="Self" value="SELF"></comboitem>
-                    	<comboitem label="Join" value="JOINT"></comboitem>
                     </combobox>
                 </row>
             </rows>

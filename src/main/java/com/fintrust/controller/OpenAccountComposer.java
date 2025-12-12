@@ -14,6 +14,7 @@ import com.fintrust.model.Account;
 import com.fintrust.model.Nominee;
 import com.fintrust.model.Account.AccountStatus;
 import com.fintrust.model.Account.AccountType;
+import com.fintrust.model.Branch;
 import com.fintrust.model_copy.Account.ModeOfOperation;
 import com.fintrust.service.AccountServiceImpl;
 import com.fintrust.service.NomineeServiceImp;
@@ -21,6 +22,7 @@ import com.fintrust.util.NotificationUtil;
 import com.fintrust.model.Notification;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class OpenAccountComposer extends SelectorComposer<Component> {
 
@@ -54,6 +56,11 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 			accountType.appendChild(new Comboitem(at.name()));
 		}
 		accountType.setSelectedIndex(0);
+		
+		List<Branch> allBranch = BranchDao.findAll();
+		for(Branch myBranch : allBranch) {
+			branch.appendChild(new Comboitem(myBranch.getBranchName()));
+		}
 	}
 
 	// 🔹 Handle Submit button click
