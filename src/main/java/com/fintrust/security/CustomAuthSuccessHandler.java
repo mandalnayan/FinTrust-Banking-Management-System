@@ -41,7 +41,7 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler {
 	    }
 
 	    // notification via ZK requires ZK session, so delay it to ZUL page
-	    // NotificationUtil.push("info", "Welcome back " + user.getFullName());
+	   //  NotificationUtil.push("info", "Welcome back " + user.getFullName());
 
 	    response.sendRedirect(request.getContextPath() + "/user/userDashboard.zul");
 	}

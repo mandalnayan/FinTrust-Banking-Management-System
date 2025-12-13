@@ -3,80 +3,84 @@ package com.fintrust.model;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-public class Bank {
+public class Branch {
 
-	private Long bankId;
-	private String bankName;
-	private String bankCode;
+	private Long branchId;
 	private String ifscCode;
 	private String branchName;
 	private String supportEmail;
 	private String supportPhone;
 	private LocalDateTime createdAt;
 	
-	public Bank() {}
-	
-	public Bank(Long bankId, String bankName, String bankCode, String ifscPrefix, String branchName,
-			String supportEmail, String supportPhone, Timestamp createdAt) {
+	public Branch() {}
+
+	public Branch(Long branchId, String ifscCode, String branchName, String supportEmail, String supportPhone,
+			LocalDateTime createdAt) {
 		super();
-		this.bankId = bankId;
-		this.bankName = bankName;
-		this.bankCode = bankCode;
-		this.ifscCode = ifscPrefix;
+		this.branchId = branchId;
+		this.ifscCode = ifscCode;
 		this.branchName = branchName;
 		this.supportEmail = supportEmail;
 		this.supportPhone = supportPhone;
-		this.createdAt = createdAt.toLocalDateTime();
+		this.createdAt = createdAt;
 	}
-	public Long getBankId() {
-		return bankId;
+
+
+	public Long getBranchId() {
+		return branchId;
 	}
-	public void setBankId(Long bankId) {
-		this.bankId = bankId;
+
+
+	public void setBranchId(Long branchId) {
+		this.branchId = branchId;
 	}
-	public String getBankName() {
-		return bankName;
-	}
-	public void setBankName(String bankName) {
-		this.bankName = bankName;
-	}
-	public String getBankCode() {
-		return bankCode;
-	}
-	public void setBankCode(String bankCode) {
-		this.bankCode = bankCode;
-	}
+
+
 	public String getIfscCode() {
 		return ifscCode;
 	}
+
+
 	public void setIfscCode(String ifscCode) {
 		this.ifscCode = ifscCode;
 	}
+
+
 	public String getBranchName() {
 		return branchName;
 	}
+
+
 	public void setBranchName(String branchName) {
 		this.branchName = branchName;
 	}
+
+
 	public String getSupportEmail() {
 		return supportEmail;
 	}
+
+
 	public void setSupportEmail(String supportEmail) {
 		this.supportEmail = supportEmail;
 	}
+
+
 	public String getSupportPhone() {
 		return supportPhone;
 	}
+
+
 	public void setSupportPhone(String supportPhone) {
 		this.supportPhone = supportPhone;
 	}
+
+
 	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
-	public void setCreatedAt(Timestamp createdAt) {
-		this.createdAt = createdAt.toLocalDateTime();
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
 	}
-	
-	
-	
 }

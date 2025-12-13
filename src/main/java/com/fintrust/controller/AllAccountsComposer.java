@@ -22,10 +22,7 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
     @Override
     public void doAfterCompose(Window comp) throws Exception {
         super.doAfterCompose(comp);
-      
-
-        Long userId = (Long)Sessions.getCurrent().getAttribute("user_id");
-        
+              
 //        if (customerId == null) {
 //            Messagebox.show("Session expired. Please log in again.", "Error", Messagebox.OK, Messagebox.ERROR);
 //           // Executions.sendRedirect("/customer_dashboard.zul");
@@ -38,8 +35,8 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
             Listitem item = new Listitem();
             item.appendChild(new Listcell(String.valueOf(acc.getAccountNumber())));
             item.appendChild(new Listcell(String.format("%.2f", acc.getBalance())));
-            item.appendChild(new Listcell(acc.getAccountType()));
-            item.appendChild(new Listcell(acc.getStatus().name()));
+            item.appendChild(new Listcell(acc.getAccountType().toString()));
+            item.appendChild(new Listcell(acc.getAccount_status().name()));
             
             Listcell actions = new Listcell();
 
@@ -85,7 +82,13 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
     	// Store selected account number in session
         Executions.getCurrent().getSession().setAttribute("selected_account_no", acc.getAccountNumber());
         // Redirect to details page
-        Executions.sendRedirect("/user/account/view_spc_account.zul");
+        //Executions.sendRedirect("/user/account/view_spc_account.zul");
+        
+        //Find center area in dashboard
+        Include centerArea = (Include) getPage().getFellow("main_content_sec");
+
+        // Load details page
+        centerArea.setSrc("/user/account/view_spc_account.zul");
     }
 
     /** Edit account **/
@@ -93,7 +96,11 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
     	// Store selected account number in session
         Executions.getCurrent().getSession().setAttribute("selected_account_no", acc.getAccountNumber());
         // Redirect to details page
-        Executions.sendRedirect("/user/account/update_account.zul");
+        //Executions.sendRedirect("/user/account/update_account.zul");
+        
+        
+        Include centerArea = (Include) getPage().getFellow("main_content_sec");
+        centerArea.setSrc("/user/account/update_account.zul");
     }
 
     /** Close account **/
@@ -101,7 +108,9 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
     	// Store selected account number in session
         Executions.getCurrent().getSession().setAttribute("selected_account_no", acc.getAccountNumber());
         // Redirect to details page
-        Executions.sendRedirect("/user/account/close_account.zul");
+        //Executions.sendRedirect("/user/account/close_account.zul");
+        Include centerArea = (Include) getPage().getFellow("main_content_sec");
+        centerArea.setSrc("/user/account/close_account.zul");
     }
 
     @Listen("onClick = #backBtn")

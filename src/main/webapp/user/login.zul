@@ -10,6 +10,9 @@
 <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 <?link rel="stylesheet" type="text/css" href="/resources/css/auth-common.css"?>
 
+<!-- Show notification if any exist  -->
+<!-- <?init class="com.fintrust.util.PageInitNotifier" ?> -->
+
 <zk xmlns:h="xhtml" xmlns:n="native">
 
     <!-- NAVBAR -->
@@ -31,10 +34,10 @@
             <label value="Login to your FinTrust digital banking account" sclass="login-subtitle"/>
 
             <vlayout spacing="15px" width="100%" sclass="login-form">
-
+       
                 <!-- HTML FORM for Spring Security 5.x -->
              <n:form method="POST" action="${pageContext.request.contextPath}/login" xmlns:n="native">
-
+				
                     <n:input 
                         type="text" 
                         name="username" 
@@ -71,6 +74,8 @@
     </div>
 
 </zk>
+
+
 
 
 

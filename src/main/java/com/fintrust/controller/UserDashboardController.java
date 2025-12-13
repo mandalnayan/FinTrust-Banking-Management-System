@@ -30,7 +30,7 @@ public class UserDashboardController extends SelectorComposer<Component>{
     
     @Wire Include main_content_sec; 
     
-    @Wire Toolbarbutton userdashboard, profile, account, viewAccounts;
+    @Wire Toolbarbutton userdashboard, profile, account, viewAccounts, kyc;
     
     private List<Include> includes = new ArrayList<>();
     private List<Toolbarbutton> buttons = new ArrayList<>();
@@ -75,9 +75,20 @@ public class UserDashboardController extends SelectorComposer<Component>{
    
    @Listen("onClick=#account")
    public void openAccount() {
-	   main_content_sec.setSrc("/WEB-INF/components/kycForm.zul");
+	   main_content_sec.setSrc("/WEB-INF/components/openNewAccount.zul");
 	   
 	   account.addSclass("active");
+	   userdashboard.removeSclass("active");
+	   viewAccounts.removeSclass("active");
+	   profile.removeSclass("active");
+   }
+   
+   @Listen("onClick=#kyc")
+   public void openKyc() {
+	   main_content_sec.setSrc("/WEB-INF/components/kycForm.zul");
+	   
+	   kyc.addSclass("active");
+	   account.removeSclass("active");
 	   userdashboard.removeSclass("active");
 	   viewAccounts.removeSclass("active");
 	   profile.removeSclass("active");

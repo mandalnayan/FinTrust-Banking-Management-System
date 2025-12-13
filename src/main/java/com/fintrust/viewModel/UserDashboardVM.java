@@ -36,7 +36,7 @@ public class UserDashboardVM {
 	@Init	
 	public void init() {	
 		accountService  = new AccountServiceImpl();
-		userDetailsServiceImpl = new UserDetailsServiceImpl();
+		userDetailsServiceImpl = new UserDetailsServiceImpl();		
 		Long userId = (Long) Sessions.getCurrent().getAttribute("user_id");
 		if (userId == null) {
 			return;
@@ -46,6 +46,7 @@ public class UserDashboardVM {
 		if (accountId == -1) {
 			return;
 		}
+		
 		selectedAccount = accountService.getAccountById(accountId);
 		if (selectedAccount == null)
 			return;

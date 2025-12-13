@@ -181,8 +181,8 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
     }
 
     	@Override
-    	public boolean updateKyc(UserDetails ud) throws SQLException {
-
+    	public boolean updateKyc(UserDetails ud) throws SQLException {    		
+    		
     	    String sql = """
     	        UPDATE user_details SET
     	            gender = ?,
@@ -194,23 +194,26 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
     	            district = ?,
     	            city = ?,
     	            pincode = ?,
+    	            address_proof_name = ?,
+    	            photo_name = ?,
     	            updated_at = NOW()
     	        WHERE details_id = ?
     	    """;
-
     	    try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
-    	        ps.setString(1, ud.getGender());
+    	        ps.setString(1, ud.getGender().trim());
     	        if (ud.getDob() == null) return false;
     	        ps.setDate(2, Date.valueOf(ud.getDob()));
-    	        ps.setString(3, ud.getAadhaarMasked());
-    	        ps.setString(4, ud.getPanMasked());
-    	        ps.setString(5, ud.getCountry());
-    	        ps.setString(6, ud.getState());
-    	        ps.setString(7, ud.getDistrict());
-    	        ps.setString(8, ud.getCity());
-    	        ps.setString(9, ud.getPincode());    	        
-    	        ps.setLong(10, ud.getDetailsId());
+    	        ps.setString(3, ud.getAadhaarMasked().trim());
+    	        ps.setString(4, ud.getPanMasked().trim());
+    	        ps.setString(5, ud.getCountry().trim());
+    	        ps.setString(6, ud.getState().trim());
+    	        ps.setString(7, ud.getDistrict().trim());
+    	        ps.setString(8, ud.getCity().trim());
+    	        ps.setString(9, ud.getPincode().trim());   
+    	        ps.setString(10, ud.getAddressProofFileName());
+    	        ps.setString(11, ud.getPhotoFileName());
+    	        ps.setLong(12, ud.getDetailsId());
 
     	        return ps.executeUpdate() > 0;
     	    }
@@ -278,7 +281,8 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
          ud.setDistrict(rs.getString("district"));
          ud.setCity(rs.getString("city"));
          ud.setPincode(rs.getString("pincode"));
-         
+         ud.setAddressProofFileName(rs.getString("address_proof_name"));
+         ud.setPhotoFileName(rs.getString("photo_name"));
          ud.setPrimaryAccountId(rs.getLong("primary_account_id"));
          User user = new User(
 				 rs.getLong("user_id"),

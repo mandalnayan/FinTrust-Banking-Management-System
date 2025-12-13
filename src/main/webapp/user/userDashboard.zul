@@ -1,10 +1,10 @@
 <!-- ============================================================
- Page Name: userDashboard.zul
- Purpose: Displays user overview after login.
- Features: Shows account summary, recent transactions, quick links.
- Controller: UserDashboardController.java
- ============================================================ -->
- 
+	Page Name: userDashboard.zul
+	Purpose: Displays user overview after login.
+	Features: Shows account summary, recent transactions, quick links.
+	Controller: UserDashboardController.java
+	============================================================ -->
+
 <?page title="Dashboard - FinTrust Bank" contentType="text/html;charset=UTF-8"?>
 <!-- Dashboard css -->
 <?link rel="stylesheet" type="text/css" href="/resources/css/dashboard.css"?>
@@ -14,65 +14,88 @@
 <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 <!-- Global css -->
 <?link rel="stylesheet" type="text/css" href="/resources/css/global.css"?>
+<!-- Banking forms -->
+<?link rel="stylesheet" type="text/css" href="/resources/css/bankingForms.css"?>
+
+<!-- account forms -->
+<?link rel="stylesheet" type="text/css" href="/resources/css/openAccount.css"?>
 
 
 <!-- Before loading page it ensuer page should not render -->
 <?init class = "com.fintrust.security.AuthenticationController" ?>
 
+<!-- Show notification if any exist  -->
 <?init class="com.fintrust.util.PageInitNotifier" ?>
 
 <zk xmlns:h="xhtml">
-  <!-- Use borderlayout for predictable ZK structure -->
-  <borderlayout  sclass="dashboard-window" apply="com.fintrust.controller.UserDashboardController">
+	<!-- Use borderlayout for predictable ZK structure -->
+	<borderlayout sclass="dashboard-window"
+		apply="com.fintrust.controller.UserDashboardController">
 
-    <!-- NORTH: Top header (compact) -->
-  <north >    
-    <!--  <include src = "/WEB-INF/components/privateNavbar.zul" />  -->
-     <privateNavbar width="100%"></privateNavbar>
-    </north> 
+		<!-- NORTH: Top header (compact) -->
+		<north>
+			<!--  <include src = "/WEB-INF/components/privateNavbar.zul" />  -->
+			<privateNavbar width="100%"></privateNavbar>
+		</north>
 
-    <!-- WEST: Sidebar navigation -->  <!-- viewModel="@id('vm') @init('com.fintrust.controller.UserDashboardController')" -->
-    <west closable="true" collapsible="true" size="240px"  splittable="true"  >
-      <vbox sclass="sidebar" spacing="12px" >
-        <h:div sclass="sidebar-brand">
-          <image src="/resources/images/logo.png" sclass="sidebar-logo-img"/>
-          <label value="FinTrust" sclass="sidebar-title"/>
-        </h:div>
+		<!-- WEST: Sidebar navigation -->
+		<!-- viewModel="@id('vm') @init('com.fintrust.controller.UserDashboardController')" -->
+		<west closable="true" collapsible="true" size="240px"
+			splittable="true">
+			<vbox sclass="sidebar" spacing="12px">
+				<h:div sclass="sidebar-brand">
+					<image src="/resources/images/logo.png"
+						sclass="sidebar-logo-img" />
+					<label value="FinTrust" sclass="sidebar-title" />
+				</h:div>
 
-<!-- MVC  -->
-        <vbox sclass="sidebar-menu" vflex="1" spacing="6px" >
-          <toolbarbutton label="Dashboard" sclass="menu-item active" id = "userdashboard"/>
-          <toolbarbutton label="open Accounts" sclass="menu-item" id = "account"/>
-          <toolbarbutton label="view Accounts" sclass="menu-item" id = "viewAccounts"/>
-          <toolbarbutton label="Transactions" sclass="menu-item" id = "transactions"/>
-          <toolbarbutton label="Cards" sclass="menu-item" id = "cards"/>
-          <toolbarbutton label="Profile" sclass="menu-item" id = "profile"/>
-        </vbox>
-        
-        <!-- MVVM -->
-<!-- 
-    <vbox sclass="sidebar-menu" vflex="1" spacing="6px" >
-          <toolbarbutton label="Dashboard" sclass="menu-item active" onClick="@command('go','dashboard')"/>
-          <toolbarbutton label="open Accounts" sclass="menu-item" onClick="@command('go','accounts')"/>
-          <toolbarbutton label="Transactions" sclass="menu-item" onClick="@command('go','transactions')"/>
-          <toolbarbutton label="Cards" sclass="menu-item" onClick="@command('go','cards')"/>
-          <toolbarbutton label="Profile" sclass="menu-item" onClick="@command('go','profile')"/>
-        </vbox> -->
+				<!-- MVC  -->
+				<vbox sclass="sidebar-menu" vflex="1" spacing="6px">
+					<toolbarbutton label="Dashboard"
+						sclass="menu-item active" id="userdashboard" />
+					<toolbarbutton label="open Accounts"
+						sclass="menu-item" id="account" />
+					<toolbarbutton label="Update Kyc" sclass="menu-item"
+						id="kyc" />
+					<toolbarbutton label="view Accounts"
+						sclass="menu-item" id="viewAccounts" />
+					<!--     <toolbarbutton label="Transactions" sclass="menu-item" id = "transactions"/> -->
+					<toolbarbutton label="Cards" sclass="menu-item"
+						id="cards" />
+					<toolbarbutton label="Profile" sclass="menu-item"
+						id="profile" />
+				</vbox>
 
-        <div sclass="sidebar-footer">
-          <label value="Need help?"/> <separator/>
-          <button label="Support" sclass="support-btn" onClick='Executions.sendRedirect("/contact-us.zul")'/>
-        </div>
-      </vbox>
-    </west>
+				<!-- MVVM -->
+				<!-- 
+					<vbox sclass="sidebar-menu" vflex="1" spacing="6px" >
+					<toolbarbutton label="Dashboard" sclass="menu-item active" onClick="@command('go','dashboard')"/>
+					<toolbarbutton label="open Accounts" sclass="menu-item" onClick="@command('go','accounts')"/>
+					<toolbarbutton label="Transactions" sclass="menu-item" onClick="@command('go','transactions')"/>
+					<toolbarbutton label="Cards" sclass="menu-item" onClick="@command('go','cards')"/>
+					<toolbarbutton label="Profile" sclass="menu-item" onClick="@command('go','profile')"/>
+					</vbox> -->
 
-    <!-- CENTER: Main content area -->
-   
-    <center vflex="1">
-    <include vflex="1" id="main_content_sec" src="/WEB-INF/components/dashboard.zul" />
-</center>
+				<div sclass="sidebar-footer">
+					<label value="Need help?" />
+					<separator />
+					<button label="Support" sclass="support-btn"
+						onClick='Executions.sendRedirect("/contact-us.zul")' />
+				</div>
+			</vbox>
+		</west>
 
-  </borderlayout>
+		<!-- CENTER: Main content area -->
+
+		<center>
+			<div zclass="no-defaultCSS"
+				style="height:100%; width:100%;">
+				<include id="main_content_sec"
+					src="/WEB-INF/components/dashboard.zul" vflex="1" hflex="1" />
+			</div>
+		</center>
+
+	</borderlayout>
 </zk>
 
 

@@ -10,31 +10,33 @@ import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.*;
 
 import com.fintrust.model.Account;
+import com.fintrust.model.Beneficiary;
 import com.fintrust.model.BeneficiaryModel;
 import com.fintrust.service.AccountService;
 import com.fintrust.service.AccountServiceImpl;
+import com.fintrust.service.BeneficiaryService;
 import com.fintrust.util.NotificationUtil;
 import com.fintrust.dao.AccountDAO;
 import com.fintrust.dao.impl.AccountDAOImpl;
-import com.fintrust.dao.impl.BeneficiaryDAO;
 import com.fintrust.dao.impl.FundTransferDAO;
 
 
 public class FundTransferController extends SelectorComposer<Component> {
 
-	@Wire private Combobox accountList;
+	@Wire private Combobox accountList, beneficiaryCombo;
 	
-    @Wire private Textbox toAccount;
+    @Wire private Longbox toAccount;
     @Wire private Textbox ifsccode;
     @Wire private Doublebox amount;
-    @Wire private Combobox beneficiaryCombo;
     @Wire private Label statusLabel;
     
     private Long fromAccount;
 
-    AccountDAO accountDao;
-    AccountService accountService;
-    private List<BeneficiaryModel> beneficiaries;
+    private AccountDAO accountDao;
+    private AccountService accountService;
+    private BeneficiaryService beneficiaryService;
+    
+    private List<Beneficiary> beneficiaries;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -43,32 +45,33 @@ public class FundTransferController extends SelectorComposer<Component> {
         accountDao = new AccountDAOImpl();
         accountService = new AccountServiceImpl();
 		List<Account> accounts = accountService.getAllAccounts();
+		beneficiaryService = new BeneficiaryService();
 		
 		if (accounts == null || accounts.size() == 0) {
 			NotificationUtil.showInstant("error", "Internal server error!");
 		} else {
-			accounts.forEach(accountNo -> accountList.appendItem(accountNo+""));		    
-	        Long userId = (Long)Sessions.getCurrent().getAttribute("customer_id"); 
-	        alert(userId + "");
-	        
-	       // beneficiaries = BeneficiaryDao.getBeneficiariesByUserId(userId);
+			for (Account account : accounts) {
+			    Comboitem item = accountList.appendItem(account.getAccountNumber() + "");
+			    item.setValue(account.getAccountNumber());  // <-- THIS FIXES NULL PROBLEM
+			}
 
-	        for (BeneficiaryModel b : beneficiaries) {
+	        beneficiaries = beneficiaryService.getBeneficiaries();
+
+	        for (Beneficiary b : beneficiaries) {
 	            Comboitem item = new Comboitem(b.getName() + " (" + b.getBankName() + ")");
 	            item.setValue(b);
 	            beneficiaryCombo.appendChild(item);
 	        }
-		}
-		
-        
+		}		
     }
     
     @Listen("onSelect=#accountList")
     public void onAccountSelect() {
+    	System.out.println("invoked fundtranser");
         Comboitem selected = accountList.getSelectedItem();
         if (selected != null) {
-            Account account = selected.getValue();
-            fromAccount = account.getAccountNumber();
+            fromAccount = selected.getValue();
+            System.out.println("acc " + fromAccount);
         }
     }
 
@@ -76,36 +79,36 @@ public class FundTransferController extends SelectorComposer<Component> {
     public void onBeneficiarySelect() {
         Comboitem selected = beneficiaryCombo.getSelectedItem();
         if (selected != null) {
-            BeneficiaryModel b = selected.getValue();
+            Beneficiary b = selected.getValue();
             toAccount.setValue(b.getAccountNumber());
             ifsccode.setValue(b.getIfscCode());
-            Clients.showNotification("Beneficiary selected: " + b.getName());
+          //  Clients.showNotification("Beneficiary selected: " + b.getName());
         }
     }
 
     @Listen("onClick=#transferBtn")
     public void transferFunds() {
         Long fromAcc = fromAccount;
-        String toAcc = toAccount.getValue();
+        Long toAcc = toAccount.getValue();
         Double amt = amount.getValue();
-
-        if (fromAcc != null || toAcc.isEmpty() || amt == null || amt <= 0) {
-            Clients.showNotification("Please enter valid transfer details!", "error", null, "top_center", 3000);
-
+        System.out.println(fromAcc + " To " + toAcc + " amt " + amt);
+        if (fromAcc == null || toAcc == null || String.valueOf(toAcc).length() != 12 || amt == null || amt <= 0 || fromAcc == toAcc) {
+          
+         	NotificationUtil.showInstant("error", "Please enter valid transfer details!");
             return;
         }
 
         boolean result = FundTransferDAO.transferFunds(fromAcc, toAcc, amt);
         Clients.showNotification("from=" + fromAcc + ", to=" + toAcc + ", amount=" + amt);
         if (result) {
-   		 Clients.showNotification("Transfer successfull!", "info", null, "top_center", 3000);
+        	NotificationUtil.showInstant("info", "Transfer successfull!");
    		//fromAccount.setValue("");
-   		toAccount.setValue("");
+   		toAccount.setValue(0l);
    		ifsccode.setValue("");
    		amount.setValue(0);
 
         } else {
-            Clients.showNotification("Transfer failed! Check balance or account.", "error", null, "top_center", 3000);
+        	NotificationUtil.showInstant("error", "Transfer failed! Check balance or account.");
         }
     }
 }

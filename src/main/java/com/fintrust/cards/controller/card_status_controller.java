@@ -30,15 +30,14 @@ public class card_status_controller extends SelectorComposer<Window> {
 	public void doAfterCompose(Window comp) throws Exception {
 		// TODO Auto-generated method stub
 		super.doAfterCompose(comp);
-		Class.forName("com.mysql.cj.jdbc.Driver");
 		Connection connection = DBConnection.getConnection();
 		// String atmCardNumber=(String)Sessions.getCurrent().getAttribute("atmNumber");
 		// long atmNumber = (Long) Long.parseLong(atmCardNumber);
 
-		String sql = "select * from card_request where customer_id =?";
+		String sql = "select * from card_request where user_id =?";
 		PreparedStatement ptsm = connection.prepareStatement(sql);
-		long customer_id = 1l;
-		ptsm.setLong(1, customer_id); // ****TAKE IT FROM SESSIONOS
+		long user_id = (Long) Sessions.getCurrent().getAttribute("user_id");
+		ptsm.setLong(1, user_id); // ****TAKE IT FROM SESSIONOS
 
 		ResultSet rs = ptsm.executeQuery();
 		while (rs.next()) {

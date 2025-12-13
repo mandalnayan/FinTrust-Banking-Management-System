@@ -13,7 +13,7 @@ import com.fintrust.model.Nominee;
 
 public class NomineeDAO {
 	public static boolean createNomineeSchema() {
-		String q = "CREATE TABLE nominee (\r\n"
+		String q = "CREATE TABLE nominee_details (\r\n"
 				+ "id BIGINT UNSIGNED PRIMARY KEY auto_increment,"
 				+ "    nominee_id BIGINT UNSIGNED NOT NULL,\r\n"
 				+ "    nominee_name VARCHAR(100) NOT NULL,\r\n"
@@ -33,7 +33,7 @@ public class NomineeDAO {
 	
 	public Long createNominee(Nominee nominee) throws SQLException {
 		createNomineeSchema();
-		String q = "INSERT INTO nominee(nominee_id, nominee_name, nominee_relation) VALUES ( ?, ?, ?);";
+		String q = "INSERT INTO nominee_details(nominee_id, nominee_name, nominee_relation) VALUES ( ?, ?, ?);";
 		try(PreparedStatement ps = DBConnection.getConnection().prepareStatement(q, Statement.RETURN_GENERATED_KEYS)){
 			
 			ps.setLong(1, nominee.getNominee_id());
@@ -54,13 +54,13 @@ public class NomineeDAO {
 	
 	public Nominee getNominee(long nominee_id) {
 		Nominee nominee = new Nominee();
-		String q = "select * from nominee where nominee_id = ?";
+		String q = "select * from nominee_details where nominee_id = ?";
 		try(PreparedStatement statement = DBConnection.getConnection().prepareStatement(q)){
 			
 			statement.setLong(1, nominee_id);
 			ResultSet rs = statement.executeQuery();
 			if(rs.next()) {
-				System.out.println("Account created successfully");
+				System.out.println("Nominee already present in db");
 				return nominee;
 			}
 		} catch (SQLException e) {
