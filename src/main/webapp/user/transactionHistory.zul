@@ -13,13 +13,13 @@
 
 <?page title="Transactions" contentType="text/html;charset=UTF-8"?>
 <zk>
-	<!-- <include src = "/WEB-INF/components/privateNavbar.zul" />  -->
 	<window
-		
+		apply = "com.fintrust.controller.TransactionHistoryController"
 		closable="false" sizable="true" width="100%" height="90%"
 		style="margin-top: 0px; padding: 0px; background-color: pink;">
+    <include src = "/WEB-INF/components/privateNavbar.zul" /> 
 
-		<vlayout spacing="10px" vflex="1">
+		<vlayout spacing="10px" vflex="1"> <separator spacing="30px"/>
 
 			<!-- Header -->
 			<hlayout width="50%" spacing="10px"
@@ -29,7 +29,7 @@
 
 				<button label="⟳ " sclass="btn-refresh"
 					style="background:#2563eb; color:white; border:none; border-radius:6px; padding:6px 12px; font-weight:600; cursor:pointer;"
-					onClick='Executions.sendRedirect(null);' />
+					onClick='Executions.sendRedirect("");' />
 			</hlayout>
 
 			<!-- Date range filter -->
@@ -41,7 +41,7 @@
 				<label value="To:" />
 				<datebox id="toDate" width="150px" />
 
-				<button id="filterBtn" label="apply"
+				<button id="filterBtn" label="filter"
 					style="background:#16a34a; color:white; border:none; border-radius:6px; padding:6px 12px; font-weight:600; cursor:pointer;" />
 			</hlayout>
 

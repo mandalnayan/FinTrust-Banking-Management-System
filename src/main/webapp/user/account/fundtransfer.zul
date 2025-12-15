@@ -32,24 +32,24 @@
 
                     <row>
                         <label value="Select Beneficiary:" style="font-weight:bold; color:#374151;"/>
-                        <combobox id="beneficiaryCombo" autodrop="true" width="300px" 
+                        <combobox id="beneficiaryComboBox" autodrop="true" width="300px" 
                                   placeholder="Select Beneficiary" />
                     </row>
 
                     <row>
                         <label value="To Account:" style="font-weight:bold; color:#374151;"/>
-                        <longbox id="toAccount" width="300px" value="10001004"/>
+                        <longbox id="toAccountBox" width="300px" value="10001004"/>
                     
                     </row>
 
                     <row>
                         <label value="IFSC Code:" style="font-weight:bold; color:#374151;"/>
-                        <textbox id="ifsccode"  width="300px" />
+                        <textbox id="ifsccodeBox"  width="300px" />
                     </row>
 
                     <row>
                         <label value="Amount:" style="font-weight:bold; color:#374151;"/>
-                        <doublebox id="amount" width="300px" format="###,###.00" 
+                        <doublebox id="amountBox" width="300px" format="###,###.00" 
                                    placeholder="Enter amount to transfer" sclass="form-text"/>
                     </row>
                 </rows>
@@ -63,7 +63,7 @@
                 <button id="resetBtn" label=" Clear" 
                         width="120px" height="40px"
                         style="background-color:#9ca3af; color:white; font-weight:bold; border:none; border-radius:8px;"
-                        onClick='fromAccount.setValue(""); toAccount.setValue(""); amount.setValue(null); beneficiaryCombo.setValue(""); ifsccode.setValue(""); statusLabel.setValue("");'/>
+                        onClick='fromAccount.setValue(""); toAccount.setValue(null); amount.setValue(null); beneficiaryCombo.setValue(""); ifsccode.setValue(""); statusLabel.setValue("");'/>
                 
                  <button id="benificryBtn" label="Add Beneficiary" 
                         height="40px"

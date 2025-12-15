@@ -50,7 +50,7 @@
 				</h:div>
 
 				<!-- MVC  -->
-				<vbox sclass="sidebar-menu" vflex="1" spacing="6px">
+				<vbox sclass="sidebar-menu" vflex="1" spacing="6px" style="overflow:auto;">
 					<toolbarbutton label="Dashboard"
 						sclass="menu-item active" id="userdashboard" />
 					<toolbarbutton label="open Accounts"
@@ -59,7 +59,7 @@
 						id="kyc" />
 					<toolbarbutton label="view Accounts"
 						sclass="menu-item" id="viewAccounts" />
-					<!--     <toolbarbutton label="Transactions" sclass="menu-item" id = "transactions"/> -->
+					     <toolbarbutton label="Transactions" sclass="menu-item" id = "transactions"/>
 					<toolbarbutton label="Cards" sclass="menu-item"
 						id="cards" />
 					<toolbarbutton label="Profile" sclass="menu-item"

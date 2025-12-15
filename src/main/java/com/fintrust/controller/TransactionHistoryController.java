@@ -3,6 +3,7 @@
 package com.fintrust.controller;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.select.annotation.Listen;
@@ -16,7 +17,9 @@ import java.util.List;
 
 public class TransactionHistoryController extends SelectorComposer<Component> {
 
-    @Wire
+    private static final long serialVersionUID = 1123456776543234L;
+
+	@Wire
     private Listbox transactionListbox;
 
     @Wire
@@ -52,23 +55,25 @@ public class TransactionHistoryController extends SelectorComposer<Component> {
 
    
     private void loadTransactionData(java.sql.Date from, java.sql.Date to) {
+    	
+    	Long user_id = (Long) Sessions.getCurrent().getAttribute("user_id");
        
     	transactionListbox.getItems().clear();
 
-        String query = "SELECT id, from_account, to_account, amount, status, created_at FROM transactions where user";
+        String query = "SELECT transaction_id, account_number, counterparty_account_number, amount, status, created_at FROM transactions where user_id = ?";
         		
 
         if (from != null && to != null) {
-            query += " WHERE DATE(created_at) BETWEEN ? AND ?";
+            query += " AND DATE(created_at) BETWEEN ? AND ?";
         }
-
 
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
         		
+        	  ps.setLong(1, user_id);
             if (from != null && to != null) {
-                ps.setDate(1, from);
-                ps.setDate(2, to);
+                ps.setDate(2, from);
+                ps.setDate(3, to);
             }
 
             ResultSet rs = ps.executeQuery();
@@ -77,9 +82,9 @@ public class TransactionHistoryController extends SelectorComposer<Component> {
 
             while (rs.next()) {
                 Listitem item = new Listitem();
-                item.appendChild(new Listcell(String.valueOf(rs.getLong("id"))));
-                item.appendChild(new Listcell(rs.getLong("from_account")+""));
-                item.appendChild(new Listcell((rs.getLong("to_account") +"")));
+                item.appendChild(new Listcell(String.valueOf(rs.getLong("transaction_id"))));
+                item.appendChild(new Listcell(rs.getLong("account_number")+""));
+                item.appendChild(new Listcell((rs.getLong("counterparty_account_number") +"")));
                 item.appendChild(new Listcell(String.format("%.2f", rs.getDouble("amount"))));
                 item.appendChild(new Listcell(rs.getString("status")));
 				 item.appendChild(new Listcell(rs.getTimestamp("created_at").toString())); 

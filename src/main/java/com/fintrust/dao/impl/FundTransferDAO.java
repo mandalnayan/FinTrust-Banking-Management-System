@@ -3,122 +3,98 @@ package com.fintrust.dao.impl;
 import java.sql.*;
 
 import com.fintrust.db.DBConnection;
-import com.fintrust.model.Transaction.TransactionStatus;
-import com.fintrust.util.NotificationUtil;
 
 public class FundTransferDAO {
 
-    /**
-     * Transfers amount from fromAcc to toAcc in a single transactional operation.
-     * Returns true if transfer committed successfully, false otherwise.
-     */
-    public static boolean transferFunds(Long fromAcc, Long toAcc, double amount) {       
-       
-        Connection conn = null;
+	Connection connection;
+    public FundTransferDAO(Connection conn){
+        Connection connection = conn;
+    }
 
-        try {
-            conn = DBConnection.getConnection();
-            if (conn == null || conn.isClosed()) {
-                System.out.println("Database connection failed.");
-                return false;
-            }
-            
-            conn.setAutoCommit(false);
-            
-            double senderBalance = 0;
-            String sqlCheckSender = "SELECT balance FROM accounts WHERE account_number = ?";
-            try (PreparedStatement ps = conn.prepareStatement(sqlCheckSender)) {
-                ps.setLong(1, fromAcc);
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        senderBalance = rs.getDouble("balance");
-                    } else {
-                        System.out.println("Sender account not found: " + fromAcc);
-                        conn.rollback();
-                        return false;
-                    }
+    public double getAccountBalance(Long accountNumber)
+            throws SQLException {
+
+        String sql = "SELECT balance FROM accounts WHERE account_number = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setLong(1, accountNumber);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) {
+                    throw new SQLException("Account not found: " + accountNumber);
                 }
-            }
-
-            if (senderBalance < amount) {
-            	NotificationUtil.showInstant("warning", " Insufficient balance in account: ");
-                conn.rollback();
-                return false;
-            }
-            
-            String sqlCheckReceiver = "SELECT 1 FROM accounts WHERE account_number = ?";
-            boolean receiverExists = false;
-            try (PreparedStatement ps = conn.prepareStatement(sqlCheckReceiver)) {
-            	 ps.setLong(1, toAcc);
-                try (ResultSet rs = ps.executeQuery()) {
-                    receiverExists = rs.next();
-                }
-            }
-            if (!receiverExists) {
-            	NotificationUtil.showInstant("warning", "Transaction Failed. Receiver account not found: ");
-                conn.rollback();
-                return false;
-            }
-            
-            String sqlDebit = "UPDATE accounts SET balance = balance - ? WHERE account_number = ?";
-            int debitRows;
-            try (PreparedStatement ps = conn.prepareStatement(sqlDebit)) {
-                ps.setDouble(1, amount);
-                ps.setLong(2,fromAcc);
-                debitRows = ps.executeUpdate();
-            }       
-
-            if (debitRows <= 0) {
-                System.out.println(" Debit failed - no sender row updated.");
-                conn.rollback();
-                return false;
-            }
-            
-            String sqlCredit = "UPDATE accounts SET balance = balance + ? WHERE account_number = ?";
-            int creditRows;
-            try (PreparedStatement ps = conn.prepareStatement(sqlCredit)) {
-                ps.setDouble(1, amount);
-                ps.setLong(2, toAcc);
-                creditRows = ps.executeUpdate();
-            }
-                   
-            String status = (creditRows > 0) ? TransactionStatus.COMPLETED.name().toLowerCase() :TransactionStatus.FAILED.name().toLowerCase() ;
-            String sqlTxn = "INSERT INTO transactions(account_number, counterparty_account_number, amount, status) VALUES (?, ?, ?, ?)";
-            try (PreparedStatement ps = conn.prepareStatement(sqlTxn)) {
-                ps.setLong(1, fromAcc);
-                ps.setLong(2, toAcc);
-                ps.setDouble(3, amount);
-                ps.setString(4, status);
-                ps.executeUpdate();
-            }
-
-            // 6️ Commit or rollback
-            if (creditRows > 0) {
-                conn.commit();              
-                return true;
-            } else {
-                conn.rollback();
-                System.out.println("Credit failed transaction rolled back.");
-                return false;
-            }
-
-        } catch (Exception e) {
-            try {
-                if (conn != null) conn.rollback();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-            e.printStackTrace();
-            return false;
-        } finally {
-            try {
-                if (conn != null && !conn.isClosed()) conn.close();
-            } catch (Exception e) {
-                e.printStackTrace();
+                return rs.getDouble("balance");
             }
         }
     }
+
+    public long getBranchId(Long accountNumber)
+            throws SQLException {
+
+        String sql = "SELECT branch_id FROM accounts WHERE account_number = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setLong(1, accountNumber);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) {
+                    throw new SQLException("Receiver account not found");
+                }
+                return rs.getLong("branch_id");
+            }
+        }
+    }
+
+    public boolean validateIFSC(long branchId, String ifsc)
+            throws SQLException {
+
+        String sql = "SELECT 1 FROM branches WHERE branch_id = ? AND ifsc_code = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setLong(1, branchId);
+            ps.setString(2, ifsc);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        }
+    }
+
+    public int debit(Long accountNumber, double amount)
+            throws SQLException {
+
+        String sql = "UPDATE accounts SET balance = balance - ? WHERE account_number = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setDouble(1, amount);
+            ps.setLong(2, accountNumber);
+            return ps.executeUpdate();
+        }
+    }
+
+    public int credit(Long accountNumber, double amount)
+            throws SQLException {
+
+        String sql = "UPDATE accounts SET balance = balance + ? WHERE account_number = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setDouble(1, amount);
+            ps.setLong(2, accountNumber);
+            return ps.executeUpdate();
+        }
+    }
+
+    public void insertTransaction(Long userId,
+                                  Long fromAcc,
+                                  Long toAcc,
+                                  double amount,
+                                  String status) throws SQLException {
+
+        String sql = """
+            INSERT INTO transactions
+            (user_id, account_number, counterparty_account_number, amount, status)
+            VALUES (?, ?, ?, ?, ?)
+        """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setLong(1, userId);
+            ps.setLong(2, fromAcc);
+            ps.setLong(3, toAcc);
+            ps.setDouble(4, amount);
+            ps.setString(5, status);
+            ps.executeUpdate();
+        }
+    }
 }
-
-
-
