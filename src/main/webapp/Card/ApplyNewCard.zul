@@ -148,13 +148,20 @@ head footer csss
 <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 
 <zk>
+        <include src="/WEB-INF/components/privateNavbar.zul" style="
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            z-index: 999;
+        " /> 
     <!-- FIXED: Removed height="130%" and added vflex="min" -->
     <window border="none" width="100%" height="auto" vflex="min"
         apply="com.fintrust.cards.controller.cardApplyPageController"
         style="background: linear-gradient(135deg, #e6f0ff, #ffffff); padding-bottom:30px;">
 
         <!-- 🌐 Top Navigation Bar -->
-        <include src="/WEB-INF/components/privateNavbar.zul" style="position: static;" />
+      
 
         <!-- 🌈 Main Content Area -->
         <div class="main-wrapper">
@@ -163,7 +170,7 @@ head footer csss
             <div class="form-card">
 
                 <div class="form-header">
-                    <label value="💳 Apply for New ATM Card" class="title" />
+                    <label value="💳 Apply for New Card" class="title" />
                     <separator />
                     <label value="Quick, Secure and Paperless Card Request Service" class="subtitle" />
                 </div>

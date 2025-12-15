@@ -1,9 +1,9 @@
-<!-- 
 
 
-<?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 
-Before loading page it ensuer page should not render
+<!-- <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
+
+
 <?init class = "com.fintrust.security.AuthenticationController" ?>
 <zk>
     <window  border="none" 
@@ -52,8 +52,8 @@ Before loading page it ensuer page should not render
                     </row>
                     <row>
                         <cell>
-                            <div sclass="card-box" onClick='Executions.sendRedirect("/Card/cardDetails.zul")'>
-                                <label value="📈 Set Card Limit" />
+                            <div sclass="card-box" onClick='Executions.sendRedirect("/Card/termAndCondition.zul")'>
+                                <label value="📄 Card Terms And Conditions" />
                             </div>
                         </cell>
                         <cell>
@@ -102,30 +102,31 @@ Before loading page it ensuer page should not render
             }
         </style>
     </window>
-</zk>    -->
+</zk>   
 
 
+ -->
 
 
-<!-- head footer css -->
 <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 
-<!-- Ensure page should not render before login -->
+
 <?init class="com.fintrust.security.AuthenticationController" ?>
 
 <zk>
-    <window border="none" width="100%" height="100%" sclass="p-4">
+     <include src="/WEB-INF/components/privateNavbar.zul" /> 
+    <window border="none" width="100%" height="90%" sclass="p-4">
 
-        <!-- Navbar -->
-        <include src="/WEB-INF/components/privateNavbar.zul" /> 
+       
+      
 
-        <!-- Main Content -->
+        
         <div style="display:flex;flex-direction:column;align-items:center;padding:30px; height:100vh; overflow-y:auto;">
-            <label value="💳 ATM Card Management Portal"
+            <label value="💳 Card Management Portal"
                    style="font-weight:bold;font-size:24px;color:#004080;margin-bottom:20px;" />
             <separator />
 
-            <!-- Flex container for cards -->
+           
             <div class="cards-container">
                 <div class="card-box" onClick='Executions.sendRedirect("/Card/ApplyNewCard.zul")'>
                     <label value="💳 Apply for New Card" />
@@ -133,9 +134,9 @@ Before loading page it ensuer page should not render
                 <div class="card-box" onClick='Executions.sendRedirect("/Card/manageCard.zul")'>
                     <label value="🧾 Manage Existing Card" />
                 </div>
-                <div class="card-box" onClick='Executions.sendRedirect("/Card/cardDetails.zul")'>
-                    <label value="📈 Set Card Limit" />
-                </div>
+                <div sclass="card-box" onClick='Executions.sendRedirect("/Card/termAndCondition.zul")'>
+                                <label value="📄 Card Terms And Conditions" />
+                            </div>
                 <div class="card-box" onClick='Executions.sendRedirect("/Card/Card_status.zul")'>
                     <label value="📦 Track Card Request" />
                 </div>
@@ -145,6 +146,7 @@ Before loading page it ensuer page should not render
         <style>
             /* Card styles - Increased size */
             .card-box {
+                
                 width: 400px;      /* Increased from 300px */
                 height: 160px;     /* Increased from 120px */
                 background: white;

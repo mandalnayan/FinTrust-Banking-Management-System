@@ -1,150 +1,336 @@
+<!-- 
+ 
+ Make sure page shouldn't render without login
+<?init class="com.fintrust.security.AuthenticationController" ?>
 
-<!-- Make sure page shouln't render without login -->
-<?init class = "com.fintrust.security.AuthenticationController" ?>
-<!-- head footer css -->
+Head footer css
 <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 
+<zk>
+    <window border="none" width="100%" height="100%"
+        style="background: linear-gradient(135deg, #e6f0ff, #ffffff);
+               overflow:auto; padding-bottom:20px;"
+        apply="com.fintrust.cards.controller.card_status_controller">
+
+        ================= FIXED NAVBAR =================
+        <div style="
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999;
+        ">
+            <include src="/WEB-INF/components/privateNavbar.zul" />
+        </div>
+
+        ================= MAIN CONTENT =================
+        padding-top must match navbar height
+        <div style="
+            padding-top:40px;
+            padding-left:20px;
+            padding-right:20px;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+        ">
+
+            ===== Page Heading =====
+            <div style="text-align:center; margin-bottom:15px;">
+                <label value="🧾 Card Request Management"
+                    style="font-size:20px;font-weight:bold;color:#003366;" />
+                <separator />
+                <label value="View pending or approved card requests"
+                    style="color:#555;font-size:12px;" />
+            </div>
+
+            ===== Filter Bar =====
+            <div style="
+                display:flex;
+                flex-wrap:wrap;
+                justify-content:center;
+                gap:10px;
+                margin-bottom:20px;
+            ">
+                <textbox id="searchBox" width="200px"
+                    placeholder="Search account no..." />
+
+                <combobox id="statusFilter" width="200px"
+                    placeholder="Filter by status" autodrop="true">
+                    <comboitem label="All" value="ALL" />
+                    <comboitem label="Pending" value="Pending" />
+                    <comboitem label="Approved" value="Approved" />
+                </combobox>
+
+                <button label="🔍 Search"
+                    sclass="btn-primary"
+                    onClick="@command('filterRequests')" />
+            </div>
+
+            ===== Data Container =====
+            <div style="
+                width:95%;
+                max-width:1000px;
+                background:rgba(255,255,255,0.95);
+                backdrop-filter:blur(6px);
+                border-radius:12px;
+                padding:15px;
+                box-shadow:0 4px 10px rgba(0,0,0,0.1);
+            ">
+
+                ===== PAGINATED LISTBOX =====
+                <listbox id="atmRequestList"
+                    width="100%"
+                    mold="paging"
+                    pageSize="7"
+                    pagingPosition="bottom"
+                    style="border:none;">
+
+                    <listhead>
+                         <listheader label="Request Number" />
+                        <listheader label="Account Nnumber" />
+                        <listheader label="Card Type" />
+                        <listheader label="Category" />
+                        <listheader label="Delivery Address" />
+                        <listheader label="Remarks" />
+                        <listheader label="Card Request Status" />
+                    </listhead>
+
+                    <template name="model">
+                        <listitem>
+                             <listcell label="${each.request_number}" />
+                            <listcell label="${each.account_number}" />
+                            <listcell label="${each.card_type}" />
+                            <listcell label="${each.card_category}" />
+                            <listcell label="${each.delivery_address}" />
+                            <listcell label="${each.remarks}" />
+                             <listcell label="${each.card_request_status}" />
+                          
+                        </listitem>
+                    </template>
+
+                </listbox>
+            </div>
+        </div>
+
+        ================= STYLES =================
+        <style>
+            .btn-primary {
+                background: linear-gradient(90deg, #004080, #0073e6);
+                color: white;
+                border: none;
+                border-radius: 6px;
+                padding: 6px 12px;
+                font-weight: 500;
+                cursor: pointer;
+                font-size: 13px;
+                transition: 0.3s ease;
+            }
+
+            .btn-primary:hover {
+                background: linear-gradient(90deg, #0059b3, #0099ff);
+                transform: scale(1.05);
+            }
+
+            /* ===== Mobile Responsive ===== */
+            @media (max-width: 768px) {
+                listheader,
+                listcell label {
+                    font-size: 12px;
+                }
+
+                .btn-primary {
+                    font-size: 12px;
+                    padding: 5px 10px;
+                }
+
+                div[style*="flex-wrap"] {
+                    flex-direction: column;
+                    align-items: center;
+                }
+            }
+
+            @media (max-width: 480px) {
+                listheader,
+                listcell label {
+                    font-size: 11px;
+                }
+
+                div[style*="max-width:1000px"] {
+                    padding: 10px !important;
+                }
+            }
+        </style>
+    </window>
+</zk>
+  -->
+  
+  
+  
+  
+  
+  
+  <?init class="com.fintrust.security.AuthenticationController" ?>
+<?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 
 <zk>
-	<window border="none" width="100%" height="100%"
-		style="background: linear-gradient(135deg, #e6f0ff, #ffffff);
-                   overflow:auto; padding-bottom:20px;"
-		apply="com.fintrust.cards.controller.card_status_controller">
+    <window border="none" width="100%" height="100%"
+        style="background: linear-gradient(135deg, #e6f0ff, #ffffff);
+               overflow:auto;"
+        apply="com.fintrust.cards.controller.card_status_controller">
 
-		<!-- 🌐 Top Navigation Bar -->
-		<include src = "/WEB-INF/components/privateNavbar.zul" />
-		
+        <!-- ================= FIXED NAVBAR ================= -->
+        <div style="
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999;
+        ">
+            <include src="/WEB-INF/components/privateNavbar.zul" />
+        </div>
 
-		<!-- 🌈 Main Section -->
-		<div
-			style="padding:20px; display:flex; flex-direction:column; align-items:center;">
+        <!-- ================= MAIN CONTENT ================= -->
+        <div style="
+            padding-top:70px;
+            padding-left:20px;
+            padding-right:20px;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+        ">
 
-			<div style="text-align:center; margin-bottom:15px;">
-				<label value="🧾 ATM Card Request Management"
-					style="font-size:20px;font-weight:bold;color:#003366;" />
-				<separator />
-				<label
-					value="View and manage pending or approved card requests"
-					style="color:#555;font-size:12px;" />
-			</div>
+            <!-- ===== PAGE HEADER ===== -->
+            <div style="text-align:center; margin-bottom:20px;">
+                <label value="🧾 Card Request Management"
+                    style="font-size:22px;font-weight:bold;color:#003366;" />
+                <separator />
+                <label value="View pending or approved card requests"
+                    style="color:#555;font-size:13px;" />
+            </div>
 
-			<!-- 🔍 Filter Bar -->
-			<div
-				style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-bottom:20px;">
-				<textbox id="searchBox" width="200px"
-					placeholder="Search account no..." />
-				<combobox id="statusFilter" width="200px"
-					placeholder="Filter by status" autodrop="true" >
-					<comboitem label="All" value="ALL" />
-					<comboitem label="Pending" value="Pending" />
-					<comboitem label="Approved" value="Approved" />
-				</combobox>
-				<button label="🔍 Search" sclass="btn-primary"
-					onClick="@command('filterRequests')" />
-			</div>
+            <!-- ===== DATA CARD ===== -->
+            <div style="
+                width:100%;
+                max-width:1100px;
+                background:white;
+                border-radius:12px;
+                padding:15px;
+                box-shadow:0 4px 12px rgba(0,0,0,0.1);
+            ">
 
-			<!-- 📋 Requests Grid -->
-			<div
-				style="width:95%; max-width:1000px; height:500px; background:rgba(255,255,255,0.95);
-                        backdrop-filter:blur(6px);
-                        border-radius:12px; padding:15px;
-                        box-shadow:10px 4px 10px rgba(0,0,0,0.1);">
+                <!-- ===== SCROLL CONTAINER ===== -->
+                <div style="width:100%; overflow-x:auto;">
 
-				<!-- 🔼 Increased height -->
-				<listbox id="atmRequestList" width="100%" height="500px"
-					mold="paging" pageSize="4"  style="border:none;">
-					<listhead>
-						<listheader label="Account No" width="140px" />
-						<listheader label="Card Type" width="120px" />
-						<listheader label="Category" width="120px" />
-						<listheader label="Address" width="250px" />
-						<listheader label="Remarks" width="150px" />
-						<listheader label="Status" width="120px" />
-						<!-- ❌ Removed Action column -->
-					</listhead>
+                    <listbox id="atmRequestList"
+                        width="100%"
+                        mold="paging"
+                        pageSize="5"
+                        pagingPosition="bottom"
+                        style="border:none; min-width:90%;">
 
-					<template name="model">
-						<listitem>
-							<listcell label="${each.accountNumber}" />
-							<listcell label="${each.cardType}" />
-							<listcell label="${each.cardCategory}" />
-							<listcell label="${each.deliveryAddress}" />
-							<listcell label="${each.remarks}" />
-							<listcell>
-								<label value="${each.status}"
-									style="font-weight:600; color:${each.status == 'Pending' ? '#ff6600' : '#009900'};" />
-							</listcell>
-							<!-- ❌ Removed Action buttons section -->
-						</listitem>
-					</template>
-				</listbox>
-			</div>
-		</div>
+                        <!-- ===== TABLE HEADER ===== -->
+                        <listhead>
+                            <listheader label="Request No" width="100px" />
+                            <listheader label="Account No" width="140px" />
+                            <listheader label="Card Type" width="140px" />
+                            <listheader label="Category" width="140px" />
+                            <listheader label="Delivery Address" width="280px" />
+                            <listheader label="Remarks" width="180px" />
+                            <listheader label="Status" width="100px" />
+                        </listhead>
 
-		<!-- 🎨 Styles -->
-		<style>
-			.btn-primary { background: linear-gradient(90deg, #004080,
-			#0073e6); color: white; border: none; border-radius: 6px;
-			padding: 6px 12px; font-weight: 500; cursor: pointer;
-			font-size: 13px; transition: 0.3s ease; }
+                        <!-- ===== TABLE DATA ===== -->
+                        <template name="model">
+                            <listitem>
 
-			.btn-primary:hover { background: linear-gradient(90deg,
-			#0059b3, #0099ff); transform: scale(1.05); }
+                                <listcell>
+                                    <label value="${each.request_number}" />
+                                </listcell>
 
-			.btn-icon-primary, .btn-icon-secondary { border: none;
-			border-radius: 6px; padding: 4px 8px; font-size: 12px;
-			cursor: pointer; transition: 0.2s; }
+                                <listcell>
+                                    <label value="${each.account_number}" />
+                                </listcell>
 
-			.btn-icon-primary { background-color: #0073e6; color: white;
-			}
+                                <listcell>
+                                    <label value="${each.card_type}" />
+                                </listcell>
 
-			.btn-icon-primary:hover { background-color: #005bb5; }
+                                <listcell>
+                                    <label value="${each.card_category}" />
+                                </listcell>
 
-			.btn-icon-secondary { background-color: #f2f2f2; color:
-			#333; }
+                                <!-- ADDRESS WRAP -->
+                                <listcell>
+                                    <label value="${each.delivery_address}"
+                                        style="white-space:normal; word-break:break-word;" />
+                                </listcell>
 
-			.btn-icon-secondary:hover { background-color: #e0e0e0; }
+                                <!-- REMARKS WRAP -->
+                                <listcell>
+                                    <label value="${each.remarks}"
+                                        style="white-space:normal; word-break:break-word;" />
+                                </listcell>
 
-			@media (max-width: 768px) { .btn-primary { font-size: 12px;
-			padding: 5px 10px; }
+                                <!-- STATUS COLOR -->
+                                <listcell>
+                                    <label value="${each.card_request_status}"
+                                        style="
+                                            font-weight:600;
+                                            color:
+                                            ${each.card_request_status == 'PENDING' ? '#ff9800' :
+                                              each.card_request_status == 'APPROVED' ? '#2e7d32' :
+                                              '#d32f2f'};
+                                        " />
+                                </listcell>
 
-			listhead, listheader { font-size: 12px; }
+                            </listitem>
+                        </template>
 
-			listcell label { font-size: 12px; }
+                    </listbox>
+                </div>
+            </div>
+        </div>
 
-			div[style*='padding:20px'] { padding: 10px !important; }
+        <!-- ================= STYLES ================= -->
+        <style>
+            listcell label {
+                white-space: normal;
+                word-break: break-word;
+            }
 
-			listbox { font-size: 12px; }
+            listheader {
+                font-weight: 600;
+            }
 
-			div[style*='flex-wrap:wrap'] { flex-direction: column;
-			align-items: center; } }
+            /* ===== Tablet ===== */
+            @media (max-width: 768px) {
+                listbox {
+                    font-size: 12px;
+                }
 
-			@media (max-width: 480px) { .btn-icon-primary,
-			.btn-icon-secondary { font-size: 11px; padding: 3px 6px; }
+                listheader {
+                    font-size: 12px;
+                }
+            }
 
-			label { font-size: 11px !important; }
+            /* ===== Mobile ===== */
+            @media (max-width: 480px) {
+                listbox {
+                    font-size: 11px;
+                }
 
-			listheader { font-size: 11px; }
+                div[style*="max-width"] {
+                    padding: 10px !important;
+                }
+            }
+        </style>
 
-			listcell label { font-size: 11px; }
-
-			div[style*='max-width:1000px'] { padding: 10px !important; }
-			}
-		</style>
-	</window>
+    </window>
 </zk>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  

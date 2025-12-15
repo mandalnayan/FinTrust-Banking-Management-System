@@ -80,18 +80,20 @@ public class manageCardController extends SelectorComposer<Window> {
         try (Connection con = DBConnection.getConnection()) {
             String sql = "SELECT * FROM cards where user_id=?";
             PreparedStatement ps = con.prepareStatement(sql);
-            Long custId= 1l;                                     //take it from session**(((((((((((
+            Long custId= 5l;                                     //take it from session**(((((((((((
 
             ps.setLong(1,custId);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                List<String> row = new ArrayList<>();
-                row.add(String.valueOf(rs.getLong("card_number")));
-                row.add(rs.getLong("user_id")+"");
-                row.add(rs.getLong("account_no")+"");
-                row.add(rs.getString("cvv"));
-                row.add(rs.getString("pin"));
+                List<String> row = new ArrayList<>();  
+                
+                row.add(rs.getString("card_number_masked"));
+
+                row.add(rs.getString("card_type")+"");
+                row.add(rs.getLong("account_number")+"");
+               // row.add(rs.getString("cvv"));
+               // row.add(rs.getString("pin"));
                 row.add(String.valueOf(rs.getDate("issued_date")));
                 row.add(String.valueOf(rs.getDate("expiry_date")));
                 row.add(rs.getString("card_status"));
@@ -115,28 +117,23 @@ public class manageCardController extends SelectorComposer<Window> {
        
           Listitem item =  (Listitem) targetButton.getParent().getParent();
           
-          String atmNumber = ((Listcell) item.getChildren().get(0)).getLabel();  
-          System.out.println(atmNumber);
-          Sessions.getCurrent().setAttribute("atmNumber", atmNumber);
+          String card_number_masked = ((Listcell) item.getChildren().get(0)).getLabel();
+          
+          System.out.println(card_number_masked);
+          
+          Sessions.getCurrent().setAttribute("card_number_masked", card_number_masked);
+          
           Executions.sendRedirect("/Card/cardDetails.zul");
              
     }
     
     public static void main(String args[]) {
+    	
     	boolean isCreated = createCardShemea();
+    	
     	System.out.println(isCreated);
+    
     }
   
-}
-
-
-
-
-
-
-
-
-
-
-
-
+    
+      }

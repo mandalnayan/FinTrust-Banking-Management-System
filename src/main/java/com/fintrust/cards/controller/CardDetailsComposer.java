@@ -1,9 +1,11 @@
 package com.fintrust.cards.controller;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
@@ -11,12 +13,15 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Messagebox;
+import org.zkoss.zul.Row;
 import org.zkoss.zul.Window;
 
 import com.fintrust.db.DBConnection;
+import com.mysql.cj.xdevapi.Client;
 
 public class CardDetailsComposer extends SelectorComposer<Window> {
 
@@ -25,6 +30,9 @@ public class CardDetailsComposer extends SelectorComposer<Window> {
 
 	@Wire
 	Button btnBlock, btnUnblock;
+	
+	@Wire
+	Row dailyLimitRow,sliderRow;
 
 	long atmNumber;
 
@@ -33,30 +41,40 @@ public class CardDetailsComposer extends SelectorComposer<Window> {
 		// TODO Auto-generated method stub
 		super.doAfterCompose(comp);
 
-		String atmCardNumber = (String) Sessions.getCurrent().getAttribute("atmNumber");
+		String card_number_masked = (String) Sessions.getCurrent().getAttribute("card_number_masked");
 
-		
-
+		String formattedCard = card_number_masked.replaceAll(
+		        "(\\d{4})(\\d{4})(\\d{4})(\\d{4})",
+		        "$1-$2-$3-$4"
+		);
+       System.out.println(formattedCard);
 		Connection connection = DBConnection.getConnection();
 		String sql = "select * from cards where card_number_masked=?"; 
 		PreparedStatement ptsm = connection.prepareStatement(sql);
-		ptsm.setString(1, atmCardNumber);
-
+		ptsm.setString(1, card_number_masked);
+        
 		ResultSet rs = ptsm.executeQuery();
 		while (rs.next()) {
-
-			lblCardNo.setValue(atmCardNumber);
-			lblType.setValue("Debit Card");
-			lblMaxLimit.setValue("50000");
+            
+			lblCardNo.setValue(formattedCard);
+			lblType.setValue(rs.getString("card_type"));
+			lblMaxLimit.setValue(rs.getString("maximum_limit"));
 			lblStatus.setValue(rs.getString("card_status"));
-
+			lblCurLimit.setValue(rs.getString("current_limit"));
 			if (rs.getString("card_status").equalsIgnoreCase("Blocked")) {
 				btnBlock.setVisible(false);
+				lblStatus.setStyle("color: red; font-weight: bold;");
+				sliderRow.setVisible(false);
+				
 				// btnUnblock.setVisible(false);
 				// btnBlock.setDisabled(true);
 			} else {
 				if (rs.getString("card_status").equalsIgnoreCase("Expired")) {
+					dailyLimitRow.setVisible(false);
+					sliderRow.setVisible(false);
+					lblStatus.setStyle("color: red; font-weight: bold;");
 
+					//sliderRow.setValue("Unable to manage This C");
 					btnBlock.setVisible(false);
 					btnUnblock.setVisible(false);
 				} else {
@@ -68,6 +86,8 @@ public class CardDetailsComposer extends SelectorComposer<Window> {
 			}
 
 		}
+		
+		
 
 	}
 
@@ -109,9 +129,37 @@ public class CardDetailsComposer extends SelectorComposer<Window> {
 	}
 
 	@Listen("onClick=#btnUpdateLimit")
-	public void updateLimit() {
-		lblCurLimit.setValue(lblDailyLimit.getValue());
-		Messagebox.show("Daily Limit Updated.");
-	}
+	public void updateLimit() throws NumberFormatException, SQLException {
+		Connection con = DBConnection.getConnection();
+		
+		String sql = "UPDATE cards SET current_limit = ? WHERE card_number_masked = ?";
+		PreparedStatement pst=con.prepareStatement(sql);
+	   
+		String card_number_masked = (String) Sessions.getCurrent().getAttribute("card_number_masked");
+        String str=lblDailyLimit.getValue().substring(1);
+        System.out.println(str);
+		pst.setBigDecimal(1,new BigDecimal(lblDailyLimit.getValue().substring(1)));
+		
+
+		pst.setLong(2, Long.parseLong(card_number_masked));
+	
+		int n=pst.executeUpdate();
+	
+		if(n!=0)
+		{   
+			lblCurLimit.setValue(lblDailyLimit.getValue());
+			Clients.showNotification(
+				    "Daily Limit Updated",
+				    Clients.NOTIFICATION_TYPE_INFO,
+				    null,
+				    "top_center",
+				    3000
+				);
+
+			
+		}
+		else
+			Clients.showNotification("Failed to update Daily Limit ");
+		   }
 
 }

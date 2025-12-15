@@ -26,11 +26,11 @@ public class AccountDAOImpl implements AccountDAO {
 	public List<String> issuedCardTypeByAct(long actNumber)
 	{
 		List<String> cardTypeList=new ArrayList();
-		String q="select card_type from cards where account_no=? and card_status <> ? ";
+		String q="select card_type from cards where account_number=? and card_status <> ? ";
 		try (PreparedStatement statement = DBConnection.getConnection().prepareStatement(q)) {
 
 			statement.setLong(1, actNumber);
-		    statement.setString(2, "Expired");
+		    statement.setString(2, "expired");
 			ResultSet rs = statement.executeQuery();
 			while(rs.next()) {
 				cardTypeList.add(rs.getString("card_type"));
@@ -173,7 +173,7 @@ public class AccountDAOImpl implements AccountDAO {
         }
         return list;
     }
-che
+    
     @Override
     public boolean update(long accountId, String accountType, String status, String currency) throws SQLException {
         String sql = """

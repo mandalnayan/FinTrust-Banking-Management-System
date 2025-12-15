@@ -34,7 +34,7 @@ public class card_status_controller extends SelectorComposer<Window> {
 		// String atmCardNumber=(String)Sessions.getCurrent().getAttribute("atmNumber");
 		// long atmNumber = (Long) Long.parseLong(atmCardNumber);
 
-		String sql = "select * from card_request where user_id =?";
+		String sql = "select * from card_requests where user_id =?";
 		PreparedStatement ptsm = connection.prepareStatement(sql);
 		long user_id = (Long) Sessions.getCurrent().getAttribute("user_id");
 		ptsm.setLong(1, user_id); // ****TAKE IT FROM SESSIONOS
@@ -43,8 +43,9 @@ public class card_status_controller extends SelectorComposer<Window> {
 		while (rs.next()) {
 
 			Listitem li = new Listitem();
-
-			Listcell lc = new Listcell((String) rs.getString("account_no"));
+			Listcell lc = new Listcell( String.valueOf( rs.getLong("request_number")));
+			 li.appendChild(lc);
+			 lc = new Listcell(String.valueOf( rs.getLong("account_number")));
 			li.appendChild(lc);
 
 			lc = new Listcell((String) rs.getString("card_type"));
@@ -53,7 +54,7 @@ public class card_status_controller extends SelectorComposer<Window> {
 			lc = new Listcell((String) rs.getString("card_category"));
 			li.appendChild(lc);
 
-			lc = new Listcell((String) rs.getString("address"));
+			lc = new Listcell((String) rs.getString("delivery_address"));
 			li.appendChild(lc);
 
 			lc = new Listcell((String) rs.getString("remarks"));
@@ -62,8 +63,6 @@ public class card_status_controller extends SelectorComposer<Window> {
 			lc = new Listcell((String) rs.getString("card_request_status"));
 			li.appendChild(lc);
 
-			lc = new Listcell((String) rs.getString("remarks"));
-			li.appendChild(lc);
 
 			atmRequestList.appendChild(li);
 		}

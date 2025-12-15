@@ -1,28 +1,34 @@
-
+<!-- 
  
- <!-- Make sure page shouln't render without login -->
-<!--  <?init class = "com.fintrust.security.AuthenticationController" ?> -->
+ Make sure page shouln't render without login
+ <?init class = "com.fintrust.security.AuthenticationController" ?>
 
-<!-- head footer csss -->
+head footer csss
 <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
  
 <zk>
-   <!-- Top Nav bar -->
-   <include src = "/WEB-INF/components/privateNavbar.zul" /> 
-<window width="100%" apply="com.fintrust.cards.controller.manageCardController">
+   Top Nav bar
+    <include src="/WEB-INF/components/privateNavbar.zul" style="
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            z-index: 999;
+        " /> 
+<window width="100%" height="90%" apply="com.fintrust.cards.controller.manageCardController">
    
    
     <vlayout spacing="15px" style="padding:20px">
 
        
-        <hlayout spacing="10px" style="align-items:center;">
+        <hlayout spacing="10px"  style="align-items:center;">
             <button label="← Back"
                     onClick='Executions.sendRedirect("cardHome.zul")'
                     style="background:#004080; color:white; border:none; 
                            border-radius:6px; padding:6px 14px; font-weight:bold;
                            cursor:pointer; font-size:14px;"/>
             <label value="Manage Existing Cards" 
-                   style="font-size:20px;font-weight:bold;color:#004080;"/>
+                   style="font-size:20px;font-weight:bold;color:#004080;margin-left:35%;"/>
         </hlayout>
 
      
@@ -37,7 +43,7 @@
                 
             <listhead>
                 <listheader label="ATM Card No" width="18%"/>
-                <listheader label="Customer ID" width="15%"/>
+                <listheader label="Card Type" width="15%"/>
                 <listheader label="Account No" width="15%"/>
                 <listheader label="Issued Date" width="12%"/>
                 <listheader label="Expiry Date" width="12%"/>
@@ -51,9 +57,9 @@
                     <listcell  label="${each[0]}"/> 
                     <listcell  label="${each[1]}"/>  
                     <listcell  label="${each[2]}"/> 
-                    <listcell  label="${each[5]}"/>
-                    <listcell  label="${each[6]}"/>  
-                    <listcell  label="${each[7]}"/> 
+                    <listcell  label="${each[3]}"/>
+                    <listcell  label="${each[4]}"/>  
+                    <listcell  label="${each[5]}"/> 
                     <listcell  >
                         <button   label="Manage"
                                 sclass="btn btn-primary"
@@ -67,4 +73,121 @@
 </window>
 </zk>
 
- 
+  -->
+  
+  
+  
+  
+  
+  <!-- head footer css -->
+<?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
+
+<zk>
+
+    <!-- ================= FIXED NAVBAR ================= -->
+    <div style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 999;
+    ">
+        <include src="/WEB-INF/components/privateNavbar.zul" />
+    </div>
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <!-- padding-top MUST match navbar height -->
+    <window width="100%" height="auto"
+            apply="com.fintrust.cards.controller.manageCardController"
+            style="padding-top:50px;">
+
+        <vlayout spacing="20px" style="padding:20px;position: fixed;
+        top: 50px;
+        left: 0;
+        width: 100%;
+        z-index: 999;
+    ">
+
+            <!-- ===== HEADER ROW ===== -->
+            <!-- position:relative allows absolute centering -->
+            <div style="position:relative; width:100%; height:40px;">
+
+                <!-- Back Button (LEFT) -->
+                <button label="← Back"
+                        onClick='Executions.sendRedirect("cardHome.zul")'
+                        style="
+                            position:absolute;
+                            left:0;
+                            background:#004080;
+                            color:white;
+                            border:none;
+                            border-radius:6px;
+                            padding:6px 14px;
+                            font-weight:bold;
+                            cursor:pointer;
+                            font-size:14px;
+                        "/>
+
+                <!-- Center Title (ALWAYS CENTERED) -->
+                <label value="Manage Existing Cards"
+                       style="
+                           position:absolute;
+                           left:50%;
+                           transform:translateX(-50%);
+                           font-size:30px;
+                           font-weight:bold;
+                           color:#004080;
+                       "/>
+            </div>
+
+            <!-- ===== CARD LIST ===== -->
+            <listbox id="cardListbox"
+                     mold="paging"
+                     pageSize="6"
+                     width="100%"
+                     height="450px"
+                     style="
+                         border:1px solid #ccc;
+                         border-radius:10px;
+                         box-shadow:0 2px 5px rgba(0,0,0,0.1);
+                     ">
+
+                <listhead>
+                    <listheader label="ATM Card No" width="18%" />
+                    <listheader label="Card Type" width="15%" />
+                    <listheader label="Account No" width="15%" />
+                    <listheader label="Issued Date" width="12%" />
+                    <listheader label="Expiry Date" width="12%" />
+                    <listheader label="Status" width="10%" />
+                    <listheader label="Action" width="18%" />
+                </listhead>
+
+                <template name="model">
+                    <listitem>
+                        <listcell label="${each[0]}" />
+                        <listcell label="${each[1]}" />
+                        <listcell label="${each[2]}" />
+                        <listcell label="${each[3]}" />
+                        <listcell label="${each[4]}" />
+                        <listcell label="${each[5]}" />
+                        <listcell>
+                            <button label="Manage"
+                                    style="
+                                        padding:4px 10px;
+                                        font-size:13px;
+                                        background:#0a66c2;
+                                        color:white;
+                                        border:none;
+                                        border-radius:6px;
+                                    " />
+                        </listcell>
+                    </listitem>
+                </template>
+
+            </listbox>
+
+        </vlayout>
+    </window>
+
+</zk>
+  
