@@ -84,19 +84,15 @@
             <rows>
                 <row>
                     <label value="Account Type:" />
-                    <combobox placeholder="Select new type" width="90%" id="accountType" readonly="true">
-                    	<comboitem label="Savings" value="SAVINGS" ></comboitem>
-                    	<comboitem label="Current" value="CURRENT"></comboitem>
-                    	<comboitem label="Salary" value="SALARY"></comboitem>
+                    <combobox placeholder="Select new type" width="90%" id="accountTypeComboBox" readonly="true">
+                    	
                     </combobox>
                 </row>
 
                 <row>
                     <label value="Branch Name:" />
                     <combobox placeholder="Select Branch" width="90%" id="accountBranch" readonly="true">
-                    	<comboitem label="Aligarh" value="Aligarh"></comboitem>
-                    	<comboitem label="Mathura" value="Mathura"></comboitem>
-                    	<comboitem label="New Delhi" value='New Delhi'></comboitem>
+                    	
                     </combobox>
                 </row>
 

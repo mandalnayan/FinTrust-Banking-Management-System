@@ -63,7 +63,7 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 		}
 	}
 
-	// 🔹 Handle Submit button click
+	// Handle Submit button click
 	@Listen("onClick = #btnAccountSubmit")
 	public void onSubmit() {
 		if (!isFormValid())
@@ -80,6 +80,15 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 			String relation = nomineeRelation.getValue().trim();
 			long nomineeIdNum = nomineeId.longValue();
 			Long nom_id = nomineeIdNum;
+			
+			Long userId  = (Long) Sessions.getCurrent().getAttribute("user_id");
+			if(acconntService.isAccountExists(userId, accType)){
+				System.out.println("account exists aready ....................");
+				String message = accType + " Account already exists with this user_id";
+				NotificationUtil.push("info", message);
+				resetForm();
+				Executions.sendRedirect("");
+			}
 
 			// check given nominee id already exist in db or not?
 			Nominee nom = new Nominee(nomineeIdNum, nominee_name, relation);
@@ -99,15 +108,23 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 			account.setNominee_id(nom_id);
 			account.setBranchId(branchId);
 
+
 			Notification notification = acconntService.openAccount(account);
 		
 			if (!notification.getType().equals("warning")) {
 				NotificationUtil.push(notification);
-				Executions.sendRedirect("");
+				Executions.sendRedirect("");			
+	
+			if (notification.getType().equals("info")) {
+				String message = "Account created successfully!";
+				NotificationUtil.push("info", message);				
+				resetForm();
+				Executions.sendRedirect("");				
+
 			} else {
 				NotificationUtil.showInstant(notification);
 			}
-
+			}
 		} catch (IllegalArgumentException e) {
 			String message = "Please give valid input!";
 			NotificationUtil.push("error", message);

@@ -38,9 +38,6 @@ public class CloseAccountComposer extends SelectorComposer<Component>{
 	public void submitCloseAccountRequest() {
 		String reasonClose = reason.getValue();
 		long accountNo = accountNum;
-		
-		long customerId;
-		
 		long userId = (long) Sessions.getCurrent().getAttribute("user_id");
 		
 		AccountCloseRequest accReq = new AccountCloseRequest();
@@ -56,7 +53,6 @@ public class CloseAccountComposer extends SelectorComposer<Component>{
 		if(closeRequetService.saveReq(accReq)) {
 			Messagebox.show("Request send Successfully for closing the account");
 		} 
-		
 	}
 	
 	@Listen("onClick=#btnReset")

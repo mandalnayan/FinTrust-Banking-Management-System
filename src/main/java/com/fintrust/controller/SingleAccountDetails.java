@@ -45,14 +45,15 @@ public class SingleAccountDetails extends SelectorComposer<Window> {
         accountStatus.setValue(acc.getAccount_status().name());
 
         Branch branch = new BranchDao().findById(acc.getBranchId());
+        
         if (branch != null) {
         	accountBranch.setValue(branch.getBranchName());
         	ifscCode.setValue(branch.getIfscCode());
  
         }
+        
         modeOfOperation.setValue("self");
         nomineeId.setValue(acc.getNominee_id()+"");
-        //System.out.println(acc.getNominee_id());
     }
 
     @Listen("onClick = #backBtn")

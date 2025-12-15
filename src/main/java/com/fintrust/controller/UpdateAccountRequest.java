@@ -1,32 +1,40 @@
 package com.fintrust.controller;
 
 
+import java.util.List;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Include;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Messagebox;
 
 import com.fintrust.model.Account;
+import com.fintrust.model.Account.AccountType;
 import com.fintrust.model.AccountUpdateRequest;
+import com.fintrust.model.Branch;
 import com.fintrust.service.AccountServiceImpl;
 import com.fintrust.service.RequestUpdateService;
 import com.fintrust.util.NotificationUtil;
 import com.fasterxml.jackson.databind.introspect.AccessorNamingStrategy;
 import com.fintrust.dao.impl.AccountUpdateRequestDao;
+import com.fintrust.dao.impl.BranchDao;
 
 public class UpdateAccountRequest extends SelectorComposer<Component> {
 	private static final long serialVersionUID = 1L;	
 	
 	@Wire private Label accountNo, accountBalance,accountStatus;
-	@Wire private Combobox accountType, accountBranch , accountMode;
+	@Wire private Combobox accountTypeComboBox, accountBranch , accountMode;
 	
 	private final AccountServiceImpl acconntService = new AccountServiceImpl();
+	private final BranchDao branchDao = new BranchDao();
 	Long accountNum;
+	
 	
 	@Override
 	public void doAfterCompose(Component comp) throws Exception {
@@ -34,12 +42,26 @@ public class UpdateAccountRequest extends SelectorComposer<Component> {
 		
 		accountNum = (Long) Executions.getCurrent().getSession().getAttribute("selected_account_no");
 		
-        Account acc = acconntService.getAccountDetails(accountNum);
-        System.out.println("Acc No: " + acc.getAccountNumber());
+		Account acc = acconntService.getAccountDetails(accountNum);
         accountNo.setValue(acc.getAccountNumber()+"");
         accountBalance.setValue(acc.getBalance()+"");
         accountStatus.setValue(acc.getAccount_status().name());
-    
+        
+        //set the account type in combobox except current account type
+        AccountType[] allAccountType = AccountType.values();
+        for(AccountType accountType : allAccountType) {
+        	if(accountType != acc.getAccountType()) {
+        		accountTypeComboBox.appendChild(new Comboitem(accountType.toString()));
+        	}
+        }
+        
+        //set the branch name in combobox except current branch
+        List<Branch> allBranch = branchDao.findAll();
+		for(Branch myBranch : allBranch) {
+			if(myBranch.getBranchId() != acc.getBranchId()) {
+				accountBranch.appendChild(new Comboitem(myBranch.getBranchName()));
+        	}
+		}
 	}
 	
 /**
@@ -50,7 +72,7 @@ public class UpdateAccountRequest extends SelectorComposer<Component> {
 		 if (!isFormValid()) return;
 		
 		 //Messagebox.show("Request submitted successfully!");
-		 String accType = accountType.getSelectedItem().getValue();
+		 String accType = accountTypeComboBox.getSelectedItem().getValue();
 		 String accBranch = accountBranch.getSelectedItem().getValue();
 		 String accMode = accountMode.getSelectedItem().getValue(); 
 		
@@ -65,7 +87,10 @@ public class UpdateAccountRequest extends SelectorComposer<Component> {
 
          if(new RequestUpdateService().updateRequest(req)) {
         	 		NotificationUtil.push("info", "Requested submitted successfully.\n your requested will be handled instantly.");
-        	 		Executions.sendRedirect("view_all_account.zul");
+        	 		//Executions.sendRedirect("view_all_account.zul");
+        	 		Component root = getSelf();
+        			Include inc = (Include) root.getPage().getFellow("main_content_sec");
+        			inc.setSrc("/WEB-INF/components/view_all_account.zul");
          } else {
         	 	NotificationUtil.showInstant("warning", "Requested is already submitted. Please check status");
          }
@@ -80,7 +105,7 @@ public class UpdateAccountRequest extends SelectorComposer<Component> {
 	}
 	
 	public boolean isFormValid(){
-		if(accountType.getSelectedItem() == null) {
+		if(accountTypeComboBox.getSelectedItem() == null) {
 			showWarning("Please select Account Type.");
             return false;
 		}
