@@ -22,10 +22,7 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
     @Override
     public void doAfterCompose(Window comp) throws Exception {
         super.doAfterCompose(comp);
-      
-
-        Long userId = (Long)Sessions.getCurrent().getAttribute("user_id");
-        
+              
 //        if (customerId == null) {
 //            Messagebox.show("Session expired. Please log in again.", "Error", Messagebox.OK, Messagebox.ERROR);
 //           // Executions.sendRedirect("/customer_dashboard.zul");

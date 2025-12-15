@@ -13,10 +13,10 @@ import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Messagebox;
 
-import com.fintrust.model_copy.AccountCloseRequest;
+import com.fintrust.model.AccountCloseRequest;
 import com.fintrust.service.AccountServiceImpl;
 
-import zcom.finrust.dao_copy.AccountCloseRequestDao;
+import com.fintrust.dao.impl.AccountCloseRequestDao;
 
 public class AccountCloseApprovelComposer extends SelectorComposer<Component>{
 	private final AccountCloseRequestDao accountCloseDao = new AccountCloseRequestDao();
