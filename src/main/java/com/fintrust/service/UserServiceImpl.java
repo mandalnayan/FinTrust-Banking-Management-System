@@ -109,7 +109,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * Future implementatin
+	 * Future implementation
 	 */
 	@Override
 	public void update2FA(UserDetails user) {

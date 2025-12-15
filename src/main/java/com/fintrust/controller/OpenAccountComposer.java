@@ -92,7 +92,8 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 
 			// check given nominee id already exist in db or not?
 			Nominee nom = new Nominee(nomineeIdNum, nominee_name, relation);
-			if (!nomineeService.isPresentNominee(nomineeIdNum)) {
+			nom_id = nomineeService.isPresentNominee(nomineeIdNum);
+			if (nom_id == null) {
 				nom_id = nomineeService.saveNominee(nom);
 			}
 			if (nom_id == -1l)

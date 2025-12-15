@@ -87,7 +87,7 @@ public class TableCreator {
 					        ON DELETE RESTRICT,
 
 					    CONSTRAINT fk_accounts_nominee FOREIGN KEY (nominee_id)
-					        REFERENCES nominee_details(nominee_id)
+					        REFERENCES nominee(nominee_id)
 					        ON UPDATE CASCADE
 					        ON DELETE RESTRICT,
 

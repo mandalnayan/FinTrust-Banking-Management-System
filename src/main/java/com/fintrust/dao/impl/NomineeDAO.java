@@ -6,9 +6,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.zkoss.zhtml.Messagebox;
+import org.zkoss.zk.ui.util.Clients;
 
 import com.fintrust.db.DBConnection;
 import com.fintrust.model.Nominee;
+import com.fintrust.util.NotificationUtil;
 
 
 public class NomineeDAO {
@@ -52,8 +54,8 @@ public class NomineeDAO {
 	
 	}
 	
-	public Nominee getNominee(long nominee_id) {
-		Nominee nominee = new Nominee();
+	public Long getNominee(long nominee_id) {
+		
 		String q = "select * from nominee_details where nominee_id = ?";
 		try(PreparedStatement statement = DBConnection.getConnection().prepareStatement(q)){
 			
@@ -61,11 +63,11 @@ public class NomineeDAO {
 			ResultSet rs = statement.executeQuery();
 			if(rs.next()) {
 				System.out.println("Nominee already present in db");
-				return nominee;
+				return rs.getLong("id");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			Messagebox.show(e.getMessage());
+			NotificationUtil.showInstant("error" , e.getMessage());
 		}
 		return null; 
 	}

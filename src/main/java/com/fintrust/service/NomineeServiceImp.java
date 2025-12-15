@@ -25,11 +25,9 @@ public class NomineeServiceImp implements NomineeService{
 		return -1l;
 	}
 	
-	public boolean isPresentNominee(long nomineeId) {
-		Nominee nominee = nomineeDAO.getNominee(nomineeId);
-		if(nominee != null) {
-			return true;
-		}
-		return false;
+	public Long isPresentNominee(long nomineeId) {
+		Long nom_id = nomineeDAO.getNominee(nomineeId);
+		
+		return nom_id;
 	}
 }

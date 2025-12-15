@@ -6,9 +6,9 @@ import com.fintrust.db.DBConnection;
 
 public class FundTransferDAO {
 
-	Connection connection;
+	private Connection connection;
     public FundTransferDAO(Connection conn){
-        Connection connection = conn;
+        connection = conn;
     }
 
     public double getAccountBalance(Long accountNumber)

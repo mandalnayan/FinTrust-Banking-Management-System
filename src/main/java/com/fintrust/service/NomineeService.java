@@ -4,5 +4,5 @@ import com.fintrust.model.Nominee;
 
 public interface NomineeService {
 	Long saveNominee(Nominee nominee);
-	boolean isPresentNominee(long nomineeId);
+	Long isPresentNominee(long nomineeId);
 }
