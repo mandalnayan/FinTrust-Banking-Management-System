@@ -207,7 +207,9 @@ Head footer css
                 <label value="View pending or approved card requests"
                     style="color:#555;font-size:13px;" />
             </div>
-
+               <a href="/Card/cardHome.zul" class="top-back-btn">
+                 ← Back
+             </a>
             <!-- ===== DATA CARD ===== -->
             <div style="
                 width:100%;
@@ -296,6 +298,29 @@ Head footer css
             listcell label {
                 white-space: normal;
                 word-break: break-word;
+            }
+            
+             .top-back-btn {
+                position: fixed;
+                top: 60px; /* just below navbar */
+                left: 20px;
+                z-index: 1100;
+                background: white;
+                color: #004080;
+                padding: 6px 14px;
+                border-radius: 20px;
+                font-size: 13px;
+                font-weight: 600;
+                text-decoration: none;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                transition: all 0.3s ease;
+            }
+            
+            
+              .top-back-btn:hover {
+                background: #004080;
+                color: white;
+                transform: translateX(-3px);
             }
 
             listheader {
