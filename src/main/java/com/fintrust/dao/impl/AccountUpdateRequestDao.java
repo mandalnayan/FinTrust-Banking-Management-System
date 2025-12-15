@@ -88,7 +88,7 @@ public class AccountUpdateRequestDao {
 	    	
 	         ResultSet rs = pstmt.executeQuery(); 
 
-	       return rs.next();
+	         return rs.next();
 
 	    } catch (SQLException e) {
 	    	Messagebox.show("Error while fetching pending account update requests:\n" + e.getMessage());

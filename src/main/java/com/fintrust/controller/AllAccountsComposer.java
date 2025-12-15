@@ -26,14 +26,15 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
 
         Long userId = (Long)Sessions.getCurrent().getAttribute("user_id");
         
-//        if (customerId == null) {
-//            Messagebox.show("Session expired. Please log in again.", "Error", Messagebox.OK, Messagebox.ERROR);
-//           // Executions.sendRedirect("/customer_dashboard.zul");
-//            return;
-//        }
+        if (userId == null) {
+            Messagebox.show("Session expired. Please log in again.", "Error", Messagebox.OK, Messagebox.ERROR);
+           Executions.sendRedirect("/userDashboard.zul");
+            return;
+        }
 
         List<Account> accounts = acconntService.getAllAccounts();
-        if (accounts == null) return; 
+        if (accounts == null) return; //Np account with this user id
+        
         for (Account acc : accounts) {
             Listitem item = new Listitem();
             item.appendChild(new Listcell(String.valueOf(acc.getAccountNumber())));

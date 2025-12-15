@@ -56,10 +56,9 @@ public class AccountDAOImpl implements AccountDAO {
             ps.executeUpdate();
           
             try (ResultSet rs = ps.getGeneratedKeys()) {
-                if (rs.next()) return rs.getLong(1);
+                if (rs.next()) return rs.getLong(1);  //return accountId
             }
         }
-
         return -1;
     }
 
@@ -104,7 +103,6 @@ public class AccountDAOImpl implements AccountDAO {
     @Override
     public List<Account> findByUserId(long userId) throws SQLException {
         String sql = "SELECT * FROM accounts WHERE user_id = ?";
-        List<Map<String, Object>> list = new ArrayList<>();
         List<Account> accounts = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setLong(1, userId);
@@ -114,7 +112,6 @@ public class AccountDAOImpl implements AccountDAO {
                 }
             }
         }
-
         return accounts;
     }
     
@@ -131,7 +128,6 @@ public class AccountDAOImpl implements AccountDAO {
                 }
             }
         }
-
         return accounts;
     }
 

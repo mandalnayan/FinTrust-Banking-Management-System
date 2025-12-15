@@ -56,7 +56,7 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 		accountType.setSelectedIndex(0);
 	}
 
-	// 🔹 Handle Submit button click
+	// Handle Submit button click
 	@Listen("onClick = #btnAccountSubmit")
 	public void onSubmit() {
 		if (!isFormValid())
@@ -73,6 +73,15 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 			String relation = nomineeRelation.getValue().trim();
 			long nomineeIdNum = nomineeId.longValue();
 			Long nom_id = nomineeIdNum;
+			
+			Long userId  = (Long) Sessions.getCurrent().getAttribute("user_id");
+			if(acconntService.isAccountExists(userId, accType)){
+				System.out.println("account exists aready ....................");
+				String message = accType + " Account already exists with this user_id";
+				NotificationUtil.push("info", message);
+				resetForm();
+				Executions.sendRedirect("");
+			}
 
 			//check given nominee id already exist in db or not?
 			Nominee nom = new Nominee(nomineeIdNum, nominee_name, relation);
@@ -84,8 +93,7 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 			
 			//GET THE Brach_id using branch name
 			long branchId = BranchDao.findByBranchName(branchName).getBranchId();
-			
-			
+		
 			
 			// Create Account object
 			Account account = new Account();
@@ -94,8 +102,8 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 			account.setNominee_id(nom_id);	
 			account.setBranchId(branchId);
 			
+			
 			boolean success = acconntService.openAccount(account);
-
 			if (success) {
 				String message = "Account created successfully!";
 				NotificationUtil.push("info", message);				

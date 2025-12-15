@@ -6,9 +6,8 @@ import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.*;
 
-import com.fintrust.model_copy.AccountUpdateRequest;
-
-import zcom.finrust.dao_copy.AccountUpdateRequestDao;
+import com.fintrust.dao.impl.AccountUpdateRequestDao;
+import com.fintrust.model.AccountUpdateRequest;
 
 import java.util.*;
 

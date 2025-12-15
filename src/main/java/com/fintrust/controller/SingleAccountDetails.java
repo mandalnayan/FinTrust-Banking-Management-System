@@ -43,14 +43,22 @@ public class SingleAccountDetails extends SelectorComposer<Window> {
         accountType.setValue(acc.getAccountType().toString());
         accountBalance.setValue(acc.getBalance()+"");
         accountStatus.setValue(acc.getAccount_status().name());
+<<<<<<< Updated upstream
         Bank bank = new BankDAOImpl().findById(acc.getBankId());
         if (bank != null) {
         	accountBranch.setValue(bank.getBranchName());
         	ifscCode.setValue(bank.getIfscCode());
+=======
+        Branch branch = new BranchDao().findById(acc.getBranchId());
+        
+        if (branch != null) {
+        	accountBranch.setValue(branch.getBranchName());
+        	ifscCode.setValue(branch.getIfscCode());
+>>>>>>> Stashed changes
         }
+        
         modeOfOperation.setValue("self");
         nomineeId.setValue(acc.getNominee_id()+"");
-        //System.out.println(acc.getNominee_id());
     }
 
     @Listen("onClick = #backBtn")
