@@ -18,7 +18,7 @@ import com.fintrust.model_copy.Account.ModeOfOperation;
 import com.fintrust.service.AccountServiceImpl;
 import com.fintrust.service.NomineeServiceImp;
 import com.fintrust.util.NotificationUtil;
-import com.fintrust.viewModel.Notification;
+import com.fintrust.model.Notification;
 
 import java.time.LocalDateTime;
 
@@ -47,7 +47,7 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
 		modeOfOperation.setSelectedIndex(0); // Default value
-		
+
 		AccountType accountTypes[] = Account.AccountType.values();
 		System.out.println("Types: " + accountTypes.length);
 		for (AccountType at : accountTypes) {
@@ -74,47 +74,42 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 			long nomineeIdNum = nomineeId.longValue();
 			Long nom_id = nomineeIdNum;
 
-			//check given nominee id already exist in db or not?
+			// check given nominee id already exist in db or not?
 			Nominee nom = new Nominee(nomineeIdNum, nominee_name, relation);
 			if (!nomineeService.isPresentNominee(nomineeIdNum)) {
 				nom_id = nomineeService.saveNominee(nom);
-			}			
-			if (nom_id == -1l) return;	
-			
-			
-			//GET THE Brach_id using branch name
+			}
+			if (nom_id == -1l)
+				return;
+
+			// GET THE Brach_id using branch name
 			long branchId = BranchDao.findByBranchName(branchName).getBranchId();
-			
-			
-			
+
 			// Create Account object
 			Account account = new Account();
 			account.setAccountType(AccountType.valueOf(accType));
-			account.setBalance(deposit);			
-			account.setNominee_id(nom_id);	
+			account.setBalance(deposit);
+			account.setNominee_id(nom_id);
 			account.setBranchId(branchId);
-			
-			boolean success = acconntService.openAccount(account);
 
-			if (success) {
-				String message = "Account created successfully!";
-				NotificationUtil.push("info", message);				
-				resetForm();
-				Executions.sendRedirect("");				
+			Notification notification = acconntService.openAccount(account);
+		
+			if (!notification.getType().equals("warning")) {
+				NotificationUtil.push(notification);
+				Executions.sendRedirect("");
 			} else {
-				String message = "Server error. Failed to create Account. Please try again!";
-				NotificationUtil.showInstant(accType, message);	
-			}	
+				NotificationUtil.showInstant(notification);
+			}
 
 		} catch (IllegalArgumentException e) {
 			String message = "Please give valid input!";
-			NotificationUtil.push("error", message);	
+			NotificationUtil.push("error", message);
 			e.printStackTrace();
-			
+
 		} catch (Exception e) {
 			String message = "Server error. Failed to create Account. Please try again!";
-			NotificationUtil.push("error", message);	
-			
+			NotificationUtil.push("error", message);
+
 			e.printStackTrace();
 		}
 	}

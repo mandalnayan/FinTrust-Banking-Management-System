@@ -3,10 +3,11 @@ package com.fintrust.service;
 import java.util.List;
 
 import com.fintrust.model.Account;
+import com.fintrust.model.Notification;
 
 public interface AccountService {
 	// Account management
-    boolean openAccount(Account account);
+    Notification openAccount(Account account);
     boolean closeAccount(long accountNo);
     boolean updateAccountDetails(Account account);
     Account getAccountDetails(long accountNo);
