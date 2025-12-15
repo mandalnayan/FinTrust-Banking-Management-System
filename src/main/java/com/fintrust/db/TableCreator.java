@@ -1,3 +1,4 @@
+
 package com.fintrust.db;
 
 import java.sql.Connection;
@@ -15,7 +16,7 @@ public class TableCreator {
 			// 1) branches
 			// -----------------------------
 			st.execute("""
-					  	CREATE TABLE branches (
+					  	CREATE TABLE IF NOT EXISTS branches (
 					   		branch_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 							branch_name VARCHAR(120) NOT NULL,
 							ifsc_code VARCHAR(12) NOT NULL UNIQUE,
@@ -50,7 +51,7 @@ public class TableCreator {
 			// 3) nominee_details
 			// -----------------------------
 			st.execute("""
-					CREATE TABLE nominee_details (
+					CREATE TABLE IF NOT EXISTS nominee_details (
 						nominee_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 						nominee_name VARCHAR(100),
 						nominee_relation VARCHAR(50)
@@ -184,7 +185,7 @@ public class TableCreator {
 			// 6) beneficiaries
 			// -----------------------------
 			st.execute("""
-										    CREATE TABLE beneficiaries (
+						CREATE TABLE IF NOT EXISTS beneficiaries (
 					    beneficiary_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 
 					    user_id BIGINT UNSIGNED NOT NULL,
@@ -368,7 +369,7 @@ public class TableCreator {
 			// -----------------------------
 			st.execute(
 					"""
-							CREATE TABLE `account_closer_request` (
+							CREATE TABLE IF NOT EXISTS `account_closer_request` (
 									  `request_id` bigint unsigned NOT NULL AUTO_INCREMENT,
 									  `account_number` bigint unsigned NOT NULL,
 									  `reason` varchar(100) DEFAULT NULL,
@@ -393,7 +394,7 @@ public class TableCreator {
 			// -----------------------------
 			st.execute(
 					"""
-											CREATE TABLE fintrust_bank.`account_update_request` (
+											CREATE TABLE IF NOT EXISTS fintrust_bank.`account_update_request` (
 							  `request_id` bigint unsigned NOT NULL AUTO_INCREMENT,
 							  `account_number` bigint unsigned NOT NULL,
 							  `new_account_type` enum('SAVINGS','CURRENT','SALARY') DEFAULT NULL,
@@ -418,7 +419,7 @@ public class TableCreator {
 			// 15) Account Update request
 			// -----------------------------
 			st.execute("""
-						CREATE TABLE card_request (
+						CREATE TABLE IF NOT EXISTS card_request (
 					    request_no BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 					    card_type VARCHAR(30) NOT NULL,
 					    card_category VARCHAR(30) NOT NULL,
@@ -430,7 +431,7 @@ public class TableCreator {
 					    requested_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 					    approved_at DATETIME NULL,
 
-					    KEY (customer_id),
+					    KEY (user_id),
 					    KEY (account_no),
 
 					    CONSTRAINT fk_card_request_customer

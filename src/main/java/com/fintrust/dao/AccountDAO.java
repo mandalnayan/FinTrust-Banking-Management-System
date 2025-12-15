@@ -19,7 +19,7 @@ public interface AccountDAO {
      * Creates a new account.
      *
      * @param userId       ID of the user owning the account
-     * @param bankId       ID of the bank
+     * @param branchId       ID of the branch
      * @param accountNumber unique account number
      * @param accountType  'savings','current','salary','fixed_deposit'
      * @param balance      initial balance
