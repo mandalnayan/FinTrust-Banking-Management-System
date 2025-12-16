@@ -394,7 +394,7 @@ public class TableCreator {
 			// -----------------------------
 			st.execute(
 					"""
-											CREATE TABLE IF NOT EXISTS fintrust_bank.`account_update_request` (
+											CREATE TABLE IF NOT EXISTS `account_update_request` (
 							  `request_id` bigint unsigned NOT NULL AUTO_INCREMENT,
 							  `account_number` bigint unsigned NOT NULL,
 							  `new_account_type` enum('SAVINGS','CURRENT','SALARY') DEFAULT NULL,

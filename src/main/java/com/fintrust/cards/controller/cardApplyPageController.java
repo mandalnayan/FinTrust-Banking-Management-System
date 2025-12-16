@@ -71,8 +71,7 @@ public class cardApplyPageController extends SelectorComposer<Window>{
 		accountDao = new AccountDAOImpl();
 		List<Long> accounts= accountService.getAllAccountsNumber();
 		accounts.forEach(accountNo -> accountList.appendItem(accountNo+""));		
-	}
-    
+	}    
     
     @Listen("onSelect=#accountList")
     public void cardTypeVisible(Event e)
@@ -88,8 +87,7 @@ public class cardApplyPageController extends SelectorComposer<Window>{
     	List<String> issuedCardForAct=accountDao.issuedCardTypeByAct(Long.parseLong(selectedAct));
     	System.out.println(issuedCardForAct);
     	
-    	cardCategory.setButtonVisible(true);
-    	
+    	cardCategory.setButtonVisible(true);    	
     	
     	issuedCardForAct.forEach(cType->{
     		System.out.println(cType);
@@ -103,11 +101,8 @@ public class cardApplyPageController extends SelectorComposer<Window>{
     			  pCardItem.setVisible(false);
     	});
     	
-    } 
+    }      
     
-    
-    
-
     @Listen("onClick=#submitApplyCard")
     public void submitCardRequest() {
         String accNumber = accountList.getValue();

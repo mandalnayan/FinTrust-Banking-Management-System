@@ -15,7 +15,7 @@ public class DBConnection {
     // Database configuration constants
     private static final String URL = "jdbc:mysql://localhost:3306/fintrust_bank";
     private static final String USER = "root";
-    private static final String PASSWORD = "Root@123";
+    private static final String PASSWORD = "Nayan@2002";
     private static Connection connection = null;
 
     // Private constructor to prevent external instantiation

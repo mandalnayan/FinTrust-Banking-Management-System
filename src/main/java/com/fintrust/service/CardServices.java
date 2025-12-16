@@ -19,7 +19,7 @@ public class CardServices {
   {
 	  Long user_id = (Long) Sessions.getCurrent().getAttribute("user_id");
 	  try {		  
-			 String sql="insert into card_requests (account_number, card_type, card_category, user_id, delivery_address, remarks) values(?,?,?,?,?,?)";
+			 String sql="insert into card_request (account_no, card_type, card_category, user_id, address, remarks) values(?,?,?,?,?,?)";
 			 
 			 PreparedStatement pstm = DBConnection.getConnection().prepareStatement(sql);
 			 pstm.setLong(1, Long.parseLong(accNumber));
@@ -42,7 +42,7 @@ public class CardServices {
    */
   public Long getActiveCardCount() {
 	    long user_id = (Long) Sessions.getCurrent().getAttribute("user_id");
-	    String sql = "SELECT COUNT(*) FROM issuedatmcard WHERE user_id = ? AND status = 'active'";
+	    String sql = "SELECT COUNT(*) FROM cards WHERE user_id = ? AND status = 'active'";
 	    
 	    try (PreparedStatement pstm = DBConnection.getConnection().prepareStatement(sql)) {
 	        pstm.setLong(1, user_id);
@@ -53,8 +53,7 @@ public class CardServices {
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
-	    }
-	    
+	    }	    
 	    return 0L;
 	}
 
@@ -67,7 +66,7 @@ public class CardServices {
   {
 	  ResultSet rs=null;
 	  long user_id = (Long) Sessions.getCurrent().getAttribute("user_id");            // select from session 
-	  String sql="select * from issuedatmcard where user_id = ?";
+	  String sql="select * from cards where user_id = ?";
 	  try {
 		PreparedStatement pstm=DBConnection.getConnection().prepareStatement(sql);
 		pstm.setLong(1, user_id);
