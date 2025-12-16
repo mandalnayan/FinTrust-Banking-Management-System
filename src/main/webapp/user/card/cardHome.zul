@@ -5,11 +5,8 @@
 
 <zk>
      <include src="/WEB-INF/components/privateNavbar.zul" /> 
-    <window border="none" width="100%" height="90%" sclass="p-4">
-
-       
+    <window border="none" width="100%" height="90%" sclass="p-4">      
       
-
         
         <div style="display:flex;flex-direction:column;align-items:center;padding:30px; height:100vh; overflow-y:auto;">
             <label value="💳 Card Management Portal"
