@@ -9,6 +9,7 @@ import com.fintrust.model.Account;
 import com.fintrust.model.Transaction;
 import com.fintrust.service.AccountService;
 import com.fintrust.service.AccountServiceImpl;
+import com.fintrust.service.CardServices;
 import com.fintrust.service.UserDetailsServiceImpl;
 
 import java.util.List;
@@ -18,12 +19,13 @@ public class UserDashboardVM {
 	private AccountService accountService;
 	private UserDetailsServiceImpl userDetailsServiceImpl;
 	private TransactionDAO transactionDAO = new TransactionDAO();
+	private CardServices cardService = new CardServices();
 	
 	private Account selectedAccount;
 	private Long selectedAccountNo;
 	private int pendingCount;
 	private int rewardPoints;
-	private int activeCards;
+	private Long activeCards;
 	private double availableBalance;
 
 	private List<Transaction> recentTransactions;
@@ -53,7 +55,7 @@ public class UserDashboardVM {
 		selectedAccountNo = selectedAccount.getAccountNumber();
 		pendingCount = 5;
 		rewardPoints = 125;
-		activeCards = 2;
+		activeCards = cardService.getActiveCardCount();
 
 		// Load sample transactions
 		recentTransactions = transactionDAO.getTransactions(userId, null, null);				
@@ -86,7 +88,7 @@ public class UserDashboardVM {
 		return rewardPoints;
 	}
 
-	public int getActiveCards() {
+	public Long getActiveCards() {
 		return activeCards;
 	}
 

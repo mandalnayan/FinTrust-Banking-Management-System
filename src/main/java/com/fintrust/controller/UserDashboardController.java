@@ -104,6 +104,11 @@ public class UserDashboardController extends SelectorComposer<Component>{
 	   profile.removeSclass("active");
    }
    
+   @Listen("onClick=#cards")
+   public void cards() {
+ 	  Executions.sendRedirect("/user/card/cardHome.zul");
+   }
+   
    @Listen("onClick=#profile")
    public void profile() {
 	   main_content_sec.setSrc("/WEB-INF/components/userProfile.zul");
@@ -117,12 +122,8 @@ public class UserDashboardController extends SelectorComposer<Component>{
   @Listen("onClick=#transactions")
   public void transactions() {
 	  Executions.sendRedirect("transactionHistory.zul");
-  }
+  }  
   
-  @Listen("onClick=#cards")
-  public void cards() {
-	  Executions.sendRedirect("/Card/cardHome.zul");
-  }
    
    /*
     @Command

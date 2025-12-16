@@ -64,11 +64,11 @@
                         </vbox>
 
                         <vbox class="widget widget-card">
-                            <label value="Cards Overview" class="widget-title"/>
-                            <label value="@load(vm.activeCards) + ' Active'" class="widget-desc"/>
+                            <label value="Active Cards" class="widget-title"/>
+                            <label value="@load(vm.activeCards)" class="widget-desc summary-value"/>
                             <button label="Manage Cards"
                                     class="widget-btn"
-                                    onClick="@command('go', page='Card/cardHome')"/>
+                                    onClick="@command('go', page='card/cardHome')"/>
                         </vbox>
 
                         <vbox class="widget widget-chart">
@@ -90,6 +90,8 @@
                                 <column label="Type"/>
                                 <column label="Mode"/>
                                 <column label="Amount"/>
+                                <column label="From"/>
+                                <column label="To"/>
                                 <column label="Status"/>
                             </columns>
 
@@ -101,6 +103,8 @@
                                         <label value="@load(each.txnType)"/>
                                         <label value="@load(each.mode)"/>
                                         <label value="@load(each.amount)"/>
+                                          <label value="@load(each.accountNumber)"/>
+                                          <label value="@load(each.counterparty_account_number)"/>
                                         <label value="@load(each.status)"/>
                                     </row>
                                 </template>

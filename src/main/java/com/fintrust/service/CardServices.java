@@ -36,6 +36,33 @@ public class CardServices {
 	  return false; 
 	}
 
+  /**
+   * Return all card
+   * @return
+   */
+  public Long getActiveCardCount() {
+	    long user_id = (Long) Sessions.getCurrent().getAttribute("user_id");
+	    String sql = "SELECT COUNT(*) FROM issuedatmcard WHERE user_id = ? AND status = 'active'";
+	    
+	    try (PreparedStatement pstm = DBConnection.getConnection().prepareStatement(sql)) {
+	        pstm.setLong(1, user_id);
+	        try (ResultSet rs = pstm.executeQuery()) {
+	            if (rs.next()) {
+	                return rs.getLong(1);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return 0L;
+	}
+
+  
+  /**
+   * Return all card
+   * @return
+   */
   public ResultSet getCardList()
   {
 	  ResultSet rs=null;

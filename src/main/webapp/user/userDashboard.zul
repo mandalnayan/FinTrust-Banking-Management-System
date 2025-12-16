@@ -33,8 +33,7 @@
 		apply="com.fintrust.controller.UserDashboardController">
 
 		<!-- NORTH: Top header (compact) -->
-		<north>
-			<!--  <include src = "/WEB-INF/components/privateNavbar.zul" />  -->
+		<north>			
 			<privateNavbar width="100%"></privateNavbar>
 		</north>
 
