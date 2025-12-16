@@ -1,6 +1,6 @@
 
 <!-- Make sure page shouln't render without login -->
-<?init class = "com.fintrust.controller.AuthenticationController" ?>
+
 <!-- head footer csss -->
 <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 
