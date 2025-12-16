@@ -23,7 +23,7 @@ import com.fintrust.dao.impl.FundTransferDAO;
 public class FundTransferController extends SelectorComposer<Component> {
 
 	@Wire
-	private Combobox accountList, beneficiaryComboBox;
+	private Combobox accountsComboBox, beneficiaryComboBox;
 
 	@Wire
 	private Longbox toAccountBox;
@@ -36,7 +36,6 @@ public class FundTransferController extends SelectorComposer<Component> {
 
 	private Long fromAccount;
 
-	private AccountDAO accountDao;
 	private AccountService accountService;
 	private BeneficiaryService beneficiaryService;
 
@@ -46,7 +45,6 @@ public class FundTransferController extends SelectorComposer<Component> {
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
 
-		accountDao = new AccountDAOImpl();
 		accountService = new AccountServiceImpl();
 		List<Account> accounts = accountService.getAllAccounts();
 		beneficiaryService = new BeneficiaryService();
@@ -55,31 +53,30 @@ public class FundTransferController extends SelectorComposer<Component> {
 			NotificationUtil.showInstant("error", "Internal server error!");
 		} else {
 			for (Account account : accounts) {
-				Comboitem item = accountList.appendItem(account.getAccountNumber() + "");
+				Comboitem item = accountsComboBox.appendItem(account.getAccountNumber() + "");
 				item.setValue(account.getAccountNumber()); // <-- THIS FIXES NULL PROBLEM
 			}
 
 			beneficiaries = beneficiaryService.getBeneficiaries();
 
 			for (Beneficiary b : beneficiaries) {
-				Comboitem item = new Comboitem(b.getName() + " (" + b.getBankName() + ")");
+				Comboitem item = new Comboitem(b.getUserId() + ". " + b.getName() + " (" + b.getBankName() + ")");
 				item.setValue(b);
 				beneficiaryComboBox.appendChild(item);
 			}
 		}
 	}
 
-	@Listen("onSelect=#accountList")
+	@Listen("onSelect=#accountsComboBox")
 	public void onAccountSelect() {
-		// System.out.println("invoked fundtranser");
-		Comboitem selected = accountList.getSelectedItem();
+		Comboitem selected = accountsComboBox.getSelectedItem();
 		if (selected != null) {
 			fromAccount = selected.getValue();
 			System.out.println("acc " + fromAccount);
 		}
 	}
 
-	@Listen("onSelect=#beneficiaryCombo")
+	@Listen("onSelect=#beneficiaryComboBox")
 	public void onBeneficiarySelect() {
 		Comboitem selected = beneficiaryComboBox.getSelectedItem();
 		if (selected != null) {

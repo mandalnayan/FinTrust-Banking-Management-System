@@ -25,7 +25,7 @@
                 <rows>
                     <row>
                         <label value="From Account:" style="font-weight:bold; color:#374151;" />
-                        <combobox id="accountList" width="300px" 
+                        <combobox id="accountsComboBox" width="300px" 
 								placeholder="Select account number" autodrop="true" readonly="true"/>
                        
                     </row>
@@ -33,7 +33,7 @@
                     <row>
                         <label value="Select Beneficiary:" style="font-weight:bold; color:#374151;"/>
                         <combobox id="beneficiaryComboBox" autodrop="true" width="300px" 
-                                  placeholder="Select Beneficiary" />
+                                  placeholder="Select Beneficiary" readonly="true"/>
                     </row>
 
                     <row>
