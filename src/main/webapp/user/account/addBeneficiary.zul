@@ -1,6 +1,8 @@
 
 <!-- Make sure page shouln't render without login -->
+
 <?init class = "com.fintrust.security.AuthenticationController" ?>
+
 <!-- head footer csss -->
 <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 
@@ -152,7 +154,7 @@
                 <hlayout spacing="20px" style="margin-top:20px;">
                     <button id="addBtn" label=" Add Beneficiary" sclass="action-btn add-btn"/>
                     <button label=" Clear" sclass="action-btn clear-btn"
-                            onClick='nameBox.setValue(""); accountBox.setValue(""); bankBox.setValue(""); ifscBox.setValue(""); statusLabel.setValue("");'/>
+                            onClick='nameBox.setValue(""); accountBox.setValue(null); bankBox.setValue(""); ifscBox.setValue(""); statusLabel.setValue("");'/>
                 </hlayout>
 
                 <label id="statusLabel" sclass="status-label"/>

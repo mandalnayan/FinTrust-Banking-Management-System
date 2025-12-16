@@ -148,26 +148,36 @@ head footer csss
 <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 
 <zk>
+        <include src="/WEB-INF/components/privateNavbar.zul" style="
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            z-index: 999;
+        " /> 
     <!-- FIXED: Removed height="130%" and added vflex="min" -->
+     <a href="/Card/cardHome.zul" class="top-back-btn">
+        ← Back
+    </a>
     <window border="none" width="100%" height="auto" vflex="min"
         apply="com.fintrust.cards.controller.cardApplyPageController"
         style="background: linear-gradient(135deg, #e6f0ff, #ffffff); padding-bottom:30px;">
 
         <!-- 🌐 Top Navigation Bar -->
-        <include src="/WEB-INF/components/privateNavbar.zul" style="position: static;" />
+        
 
         <!-- 🌈 Main Content Area -->
         <div class="main-wrapper">
 
             <!-- 💡 Glass-Style Form Card -->
             <div class="form-card">
-
+              
                 <div class="form-header">
-                    <label value="💳 Apply for New ATM Card" class="title" />
+                    <label value="💳 Apply for New Card" class="title" />
                     <separator />
                     <label value="Quick, Secure and Paperless Card Request Service" class="subtitle" />
                 </div>
-
+  
                 <grid width="100%" sclass="responsive-grid">
                     <rows>
                         <row>
@@ -234,6 +244,8 @@ head footer csss
             html, body {
                 overflow-x: hidden !important;
             }
+            
+            
 
             .main-wrapper {
                 display: flex;
@@ -311,6 +323,29 @@ head footer csss
             .btn-secondary {
                 background: #f5f5f5;
                 color: #333;
+            }
+            
+            .top-back-btn {
+                position: fixed;
+                top: 90px; /* just below navbar */
+                left: 20px;
+                z-index: 1100;
+                background: white;
+                color: #004080;
+                padding: 6px 14px;
+                border-radius: 20px;
+                font-size: 13px;
+                font-weight: 600;
+                text-decoration: none;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                transition: all 0.3s ease;
+            }
+            
+            
+              .top-back-btn:hover {
+                background: #004080;
+                color: white;
+                transform: translateX(-3px);
             }
 
             /* Mobile Fix */

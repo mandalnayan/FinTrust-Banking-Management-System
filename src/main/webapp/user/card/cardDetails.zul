@@ -8,18 +8,46 @@
                    border-radius:15px;
                    box-shadow:0 4px 12px rgba(0,0,0,0.12);
                    padding:25px;"> 
-
+              
         <vlayout spacing="0px" width="100%" height="auto">
+              <div style="position:relative; width:100%; height:40px;">
 
+                <!-- Back Button (LEFT) -->
+                <button label="← Back to Manage Cards"
+                        onClick='Executions.sendRedirect("manageCard.zul")'
+                        style="
+                            position:absolute;
+                            left:0;
+                            background:#004080;
+                            color:white;
+                            border:none;
+                            border-radius:6px;
+                            padding:6px 14px;
+                            font-weight:bold;
+                            cursor:pointer;
+                            font-size:14px;
+                        "/>
+
+                <!-- Center Title (ALWAYS CENTERED) -->
+                <label value="FinTrust Bank - Card Details"
+                       style="
+                           position:absolute;
+                           left:50%;
+                           transform:translateX(-50%);
+                           font-size:30px;
+                           font-weight:bold;
+                           color:#004080;
+                       "/>
+            </div>
             <!-- Header -->
-            <hlayout width="100%" style="justify-content:space-between;align-items:center;">
+            <!-- <hlayout width="100%" style="justify-content:space-between;align-items:center;">
                 <label value="FinTrust Bank - Card Details"
                        style="font-size:20px;font-weight:bold;color:#003399;letter-spacing:0.5px;"/>
                 <button label="← Back to Manage Cards"
                         onClick='Executions.sendRedirect("manageCard.zul")'
                         style="background:#003399;color:white;border:none;border-radius:8px;
                                padding:6px 14px;font-weight:500;cursor:pointer;transition:background 0.3s;"/>
-            </hlayout>
+            </hlayout> -->
 
             <!-- Card Information -->
             <div style="background:white;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,0.08);
@@ -45,11 +73,11 @@
                             <label value="Maximum Daily Limit:" style="color:#333;font-weight:600;"/>
                             <label id="lblMaxLimit" style="color:#444;"/>
                         </row>
-                          <row>
+                          <row id="dailyLimitRow" >
                             <label value="Current Daily Limit:" style="color:#333;font-weight:600;"/>
                             <label id="lblCurLimit" value="50000" style="color:#444;"/>
                         </row>
-                        <row>
+                        <row id="sliderRow">
                             <label value="Set Daily Limit:" style="color:#333;font-weight:600;"/>
                           <vlayout>
     <slider id="limitSlider"

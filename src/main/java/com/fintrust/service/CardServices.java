@@ -19,7 +19,7 @@ public class CardServices {
   {
 	  Long user_id = (Long) Sessions.getCurrent().getAttribute("user_id");
 	  try {		  
-			 String sql="insert into card_request (account_no, card_type, card_category, user_id, address, remarks) values(?,?,?,?,?,?)";
+			 String sql="insert into card_requests (account_number, card_type, card_category, user_id, delivery_address, remarks) values(?,?,?,?,?,?)";
 			 
 			 PreparedStatement pstm = DBConnection.getConnection().prepareStatement(sql);
 			 pstm.setLong(1, Long.parseLong(accNumber));

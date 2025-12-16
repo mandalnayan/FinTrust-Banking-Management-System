@@ -1,0 +1,232 @@
+ 
+ 
+ <?init class="com.fintrust.security.AuthenticationController" ?>
+<?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
+
+<zk>
+
+    <!-- ================= FIXED NAVBAR ================= -->
+    <div class="fixed-navbar">
+        <include src="/WEB-INF/components/privateNavbar.zul" />
+    </div>
+
+    <!-- ================= TOP BACK BUTTON ================= -->
+    <a href="/Card/cardHome.zul" class="top-back-btn">
+        ← Back
+    </a>
+
+    <!-- ================= PAGE CONTAINER ================= -->
+    <window border="none" width="100%" height="100%" style="background:#f4f8ff;">
+
+        <!-- ================= MAIN CONTENT ================= -->
+        <div class="main-content">
+
+            <!-- ===== PAGE TITLE ===== -->
+            <div class="page-header">
+                <label value="📄 ATM / Debit /Credit Card – Terms And Conditions"
+                    class="page-title" />
+                <separator />
+                <label value="Please read these terms carefully before using your card"
+                    class="page-subtitle" />
+            </div>
+
+            <!-- ================= CARDS GRID ================= -->
+            <div class="cards-container">
+
+                <div class="card-box">
+                    <label value="💳 Card Usage Policy" class="card-title" />
+                    <label value="Your FinTrust Bank ATM/Debit Card is for personal use only and must be used at authorized ATMs, POS terminals, and approved online platforms."
+                           class="card-text" />
+                </div>
+
+                <div class="card-box">
+                    <label value="💰 Transaction And Withdrawal Limits" class="card-title" />
+                    <label value="Daily withdrawal and transaction limits depend on your card type and account category and may change as per bank policy."
+                           class="card-text" />
+                </div>
+
+                <div class="card-box">
+                    <label value="🪙 Fees And Charges" class="card-title" />
+                    <label value="Charges may apply for exceeding free ATM usage, card replacement, PIN regeneration, international usage, or failed transactions."
+                           class="card-text" />
+                </div>
+
+                <div class="card-box important">
+                    <label value="🔒 Security Guidelines (Important)" class="card-title" />
+                    <label value="Never share your ATM PIN, CVV, or OTP. FinTrust Bank will never ask for sensitive information through calls, emails, or messages."
+                           class="card-text" />
+                </div>
+
+                <div class="card-box">
+                    <label value="⚠️ Lost or Stolen Card" class="card-title" />
+                    <label value="If your card is lost or stolen, report it immediately via customer care or internet banking. The bank is not responsible for misuse before reporting."
+                           class="card-text" />
+                </div>
+
+                <div class="card-box">
+                    <label value="🛑 Card Suspension And Termination" class="card-title" />
+                    <label value="FinTrust Bank reserves the right to suspend or terminate card services in case of suspicious activity or policy violations."
+                           class="card-text" />
+                </div>
+
+              <!--   <div class="card-box">
+                    <label value="ℹ️ Bank Rights And Disclaimer" class="card-title" />
+                    <label value="The bank may update these terms at any time. Continued usage of the card implies acceptance of the revised terms."
+                           class="card-text" />
+                </div> -->
+
+            </div>
+
+            <!-- ===== FOOTER ===== -->
+            <div class="tc-footer">
+                <label value="© 2025 FinTrust Bank. All Rights Reserved." />
+            </div>
+
+        </div>
+
+        <!-- ================= STYLES ================= -->
+        <style>
+
+            /* ===== Navbar ===== */
+            .fixed-navbar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                z-index: 1000;
+            }
+
+            /* ===== Top Back Button ===== */
+            .top-back-btn {
+                position: fixed;
+                top: 120px; /* just below navbar */
+                left: 20px;
+                z-index: 1100;
+                background: white;
+                color: #004080;
+                padding: 6px 14px;
+                border-radius: 20px;
+                font-size: 13px;
+                font-weight: 600;
+                text-decoration: none;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                transition: all 0.3s ease;
+            }
+
+            .top-back-btn:hover {
+                background: #004080;
+                color: white;
+                transform: translateX(-3px);
+            }
+
+            /* ===== Main Content (Desktop) ===== */
+            .main-content {
+                margin-top: 75px;
+                padding: 30px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            /* ===== Page Header ===== */
+            .page-header {
+                text-align: center;
+                margin-bottom: 30px;
+                 margin-bottom: 30px;
+            }
+
+            .page-title {
+                font-size: 26px;
+                font-weight: 700;
+                color: #003366;
+            }
+
+            .page-subtitle {
+                font-size: 14px;
+                color: #555;
+            }
+
+            /* ===== Cards Grid ===== */
+            .cards-container {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 25px;
+                width: 100%;
+                max-width: 1200px;
+                margin-bottom: 30px;
+            }
+
+            .card-box {
+                background: #ffffff;
+                border-radius: 16px;
+                box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+                padding: 25px;
+                text-align: center;
+                transition: all 0.3s ease;
+            }
+
+            .card-box:hover {
+                transform: translateY(-6px);
+                box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+            }
+
+            .card-box.important {
+                border-left: 6px solid #ff9800;
+                background: #fff7e6;
+            }
+
+            .card-title {
+                font-size: 18px;
+                font-weight: 700;
+                color: #004080;
+                margin-bottom: 10px;
+            }
+
+            .card-text {
+                font-size: 14px;
+                color: #333;
+                line-height: 1.6;
+            }
+
+            /* ===== Footer ===== */
+            .tc-footer {
+                margin-top: 35px;
+                font-size: 13px;
+                color: #666;
+                text-align: center;
+            }
+
+            /* ===== Mobile / Tablet Scroll ===== */
+            @media (max-width: 768px) {
+                .main-content {
+                    height: calc(100vh - 75px);
+                    overflow-y: auto;
+                    padding: 20px 15px;
+                    -webkit-overflow-scrolling: touch;
+                }
+
+                .top-back-btn {
+                    top: 80px;
+                    left: 12px;
+                    font-size: 12px;
+                    padding: 5px 12px;
+                }
+
+                .page-title {
+                    font-size: 22px;
+                }
+
+                .card-title {
+                    font-size: 16px;
+                }
+
+                .card-text {
+                    font-size: 13px;
+                }
+            }
+
+        </style>
+
+    </window>
+</zk>
+ 

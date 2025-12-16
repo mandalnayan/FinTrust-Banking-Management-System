@@ -106,5 +106,8 @@ public interface AccountDAO {
      * @throws SQLException if database operation fails
      */
     boolean delete(long accountId) throws SQLException;
+    
+    
+    List<String> issuedCardTypeByAct(long actNumber);
 }
 

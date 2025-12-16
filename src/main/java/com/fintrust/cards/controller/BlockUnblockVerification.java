@@ -9,6 +9,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Messagebox;
@@ -49,28 +50,30 @@ public class BlockUnblockVerification  extends SelectorComposer<Window>{
 		 String doStatus;
 	
 	    String currentStatus=(String) Sessions.getCurrent().getAttribute("blockOrUnblock");
-	    if(currentStatus.equalsIgnoreCase("block card"))
-	    {
-	        doStatus="Blocked";  
-	    }else {
-	    	 doStatus="Active"; 
+	    System.out.println(currentStatus);
+	    
+	    if(currentStatus.equalsIgnoreCase("Block Card"))
+	    {  
+	        doStatus="blocked";  
+	    }else { 
+	    	 doStatus="active"; 
 	    }
-	   
-	    String atmCardNumber=(String)Sessions.getCurrent().getAttribute("atmNumber");
-		
+	 
+	    String card_number_masked=(String)Sessions.getCurrent().getAttribute("card_number_masked");
+	    
 		// long atmNumber = (Long) Long.parseLong(atmCardNumber);
-	     String sql = "UPDATE card SET card_status = ? WHERE card_number = ?";
-
-		//String atmCardNumber=(String)Sessions.getCurrent().getAttribute("atmNumber");
+	     String sql = "UPDATE cards SET card_status = ? WHERE card_number_masked = ?";
+	    
+		//String atmCardNumber=(String)Sessions.getCurrent().getAttribute("card_number_masked");
 		Connection connection=DBConnection.getConnection();
-		
+		  
 		try(  PreparedStatement pstm=connection.prepareStatement(sql))
-		{
+		{ 
 			pstm.setString(1, doStatus);
-			pstm.setString(2, atmCardNumber );
+			pstm.setString(2, card_number_masked );
 			int  n = pstm.executeUpdate();
 			//Executions.sendRedirect("");
-			
+			 
 		}catch(Exception e1)
 		{
 			e1.getMessage();
@@ -91,24 +94,46 @@ public class BlockUnblockVerification  extends SelectorComposer<Window>{
 	   if(btnValue.equalsIgnoreCase("Verify Password"))
 	   {
 		  String enteredPassword=txtPassword.getValue();
-		  String userPassword="Vikas12345";                  ////get from session
+		  String userPassword="Vikas12345";                  ////get from session or encrpted and get from DB and compare 
+		  
 		  if(enteredPassword.equalsIgnoreCase(userPassword))
 		  {
 			     txtOTP.setDisabled(false);
 			  	 btnSendOTP.setDisabled(false);
 			  	isVerifyLbl.setValue("OTP verified!!!!!");
-			  	Messagebox.show("OTP Verified!!!");
+			  
+			  	Clients.showNotification(
+					    "Password Verified!!!",
+					    Clients.NOTIFICATION_TYPE_INFO,
+					    null,
+					    "top_center",
+					    3000
+					);
 				 
 		  }
 		  else {
-			  Messagebox.show("Invalid PAssord!!!!");
+				Clients.showNotification(
+					    "Invalid Password!!!!",
+					    Clients.NOTIFICATION_TYPE_ERROR,
+					    null,
+					    "top_center",
+					    3000
+					);
+			 
 		  }
 	   }
 	   
 	   
 	   if(btnValue.equalsIgnoreCase("Send OTP to Email"))
 	   {
-		   Messagebox.show("OTP has been send to your registeded Mail Address");
+			Clients.showNotification(
+				    "OTP has been send to your registeded Mail Address",
+				    Clients.NOTIFICATION_TYPE_INFO,
+				    null,
+				    "top_center",
+				    3000
+				);
+		
 		   btnSendOTP.setDisabled(true);
 		   btnVerifyOTP.setDisabled(false);
 		   
@@ -117,11 +142,25 @@ public class BlockUnblockVerification  extends SelectorComposer<Window>{
 	   {
 		 String currentOtp="707070";                              //get it from mail 
 		 if(txtOTP.getValue().equalsIgnoreCase(currentOtp)) 
-		 {     Messagebox.show("OTP verified!!!!!!!!!");
+		 {   
+			 Clients.showNotification(
+					    "OTP verified!!!!!!!!!",
+					    Clients.NOTIFICATION_TYPE_INFO,
+					    null,
+					    "top_center",
+					    3000
+					);
+			
 			 btnConfirm.setDisabled(false);
 		 }
 		 else {
-			   Messagebox.show("Plese ! enter valid OTP.");
+			 Clients.showNotification(
+					    "OTP verification Failed!!!!",
+					    Clients.NOTIFICATION_TYPE_ERROR,
+					    null,
+					    "top_center",
+					    3000
+					);
 		 }
 	   }
 	   
@@ -129,8 +168,23 @@ public class BlockUnblockVerification  extends SelectorComposer<Window>{
 	   {
 		   
 		 statusChange(); 
-		 Messagebox.show("Your card is "+btnValue);
-		 Executions.sendRedirect("/Card/manageCard.zul");
+		 Clients.showNotification(
+				 "Your card is "+(String) Sessions.getCurrent().getAttribute("blockOrUnblock"),
+				    Clients.NOTIFICATION_TYPE_ERROR,
+				    null,
+				    "top_center",
+				    3000
+				);
+		 // Executions.sendRedirect("/Card/manageCard.zul");
+		
+		 String contextPath = Executions.getCurrent().getContextPath();
+
+		 Clients.evalJavaScript(
+		     "setTimeout(function(){ window.location.href='" 
+		     + contextPath + "/Card/manageCard.zul'; }, 3000);"
+		 );
+
+
 	   }
 	  
 	}
