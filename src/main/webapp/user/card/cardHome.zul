@@ -18,16 +18,16 @@
 
            
             <div class="cards-container">
-                <div class="card-box" onClick='Executions.sendRedirect("/Card/ApplyNewCard.zul")'>
+                <div class="card-box" onClick='Executions.sendRedirect("/user/card/ApplyNewCard.zul")'>
                     <label value="💳 Apply for New Card" />
                 </div>
-                <div class="card-box" onClick='Executions.sendRedirect("/Card/manageCard.zul")'>
+                <div class="card-box" onClick='Executions.sendRedirect("/user/card/manageCard.zul")'>
                     <label value="🧾 Manage Existing Card" />
                 </div>
-                <div sclass="card-box" onClick='Executions.sendRedirect("/Card/termAndCondition.zul")'>
+                <div sclass="card-box" onClick='Executions.sendRedirect("/user/card/termAndCondition.zul")'>
                                 <label value="📄 Card Terms And Conditions" />
                             </div>
-                <div class="card-box" onClick='Executions.sendRedirect("/Card/Card_status.zul")'>
+                <div class="card-box" onClick='Executions.sendRedirect("/user/card/Card_status.zul")'>
                     <label value="📦 Track Card Request" />
                 </div>
             </div>
