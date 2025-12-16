@@ -83,12 +83,12 @@
                         <label value="Recent Transactions" sclass="section-title"/>
 
                         <grid model="@load(vm.recentTransactions)" 
-                              sclass="transactions-grid" mold="paging" pageSize="5">
+                              sclass="transactions-grid" mold="paging" pageSize="2">
 
                             <columns>
                                 <column label="Date"/>
-                                <column label="Description"/>
                                 <column label="Type"/>
+                                <column label="Mode"/>
                                 <column label="Amount"/>
                                 <column label="Status"/>
                             </columns>
@@ -96,9 +96,10 @@
                             <rows>
                                 <template name="model">
                                     <row>
-                                        <label value="@load(each.date)"/>
-                                        <label value="@load(each.description)"/>
-                                        <label value="@load(each.type)"/>
+                                        <label value="@load(each.createdAt)" />
+
+                                        <label value="@load(each.txnType)"/>
+                                        <label value="@load(each.mode)"/>
                                         <label value="@load(each.amount)"/>
                                         <label value="@load(each.status)"/>
                                     </row>
@@ -109,7 +110,7 @@
                         <hbox style="justify-content:flex-end; ">
                             <button label="View All Transactions"
                                     class="view-all-btn"
-                                    onClick="@command('go', page='transactions')"/>
+                                    onClick="@command('go', page='transactionHistory')"/>
                         </hbox>
                     </vbox>
 

@@ -3,23 +3,22 @@ package com.fintrust.viewModel;
 import org.zkoss.bind.annotation.*;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
-import org.zkoss.zul.Messagebox;
 
-import com.fintrust.dao.impl.UserDetailsDAOImpl;
+import com.fintrust.dao.impl.TransactionDAO;
 import com.fintrust.model.Account;
+import com.fintrust.model.Transaction;
 import com.fintrust.service.AccountService;
 import com.fintrust.service.AccountServiceImpl;
 import com.fintrust.service.UserDetailsServiceImpl;
 
-import java.math.BigDecimal;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserDashboardVM {
 
 	private AccountService accountService;
-	UserDetailsServiceImpl userDetailsServiceImpl;
+	private UserDetailsServiceImpl userDetailsServiceImpl;
+	private TransactionDAO transactionDAO = new TransactionDAO();
+	
 	private Account selectedAccount;
 	private Long selectedAccountNo;
 	private int pendingCount;
@@ -57,9 +56,7 @@ public class UserDashboardVM {
 		activeCards = 2;
 
 		// Load sample transactions
-		recentTransactions = new ArrayList<>();
-		recentTransactions
-				.add(new Transaction("2025-11-08", "POS - Grocery Store", "Debit", "-₹ 3,250.00", "Completed"));
+		recentTransactions = transactionDAO.getTransactions(userId, null, null);				
 	}
 
 	// ==========================
@@ -105,42 +102,4 @@ public class UserDashboardVM {
 		Executions.sendRedirect("/user/" + page + ".zul");
 	}
 
-	// ==========================
-	// Inner class representing a transaction
-	// ==========================
-	public static class Transaction {
-		private String date;
-		private String description;
-		private String type;
-		private String amount;
-		private String status;
-
-		public Transaction(String date, String description, String type, String amount, String status) {
-			this.date = date;
-			this.description = description;
-			this.type = type;
-			this.amount = amount;
-			this.status = status;
-		}
-
-		public String getDate() {
-			return date;
-		}
-
-		public String getDescription() {
-			return description;
-		}
-
-		public String getType() {
-			return type;
-		}
-
-		public String getAmount() {
-			return amount;
-		}
-
-		public String getStatus() {
-			return status;
-		}
 	}
-}

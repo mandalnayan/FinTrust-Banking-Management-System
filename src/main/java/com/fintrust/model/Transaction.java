@@ -1,17 +1,18 @@
 package com.fintrust.model;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public class Transaction {
 	private Long transactionId;
-	private Long accountId;
-	private Long relatedAccountId;
+	private Long accountNumber;
+	private Long counterparty_account_number;
 	private Long beneficiaryId;
 	private String txnReference;
 	private String txnType; // credit/debit
 	private String mode; // upi/neft/imps/card/cash
-	private BigDecimal amount;
+	private Double amount;
 	private BigDecimal balanceAfter;
 	private String description;
 	private TransactionStatus status;
@@ -26,13 +27,13 @@ public class Transaction {
 		PENDING, FAILED, REVERSED, COMPLETED
 	}
 
-	public Transaction(Long transactionId, Long accountId, Long relatedAccountId, Long beneficiaryId,
-			String txnReference, String txnType, String mode, BigDecimal amount, BigDecimal balanceAfter,
-			String description, String status, LocalDateTime createdAt) {
+	public Transaction(Long transactionId, Long accountNumber, Long relatedAccountNumber, Long beneficiaryId,
+			String txnReference, String txnType, String mode, Double amount, BigDecimal balanceAfter,
+			String description, String status, Timestamp createdAt) {
 		super();
 		this.transactionId = transactionId;
-		this.accountId = accountId;
-		this.relatedAccountId = relatedAccountId;
+		this.accountNumber = accountNumber;
+		this.counterparty_account_number = relatedAccountNumber;
 		this.beneficiaryId = beneficiaryId;
 		this.txnReference = txnReference;
 		this.txnType = txnType;
@@ -41,7 +42,7 @@ public class Transaction {
 		this.balanceAfter = balanceAfter;
 		this.description = description;
 		this.status = TransactionStatus.valueOf(status.toUpperCase());
-		this.createdAt = createdAt;
+		this.createdAt = createdAt.toLocalDateTime();
 	}
 
 	public Long getTransactionId() {
@@ -50,22 +51,26 @@ public class Transaction {
 
 	public void setTransactionId(Long transactionId) {
 		this.transactionId = transactionId;
+	}	
+
+	public Long getAccountNumber() {
+		return accountNumber;
 	}
 
-	public Long getAccountId() {
-		return accountId;
+	public void setAccountNumber(Long accountNumber) {
+		this.accountNumber = accountNumber;
 	}
 
-	public void setAccountId(Long accountId) {
-		this.accountId = accountId;
+	public Long getCounterparty_account_number() {
+		return counterparty_account_number;
 	}
 
-	public Long getRelatedAccountId() {
-		return relatedAccountId;
+	public void setCounterparty_account_number(Long counterparty_account_number) {
+		this.counterparty_account_number = counterparty_account_number;
 	}
 
-	public void setRelatedAccountId(Long relatedAccountId) {
-		this.relatedAccountId = relatedAccountId;
+	public void setStatus(TransactionStatus status) {
+		this.status = status;
 	}
 
 	public Long getBeneficiaryId() {
@@ -100,11 +105,11 @@ public class Transaction {
 		this.mode = mode;
 	}
 
-	public BigDecimal getAmount() {
+	public Double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(BigDecimal amount) {
+	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 
@@ -136,8 +141,8 @@ public class Transaction {
 		return createdAt;
 	}
 
-	public void setCreatedAt(LocalDateTime createdAt) {
-		this.createdAt = createdAt;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt.toLocalDateTime();
 	}
 
 }
