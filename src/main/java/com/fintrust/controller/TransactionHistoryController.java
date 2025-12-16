@@ -66,11 +66,11 @@ public class TransactionHistoryController extends SelectorComposer<Component> {
         if (from != null && to != null) {
             query += " AND DATE(created_at) BETWEEN ? AND ?";
         }
-
+        query += " ORDER BY created_at DESC;";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
         		
-        	  ps.setLong(1, user_id);
+        		ps.setLong(1, user_id);
             if (from != null && to != null) {
                 ps.setDate(2, from);
                 ps.setDate(3, to);

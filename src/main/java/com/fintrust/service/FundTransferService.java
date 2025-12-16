@@ -7,6 +7,7 @@ import org.zkoss.zk.ui.Sessions;
 import com.fintrust.dao.impl.FundTransferDAO;
 import com.fintrust.db.DBConnection;
 import com.fintrust.model.Transaction.TransactionStatus;
+import com.fintrust.util.NotificationUtil;
 
 public class FundTransferService {
 
@@ -21,7 +22,9 @@ public class FundTransferService {
 		}
 
 		try {
-
+			// Either all operation must happened or nore
+			connection.setAutoCommit(false);
+			
 			validateBalance(fromAcc, amount);
 			validateReceiver(toAcc, ifscCode);
 
@@ -36,7 +39,7 @@ public class FundTransferService {
 
 		} catch (Exception e) {
 			rollbackQuietly();
-
+			NotificationUtil.showInstant("error", "Fund transfer failed! " + e.getMessage());
 			try {
 				if (connection != null) {
 					dao.insertTransaction(userId, fromAcc, toAcc, amount,
@@ -45,7 +48,7 @@ public class FundTransferService {
 			} catch (Exception ignore) {
 			}
 
-			throw new RuntimeException("Fund transfer failed", e);
+			return false;
 
 		} finally {
 			closeQuietly();

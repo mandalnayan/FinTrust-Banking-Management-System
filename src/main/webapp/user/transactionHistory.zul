@@ -50,12 +50,12 @@
 				pageSize="4" sizedByContent="true" itemRenderer="com.fintrust.renderview.TransactionRender"
 				style="border:1px solid #ccc; border-radius:8px;">
 				<listhead hflex="1">
-					<listheader label="Transaction ID" width="auto" />
-					<listheader label="From Account" width="auto" />
-					<listheader label="To Account" width="auto" />
-					<listheader label="Amount" width="auto" />
-					<listheader label="Status" width="auto" />
-					<listheader label="Date" width="auto" />
+					<listheader label="Transaction ID" width="auto" sort="auto"/>
+					<listheader label="From Account" width="auto" sort="auto"/>
+					<listheader label="To Account" width="auto" sort="auto"/>
+					<listheader label="Amount" width="auto" sort="auto"/>
+					<listheader label="Status" width="auto" sort="auto"/>
+					<listheader label="Date" width="auto" sort="auto"/>
 				</listhead>
 			</listbox>
 

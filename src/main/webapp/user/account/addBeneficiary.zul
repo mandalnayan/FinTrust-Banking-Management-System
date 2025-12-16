@@ -1,6 +1,6 @@
 
 <!-- Make sure page shouln't render without login -->
-<?init class = "com.fintrust.controller.AuthenticationController" ?>
+<?init class = "com.fintrust.security.AuthenticationController" ?>
 <!-- head footer csss -->
 <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 
@@ -134,7 +134,7 @@
 
                         <row>
                             <label value="Account Number:" sclass="form-label"/>
-                            <textbox id="accountBox" placeholder="Enter account number" sclass="form-input"/>
+                            <longbox id="accountBox" placeholder="Enter account number" sclass="form-input"/>
                         </row>
 
                         <row>

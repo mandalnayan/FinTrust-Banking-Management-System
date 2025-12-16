@@ -10,6 +10,7 @@ import org.zkoss.zul.*;
 
 import com.fintrust.model.Account;
 import com.fintrust.model.Beneficiary;
+import com.fintrust.model.Notification;
 import com.fintrust.service.AccountService;
 import com.fintrust.service.AccountServiceImpl;
 import com.fintrust.service.BeneficiaryService;
@@ -95,22 +96,32 @@ public class FundTransferController extends SelectorComposer<Component> {
 		Long toAcc = toAccountBox.getValue();
 		Double amt = amountBox.getValue();
 		String ifscCode = ifsccodeBox.getValue();
+		
+		Notification notification = isValid(fromAcc, toAcc, amt, ifscCode);
+		
 
-		if (fromAcc == null || toAcc == null || String.valueOf(toAcc).length() != 12 || amt == null || amt <= 0
-				|| fromAcc.equals(toAcc)) {
-
-			NotificationUtil.showInstant("error", "Please enter valid transfer details!");
+		if (!notification.getType().equals("info")) {
+			NotificationUtil.showInstant(notification);
 			return;
+		} else {
+			NotificationUtil.showInstant("info", "Processing..");  
 		}
 
 		boolean result = new FundTransferService().transferFunds(fromAcc, toAcc, ifscCode, amt);
 
 		if (result) {
 			NotificationUtil.push("info", "Transfer successfull!");
-			Executions.sendRedirect("");
-
-		} else {
-			NotificationUtil.showInstant("error", "Transfer failed! Check balance or account.");
+			Executions.sendRedirect("/user/userDashboard.zul");
 		}
+	}
+
+	public Notification isValid(Long fromAcc, Long toAcc, Double amt, String ifscCode) {
+		String res = "";
+		if (fromAcc == null || String.valueOf(fromAcc).length() != 12) res = "Sender account number is invalid";
+		else if(toAcc == null || String.valueOf(toAcc).length() != 12) res = "Receiver account number is invalid";
+		else if(amt == null || amt < 1) res = "Invalid amount";
+		else if(ifscCode == null || ifscCode.length() != 11) res = "Please enter valid IFSC code";
+		String notificationType = res.isBlank() ? "info" : "error";
+		return new Notification(notificationType, res);
 	}
 }
