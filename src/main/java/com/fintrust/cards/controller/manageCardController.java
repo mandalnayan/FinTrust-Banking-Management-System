@@ -44,7 +44,7 @@ public class manageCardController extends SelectorComposer<Window> {
         List<List<String>> cardData = new ArrayList<>();
 
         try (Connection con = DBConnection.getConnection()) {
-            String sql = "SELECT * FROM cards where user_id=?";
+            String sql = "SELECT * FROM cards where user_id = ?";
             PreparedStatement ps = con.prepareStatement(sql);
             Long user_id = (Long) Sessions.getCurrent().getAttribute("user_id");                                    //take it from session**(((((((((((
           

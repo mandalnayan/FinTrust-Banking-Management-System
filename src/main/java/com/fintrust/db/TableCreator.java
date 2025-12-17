@@ -10,446 +10,455 @@ public class TableCreator {
 		try (Connection con = DBConnection.getConnection(); Statement st = con.createStatement()) {
 
 			// Enable strict SQL mode
-			st.execute("SET SESSION sql_mode = 'STRICT_ALL_TABLES';");
+	st.execute("SET SESSION sql_mode = 'STRICT_ALL_TABLES';");
 
-			// -----------------------------
-			// 1) branches
-			// -----------------------------
-			st.execute("""
-					  	CREATE TABLE IF NOT EXISTS branches (
-					   		branch_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-							branch_name VARCHAR(120) NOT NULL,
-							ifsc_code VARCHAR(12) NOT NULL UNIQUE,
-							support_email VARCHAR(120),
-							support_phone VARCHAR(20),
-							created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-							PRIMARY KEY (branch_id)
-						);
-					""");
+	// -----------------------------
+	// 1) branches
+	// -----------------------------
+	st.execute("""
+			  	CREATE TABLE IF NOT EXISTS branches (
+			   		branch_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+					branch_name VARCHAR(120) NOT NULL,
+					ifsc_code VARCHAR(12) NOT NULL UNIQUE,
+					support_email VARCHAR(120),
+					support_phone VARCHAR(20),
+					created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+					PRIMARY KEY (branch_id)
+				);
+			""");
 
-			// -----------------------------
-			// 2) users
-			// -----------------------------
-			st.execute("""
-					    CREATE TABLE IF NOT EXISTS users (
-					        user_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-					        full_name VARCHAR(120) NOT NULL,
-					        email VARCHAR(120) NOT NULL UNIQUE,
-					        phone VARCHAR(20),
-					        password_hash VARCHAR(255) NOT NULL,
-					        role ENUM('ROLE_USER','ROLE_ADMIN','ROLE_SUPER_ADMIN') NOT NULL DEFAULT 'ROLE_USER',
-					        status ENUM('active','inactive','blocked') NOT NULL DEFAULT 'active',
-					        kycStatus ENUM('pending','upated','expired') NOT NULL DEFAULT 'pending',
-					        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-					        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-					        INDEX idx_users_email(email),
-					        INDEX idx_users_phone(phone)
-					    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-					""");
-			
-			// -----------------------------
-			// 3) nominee_details
-			// -----------------------------
-			st.execute("""
-					CREATE TABLE IF NOT EXISTS nominee_details (
-						nominee_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-						nominee_name VARCHAR(100),
-						nominee_relation VARCHAR(50)
-					);
-				""");
+	// -----------------------------
+	// 2) users
+	// -----------------------------
+	st.execute("""
+			    CREATE TABLE IF NOT EXISTS users (
+			        user_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+			        full_name VARCHAR(120) NOT NULL,
+			        email VARCHAR(120) NOT NULL UNIQUE,
+			        phone VARCHAR(20),
+			        password_hash VARCHAR(255) NOT NULL,
+			        role ENUM('ROLE_USER','ROLE_ADMIN','ROLE_SUPER_ADMIN') NOT NULL DEFAULT 'ROLE_USER',
+			        status ENUM('active','inactive','blocked') NOT NULL DEFAULT 'active',
+			        kycStatus ENUM('pending','upated','expired') NOT NULL DEFAULT 'pending',
+			        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+			        INDEX idx_users_email(email),
+			        INDEX idx_users_phone(phone)
+			    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+			""");
 
-			// -----------------------------
-			// 3) accounts
-			// -----------------------------
-			st.execute("""
-					CREATE TABLE IF NOT EXISTS accounts (
-					    account_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-					    user_id BIGINT UNSIGNED NOT NULL,
-					    branch_id BIGINT UNSIGNED NOT NULL,
-					    account_number BIGINT UNSIGNED NOT NULL UNIQUE,
-					    account_type ENUM('savings','current','salary','fixed_deposit') NOT NULL,
-					    balance DECIMAL(18,2) NOT NULL DEFAULT 0.00,
-					    currency VARCHAR(10) NOT NULL DEFAULT 'INR',
-					    status ENUM('active','inactive','frozen','closed') DEFAULT 'active',
-					    nominee_id BIGINT UNSIGNED NOT NULL,
-					    opened_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-					    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	// -----------------------------
+	// 3) nominee_details
+	// -----------------------------
+	st.execute("""
+				CREATE TABLE IF NOT EXISTS nominee_details (
+					nominee_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+					nominee_name VARCHAR(100),
+					nominee_relation VARCHAR(50)
+				);
+			""");
+
+	// -----------------------------
+	// 3) accounts
+	// -----------------------------
+	st.execute("""
+			CREATE TABLE IF NOT EXISTS accounts (
+			    account_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+			    user_id BIGINT UNSIGNED NOT NULL,
+			    branch_id BIGINT UNSIGNED NOT NULL,
+			    account_number BIGINT UNSIGNED NOT NULL UNIQUE,
+			    account_type ENUM('savings','current','salary','fixed_deposit') NOT NULL,
+			    balance DECIMAL(18,2) NOT NULL DEFAULT 0.00,
+			    currency VARCHAR(10) NOT NULL DEFAULT 'INR',
+			    status ENUM('active','inactive','frozen','closed') DEFAULT 'active',
+			    nominee_id BIGINT UNSIGNED NOT NULL,
+			    opened_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
 
-					    CONSTRAINT fk_accounts_user FOREIGN KEY (user_id)
-					        REFERENCES users(user_id)
-					        ON UPDATE CASCADE
-					        ON DELETE RESTRICT,
+			    CONSTRAINT fk_accounts_user FOREIGN KEY (user_id)
+			        REFERENCES users(user_id)
+			        ON UPDATE CASCADE
+			        ON DELETE RESTRICT,
 
-					    CONSTRAINT fk_accounts_branch FOREIGN KEY (branch_id)
-					        REFERENCES branches(branch_id)
-					        ON UPDATE CASCADE
-					        ON DELETE RESTRICT,
+			    CONSTRAINT fk_accounts_branch FOREIGN KEY (branch_id)
+			        REFERENCES branches(branch_id)
+			        ON UPDATE CASCADE
+			        ON DELETE RESTRICT,
 
-					    CONSTRAINT fk_accounts_nominee FOREIGN KEY (nominee_id)
-					        REFERENCES nominee(nominee_id)
-					        ON UPDATE CASCADE
-					        ON DELETE RESTRICT,
+			    CONSTRAINT fk_accounts_nominee FOREIGN KEY (nominee_id)
+			        REFERENCES nominee(nominee_id)
+			        ON UPDATE CASCADE
+			        ON DELETE RESTRICT,
 
-					    INDEX idx_accounts_user(user_id)
-					) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+			    INDEX idx_accounts_user(user_id)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-					""");		
-			
-			
-			// -----------------------------
-			// 4) user_details
-			// -----------------------------
-			st.execute("""
-					    CREATE TABLE IF NOT EXISTS user_details (
-					        details_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-					        user_id BIGINT UNSIGNED NOT NULL,
-					        primary_account_id BIGINT UNSIGNED NULL,
-					        gender ENUM('male','female','other'),
-					        dob DATE,
-					        aadhaar_masked VARBINARY(255),
-					        pan_masked VARBINARY(255),
-					        country VARCHAR(50),
-					        state VARCHAR(50),
-					        district VARCHAR(50),
-					        city VARCHAR(50),
-					        pincode VARCHAR(10),
-					        address_proof_name VARCHAR(255) DEFAULT NULL,
-					        photo_name VARCHAR(255) DEFAULT NULL,
-					        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-					        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-					        CONSTRAINT fk_ud_user FOREIGN KEY (user_id)
-					            REFERENCES users(user_id)
-					            ON UPDATE CASCADE
-					            ON DELETE RESTRICT,
-					        CONSTRAINT fk_userdetails_primary_account FOREIGN KEY (primary_account_id)
-					            REFERENCES accounts(account_id)
-					            ON UPDATE CASCADE
-					            ON DELETE SET NULL,
-					        UNIQUE INDEX ux_ud_userid(user_id)
-					    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-					""");
-			// -----------------------------
-			// 5) card
-			// -----------------------------
-			st.execute("""
-					                CREATE TABLE IF NOT EXISTS cards (
-					    card_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+			""");
 
-					    user_id BIGINT UNSIGNED NOT NULL,
-					    account_id BIGINT UNSIGNED NOT NULL,
+	// -----------------------------
+	// 4) user_details
+	// -----------------------------
+	st.execute("""
+			    CREATE TABLE IF NOT EXISTS user_details (
+			        details_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+			        user_id BIGINT UNSIGNED NOT NULL,
+			        primary_account_id BIGINT UNSIGNED NULL,
+			        gender ENUM('male','female','other'),
+			        dob DATE,
+			        aadhaar_masked VARBINARY(255),
+			        pan_masked VARBINARY(255),
+			        country VARCHAR(50),
+			        state VARCHAR(50),
+			        district VARCHAR(50),
+			        city VARCHAR(50),
+			        pincode VARCHAR(10),
+			        address_proof_name VARCHAR(255) DEFAULT NULL,
+			        photo_name VARCHAR(255) DEFAULT NULL,
+			        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+			        CONSTRAINT fk_ud_user FOREIGN KEY (user_id)
+			            REFERENCES users(user_id)
+			            ON UPDATE CASCADE
+			            ON DELETE RESTRICT,
+			        CONSTRAINT fk_userdetails_primary_account FOREIGN KEY (primary_account_id)
+			            REFERENCES accounts(account_id)
+			            ON UPDATE CASCADE
+			            ON DELETE SET NULL,
+			        UNIQUE INDEX ux_ud_userid(user_id)
+			    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+			""");
+	// -----------------------------
+	// 5) card
+	// -----------------------------
+	st.execute("""
+			    CREATE TABLE IF NOT EXISTS cards (
+			    card_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 
-					    -- Masked card number (example: XXXX-XXXX-XXXX-1234)
-					    card_number_masked VARCHAR(24) NOT NULL,
+			    user_id BIGINT UNSIGNED NOT NULL,
+			    account_id BIGINT UNSIGNED NOT NULL,
 
-					    -- Last 4 digits stored separately (optional)
-					    last4 CHAR(4) NOT NULL,
+			    -- Masked card number (example: XXXX-XXXX-XXXX-1234)
+			    card_number_masked VARCHAR(24) NOT NULL,
 
-					    -- Encrypted PIN, never store raw PIN
-					    pin_hash VARCHAR(255) NOT NULL,
+			    -- Last 4 digits stored separately (optional)
+			    last4 CHAR(4) NOT NULL,
 
-					    -- Bank NEVER stores CVV (PCI-DSS restriction)
-					    -- cvv is validated at gateway only
-					    -- (REMOVED from design)
+			    -- Encrypted PIN, never store raw PIN
+			    pin_hash VARCHAR(255) NOT NULL,
 
-					    issued_date DATE NOT NULL DEFAULT (CURRENT_DATE),
+			    -- Bank NEVER stores CVV (PCI-DSS restriction)
+			    -- cvv is validated at gateway only
+			    -- (REMOVED from design)
 
-					    expiry_date DATE NOT NULL,
+			    issued_date DATE NOT NULL DEFAULT (CURRENT_DATE),
 
-					    card_status ENUM('active', 'blocked', 'expired', 'hotlisted')
-					        NOT NULL DEFAULT 'active',
+			    expiry_date DATE NOT NULL,
 
-					    maximum_limit DECIMAL(12,2) DEFAULT 50000.00,
+			    card_status ENUM('active', 'blocked', 'expired', 'hotlisted')
+			        NOT NULL DEFAULT 'active',
 
-					    provider ENUM('visa', 'mastercard', 'rupay', 'amex')
-					        DEFAULT 'visa',
+			    maximum_limit DECIMAL(12,2) DEFAULT 50000.00,
 
-					    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			    provider ENUM('visa', 'mastercard', 'rupay', 'amex')
+			        DEFAULT 'visa',
 
-					    CONSTRAINT fk_cards_user
-					        FOREIGN KEY (user_id) REFERENCES users(user_id)
-					        ON UPDATE CASCADE
-					        ON DELETE RESTRICT,
+			    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-					    CONSTRAINT fk_cards_account
-					        FOREIGN KEY (account_id) REFERENCES accounts(account_id)
-					        ON UPDATE CASCADE
-					        ON DELETE RESTRICT
-					) ENGINE=InnoDB
-					  DEFAULT CHARSET=utf8mb4
-					  COLLATE=utf8mb4_unicode_ci;
+			    CONSTRAINT fk_cards_user
+			        FOREIGN KEY (user_id) REFERENCES users(user_id)
+			        ON UPDATE CASCADE
+			        ON DELETE RESTRICT,
 
-					            """);
+			    CONSTRAINT fk_cards_account
+			        FOREIGN KEY (account_id) REFERENCES accounts(account_id)
+			        ON UPDATE CASCADE
+			        ON DELETE RESTRICT
+			) ENGINE=InnoDB
+			  DEFAULT CHARSET=utf8mb4
+			  COLLATE=utf8mb4_unicode_ci;
+			""");
 
-			// -----------------------------
-			// 6) beneficiaries
-			// -----------------------------
-			st.execute("""
-						CREATE TABLE IF NOT EXISTS beneficiaries (
-					    beneficiary_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	// -----------------------------
+	// 6) beneficiaries
+	// -----------------------------
+	st.execute("""
+				CREATE TABLE IF NOT EXISTS beneficiaries (
+			    beneficiary_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 
-					    user_id BIGINT UNSIGNED NOT NULL,
-					    account_number BIGINT UNSIGNED NOT NULL,
+			    user_id BIGINT UNSIGNED NOT NULL,
+			    account_number BIGINT UNSIGNED NOT NULL,
 
-					    name VARCHAR(120) NOT NULL,
-					    bank_name VARCHAR(150),
-					    ifsc_code VARCHAR(20),
+			    name VARCHAR(120) NOT NULL,
+			    bank_name VARCHAR(150),
+			    ifsc_code VARCHAR(20),
 
-					    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-					    KEY (user_id),
-					    KEY (account_number),
+			    KEY (user_id),
+			    KEY (account_number),
 
-					    CONSTRAINT fk_beneficiary_user
-					        FOREIGN KEY (user_id) REFERENCES users(user_id),
+			    CONSTRAINT fk_beneficiary_user
+			        FOREIGN KEY (user_id) REFERENCES users(user_id),
 
-					    CONSTRAINT fk_beneficiary_account
-					        FOREIGN KEY (account_number) REFERENCES accounts(account_number)
-					) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+			    CONSTRAINT fk_beneficiary_account
+			        FOREIGN KEY (account_number) REFERENCES accounts(account_number)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-										""");
+								""");
 
-			// -----------------------------
-			// 6) transactions
-			// -----------------------------
-			st.execute("""
-					    CREATE TABLE IF NOT EXISTS transactions (
-					        transaction_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-					        account_id BIGINT UNSIGNED NOT NULL,
-					        related_account_id BIGINT UNSIGNED DEFAULT NULL,
-					        beneficiary_id BIGINT UNSIGNED DEFAULT NULL,
-					        txn_reference VARCHAR(64) UNIQUE,
-					        txn_type ENUM('credit','debit') NOT NULL,
-					        mode ENUM('online','upi','card','neft','rtgs','imps','cash') NOT NULL DEFAULT 'online',
-					        amount DECIMAL(18,2) NOT NULL,
-					        balance_after DECIMAL(18,2),
-					        description VARCHAR(512),
-					        status ENUM('pending','completed','failed','reversed') NOT NULL DEFAULT 'pending',
-					        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-					        CONSTRAINT fk_tx_account FOREIGN KEY (account_id)
-					            REFERENCES accounts(account_id)
-					            ON UPDATE CASCADE
-					            ON DELETE RESTRICT,
-					        CONSTRAINT fk_tx_related_account FOREIGN KEY (related_account_id)
-					            REFERENCES accounts(account_id)
-					            ON UPDATE CASCADE
-					            ON DELETE RESTRICT,
-					        CONSTRAINT fk_tx_beneficiary FOREIGN KEY (beneficiary_id)
-					            REFERENCES beneficiaries(beneficiary_id)
-					            ON UPDATE CASCADE
-					            ON DELETE SET NULL,
-					        INDEX idx_tx_account(account_id),
-					        INDEX idx_tx_related_account(related_account_id),
-					        INDEX idx_tx_beneficiary(beneficiary_id)
-					    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-					""");
+	// -----------------------------
+	// 6) transactions
+	// -----------------------------
+	st.execute("""
+			    CREATE TABLE IF NOT EXISTS transactions (
+			        transaction_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+			        account_id BIGINT UNSIGNED NOT NULL,
+			        related_account_id BIGINT UNSIGNED DEFAULT NULL,
+			        beneficiary_id BIGINT UNSIGNED DEFAULT NULL,
+			        txn_reference VARCHAR(64) UNIQUE,
+			        txn_type ENUM('credit','debit') NOT NULL,
+			        mode ENUM('online','upi','card','neft','rtgs','imps','cash') NOT NULL DEFAULT 'online',
+			        amount DECIMAL(18,2) NOT NULL,
+			        balance_after DECIMAL(18,2),
+			        description VARCHAR(512),
+			        status ENUM('pending','completed','failed','reversed') NOT NULL DEFAULT 'pending',
+			        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			        CONSTRAINT fk_tx_account FOREIGN KEY (account_id)
+			            REFERENCES accounts(account_id)
+			            ON UPDATE CASCADE
+			            ON DELETE RESTRICT,
+			        CONSTRAINT fk_tx_related_account FOREIGN KEY (related_account_id)
+			            REFERENCES accounts(account_id)
+			            ON UPDATE CASCADE
+			            ON DELETE RESTRICT,
+			        CONSTRAINT fk_tx_beneficiary FOREIGN KEY (beneficiary_id)
+			            REFERENCES beneficiaries(beneficiary_id)
+			            ON UPDATE CASCADE
+			            ON DELETE SET NULL,
+			        INDEX idx_tx_account(account_id),
+			        INDEX idx_tx_related_account(related_account_id),
+			        INDEX idx_tx_beneficiary(beneficiary_id)
+			    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+			""");
 
-			// -----------------------------
-			// 7) cards
-			// -----------------------------
-			st.execute("""
-					    CREATE TABLE IF NOT EXISTS cards (
-					        card_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-					        user_id BIGINT UNSIGNED NOT NULL,
-					        account_id BIGINT UNSIGNED,
-					        card_number_masked VARBINARY(255) NOT NULL,
-					        card_bin CHAR(8),
-					        card_type ENUM('debit','credit','prepaid') NOT NULL,
-					        provider ENUM('visa','mastercard','rupay','amex'),
-					        expiry_date DATE,
-					        status ENUM('active','blocked','expired') DEFAULT 'active',
-					        issued_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-					        CONSTRAINT fk_cards_user FOREIGN KEY (user_id)
-					            REFERENCES users(user_id)
-					            ON UPDATE CASCADE
-					            ON DELETE RESTRICT,
-					        CONSTRAINT fk_cards_account FOREIGN KEY (account_id)
-					            REFERENCES accounts(account_id)
-					            ON UPDATE CASCADE
-					            ON DELETE SET NULL
-					    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-					""");
+	// -----------------------------
+	// 7) cards
+	// -----------------------------
+	st.execute("""
+				CREATE TABLE cards (
+			    card_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+			    user_id BIGINT UNSIGNED NOT NULL,
+			    card_number_masked VARCHAR(24) NOT NULL,
+			    last4 CHAR(4) NOT NULL,
+			    pin_hash VARCHAR(255) NOT NULL,
+			    issued_date DATE NOT NULL DEFAULT (CURDATE()),
+			    expiry_date DATE NOT NULL,
+			    card_status ENUM('active','blocked','expired','hotlisted') NOT NULL DEFAULT 'active',
+			    maximum_limit DECIMAL(12,2) DEFAULT 50000.00,
+			    provider ENUM('visa','mastercard','rupay','amex') DEFAULT 'visa',
+			    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			    card_type ENUM('Credit','Debit','Prepaid'),
+			    current_limit DECIMAL(12,2) DEFAULT 50000.00,
+			    account_number BIGINT UNSIGNED,
+			    PRIMARY KEY (card_id),
+			    CONSTRAINT fk_card_users
+			        FOREIGN KEY (user_id)
+			        REFERENCES users(user_id)
+			        ON UPDATE CASCADE
+			        ON DELETE RESTRICT,
 
-			// -----------------------------
-			// 8) loans
-			// -----------------------------
-			st.execute("""
-					    CREATE TABLE IF NOT EXISTS loans (
-					        loan_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-					        user_id BIGINT UNSIGNED NOT NULL,
-					        loan_type ENUM('home','personal','education','vehicle','business') DEFAULT 'personal',
-					        principal_amount DECIMAL(18,2) NOT NULL,
-					        interest_rate DECIMAL(5,2),
-					        tenure_months INT,
-					        status ENUM('applied','approved','active','closed','defaulted') DEFAULT 'applied',
-					        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-					        approved_at TIMESTAMP NULL,
-					        CONSTRAINT fk_loans_user FOREIGN KEY (user_id)
-					            REFERENCES users(user_id)
-					            ON UPDATE CASCADE
-					            ON DELETE RESTRICT
-					    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-					""");
+			    CONSTRAINT fk_card_account
+			        FOREIGN KEY (account_number)
+			        REFERENCES accounts(account_number)
+			        ON UPDATE CASCADE
+			        ON DELETE RESTRICT,
 
-			// -----------------------------
-			// 9) loan_payments
-			// -----------------------------
-			st.execute("""
-					    CREATE TABLE IF NOT EXISTS loan_payments (
-					        payment_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-					        loan_id BIGINT UNSIGNED NOT NULL,
-					        amount DECIMAL(18,2) NOT NULL,
-					        payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-					        method ENUM('neft','rtgs','imps','upi','card','cash') DEFAULT 'neft',
-					        status ENUM('success','failed','pending') DEFAULT 'success',
-					        CONSTRAINT fk_lp_loan FOREIGN KEY (loan_id)
-					            REFERENCES loans(loan_id)
-					            ON UPDATE CASCADE
-					            ON DELETE RESTRICT
-					    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-					""");
+			    KEY idx_user_id (user_id),
+			    KEY idx_account_number (account_number)
+			); ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+								""");
 
-			// -----------------------------
-			// 10) support_tickets
-			// -----------------------------
-			st.execute("""
-					    CREATE TABLE IF NOT EXISTS support_tickets (
-					        ticket_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-					        user_id BIGINT UNSIGNED NOT NULL,
-					        subject VARCHAR(200) NOT NULL,
-					        message TEXT NOT NULL,
-					        priority ENUM('low','medium','high') DEFAULT 'medium',
-					        status ENUM('open','in_progress','resolved','closed') DEFAULT 'open',
-					        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-					        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-					        CONSTRAINT fk_tickets_user FOREIGN KEY (user_id)
-					            REFERENCES users(user_id)
-					            ON UPDATE CASCADE
-					            ON DELETE RESTRICT
-					    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-					""");
+	// -----------------------------
+	// 8) loans
+	// -----------------------------
+	st.execute("""
+			    CREATE TABLE IF NOT EXISTS loans (
+			        loan_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+			        user_id BIGINT UNSIGNED NOT NULL,
+			        loan_type ENUM('home','personal','education','vehicle','business') DEFAULT 'personal',
+			        principal_amount DECIMAL(18,2) NOT NULL,
+			        interest_rate DECIMAL(5,2),
+			        tenure_months INT,
+			        status ENUM('applied','approved','active','closed','defaulted') DEFAULT 'applied',
+			        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			        approved_at TIMESTAMP NULL,
+			        CONSTRAINT fk_loans_user FOREIGN KEY (user_id)
+			            REFERENCES users(user_id)
+			            ON UPDATE CASCADE
+			            ON DELETE RESTRICT
+			    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+			""");
 
-			// -----------------------------
-			// 11) admin_logs
-			// -----------------------------
-			st.execute("""
-					    CREATE TABLE IF NOT EXISTS admin_logs (
-					        log_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-					        admin_id BIGINT UNSIGNED NOT NULL,
-					        action VARCHAR(512) NOT NULL,
-					        metadata JSON,
-					        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-					        CONSTRAINT fk_adminlogs_admin FOREIGN KEY (admin_id)
-					            REFERENCES users(user_id)
-					            ON UPDATE CASCADE
-					            ON DELETE RESTRICT
-					    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-					""");
+	// -----------------------------
+	// 9) loan_payments
+	// -----------------------------
+	st.execute("""
+			    CREATE TABLE IF NOT EXISTS loan_payments (
+			        payment_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+			        loan_id BIGINT UNSIGNED NOT NULL,
+			        amount DECIMAL(18,2) NOT NULL,
+			        payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			        method ENUM('neft','rtgs','imps','upi','card','cash') DEFAULT 'neft',
+			        status ENUM('success','failed','pending') DEFAULT 'success',
+			        CONSTRAINT fk_lp_loan FOREIGN KEY (loan_id)
+			            REFERENCES loans(loan_id)
+			            ON UPDATE CASCADE
+			            ON DELETE RESTRICT
+			    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+			""");
 
-			// -----------------------------
-			// 12) login_history
-			// -----------------------------
-			st.execute("""
-					    CREATE TABLE IF NOT EXISTS login_history (
-					        login_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-					        user_id BIGINT UNSIGNED NOT NULL,
-					        ip_address VARCHAR(45),
-					        device_info VARCHAR(255),
-					        status ENUM('success','failed') DEFAULT 'success',
-					        occurred_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-					        CONSTRAINT fk_lh_user FOREIGN KEY (user_id)
-					            REFERENCES users(user_id)
-					            ON UPDATE CASCADE
-					            ON DELETE RESTRICT
-					    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-					""");
+	// -----------------------------
+	// 10) support_tickets
+	// -----------------------------
+	st.execute("""
+			    CREATE TABLE IF NOT EXISTS support_tickets (
+			        ticket_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+			        user_id BIGINT UNSIGNED NOT NULL,
+			        subject VARCHAR(200) NOT NULL,
+			        message TEXT NOT NULL,
+			        priority ENUM('low','medium','high') DEFAULT 'medium',
+			        status ENUM('open','in_progress','resolved','closed') DEFAULT 'open',
+			        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+			        CONSTRAINT fk_tickets_user FOREIGN KEY (user_id)
+			            REFERENCES users(user_id)
+			            ON UPDATE CASCADE
+			            ON DELETE RESTRICT
+			    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+			""");
 
-			// -----------------------------
-			// 13) Account closer request
-			// -----------------------------
-			st.execute(
-					"""
-							CREATE TABLE IF NOT EXISTS `account_closer_request` (
-									  `request_id` bigint unsigned NOT NULL AUTO_INCREMENT,
-									  `account_number` bigint unsigned NOT NULL,
-									  `reason` varchar(100) DEFAULT NULL,
-									  `status` enum('PENDING','REJECT','APPROVED') DEFAULT 'PENDING',
-									  `requested_by` bigint unsigned NOT NULL,
-									  `review_by` bigint unsigned DEFAULT NULL,
-									  `requested_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-									  `review_date` timestamp NULL DEFAULT NULL,
-									  `remarks` varchar(255) DEFAULT NULL,
-									  PRIMARY KEY (`request_id`),
-									  KEY `account_number` (`account_number`),
-									  KEY `requested_by` (`requested_by`),
-									  KEY `review_by` (`review_by`),
-									  CONSTRAINT `account_closer_request_ibfk_1` FOREIGN KEY (`account_number`) REFERENCES `accounts` (`account_number`),
-									  CONSTRAINT `account_closer_request_ibfk_2` FOREIGN KEY (`requested_by`) REFERENCES `users` (`user_id`),
-									  CONSTRAINT `account_closer_request_ibfk_3` FOREIGN KEY (`review_by`) REFERENCES `users` (`user_id`)
-									)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-									""");
+	// -----------------------------
+	// 11) admin_logs
+	// -----------------------------
+	st.execute("""
+			    CREATE TABLE IF NOT EXISTS admin_logs (
+			        log_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+			        admin_id BIGINT UNSIGNED NOT NULL,
+			        action VARCHAR(512) NOT NULL,
+			        metadata JSON,
+			        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			        CONSTRAINT fk_adminlogs_admin FOREIGN KEY (admin_id)
+			            REFERENCES users(user_id)
+			            ON UPDATE CASCADE
+			            ON DELETE RESTRICT
+			    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+			""");
 
-			// -----------------------------
-			// 14) Account Update request
-			// -----------------------------
-			st.execute(
-					"""
-											CREATE TABLE IF NOT EXISTS `account_update_request` (
+	// -----------------------------
+	// 12) login_history
+	// -----------------------------
+	st.execute("""
+			    CREATE TABLE IF NOT EXISTS login_history (
+			        login_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+			        user_id BIGINT UNSIGNED NOT NULL,
+			        ip_address VARCHAR(45),
+			        device_info VARCHAR(255),
+			        status ENUM('success','failed') DEFAULT 'success',
+			        occurred_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			        CONSTRAINT fk_lh_user FOREIGN KEY (user_id)
+			            REFERENCES users(user_id)
+			            ON UPDATE CASCADE
+			            ON DELETE RESTRICT
+			    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+			""");
+
+	// -----------------------------
+	// 13) Account closer request
+	// -----------------------------
+	st.execute(
+			"""
+					CREATE TABLE IF NOT EXISTS `account_closer_request` (
 							  `request_id` bigint unsigned NOT NULL AUTO_INCREMENT,
 							  `account_number` bigint unsigned NOT NULL,
-							  `new_account_type` enum('SAVINGS','CURRENT','SALARY') DEFAULT NULL,
-							  `new_branch_name` varchar(100) DEFAULT NULL,
-							  `new_mode_of_operation` enum('SELF','JOINT') DEFAULT 'SELF',
-							  `status` enum('PENDING','APPROVED','REJECTED') DEFAULT 'PENDING',
-							  `requested_by` bigint unsigned DEFAULT NULL,
-							  `reviewed_by` bigint unsigned NULL,
-							  `request_date` datetime DEFAULT CURRENT_TIMESTAMP,
-							  `review_date` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+							  `reason` varchar(100) DEFAULT NULL,
+							  `status` enum('PENDING','REJECT','APPROVED') DEFAULT 'PENDING',
+							  `requested_by` bigint unsigned NOT NULL,
+							  `review_by` bigint unsigned DEFAULT NULL,
+							  `requested_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+							  `review_date` timestamp NULL DEFAULT NULL,
+							  `remarks` varchar(255) DEFAULT NULL,
 							  PRIMARY KEY (`request_id`),
 							  KEY `account_number` (`account_number`),
 							  KEY `requested_by` (`requested_by`),
-							  KEY `reviewed_by` (`reviewed_by`),
-							  CONSTRAINT `account_update_request_ibfk_1` FOREIGN KEY (`account_number`) REFERENCES accounts(`account_number`),
-							  CONSTRAINT `account_update_request_ibfk_2` FOREIGN KEY (`requested_by`) REFERENCES users(`user_id`),
-							  CONSTRAINT `account_update_request_ibfk_3` FOREIGN KEY (`reviewed_by`) REFERENCES users(`user_id`)
+							  KEY `review_by` (`review_by`),
+							  CONSTRAINT `account_closer_request_ibfk_1` FOREIGN KEY (`account_number`) REFERENCES `accounts` (`account_number`),
+							  CONSTRAINT `account_closer_request_ibfk_2` FOREIGN KEY (`requested_by`) REFERENCES `users` (`user_id`),
+							  CONSTRAINT `account_closer_request_ibfk_3` FOREIGN KEY (`review_by`) REFERENCES `users` (`user_id`)
 							)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-															""");
+							""");
 
-			// -----------------------------
-			// 15) Account Update request
-			// -----------------------------
-			st.execute("""
-						CREATE TABLE IF NOT EXISTS card_request (
-					    request_no BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-					    card_type VARCHAR(30) NOT NULL,
-					    card_category VARCHAR(30) NOT NULL,
-					    address VARCHAR(255),
-					    remarks VARCHAR(255),
-					    card_request_status ENUM('PENDING','APPROVED','REJECTED','ISSUED') DEFAULT 'PENDING',
-					    user_id BIGINT UNSIGNED NOT NULL,
-					    account_no  BIGINT UNSIGNED NOT NULL,
-					    requested_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-					    approved_at DATETIME NULL,
+	// -----------------------------
+	// 14) Account Update request
+	// -----------------------------
+	st.execute(
+			"""
+									CREATE TABLE IF NOT EXISTS `account_update_request` (
+					  `request_id` bigint unsigned NOT NULL AUTO_INCREMENT,
+					  `account_number` bigint unsigned NOT NULL,
+					  `new_account_type` enum('SAVINGS','CURRENT','SALARY') DEFAULT NULL,
+					  `new_branch_name` varchar(100) DEFAULT NULL,
+					  `new_mode_of_operation` enum('SELF','JOINT') DEFAULT 'SELF',
+					  `status` enum('PENDING','APPROVED','REJECTED') DEFAULT 'PENDING',
+					  `requested_by` bigint unsigned DEFAULT NULL,
+					  `reviewed_by` bigint unsigned NULL,
+					  `request_date` datetime DEFAULT CURRENT_TIMESTAMP,
+					  `review_date` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+					  PRIMARY KEY (`request_id`),
+					  KEY `account_number` (`account_number`),
+					  KEY `requested_by` (`requested_by`),
+					  KEY `reviewed_by` (`reviewed_by`),
+					  CONSTRAINT `account_update_request_ibfk_1` FOREIGN KEY (`account_number`) REFERENCES accounts(`account_number`),
+					  CONSTRAINT `account_update_request_ibfk_2` FOREIGN KEY (`requested_by`) REFERENCES users(`user_id`),
+					  CONSTRAINT `account_update_request_ibfk_3` FOREIGN KEY (`reviewed_by`) REFERENCES users(`user_id`)
+					)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+													""");
 
-					    KEY (user_id),
-					    KEY (account_no),
+	// -----------------------------
+	// 15) Account Update request
+	// -----------------------------
+	st.execute("""
+				CREATE TABLE IF NOT EXISTS card_request (
+			    request_no BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+			    card_type VARCHAR(30) NOT NULL,
+			    card_category VARCHAR(30) NOT NULL,
+			    address VARCHAR(255),
+			    remarks VARCHAR(255),
+			    card_request_status ENUM('PENDING','APPROVED','REJECTED','ISSUED') DEFAULT 'PENDING',
+			    user_id BIGINT UNSIGNED NOT NULL,
+			    account_no  BIGINT UNSIGNED NOT NULL,
+			    requested_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+			    approved_at DATETIME NULL,
 
-					    CONSTRAINT fk_card_request_customer
-					        FOREIGN KEY (user_id) REFERENCES users(user_id),
+			    KEY (user_id),
+			    KEY (account_no),
 
-					    CONSTRAINT fk_card_request_account
-					        FOREIGN KEY (account_no) REFERENCES accounts(account_number)
-					) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-																				""");
+			    CONSTRAINT fk_card_request_customer
+			        FOREIGN KEY (user_id) REFERENCES users(user_id),
 
-			System.out.println("✅ All banking tables created successfully for Workbench!");
+			    CONSTRAINT fk_card_request_account
+			        FOREIGN KEY (account_no) REFERENCES accounts(account_number)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+																		""");
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println("❌ Error creating tables: " + e.getMessage());
+	System.out.println("✅ All banking tables created successfully for Workbench!");
+
+} catch (Exception e) {
+	e.printStackTrace();
+	System.err.println("❌ Error creating tables: " + e.getMessage());
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		createAllTables();
 	}
