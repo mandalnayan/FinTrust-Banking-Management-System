@@ -95,7 +95,7 @@ public class CardDetailsComposer extends SelectorComposer<Window> {
 		Button b = (Button) e.getTarget();
 		String blkOrUblk = b.getLabel();
 		Sessions.getCurrent().setAttribute("blockOrUnblock", blkOrUblk);
-		Executions.sendRedirect("/Card/block_unblock_verification.zul");
+		Executions.sendRedirect("/user/card/block_unblock_verification.zul");
 //		 String doStatus;
 //		Button b=(Button) e.getTarget();
 //	    String s=b.getLabel();

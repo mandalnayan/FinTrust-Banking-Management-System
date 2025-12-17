@@ -1,4 +1,4 @@
- 
+<!--  
   <?init class="com.fintrust.security.AuthenticationController" ?>
 <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 
@@ -8,10 +8,10 @@
                overflow:auto;"
         apply="com.fintrust.cards.controller.card_status_controller">
 
-        <!-- ================= FIXED NAVBAR ================= -->
+        ================= FIXED NAVBAR =================
 <privateNavbar width="100%"></privateNavbar>
 
-        <!-- ================= MAIN CONTENT ================= -->
+        ================= MAIN CONTENT =================
         <div style="
             padding-top:70px;
             padding-left:20px;
@@ -21,7 +21,7 @@
             align-items:center;
         ">
 
-            <!-- ===== PAGE HEADER ===== -->
+            ===== PAGE HEADER =====
             <div style="text-align:center; margin-bottom:20px;">
                 <label value="🧾 Card Request Management"
                     style="font-size:22px;font-weight:bold;color:#003366;" />
@@ -29,10 +29,10 @@
                 <label value="View pending or approved card requests"
                     style="color:#555;font-size:13px;" />
             </div>
-             <!--   <a href="/user/card/cardHome.zul" class="top-back-btn">
+               <a href="/user/card/cardHome.zul" class="top-back-btn">
                  ← Back
-             </a> -->
-            <!-- ===== DATA CARD ===== -->
+             </a>
+            ===== DATA CARD =====
             <div style="
                 width:100%;
                 max-width:1100px;
@@ -42,7 +42,7 @@
                 box-shadow:0 4px 12px rgba(0,0,0,0.1);
             ">
 
-                <!-- ===== SCROLL CONTAINER ===== -->
+                ===== SCROLL CONTAINER =====
                 <div style="width:100%; overflow-x:auto;">
 
                     <listbox id="atmRequestList"
@@ -52,7 +52,7 @@
                         pagingPosition="bottom"
                         style="border:none; min-width:90%;">
 
-                        <!-- ===== TABLE HEADER ===== -->
+                        ===== TABLE HEADER =====
                         <listhead>
                             <listheader label="Request No" width="100px" />
                             <listheader label="Account No" width="140px" />
@@ -63,7 +63,7 @@
                             <listheader label="Status" width="100px" />
                         </listhead>
 
-                        <!-- ===== TABLE DATA ===== -->
+                        ===== TABLE DATA =====
                         <template name="model">
                             <listitem>
 
@@ -83,19 +83,19 @@
                                     <label value="${each.card_category}" />
                                 </listcell>
 
-                                <!-- ADDRESS WRAP -->
+                                ADDRESS WRAP
                                 <listcell>
                                     <label value="${each.delivery_address}"
                                         style="white-space:normal; word-break:break-word;" />
                                 </listcell>
 
-                                <!-- REMARKS WRAP -->
+                                REMARKS WRAP
                                 <listcell>
                                     <label value="${each.remarks}"
                                         style="white-space:normal; word-break:break-word;" />
                                 </listcell>
 
-                                <!-- STATUS COLOR -->
+                                STATUS COLOR
                                 <listcell>
                                     <label value="${each.card_request_status}"
                                         style="
@@ -115,7 +115,7 @@
             </div>
         </div>
 
-        <!-- ================= STYLES ================= -->
+        ================= STYLES =================
         <style>
             listcell label {
                 white-space: normal;
@@ -180,4 +180,196 @@
   
   
   
-  
+   -->
+   
+   
+   
+   <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
+
+<zk>
+
+    <!-- ================= FIXED NAVBAR ================= -->
+    <privateNavbar width="100%"></privateNavbar>
+
+    <!-- ================= MAIN WINDOW ================= -->
+    <window border="none"
+            width="100%"
+            height="100%"
+            apply="com.fintrust.cards.controller.manageCardController"
+            style="
+                background: linear-gradient(135deg, #e6f0ff, #ffffff);
+                overflow:auto;
+            ">
+
+        <!-- ================= CONTENT WRAPPER ================= -->
+        <div style="
+            padding-top:70px;
+            padding-left:20px;
+            padding-right:20px;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+        ">
+
+            <!-- ===== PAGE HEADER ===== -->
+            <div style="text-align:center; margin-bottom:20px; width:100%; max-width:1100px; position:relative;">
+
+                <!-- Back Button -->
+                <button label="← Back"
+                        onClick='Executions.sendRedirect("/user/card/cardHome.zul")'
+                        class="top-back-btn"/>
+
+                <!-- Title -->
+                <label value="Manage Existing Cards"
+                       style="font-size:22px;font-weight:bold;color:#003366;" />
+                <separator />
+                <label value="View and manage your issued ATM cards"
+                       style="color:#555;font-size:13px;" />
+            </div>
+
+            <!-- ================= DATA CARD ================= -->
+            <div style="
+                width:100%;
+                max-width:1100px;
+                background:white;
+                border-radius:12px;
+                padding:15px;
+                box-shadow:0 4px 12px rgba(0,0,0,0.1);
+            ">
+
+                <!-- ===== SCROLL CONTAINER ===== -->
+                <div style="width:100%; overflow-x:auto;">
+
+                    <listbox id="cardListbox"
+                             mold="paging"
+                             pageSize="6"
+                             pagingPosition="bottom"
+                             width="100%"
+                             style="border:none; min-width:900px;">
+
+                        <!-- ===== TABLE HEADER ===== -->
+                        <listhead>
+                            <listheader label="ATM Card No" width="180px"/>
+                            <listheader label="Card Type" width="140px"/>
+                            <listheader label="Account No" width="160px"/>
+                            <listheader label="Issued Date" width="130px"/>
+                            <listheader label="Expiry Date" width="130px"/>
+                            <listheader label="Status" width="120px"/>
+                            <listheader label="Action" width="120px"/>
+                        </listhead>
+
+                        <!-- ===== TABLE DATA ===== -->
+                        <template name="model">
+                            <listitem>
+
+                                <listcell>
+                                    <label value="${each[0]}" />
+                                </listcell>
+
+                                <listcell>
+                                    <label value="${each[1]}" />
+                                </listcell>
+
+                                <listcell>
+                                    <label value="${each[2]}" />
+                                </listcell>
+
+                                <listcell>
+                                    <label value="${each[3]}" />
+                                </listcell>
+
+                                <listcell>
+                                    <label value="${each[4]}" />
+                                </listcell>
+
+                                <listcell>
+                                    <label value="${each[5]}"
+                                           style="font-weight:600;" />
+                                </listcell>
+
+                                <listcell>
+                                    <button label="Manage"
+                                            class="manage-btn"/>
+                                </listcell>
+
+                            </listitem>
+                        </template>
+
+                    </listbox>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= STYLES ================= -->
+        <style>
+            listcell label {
+                white-space: normal;
+                word-break: break-word;
+            }
+
+            listheader {
+                font-weight: 600;
+            }
+
+            .manage-btn {
+                padding: 5px 12px;
+                font-size: 13px;
+                background: #0a66c2;
+                color: white;
+                border: none;
+                border-radius: 6px;
+            }
+
+            .manage-btn:hover {
+                background: #084c9e;
+            }
+
+            .top-back-btn {
+                position: absolute;
+                left: 0;
+                top: 0;
+                background: white;
+                color: #004080;
+                padding: 6px 14px;
+                border-radius: 20px;
+                font-size: 13px;
+                font-weight: 600;
+                border: none;
+                cursor: pointer;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                transition: all 0.3s ease;
+            }
+
+            .top-back-btn:hover {
+                background: #004080;
+                color: white;
+                transform: translateX(-3px);
+            }
+
+            /* ===== Tablet ===== */
+            @media (max-width: 768px) {
+                listbox {
+                    font-size: 12px;
+                }
+
+                listheader {
+                    font-size: 12px;
+                }
+            }
+
+            /* ===== Mobile ===== */
+            @media (max-width: 480px) {
+                listbox {
+                    font-size: 11px;
+                }
+
+                div[style*="max-width"] {
+                    padding: 10px !important;
+                }
+            }
+        </style>
+
+    </window>
+</zk>
+   

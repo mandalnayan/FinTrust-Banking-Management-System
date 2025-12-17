@@ -47,7 +47,7 @@ public class manageCardController extends SelectorComposer<Window> {
             String sql = "SELECT * FROM cards where user_id=?";
             PreparedStatement ps = con.prepareStatement(sql);
             Long user_id = (Long) Sessions.getCurrent().getAttribute("user_id");                                    //take it from session**(((((((((((
-
+          
             ps.setLong(1, user_id);
             ResultSet rs = ps.executeQuery();
 
@@ -92,5 +92,5 @@ public class manageCardController extends SelectorComposer<Window> {
           Executions.sendRedirect("/user/card/cardDetails.zul");
              
     } 
-    
+ 
       }
