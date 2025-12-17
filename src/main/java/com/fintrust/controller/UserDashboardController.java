@@ -26,29 +26,20 @@ public class UserDashboardController extends SelectorComposer<Component>{
     // sample properties; replace with actual service calls
     private int pendingCount = 3;
     private int rewardPoints = 1200;
-    private int activeCards = 2; 
+    private int activeCards = 0; 
     
     @Wire Include main_content_sec; 
     
     @Wire Toolbarbutton userdashboard, profile, account, viewAccounts, kyc;
     
     private List<Include> includes = new ArrayList<>();
-    private List<Toolbarbutton> buttons = new ArrayList<>();
     
     @Override
     public void doAfterCompose(Component comp) throws Exception {
-    	
- //   	Sessions.getCurrent().setAttribute("main_content_sec", main_content_sec);
     	super.doAfterCompose(comp);
-    }
+    	Sessions.getCurrent().setAttribute("main_content_sec", main_content_sec);
+    }   
     
-    private void initialize() {	
-		
-		buttons.add(userdashboard);
-		buttons.add(profile);
-		buttons.add(account);
-		buttons.add(viewAccounts);
-    }
     
     // commands wired from ZUL
    @Listen("onClick=#logout")
@@ -71,6 +62,7 @@ public class UserDashboardController extends SelectorComposer<Component>{
 	   account.removeSclass("active");
 	   viewAccounts.removeSclass("active");
 	   profile.removeSclass("active");
+	   kyc.removeSclass("active");
    }
    
    @Listen("onClick=#account")
@@ -81,6 +73,7 @@ public class UserDashboardController extends SelectorComposer<Component>{
 	   userdashboard.removeSclass("active");
 	   viewAccounts.removeSclass("active");
 	   profile.removeSclass("active");
+	   kyc.removeSclass("active");
    }
    
    @Listen("onClick=#kyc")
@@ -102,6 +95,7 @@ public class UserDashboardController extends SelectorComposer<Component>{
 	   userdashboard.removeSclass("active");
 	   account.removeSclass("active");
 	   profile.removeSclass("active");
+	   kyc.removeSclass("active");
    }
    
    @Listen("onClick=#cards")
@@ -117,7 +111,19 @@ public class UserDashboardController extends SelectorComposer<Component>{
 	   viewAccounts.removeSclass("active");
 	   userdashboard.removeSclass("active");
 	   account.removeSclass("active");
+	   kyc.removeSclass("active");
    }
+   
+   @Listen("onClick=#fundTransfer")
+   public void fundTransfer() {
+	   main_content_sec.setSrc("/WEB-INF/components/fundTransfer.zul");
+	   
+	   profile.removeSclass("active");
+	   viewAccounts.removeSclass("active");
+	   userdashboard.removeSclass("active");
+	   account.removeSclass("active");
+   }
+   
    
   @Listen("onClick=#transactions")
   public void transactions() {
@@ -166,18 +172,6 @@ public class UserDashboardController extends SelectorComposer<Component>{
     }
 */
    
-   private void toggleVisibility(Include activeSection, Toolbarbutton button) {
-	   includes.forEach((section) -> {
-		   section.setVisible(section.equals(activeSection));			   
-	   });
-	   buttons.forEach((btn) -> {
-		   if (btn.getLabel().equals(button.getLabel())) {
-			   button.addSclass("active");
-		   } else {
-			   button.removeSclass("active");
-		   }
-	   });
-   }
     // getters for data binding if you bind via MVVM (optional)   
     public int getPendingCount() { return pendingCount; }
     public int getRewardPoints() { return rewardPoints; }

@@ -1,0 +1,182 @@
+<!-- Make sure page shouln't render without login -->
+<!-- <?init class = "com.fintrust.security.AuthenticationController" ?> -->
+
+<!-- head footer csss -->
+<?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
+
+
+<zk>
+
+	<window border="normal" width="100%"
+		apply="com.fintrust.controller.FundTransferController"
+		style="border-radius: 12px; background-color: #f9fafc; box-shadow: 0 0 15px rgba(0,0,0,0.1); margin: auto;">
+
+		<vlayout spacing="20px" width="90%" style="margin:auto">
+
+    <!-- TITLE -->
+    <hbox pack="center">
+        <label value="Fund Transfer Portal"
+               style="font-size:22px;font-weight:bold;color:#1e3a8a"/>
+    </hbox>
+
+    <separator bar="true"/>
+
+    <!-- SCROLLABLE FORM ONLY -->
+    <div sclass="form-scroll">
+        <grid sclass="form-grid responsive-grid">
+            <rows>
+
+                <row>
+                    <label value="From Account:"/>
+                    <combobox width="300px" popupWidth="300px" autodrop="true"/>
+                </row>
+
+                <row>
+                    <label value="Beneficiary:"/>
+                    <combobox width="300px" autodrop="true"/>
+                </row>
+
+                <row>
+                    <label value="To Account:"/>
+                    <longbox width="300px"/>
+                </row>
+
+                <row>
+                    <label value="IFSC Code:"/>
+                    <textbox width="300px"/>
+                </row>
+
+                <row>
+                    <label value="Amount:"/>
+                    <doublebox width="300px"/>
+                </row>
+
+            </rows>
+        </grid>
+    </div>
+
+    <!-- FIXED ACTION BUTTONS -->
+    <hbox sclass="action-bar" pack="center" spacing="20px">
+        <button label="Transfer Funds"/>
+        <button label="Clear"/>
+        <button label="Add Beneficiary"/>
+    </hbox>
+
+</vlayout>
+
+	</window>
+
+<style>
+	/* =====================================================
+   SCROLL CONTAINER (grid wrapper)
+===================================================== */
+.form-scroll {
+    max-height: 60vh;
+    overflow-y: auto;
+
+    /* Hide scrollbar */
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.form-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+/* =====================================================
+   GRID ROWS (DO NOT APPLY OVERFLOW HERE)
+===================================================== */
+.form-grid .z-row {
+    padding: 10px 0;
+}
+
+/* Keep labels readable */
+.form-grid .z-label {
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+/* =====================================================
+   MOBILE / SMALL SCREENS
+===================================================== */
+@media (max-width: 768px) {
+
+    /* Stack grid rows */
+    .responsive-grid .z-row .responsive-btn {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .responsive-grid .z-row > .z-label {
+        width: 100%;
+        margin-bottom: 2px;
+    }
+
+    /* Full-width inputs */
+    .responsive-grid .z-row .z-combobox,
+    .responsive-grid .z-row .z-textbox,
+    .responsive-grid .z-row .z-longbox,
+    .responsive-grid .z-row .z-doublebox {
+        width: 100% !important;
+    }
+
+    /* =================================================
+       COMBOBOX POPUP FIX (CRITICAL PART)
+    ================================================= */
+    .z-combobox-popup {
+        width: auto !important;          /* allow ZK positioning */
+        max-width: 95vw !important;      /* never full screen */
+        height: auto !important;         /* keep popup attached */
+        max-height: 20vh !important;     /* limit popup height */
+        overflow-y: auto !important;     /* internal scroll */
+    }
+
+    /* Combobox items (touch friendly) */
+    .z-comboitem {
+        padding: 8px 12px;
+        font-size: 14px;
+        white-space: nowrap;
+        height: 12% !important;
+    }
+
+    /* Stack buttons */
+    .z-hbox {
+        flex-direction: column !important;
+        gap: 10px;
+    }
+
+    .z-button {
+        width: 100% !important;
+    }
+}
+
+/* =====================================================
+   FORM STYLES
+===================================================== */
+.form-text {
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    padding: 5px;
+}
+
+.form-readonly {
+    background-color: #f3f4f6;
+    color: #6b7280;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+}
+
+.form-select {
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    padding: 5px;
+    background-color: white;
+}
+
+.z-button:hover {
+    cursor: pointer;
+}
+	</style>
+
+</zk>

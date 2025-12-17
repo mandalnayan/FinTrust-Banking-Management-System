@@ -22,6 +22,7 @@ public class User {
     private Status status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private KycStatus kycStatus ;
 
     public enum Role {
         ROLE_USER,
@@ -33,6 +34,12 @@ public class User {
         ACTIVE,
         INACTIVE,
         BLOCKED
+    }
+    
+    public enum KycStatus {
+        PENDING,
+        Active,
+        EXPIRED
     }
 
     public User() {
@@ -102,10 +109,18 @@ public class User {
 
     public Status getStatus() {
         return status;
-    }
-
+    }   
+    
     public void setStatus(Status status) {
         this.status = status;
+    }
+    
+    public KycStatus getKycStatus() {
+        return kycStatus;
+    }   
+    
+    public void setKycStatus(KycStatus status) {
+        this.kycStatus = status;
     }
 
     public LocalDateTime getCreatedAt() {

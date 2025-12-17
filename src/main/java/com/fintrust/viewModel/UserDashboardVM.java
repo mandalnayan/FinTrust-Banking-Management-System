@@ -3,6 +3,9 @@ package com.fintrust.viewModel;
 import org.zkoss.bind.annotation.*;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.select.annotation.Listen;
+import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Include;
 
 import com.fintrust.dao.impl.TransactionDAO;
 import com.fintrust.model.Account;
@@ -103,5 +106,13 @@ public class UserDashboardVM {
 	public void go(@BindingParam("page") String page) {
 		Executions.sendRedirect("/user/" + page + ".zul");
 	}
+	
+	  @Command
+	   public void tranfer(@BindingParam("page") String url) {
+		  Include main_content_sec = (Include) Sessions.getCurrent().getAttribute("main_content_sec");
+				  
+		  main_content_sec.setSrc("/WEB-INF/components/" + url + ".zul");
+		   
+	   }
 
 	}
