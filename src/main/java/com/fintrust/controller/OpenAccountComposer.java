@@ -12,20 +12,27 @@ import org.zkoss.zul.*;
 import com.fintrust.dao.impl.BranchDao;
 import com.fintrust.model.Account;
 import com.fintrust.model.Nominee;
+import com.fintrust.model.Account.AccountOwnershipType;
 import com.fintrust.model.Account.AccountStatus;
 import com.fintrust.model.Account.AccountType;
+import com.fintrust.model.Branch;
 import com.fintrust.model_copy.Account.ModeOfOperation;
 import com.fintrust.service.AccountServiceImpl;
 import com.fintrust.service.NomineeServiceImp;
+import com.fintrust.service.UserServiceImpl;
 import com.fintrust.util.NotificationUtil;
 import com.fintrust.viewModel.Notification;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class OpenAccountComposer extends SelectorComposer<Component> {
 
 	@Wire
-	private Combobox accountType, branch, modeOfOperation, nomineeRelation;
+	private Combobox accountType, branch, accountOwnershipType, nomineeRelation;
 
 	@Wire
 	private Longbox nomineeId;
@@ -34,28 +41,59 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 	private Doublebox initialDeposit;
 
 	@Wire
-	private Textbox nomineeName;
+	private Textbox nomineeName,jointAccountHolderEmailIdTextbox;
 
 	@Wire
 	private Button btnSubmit, btnReset;
+	
+	@Wire 
+	private Groupbox jointAccounHolderDetailsGroupBox;
 
-	private final AccountServiceImpl acconntService = new AccountServiceImpl();
+	private final AccountServiceImpl accountService = new AccountServiceImpl();
 	private final NomineeServiceImp nomineeService = new NomineeServiceImp();
-	private final BranchDao BranchDao = new BranchDao();
+	private final BranchDao branchDao = new BranchDao();
 
 	@Override
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
-		modeOfOperation.setSelectedIndex(0); // Default value
 		
-		AccountType accountTypes[] = Account.AccountType.values();
-		System.out.println("Types: " + accountTypes.length);
-		for (AccountType at : accountTypes) {
-			accountType.appendChild(new Comboitem(at.name()));
+		AccountType accountTypesExistInBank[] = Account.AccountType.values();
+		List<AccountType> allAccountTypeOfCurrentUser = accountService.getAllAccountType();
+		for (AccountType at : accountTypesExistInBank) {
+			if(!allAccountTypeOfCurrentUser.contains(at)) {
+				accountType.appendChild(new Comboitem(at.name()));
+			}
 		}
-		accountType.setSelectedIndex(0);
+		
+		
+		//set the all branch from db
+		List<Branch> allBranch = branchDao.findAll();
+		for (Branch accBranch : allBranch) {
+			branch.appendChild(new Comboitem(accBranch.getBranchName()));
+		}
+		
+		
+		AccountOwnershipType accountOwnershipTypeInBank[] = Account.AccountOwnershipType.values();
+		for (AccountOwnershipType at : accountOwnershipTypeInBank) {
+			accountOwnershipType.appendChild(new Comboitem(at.name()));
+		}
+		
+		accountType.setValue("Select");
+		branch.setValue("Select");
+		nomineeRelation.setValue("Select");
+		accountOwnershipType.setValue("Select");
 	}
 
+	 @Listen("onChange=#accountOwnershipType") 
+	 public void chageFileType() throws IOException{ 
+		 if(accountOwnershipType.getSelectedItem().getLabel().equals("JOINT")) {
+			 jointAccounHolderDetailsGroupBox.setVisible(true); 
+		 } 
+		 else {
+			 jointAccounHolderDetailsGroupBox.setVisible(false);
+		 }
+	 }
+	
 	// Handle Submit button click
 	@Listen("onClick = #btnAccountSubmit")
 	public void onSubmit() {
@@ -66,22 +104,35 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 			// Collecting form data
 			String accType = accountType.getSelectedItem().getLabel().toUpperCase();
 			String branchName = branch.getSelectedItem().getLabel();
-			String mode = modeOfOperation.getSelectedItem().getLabel().toUpperCase();
+			String ownerShip = accountOwnershipType.getSelectedItem().getLabel().toUpperCase();
 			double deposit = initialDeposit.getValue();
-
+			
 			String nominee_name = nomineeName.getValue().trim();
 			String relation = nomineeRelation.getValue().trim();
 			long nomineeIdNum = nomineeId.longValue();
 			Long nom_id = nomineeIdNum;
 			
+			//check that the user with same account type is already exists in db or not?
 			Long userId  = (Long) Sessions.getCurrent().getAttribute("user_id");
-			if(acconntService.isAccountExists(userId, accType)){
+			if(accountService.isAccountExists(userId, accType)){
 				System.out.println("account exists aready ....................");
 				String message = accType + " Account already exists with this user_id";
 				NotificationUtil.push("info", message);
 				resetForm();
 				Executions.sendRedirect("");
 			}
+			
+			//check that Joint account holder is already register or not on portal?
+			if(accountOwnershipType.getSelectedItem().getLabel().equals("JOINT")){
+				String jointAccountHolderUserId = jointAccountHolderEmailIdTextbox.getText();
+				if(!new UserServiceImpl().isExistsUser(jointAccountHolderUserId)) {
+					String message = "Please Register first joint Account Holder";
+					NotificationUtil.push("info", message);
+					resetForm();
+					Executions.sendRedirect("");
+				}
+			}
+			
 
 			//check given nominee id already exist in db or not?
 			Nominee nom = new Nominee(nomineeIdNum, nominee_name, relation);
@@ -92,18 +143,19 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 			
 			
 			//GET THE Brach_id using branch name
-			long branchId = BranchDao.findByBranchName(branchName).getBranchId();
+			long branchId = branchDao.findByBranchName(branchName).getBranchId();
 		
 			
 			// Create Account object
 			Account account = new Account();
 			account.setAccountType(AccountType.valueOf(accType));
+			account.setBranchId(branchId);
 			account.setBalance(deposit);			
 			account.setNominee_id(nom_id);	
-			account.setBranchId(branchId);
+			account.setAccountOwnershipType(AccountOwnershipType.valueOf(ownerShip));
 			
 			
-			boolean success = acconntService.openAccount(account);
+			boolean success = accountService.openAccount(account);
 			if (success) {
 				String message = "Account created successfully!";
 				NotificationUtil.push("info", message);				
@@ -147,7 +199,7 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 			showWarning("Minimum initial deposit must be ₹1000 or above.");
 			return false;
 		}
-		if (modeOfOperation.getSelectedItem() == null) {
+		if (accountOwnershipType.getSelectedItem() == null) {
 			showWarning("Please select Mode of Operation.");
 			return false;
 		}
@@ -181,12 +233,12 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 
 	// Reset the form
 	private void resetForm() {
-		accountType.setSelectedIndex(-1);
-		branch.setSelectedIndex(-1);
 		initialDeposit.setValue(null);
-		modeOfOperation.setSelectedIndex(-1);
 		nomineeName.setValue("");
 		nomineeId.setText("");
-		nomineeRelation.setValue("");
+		accountType.setValue("Select");
+		branch.setValue("Select");
+		nomineeRelation.setValue("Select");
+		accountOwnershipType.setValue("Select");
 	}
 }

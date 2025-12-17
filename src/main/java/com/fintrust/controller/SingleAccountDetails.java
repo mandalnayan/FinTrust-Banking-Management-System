@@ -6,27 +6,24 @@ import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.*;
 import org.zkoss.zul.*;
 
-import com.fintrust.dao.impl.BankDAOImpl;
+import com.fintrust.dao.impl.BranchDao;
 import com.fintrust.model.Account;
-import com.fintrust.model.Bank;
+import com.fintrust.model.Branch;
 import com.fintrust.service.AccountServiceImpl;
 
 
 public class SingleAccountDetails extends SelectorComposer<Window> {
 	private final AccountServiceImpl acconntService = new AccountServiceImpl();
 
-    @Wire private Label accountNo, accountType, ifscCode, accountBalance, accountStatus, accountBranch, modeOfOperation, nomineeId;
+    @Wire private Label accountNo, accountType, ifscCode, accountBalance, accountStatus, accountBranch, accountOwnershipType , nomineeId;
 
     @Override
     public void doAfterCompose(Window comp) throws Exception {
         super.doAfterCompose(comp);
 
         Long selectedAccountNo = (Long) Executions.getCurrent().getSession().getAttribute("selected_account_no");
-        //Long customerId = (Long) Executions.getCurrent().getSession().getAttribute("customer_id");
-   
-
-       // if (selectedAccountNo == null || customerId == null) {
-         if (selectedAccountNo == null) {
+        
+        if (selectedAccountNo == null) {
             Messagebox.show("Invalid access or session expired!", "Error", Messagebox.OK, Messagebox.ERROR);
             Executions.sendRedirect("index.zul");
             return;
@@ -43,21 +40,14 @@ public class SingleAccountDetails extends SelectorComposer<Window> {
         accountType.setValue(acc.getAccountType().toString());
         accountBalance.setValue(acc.getBalance()+"");
         accountStatus.setValue(acc.getAccount_status().name());
-<<<<<<< Updated upstream
-        Bank bank = new BankDAOImpl().findById(acc.getBankId());
-        if (bank != null) {
-        	accountBranch.setValue(bank.getBranchName());
-        	ifscCode.setValue(bank.getIfscCode());
-=======
+
         Branch branch = new BranchDao().findById(acc.getBranchId());
-        
         if (branch != null) {
         	accountBranch.setValue(branch.getBranchName());
         	ifscCode.setValue(branch.getIfscCode());
->>>>>>> Stashed changes
         }
         
-        modeOfOperation.setValue("self");
+        accountOwnershipType.setValue(acc.getAccountOwnershipType().toString());
         nomineeId.setValue(acc.getNominee_id()+"");
     }
 

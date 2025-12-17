@@ -180,5 +180,19 @@ public class UserServiceImpl implements UserService {
 		}
 		return false;
 	}
-
+	
+	@Override
+	public boolean isExistsUser(String email) {
+		User user;
+		try {
+			user = userDAO.findByEmail(email);
+			if(user != null) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
 }

@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fintrust.dao.BranchDAO;
@@ -68,8 +69,20 @@ public class BranchDao implements BranchDAO {
 
 	@Override
 	public List<Branch> findAll() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Branch> allBranch = new ArrayList<>();
+		String query = "Select * from branches";
+		try (PreparedStatement pstmt = connection.prepareStatement(query);) {
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Branch branch = new Branch();
+				branch.setBranchId(rs.getLong("branch_id"));
+				branch.setBranchName(rs.getString("branch_name"));
+				branch.setIfscCode(rs.getString("ifsc_code"));
+				branch.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+				allBranch.add(branch);
+			}
+		}
+		return allBranch;
 	}
 
 	@Override

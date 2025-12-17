@@ -26,9 +26,6 @@
                         <vlayout hflex="1">
                             <label value="Branch"/>
                             <combobox id="branch" width="100%" readonly="true">
-                                <comboitem label="Mathura"/>
-                                <comboitem label="Aligarh"/>
-                                <comboitem label="New Delhi"/>
                             </combobox>
                         </vlayout>
                     </hbox>
@@ -40,12 +37,24 @@
                             <doublebox id="initialDeposit" width="100%" placeholder="Min 1000"/>
                         </vlayout>
                         <vlayout hflex="1">
-                            <label value="Mode of Operation"/>
-                            <combobox id="modeOfOperation" width="100%" readonly="true">
-                                <comboitem label="Self"/>
+                            <label value="Account Ownership Type"/>
+                            <combobox id="accountOwnershipType" width="100%" readonly="true">
                             </combobox>
                         </vlayout>
                     </hbox>
+
+					<!-- joint account holder detail -->
+                    <groupbox width="100%" visible="false" id="jointAccounHolderDetailsGroupBox">
+                    	<caption label="Joint Account Holder User Id" />
+
+                    	<hbox width="100%" spacing="15px" class="form-row">
+                    		<vlayout hflex="1">
+                    			<!-- <label value="Joint Account Holder Email Id" /> -->
+                    			<textbox id="jointAccountHolderEmailIdTextbox" width="100%" placeholder="User Email (Joint account holder must be registered on portal! )"/>
+                    		</vlayout>
+                    	</hbox>
+                    </groupbox>
+
 
                     <!-- Nominee Name + Relationship -->
                     <hbox width="100%" spacing="15px" class="form-row">
