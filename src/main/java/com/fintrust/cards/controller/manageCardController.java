@@ -47,7 +47,7 @@ public class manageCardController extends SelectorComposer<Window> {
             String sql = "SELECT * FROM cards where user_id=?";
             PreparedStatement ps = con.prepareStatement(sql);
             Long user_id = (Long) Sessions.getCurrent().getAttribute("user_id");                                    //take it from session**(((((((((((
-
+          
             ps.setLong(1, user_id);
             ResultSet rs = ps.executeQuery();
 
@@ -60,9 +60,9 @@ public class manageCardController extends SelectorComposer<Window> {
                 row.add(rs.getLong("account_number")+"");
                // row.add(rs.getString("cvv"));
                // row.add(rs.getString("pin"));
-                row.add(String.valueOf(rs.getDate("issued_at")));
+                row.add(String.valueOf(rs.getDate("issued_date")));
                 row.add(String.valueOf(rs.getDate("expiry_date")));
-                row.add(rs.getString("status"));
+                row.add(rs.getString("card_status"));
                 cardData.add(row);
             }
 
@@ -89,8 +89,8 @@ public class manageCardController extends SelectorComposer<Window> {
           
           Sessions.getCurrent().setAttribute("card_number_masked", card_number_masked);
           
-          Executions.sendRedirect("/Card/cardDetails.zul");
+          Executions.sendRedirect("/user/card/cardDetails.zul");
              
     } 
-    
+ 
       }
