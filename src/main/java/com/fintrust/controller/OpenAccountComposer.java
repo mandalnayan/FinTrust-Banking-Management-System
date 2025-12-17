@@ -85,7 +85,8 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 			if(acconntService.isAccountExists(userId, accType)){
 				System.out.println("account exists aready ....................");
 				String message = accType + " Account already exists with this user_id";
-				NotificationUtil.push("info", message);
+				
+				NotificationUtil.push("info", message);			
 				resetForm();
 				Executions.sendRedirect("");
 			}

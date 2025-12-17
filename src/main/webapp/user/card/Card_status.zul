@@ -9,15 +9,7 @@
         apply="com.fintrust.cards.controller.card_status_controller">
 
         <!-- ================= FIXED NAVBAR ================= -->
-        <div style="
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 999;
-        ">
-            <include src="/WEB-INF/components/privateNavbar.zul" />
-        </div>
+<privateNavbar width="100%"></privateNavbar>
 
         <!-- ================= MAIN CONTENT ================= -->
         <div style="
@@ -37,9 +29,9 @@
                 <label value="View pending or approved card requests"
                     style="color:#555;font-size:13px;" />
             </div>
-               <a href="/user/card/cardHome.zul" class="top-back-btn">
+             <!--   <a href="/user/card/cardHome.zul" class="top-back-btn">
                  ← Back
-             </a>
+             </a> -->
             <!-- ===== DATA CARD ===== -->
             <div style="
                 width:100%;

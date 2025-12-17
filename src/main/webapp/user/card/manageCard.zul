@@ -4,9 +4,7 @@
 <zk>
 
     <!-- ================= FIXED NAVBAR ================= -->
-    <div class="navbar-fixed">
-        <include src="/WEB-INF/components/privateNavbar.zul" />
-    </div>
+   <privateNavbar width="100%"></privateNavbar>
 
     <!-- ================= MAIN CONTENT ================= -->
     <window width="100%"
