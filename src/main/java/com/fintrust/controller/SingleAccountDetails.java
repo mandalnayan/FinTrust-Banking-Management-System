@@ -10,6 +10,7 @@ import com.fintrust.dao.impl.BranchDao;
 import com.fintrust.model.Account;
 import com.fintrust.model.Branch;
 import com.fintrust.service.AccountServiceImpl;
+import com.fintrust.util.NotificationUtil;
 
 
 public class SingleAccountDetails extends SelectorComposer<Window> {
@@ -24,17 +25,17 @@ public class SingleAccountDetails extends SelectorComposer<Window> {
         Long selectedAccountNo = (Long) Executions.getCurrent().getSession().getAttribute("selected_account_no");
         //Long customerId = (Long) Executions.getCurrent().getSession().getAttribute("customer_id");
    
-
        // if (selectedAccountNo == null || customerId == null) {
          if (selectedAccountNo == null) {
             Messagebox.show("Invalid access or session expired!", "Error", Messagebox.OK, Messagebox.ERROR);
+           
             Executions.sendRedirect("index.zul");
             return;
         }
 
         Account acc = acconntService.getAccountDetails(selectedAccountNo);
         if (acc == null) {
-            Messagebox.show("Account not found!", "Error", Messagebox.OK, Messagebox.ERROR);
+        	NotificationUtil.showInstant("warning", "Account not found!");
             Executions.sendRedirect("index.zul");
             return;
         }
@@ -59,7 +60,7 @@ public class SingleAccountDetails extends SelectorComposer<Window> {
     @Listen("onClick = #backBtn")
     public void onBackClick() {
         //Executions.sendRedirect("/user/userDashboard.zul");
-    	Component root = getSelf();
+      	Component root = getSelf();
 		Include inc = (Include) root.getPage().getFellow("main_content_sec");
 		inc.setSrc("/WEB-INF/components/view_all_account.zul");
     }

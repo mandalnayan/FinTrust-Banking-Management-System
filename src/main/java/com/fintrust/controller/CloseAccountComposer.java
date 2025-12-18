@@ -16,6 +16,7 @@ import org.zkoss.zul.Textbox;
 
 import com.fintrust.model.AccountCloseRequest;
 import com.fintrust.service.AccountCloseRequestService;
+import com.fintrust.util.NotificationUtil;
 
 
 public class CloseAccountComposer extends SelectorComposer<Component>{
@@ -25,7 +26,7 @@ public class CloseAccountComposer extends SelectorComposer<Component>{
 	
 	private final AccountCloseRequestService closeRequetService = new AccountCloseRequestService();
 	
-	Long accountNum;
+	private Long accountNum;
 	
 	@Override
 	public void doAfterCompose(Component comp) throws Exception {
@@ -46,12 +47,13 @@ public class CloseAccountComposer extends SelectorComposer<Component>{
 		accReq.setRequestedBy(userId);
 		
 		if(!confirmClose.isChecked()) {
-			Messagebox.show("Please confirm first!");
+			NotificationUtil.showInstant("warning", "Please confirm first!");
+
 			return;
 		}
 		
 		if(closeRequetService.saveReq(accReq)) {
-			Messagebox.show("Request send Successfully for closing the account");
+			NotificationUtil.showInstant("info", "Request send Successfully for closing the account");
 		} 
 	}
 	

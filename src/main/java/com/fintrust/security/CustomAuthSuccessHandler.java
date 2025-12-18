@@ -37,7 +37,9 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler {
 	        // Use HttpSession instead of ZK Session
 	        HttpSession httpSession = request.getSession(true);
 	        httpSession.setAttribute("user_id", user.getId());
+	        httpSession.setAttribute("admin_user_id", user.getId());
 	        httpSession.setAttribute("user_name", user.getFullName());
+	        
 	    }
 
 	    // notification via ZK requires ZK session, so delay it to ZUL page

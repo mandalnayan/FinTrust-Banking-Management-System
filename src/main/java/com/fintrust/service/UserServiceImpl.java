@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
 		// user.setPassword(PasswordUtil.encrypt(user.getPassword()));
 
 		// Encrypted the password
-		String encrypted = passwordEncoder.encode(user.getPassword());
+		String encrypted = encryptPassword(user.getPassword());
 		user.setPassword(encrypted);
 
 		// Insert user to DB
@@ -127,7 +127,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean isAuthorize(String userName, String password) {
 		// String digestPassword = MessageDigestion.digestPassword(password);
-
+		password = encryptPassword(password);
 		// converting password into digest password
 		try {
 			User user = userDAO.authenticate(userName, password);
@@ -171,14 +171,23 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public boolean updatePassword(String password) {
-		String digestedPassword = MessageDigestion.digestPassword(password);
+		String encryptedPassword = encryptPassword(password);
 		try {
-			return userDAO.updatePassword(digestedPassword);
+			String email = (String) Sessions.getCurrent().getAttribute("userEmail");
+			if (email == null)
+				return false;
+			return userDAO.updatePassword(email, encryptedPassword);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	private String encryptPassword(String password) {
+		// Encrypted the password
+				String encryptedPassword = passwordEncoder.encode(password);
+				return encryptedPassword;
 	}
 
 }

@@ -4,16 +4,15 @@ package com.fintrust.admin.controller;
 import org.zkoss.zk.ui.select.annotation.*;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.*;
 
-<<<<<<< HEAD
 import com.fintrust.model.AccountUpdateRequest;
 import com.fintrust.util.NotificationUtil;
 import com.fintrust.dao.impl.AccountUpdateRequestDao;
-=======
+
 import com.fintrust.dao.impl.AccountUpdateRequestDao;
-import com.fintrust.model.AccountUpdateRequest;
->>>>>>> 14057b1 (Single account updation and accoun closer done)
+
 
 import java.util.*;
 
@@ -21,12 +20,15 @@ public class EmployeeApprovalController extends SelectorComposer<Component> {
 
     @Wire private Listbox requestList;
     @Wire Button approveBtn,rejectBtn;
-    private long currentEmployeeId = 201; // demo
+    private Long currentEmployeeId;
+    
     private AccountUpdateRequestDao dao = new AccountUpdateRequestDao();
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
+        currentEmployeeId = (Long) Sessions.getCurrent().getAttribute("admin_user_id");
+        if (currentEmployeeId == null) return;
         loadPendingRequests();
     }
 

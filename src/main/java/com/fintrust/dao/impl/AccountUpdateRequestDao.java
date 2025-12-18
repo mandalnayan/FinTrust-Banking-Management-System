@@ -10,8 +10,10 @@ import java.util.List;
 
 import org.zkoss.zul.Messagebox;
 
+import com.fintrust.dao.impl.BranchDao;
 import com.fintrust.db.DBConnection;
 import com.fintrust.model.AccountUpdateRequest;
+import com.fintrust.model.Branch;
 
 public class AccountUpdateRequestDao {
 	
@@ -56,7 +58,7 @@ public class AccountUpdateRequestDao {
 
 	public boolean save(AccountUpdateRequest req) {
 	    String sql = "INSERT INTO account_update_request " +
-	                 "(account_number, new_account_type, new_branch_name, new_mode_of_operation, requested_by) " +
+	                 "(account_number, new_account_type, new_branch_id, new_mode_of_operation, requested_by) " +
 	                 "VALUES (?, ?, ?, ?, ?)";
 
 	    try (Connection conn = DBConnection.getConnection();
@@ -64,7 +66,7 @@ public class AccountUpdateRequestDao {
 
 	        ps.setLong(1, req.getAccountNo());
 	        ps.setString(2, req.getNewAccountType());
-	        ps.setString(3, req.getNewBranchName());
+	        ps.setLong(3, req.getBranchId());
 	        ps.setString(4, req.getNewModeOfOperation());
 	        ps.setLong(5, req.getRequestedBy());
 
@@ -110,10 +112,14 @@ public class AccountUpdateRequestDao {
 	            r.setRequestId(rs.getLong("request_id"));
 	            r.setAccountNo(rs.getLong("account_number"));
 	            r.setNewAccountType(rs.getString("new_account_type"));
-	            r.setNewBranchName(rs.getString("new_branch_name"));
+	            r.setBranchId(rs.getLong("new_branch_id"));
 	            r.setNewModeOfOperation(rs.getString("new_mode_of_operation"));
 	            r.setStatus(rs.getString("status"));
 	            r.setRequestedBy(rs.getLong("requested_by"));
+	            
+	            // Setting branch name by branch id
+	            Branch branch = new BranchDao().findById(r.getBranchId());
+	            r.setNewBranchName(branch.getBranchName());
 	            list.add(r);
 	        }
 
@@ -127,7 +133,7 @@ public class AccountUpdateRequestDao {
 
 	public void approveRequest(long reqId, long empId) {
 	    String fetchSql = "SELECT * FROM account_update_request WHERE request_id = ?";
-	    String updateAccSql = "UPDATE accounts SET account_type = ?, branch_name = ?, mode_of_operation = ? WHERE account_number = ?";
+	    String updateAccSql = "UPDATE accounts SET account_type = ?, branch_id = ?, mode_of_operation = ? WHERE account_number = ?";
 	    String updateReqSql = "UPDATE account_update_request SET status = 'APPROVED', reviewed_by = ?, review_date = NOW() WHERE request_id = ?";
 
 	    try (Connection conn = DBConnection.getConnection()) {
@@ -140,13 +146,13 @@ public class AccountUpdateRequestDao {
 	                if (rs.next()) {
 	                    long accNo = rs.getLong("account_number");
 	                    String type = rs.getString("new_account_type");
-	                    String branch = rs.getString("new_branch_name");
+	                    Long branchId = rs.getLong("new_branch_id");
 	                    String mode = rs.getString("new_mode_of_operation");
 
 	                    // Step 2: Update account details
 	                    try (PreparedStatement upd = conn.prepareStatement(updateAccSql)) {
 	                        upd.setString(1, type);
-	                        upd.setString(2, branch);
+	                        upd.setLong(2, branchId);
 	                        upd.setString(3, mode);
 	                        upd.setLong(4, accNo);
 	                        upd.executeUpdate();

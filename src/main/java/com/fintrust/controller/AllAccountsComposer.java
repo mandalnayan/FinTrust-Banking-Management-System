@@ -33,7 +33,7 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
         }
 
         List<Account> accounts = acconntService.getAllAccounts();
-        if (accounts == null) return; //Np account with this user id
+        if (accounts == null) return; //No account with this user id
         
         for (Account acc : accounts) {
             Listitem item = new Listitem();
@@ -100,8 +100,7 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
     	// Store selected account number in session
         Executions.getCurrent().getSession().setAttribute("selected_account_no", acc.getAccountNumber());
         // Redirect to details page
-        //Executions.sendRedirect("/user/account/update_account.zul");
-        
+        //Executions.sendRedirect("/user/account/update_account.zul");        
         
         Include centerArea = (Include) getPage().getFellow("main_content_sec");
         centerArea.setSrc("/user/account/update_account.zul");

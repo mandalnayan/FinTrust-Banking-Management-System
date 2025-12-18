@@ -1,6 +1,5 @@
 package com.fintrust.controller;
 
-
 import java.util.List;
 
 import org.zkoss.zk.ui.Component;
@@ -26,104 +25,115 @@ import com.fintrust.dao.impl.AccountUpdateRequestDao;
 import com.fintrust.dao.impl.BranchDao;
 
 public class UpdateAccountRequest extends SelectorComposer<Component> {
-	private static final long serialVersionUID = 1L;	
-	
-	@Wire private Label accountNo, accountBalance,accountStatus;
-	@Wire private Combobox accountTypeComboBox, accountBranch , accountMode;
-	
+	private static final long serialVersionUID = 1L;
+
+	@Wire
+	private Label accountNo, accountBalance, accountStatus;
+	@Wire
+	private Combobox accountTypeComboBox, accountBranchBox, accountModeBox;
+
 	private final AccountServiceImpl acconntService = new AccountServiceImpl();
 	private final BranchDao branchDao = new BranchDao();
-	Long accountNum;
-	
-	
+	private Long accountNum;
+
 	@Override
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
-		
+
 		accountNum = (Long) Executions.getCurrent().getSession().getAttribute("selected_account_no");
-		
+
 		Account acc = acconntService.getAccountDetails(accountNum);
-        accountNo.setValue(acc.getAccountNumber()+"");
-        accountBalance.setValue(acc.getBalance()+"");
-        accountStatus.setValue(acc.getAccount_status().name());
-        
-        //set the account type in combobox except current account type
-        AccountType[] allAccountType = AccountType.values();
-        for(AccountType accountType : allAccountType) {
-        	if(accountType != acc.getAccountType()) {
-        		accountTypeComboBox.appendChild(new Comboitem(accountType.toString()));
-        	}
-        }
-        
-        //set the branch name in combobox except current branch
-        List<Branch> allBranch = branchDao.findAll();
-		for(Branch myBranch : allBranch) {
-			if(myBranch.getBranchId() != acc.getBranchId()) {
-				accountBranch.appendChild(new Comboitem(myBranch.getBranchName()));
-        	}
+		accountNo.setValue(acc.getAccountNumber() + "");
+		accountBalance.setValue(acc.getBalance() + "");
+		accountStatus.setValue(acc.getAccount_status().name());
+
+		// set the account type in combobox except current account type
+		AccountType[] allAccountType = AccountType.values();
+		for (AccountType accountType : allAccountType) {
+		    if (accountType != acc.getAccountType()) {
+		        Comboitem item = new Comboitem();
+		        item.setLabel(accountType.name());
+		        item.setValue(accountType.name()); // IMPORTANT
+		        accountTypeComboBox.appendChild(item);
+		    }
 		}
+
+
+		// set the branch name in combobox except current branch
+		List<Branch> allBranch = branchDao.findAll();
+		for (Branch myBranch : allBranch) {
+		    if (!myBranch.getBranchId().equals(acc.getBranchId())) {
+		        Comboitem item = new Comboitem();
+		        item.setLabel(myBranch.getBranchName());
+		        item.setValue(myBranch.getBranchName()); // or branchId if preferred
+		        accountBranchBox.appendChild(item);
+		    }
+		}
+
 	}
-	
-/**
- * Taking updatable data
- */
+
+	/**
+	 * Taking updatable data
+	 */
 	@Listen("onClick=#update")
 	public void sendUpdateAccountReq() {
-		 if (!isFormValid()) return;
-		
-		 //Messagebox.show("Request submitted successfully!");
-		 String accType = accountTypeComboBox.getSelectedItem().getValue();
-		 String accBranch = accountBranch.getSelectedItem().getValue();
-		 String accMode = accountMode.getSelectedItem().getValue(); 
-		
-		 AccountUpdateRequest req = new AccountUpdateRequest();
-         req.setAccountNo(accountNum);
-         req.setNewAccountType(accType);
-         req.setNewBranchName(accBranch);
-         req.setNewModeOfOperation(accMode);
-         System.out.println("Updating: " + accountNum);
-         Long user_id = (Long) Executions.getCurrent().getSession().getAttribute("user_id");
-         req.setRequestedBy(user_id);
+		if (!isFormValid())
+			return;
 
-         if(new RequestUpdateService().updateRequest(req)) {
-        	 		NotificationUtil.push("info", "Requested submitted successfully.\n your requested will be handled instantly.");
-        	 		//Executions.sendRedirect("view_all_account.zul");
-        	 		Component root = getSelf();
-        			Include inc = (Include) root.getPage().getFellow("main_content_sec");
-        			inc.setSrc("/WEB-INF/components/view_all_account.zul");
-         } else {
-        	 	NotificationUtil.showInstant("warning", "Requested is already submitted. Please check status");
-         }
+		// Messagebox.show("Request submitted successfully!");
+		String accType = accountTypeComboBox.getSelectedItem().getValue();
+		String accBranch = accountBranchBox.getSelectedItem().getValue();
+		String accMode = accountModeBox.getSelectedItem().getValue();
+		
+		AccountUpdateRequest req = new AccountUpdateRequest();
+		req.setAccountNo(accountNum);
+		req.setNewAccountType(accType);
+		req.setNewBranchName(accBranch);
+		req.setNewModeOfOperation(accMode);
+		System.out.println("Updating: " + accountNum);
+		Long user_id = (Long) Executions.getCurrent().getSession().getAttribute("user_id");
+		req.setRequestedBy(user_id);
+
+		if (new RequestUpdateService().updateRequest(req)) {
+			NotificationUtil.showInstant("info",
+					"Requested submitted successfully.\nyour requested will be handled instantly.");
+
+			Component root = getSelf();
+			Include inc = (Include) root.getPage().getFellow("main_content_sec");
+			inc.setSrc("/WEB-INF/components/view_all_account.zul");
+		} else {
+			NotificationUtil.showInstant("warning", "Requested is already submitted. Please check status");
+		}
 	}
-	
+
 	@Listen("onClick=#cancel")
 	public void cancelUpdateAccountReq() {
-		//Executions.sendRedirect("/user/userDashboard.zul");
+		// Executions.sendRedirect("/user/userDashboard.zul");
 		Component root = getSelf();
 		Include inc = (Include) root.getPage().getFellow("main_content_sec");
 		inc.setSrc("/WEB-INF/components/view_all_account.zul");
 	}
-	
-	public boolean isFormValid(){
-		if(accountTypeComboBox.getSelectedItem() == null) {
+
+	public boolean isFormValid() {
+		if (accountTypeComboBox.getSelectedItem() == null) {
 			showWarning("Please select Account Type.");
-            return false;
+			return false;
 		}
-		
-		if(accountBranch.getSelectedItem() == null) {
+
+		if (accountBranchBox.getSelectedItem() == null) {
 			showWarning("Please select Branch.");
-            return false;
+			return false;
 		}
-		
-		if(accountMode.getSelectedItem() == null) {
+
+		if (accountModeBox.getSelectedItem() == null) {
 			showWarning("Please select Mode of Operation.");
-            return false;
+			return false;
 		}
 		return true;
 	}
-	
-	//Helper to show warning messages
-    private void showWarning(String msg) {
-        Messagebox.show(msg, "Validation Error", Messagebox.OK, Messagebox.EXCLAMATION);
-    }
+
+	// Helper to show warning messages
+	private void showWarning(String msg) {
+		NotificationUtil.showInstant("warning", msg);
+	}
 }

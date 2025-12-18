@@ -3,6 +3,7 @@ package com.fintrust.admin.controller;
 import java.util.List;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
@@ -15,20 +16,22 @@ import org.zkoss.zul.Messagebox;
 
 import com.fintrust.model.AccountCloseRequest;
 import com.fintrust.service.AccountServiceImpl;
-
+import com.fintrust.util.NotificationUtil;
 import com.fintrust.dao.impl.AccountCloseRequestDao;
 
 public class AccountCloseApprovelComposer extends SelectorComposer<Component>{
 	private final AccountCloseRequestDao accountCloseDao = new AccountCloseRequestDao();
 	
 	@Wire Listbox requestList;
-	@Wire Button approveBtn,rejectBtn;
+	@Wire Button approveBtn, rejectBtn;
 	    
-	private long currentEmployeeId = 201;
+	private Long currentEmployeeId;
 	
 	@Override
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
+		currentEmployeeId = (Long) Sessions.getCurrent().getAttribute("admin_user_id");
+		if (currentEmployeeId == null) return;
 		loadPendingRequests();
 	}
 	
@@ -36,7 +39,7 @@ public class AccountCloseApprovelComposer extends SelectorComposer<Component>{
 		requestList.getItems().clear();
 		List<AccountCloseRequest> list = accountCloseDao.getAllPendingRequest();
 	
-		if(list.size()==0) {
+		if(list.size() == 0) {
 	        	approveBtn.setVisible(false);
 	        	rejectBtn.setVisible(false);
 	        	
@@ -59,13 +62,15 @@ public class AccountCloseApprovelComposer extends SelectorComposer<Component>{
 	@Listen("onClick=#approveBtn")
 	public void approveRquest() throws Exception {
 		if(requestList.getSelectedItem()==null) {
-        	Messagebox.show("Please select one account first!" );
+			NotificationUtil.showInstant("warning", "Please select one account first!");
+
         	return;
         }
 		AccountCloseRequest req = requestList.getSelectedItem().getValue();
 		
 		if(new AccountServiceImpl().checkBalance(req.getAccountNo()) > 0) {
-			Messagebox.show("First of all withdrawal your balance then do request for account closing");
+			NotificationUtil.showInstant("warning", "First of all withdrawal your balance then do request for account closing");
+		
 //			EmailService email = new EmailService();
 //		        email.sendEmail(
 //		            "hk5511073@gmail.com",
@@ -89,7 +94,7 @@ public class AccountCloseApprovelComposer extends SelectorComposer<Component>{
 	@Listen("onClick=#rejectBtn")
 	public void rejectRquest() throws Exception {
 		if(requestList.getSelectedItem()==null) {
-        	Messagebox.show("Please select one account first!" );
+			NotificationUtil.showInstant("warning", "Please select one account first!");
         	return;
         }
 		AccountCloseRequest req = requestList.getSelectedItem().getValue();

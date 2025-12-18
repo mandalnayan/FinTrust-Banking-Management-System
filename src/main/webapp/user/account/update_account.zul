@@ -91,14 +91,14 @@
 
                 <row>
                     <label value="Branch Name:" />
-                    <combobox placeholder="Select Branch" width="90%" id="accountBranch" readonly="true">
+                    <combobox placeholder="Select Branch" width="90%" id="accountBranchBox" readonly="true">
                     	
                     </combobox>
                 </row>
 
               <row>
                     <label value="Mode of Operation:" />
-                    <combobox placeholder="Select new mode" width="90%" id="accountMode" readonly="true">
+                    <combobox placeholder="Select new mode" width="90%" id="accountModeBox" readonly="true">
                     	<comboitem label="Self" value="SELF"></comboitem>
                     </combobox>
                 </row>

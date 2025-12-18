@@ -74,7 +74,9 @@ public class TableCreator {
 					    nominee_id BIGINT UNSIGNED NOT NULL,
 					    opened_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 					    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-
+						 mode_of_operation ENUM('SELF', 'JOINT')
+NOT NULL
+DEFAULT 'SELF',
 
 					    CONSTRAINT fk_accounts_user FOREIGN KEY (user_id)
 					        REFERENCES users(user_id)

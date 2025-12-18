@@ -12,6 +12,7 @@ import org.zkoss.zul.Messagebox;
 
 import com.fintrust.db.DBConnection;
 import com.fintrust.model.AccountCloseRequest;
+import com.fintrust.util.NotificationUtil;
 
 
 public class AccountCloseRequestDao {
@@ -60,11 +61,11 @@ public class AccountCloseRequestDao {
 	
 	
 	public boolean saveRequest(AccountCloseRequest req) {
-		createAccountCloserSchema();
+		
 		String query =  """
 						INSERT INTO account_closer_request 
-						(account_number,reason, requested_by)
-						values (?,?,?);
+						(account_number, reason, requested_by, review_by)
+						values (?,?,?,1);
 				""" ; 
 		
 		try(Connection con = DBConnection.getConnection()){
@@ -88,7 +89,7 @@ public class AccountCloseRequestDao {
 	}
 	
 	public Boolean isRequestExist(long account_number){
-		String query = "select * from account_closer_request where account_number = ?;";
+		String query = "select * from account_closer_request where account_number = ? and status = 'PENDING';";
 		
 		try(Connection con = DBConnection.getConnection()){
 			if(con != null) {
@@ -133,7 +134,7 @@ public class AccountCloseRequestDao {
 	
 	public boolean approveRequest(long requestId , long employeeId , String remarks) {
 		String fetchDetailsAboutRequest = "select * from account_closer_request where request_id = ? ;";
-		String closeAccountQuery = "UPDATE account SET account_status='CLOSED' WHERE account_number=?";
+		String closeAccountQuery = "UPDATE accounts SET status='closed' WHERE account_number=?";
 		
 		String UpdateStatusQuery = """
 											update account_closer_request 
@@ -142,7 +143,8 @@ public class AccountCloseRequestDao {
 									""";
 		PreparedStatement ps;
 		//step 1 :- find the account no by request id
-		try(Connection con = DBConnection.getConnection()){
+		Connection con = DBConnection.getConnection();
+		try{
 			con.setAutoCommit(false); // start transaction
 			
 			ps = con.prepareStatement(fetchDetailsAboutRequest);
@@ -150,14 +152,14 @@ public class AccountCloseRequestDao {
 			ResultSet rs = ps.executeQuery();
 			
 			if(rs.next()) {
-				long accountNo = rs.getLong("account_no");
+				long accountNo = rs.getLong("account_number");
 				//step 2 :- delete account from account table using account no	
 				ps = con.prepareStatement(closeAccountQuery);
 				ps.setLong(1, accountNo);
 				ps.executeUpdate();
 			}
 			else {
-				Messagebox.show("No request found with ID: " + requestId, "Success", Messagebox.OK, Messagebox.INFORMATION);
+				NotificationUtil.showInstant("warning", "No request found with ID: ");
 			}
 			
 			//step-3 update the closer request table 
@@ -178,10 +180,16 @@ public class AccountCloseRequestDao {
 			e.printStackTrace();
 			
             try {
-            	Connection conn = DBConnection.getConnection();
-				conn.rollback();
+            if (con != null)
+            	con.rollback();
 			} catch (SQLException e1) {
 				e1.printStackTrace();
+			}
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
 		}
 		return false;

@@ -154,11 +154,9 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	@Override
-	public boolean updatePassword(String passwordHash) throws SQLException {
+	public boolean updatePassword(String email, String passwordHash) throws SQLException {
 		String sql = "UPDATE users SET password_hash = ? WHERE email = ?";
-		String email = (String) Sessions.getCurrent().getAttribute("userEmail");
-		if (email == null)
-			return false;
+		
 		try (PreparedStatement ps = connection.prepareStatement(sql)) {
 			ps.setString(1, passwordHash);
 			ps.setString(2, email);

@@ -6,6 +6,7 @@ public class AccountUpdateRequest {
     private long accountNo;
     private String newAccountType;
     private String newBranchName;
+    private long branchId;
     private String newModeOfOperation;
     private String status;
     private long requestedBy;
@@ -26,6 +27,10 @@ public class AccountUpdateRequest {
     public String getNewBranchName() { return newBranchName; }
     public void setNewBranchName(String newBranchName) { this.newBranchName = newBranchName; }
 
+    public long getBranchId() { return branchId; }
+    public void setBranchId(long branchId) { this.branchId = branchId; }
+
+    
     public String getNewModeOfOperation() { return newModeOfOperation; }
     public void setNewModeOfOperation(String newModeOfOperation) { this.newModeOfOperation = newModeOfOperation; }
 
