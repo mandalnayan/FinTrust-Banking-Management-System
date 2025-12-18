@@ -16,11 +16,10 @@ import com.fintrust.service.AccountServiceImpl;
 import com.fintrust.service.BeneficiaryService;
 import com.fintrust.service.FundTransferService;
 import com.fintrust.util.NotificationUtil;
-import com.fintrust.dao.AccountDAO;
-import com.fintrust.dao.impl.AccountDAOImpl;
-import com.fintrust.dao.impl.FundTransferDAO;
 
 public class FundTransferController extends SelectorComposer<Component> {
+
+	private static final long serialVersionUID = 7007232702111772233L;
 
 	@Wire
 	private Combobox accountsComboBox, beneficiaryComboBox;
@@ -47,6 +46,7 @@ public class FundTransferController extends SelectorComposer<Component> {
 
 		accountService = new AccountServiceImpl();
 		List<Account> accounts = accountService.getAllAccounts();
+		System.out.println(accounts);
 		beneficiaryService = new BeneficiaryService();
 
 		if (accounts == null || accounts.size() == 0) {
@@ -110,6 +110,14 @@ public class FundTransferController extends SelectorComposer<Component> {
 			NotificationUtil.push("info", "Transfer successfull!");
 			Executions.sendRedirect("/user/userDashboard.zul");
 		}
+	}
+	
+	@Listen("onClick=#clearBtn")
+	public void clear() {
+		accountsComboBox.setValue(null);
+		beneficiaryComboBox.setValue(null);
+		toAccountBox.setValue(null);
+		amountBox.setValue(null);	
 	}
 
 	public Notification isValid(Long fromAcc, Long toAcc, Double amt, String ifscCode) {

@@ -42,7 +42,7 @@ public class CardServices {
    */
   public Long getActiveCardCount() {
 	    long user_id = (Long) Sessions.getCurrent().getAttribute("user_id");
-	    String sql = "SELECT COUNT(*) FROM cards WHERE user_id = ? AND status = 'active'";
+	    String sql = "SELECT COUNT(*) FROM cards WHERE user_id = ? AND card_status = 'active'";
 	    
 	    try (PreparedStatement pstm = DBConnection.getConnection().prepareStatement(sql)) {
 	        pstm.setLong(1, user_id);

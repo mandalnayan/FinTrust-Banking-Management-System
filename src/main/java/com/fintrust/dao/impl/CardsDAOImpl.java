@@ -74,7 +74,7 @@ public class CardsDAOImpl implements CardsDAO {
 
     @Override
     public List<Map<String, Object>> findByUserId(long userId) throws SQLException {
-        String sql = "SELECT * FROM cards WHERE user_id = ? ORDER BY issued_at DESC";
+        String sql = "SELECT * FROM cards WHERE user_id = ? ORDER BY issued_date DESC";
         List<Map<String, Object>> list = new ArrayList<>();
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -89,7 +89,7 @@ public class CardsDAOImpl implements CardsDAO {
 
     @Override
     public List<Map<String, Object>> findAll() throws SQLException {
-        String sql = "SELECT * FROM cards ORDER BY issued_at DESC";
+        String sql = "SELECT * FROM cards ORDER BY issued_date DESC";
         List<Map<String, Object>> list = new ArrayList<>();
 
         try (PreparedStatement ps = connection.prepareStatement(sql);
@@ -140,7 +140,7 @@ public class CardsDAOImpl implements CardsDAO {
         map.put("provider", rs.getString("provider"));
         map.put("expiry_date", rs.getDate("expiry_date"));
         map.put("status", rs.getString("status"));
-        map.put("issued_at", rs.getTimestamp("issued_at"));
+        map.put("issued_at", rs.getTimestamp("issued_date"));
         return map;
     }
 }

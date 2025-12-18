@@ -60,9 +60,9 @@ public class manageCardController extends SelectorComposer<Window> {
                 row.add(rs.getLong("account_number")+"");
                // row.add(rs.getString("cvv"));
                // row.add(rs.getString("pin"));
-                row.add(String.valueOf(rs.getDate("issued_at")));
+                row.add(String.valueOf(rs.getDate("issued_date")));
                 row.add(String.valueOf(rs.getDate("expiry_date")));
-                row.add(rs.getString("status"));
+                row.add(rs.getString("card_status"));
                 cardData.add(row);
             }
 
