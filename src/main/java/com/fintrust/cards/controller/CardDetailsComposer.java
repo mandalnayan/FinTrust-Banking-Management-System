@@ -58,7 +58,6 @@ public class CardDetailsComposer extends SelectorComposer<Window> {
             
 			lblCardNo.setValue(formattedCard);
 			lblType.setValue(rs.getString("card_type"));
-			lblMaxLimit.setValue(rs.getString("maximum_limit"));
 			lblStatus.setValue(rs.getString("card_status"));
 			lblCurLimit.setValue(rs.getString("current_limit"));
 			if (rs.getString("card_status").equalsIgnoreCase("Blocked")) {

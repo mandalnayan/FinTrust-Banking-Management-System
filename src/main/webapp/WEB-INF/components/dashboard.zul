@@ -38,9 +38,9 @@
                     </vbox>
 
                     <hbox sclass="quick-actions" spacing="12px">
-                        <button label="Transfer"
+                        <button id = "fundTransfer" label="Transfer"
                                 sclass="action-btn"
-                                onClick="@command('go', page='account/fundtransfer')"/>
+                                onClick="@command('tranfer', page='fundtransfer')"/>
                         <button label="Pay Bill"
                                 sclass="action-btn"
                                 onClick="@command('go', page='payBill')"/>
@@ -83,7 +83,7 @@
                         <label value="Recent Transactions" sclass="section-title"/>
 
                         <grid model="@load(vm.recentTransactions)" 
-                              sclass="transactions-grid" mold="paging" pageSize="2">
+                              sclass="transactions-grid" mold="paging" pageSize="1">
 
                             <columns>
                                 <column label="Date"/>
