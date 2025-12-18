@@ -18,7 +18,7 @@ public class OtpViewModel {
 	private String statusMessage;
 	private final OtpService otpService;
 	private final String adminEmail = "nayanm417@gmail.com";
-	private final String password = "zxrhrgrielkhqxml";
+	private final String password = "ackibmuewmmkfydp";
 
 	private boolean success; // css file
 
