@@ -13,18 +13,11 @@ import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Messagebox;
 
-<<<<<<< HEAD
 import com.fintrust.model.AccountCloseRequest;
 import com.fintrust.service.AccountServiceImpl;
 
 import com.fintrust.dao.impl.AccountCloseRequestDao;
 
-=======
-import com.fintrust.dao.impl.AccountCloseRequestDao;
-import com.fintrust.model.AccountCloseRequest;
-import com.fintrust.service.AccountServiceImpl;
-
->>>>>>> 14057b1 (Single account updation and accoun closer done)
 public class AccountCloseApprovelComposer extends SelectorComposer<Component>{
 	private final AccountCloseRequestDao accountCloseDao = new AccountCloseRequestDao();
 	
@@ -103,11 +96,5 @@ public class AccountCloseApprovelComposer extends SelectorComposer<Component>{
         accountCloseDao.rejectRequest(req.getRequestId(), currentEmployeeId, "");
         
         loadPendingRequests();
-//        EmailService email = new EmailService();
-//        email.sendEmail(
-//            "hk5511073@gmail.com",
-//            "Account Update Rejected",
-//            "Your request has been rejected."
-//        );
 	}
 }
