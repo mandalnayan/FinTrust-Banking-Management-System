@@ -6,7 +6,6 @@
            http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
            http://www.springframework.org/schema/security https://www.springframework.org/schema/security/spring-security.xsd">
 
-
     <!-- =============================
          HTTP SECURITY CONFIG
        ============================= -->
@@ -32,7 +31,7 @@
     <security:intercept-url pattern="/zkau/**" access="permitAll"/>
     <security:intercept-url pattern="/user/login.zul" access="permitAll"/> 
     <security:intercept-url pattern="/user/signup.zul" access="permitAll"/>   
-   <!--  <security:intercept-url pattern="/auth/**" access="permitAll"/>      -->   
+     <security:intercept-url pattern="/auth/**" access="permitAll"/>    
     <security:intercept-url pattern="/home.zul" access="permitAll"/>
 
     <!-- Protected Pages -->
