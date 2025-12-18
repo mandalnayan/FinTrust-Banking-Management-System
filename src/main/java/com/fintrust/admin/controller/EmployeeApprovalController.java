@@ -5,9 +5,15 @@ import org.zkoss.zk.ui.select.annotation.*;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.*;
+
+<<<<<<< HEAD
 import com.fintrust.model.AccountUpdateRequest;
 import com.fintrust.util.NotificationUtil;
 import com.fintrust.dao.impl.AccountUpdateRequestDao;
+=======
+import com.fintrust.dao.impl.AccountUpdateRequestDao;
+import com.fintrust.model.AccountUpdateRequest;
+>>>>>>> 14057b1 (Single account updation and accoun closer done)
 
 import java.util.*;
 

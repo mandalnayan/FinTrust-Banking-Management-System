@@ -46,7 +46,5 @@ public interface UserService {
 	boolean isAuthorize(String userName, String password);
 	
 	User getUserByUserName(String userName);
-	
-	boolean isExistsUser(String email);
     
 }

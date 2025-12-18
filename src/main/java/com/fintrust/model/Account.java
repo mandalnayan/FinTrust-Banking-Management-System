@@ -11,7 +11,6 @@ public class Account {
     private Double balance;
     private String currency;
     private AccountStatus account_status;
-    private AccountOwnershipType accountOwnershipType;
     private LocalDateTime openedAt;
     private LocalDateTime updatedAt;
     
@@ -24,11 +23,6 @@ public class Account {
 	public enum AccountType {
 		SAVINGS, CURRENT, SALARY
 	}
-	
-	// Account Ownership Type
-	public enum AccountOwnershipType{
-		SELF,JOINT
-	}
     
     public Account() {
     	
@@ -36,7 +30,7 @@ public class Account {
 
 	public Account(Long accountId, Long userId, Long branchId, Long nominee_id, Long accountNumber,
 			AccountType accountType, Double balance, String currency, AccountStatus account_status,
-			AccountOwnershipType accountOwnershipType, LocalDateTime openedAt, LocalDateTime updatedAt) {
+			LocalDateTime openedAt, LocalDateTime updatedAt) {
 		super();
 		this.accountId = accountId;
 		this.userId = userId;
@@ -47,7 +41,6 @@ public class Account {
 		this.balance = balance;
 		this.currency = currency;
 		this.account_status = account_status;
-		this.accountOwnershipType = accountOwnershipType;
 		this.openedAt = openedAt;
 		this.updatedAt = updatedAt;
 	}
@@ -122,14 +115,6 @@ public class Account {
 
 	public void setAccount_status(AccountStatus account_status) {
 		this.account_status = account_status;
-	}
-
-	public AccountOwnershipType getAccountOwnershipType() {
-		return accountOwnershipType;
-	}
-
-	public void setAccountOwnershipType(AccountOwnershipType accountOwnershipType) {
-		this.accountOwnershipType = accountOwnershipType;
 	}
 
 	public LocalDateTime getOpenedAt() {

@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.fintrust.model.Account;
 import com.fintrust.model.Notification;
-import com.fintrust.model.Account.AccountType;
 
 public interface AccountService {
 	// Account management
@@ -15,7 +14,6 @@ public interface AccountService {
     Account getAccountById(long accountId);
     List<Account> getAllAccounts();
     public List<Long> getAllAccountsNumber(); 
-    public List<AccountType> getAllAccountType();
     
     boolean isAccountExists(long user_id, String accountType);
 

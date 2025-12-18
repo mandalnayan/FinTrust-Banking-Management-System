@@ -69,20 +69,20 @@ public class BranchDao implements BranchDAO {
 
 	@Override
 	public List<Branch> findAll() throws SQLException {
-		List<Branch> allBranch = new ArrayList<>();
+		List<Branch> branchList = new ArrayList<>();
 		String query = "Select * from branches";
 		try (PreparedStatement pstmt = connection.prepareStatement(query);) {
 			ResultSet rs = pstmt.executeQuery();
-			while (rs.next()) {
+			while(rs.next()) {
 				Branch branch = new Branch();
 				branch.setBranchId(rs.getLong("branch_id"));
 				branch.setBranchName(rs.getString("branch_name"));
 				branch.setIfscCode(rs.getString("ifsc_code"));
 				branch.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-				allBranch.add(branch);
+				branchList.add(branch);
 			}
 		}
-		return allBranch;
+		return branchList;
 	}
 
 	@Override

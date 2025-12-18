@@ -2,11 +2,8 @@ package com.fintrust.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 import org.zkoss.zk.ui.Sessions;
 
@@ -14,9 +11,6 @@ import com.fintrust.model.Account;
 import com.fintrust.model.Account.AccountStatus;
 import com.fintrust.model.Notification;
 import com.fintrust.util.NotificationUtil;
-import com.fintrust.model.Account.AccountType;
-import com.fintrust.model.User;
-import com.fintrust.model.UserDetails;
 import com.fintrust.dao.impl.AccountDAOImpl;
 import com.fintrust.dao.impl.UserDetailsDAOImpl;
 import com.fintrust.db.DBConnection;
@@ -39,6 +33,7 @@ public class AccountServiceImpl implements AccountService {
 		try {
 			return accountDAO.findByType(user_id, accountType) != null;
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
@@ -60,11 +55,6 @@ public class AccountServiceImpl implements AccountService {
 			}	
 						
 			account.setAccountNumber(accountNo);
-			
-			//check the kyc status of current user it is pending or updated 
-//			User loggedInUser = new UserServiceImpl().getLoggedInUser();
-//			if(loggedInUser.getStatus())
-			
 			long account_id = accountDAO.create(account);
 			List<Account> accounts = accountDAO.findByUserId(user_id);
 			if (accounts.size() == 1) {
@@ -128,18 +118,6 @@ public class AccountServiceImpl implements AccountService {
 		}
 		return null;
 	}
-	
-	@Override
-	public List<AccountType> getAllAccountType() {
-		List<Account> allAccounts = new AccountServiceImpl().getAllAccounts();
-		
-		List<AccountType> allAccountTypeOfCurrentUser = new ArrayList<>();
-		for(Account account : allAccounts) {
-			allAccountTypeOfCurrentUser.add(account.getAccountType());
-		}
-		return allAccountTypeOfCurrentUser;
-	}
-
 
 	@Override
 	public List<Long> getAllAccountsNumber() {
@@ -275,5 +253,4 @@ public class AccountServiceImpl implements AccountService {
 		return -1l;
 	}
 
-	
 }

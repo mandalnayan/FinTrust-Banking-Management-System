@@ -90,8 +90,8 @@
                         <label id="ifscCode"/>
                     </row>
                     <row>
-                        <label value="Account Ownership Type:"/>
-                        <label id="accountOwnershipType"/>
+                        <label value="Mode of Operation:"/>
+                        <label id="modeOfOperation"/>
                     </row>
                     <row>
                         <label value="Nominee ID:"/>
