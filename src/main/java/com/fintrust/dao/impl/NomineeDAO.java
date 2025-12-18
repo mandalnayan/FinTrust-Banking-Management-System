@@ -14,27 +14,27 @@ import com.fintrust.util.NotificationUtil;
 
 
 public class NomineeDAO {
-	public static boolean createNomineeSchema() {
-		String q = "CREATE TABLE nominee_details (\r\n"
-				+ "id BIGINT UNSIGNED PRIMARY KEY auto_increment,"
-				+ "    nominee_id BIGINT UNSIGNED NOT NULL,\r\n"
-				+ "    nominee_name VARCHAR(100) NOT NULL,\r\n"
-				+ "    nominee_relation VARCHAR(50) NOT NULL\r\n"
-				+ ");";
-		try {
-			Statement statement = DBConnection.getConnection().createStatement();
-			statement.executeUpdate(q);
-			System.out.println("nominee table created");
-			return true;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
+//	public static boolean createNomineeSchema() {
+//		String q = "CREATE TABLE if not exists nominee_details (\r\n"
+//				+ "id BIGINT UNSIGNED PRIMARY KEY auto_increment,"
+//				+ "    nominee_id BIGINT UNSIGNED NOT NULL,\r\n"
+//				+ "    nominee_name VARCHAR(100) NOT NULL,\r\n"
+//				+ "    nominee_relation VARCHAR(50) NOT NULL\r\n"
+//				+ ");";
+//		try {
+//			Statement statement = DBConnection.getConnection().createStatement();
+//			statement.executeUpdate(q);
+//			System.out.println("nominee table created");
+//			return true;
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		return false;
+//	}
 	
 	
 	public Long createNominee(Nominee nominee) throws SQLException {
-		createNomineeSchema();
+		//createNomineeSchema();
 		String q = "INSERT INTO nominee_details(nominee_id, nominee_name, nominee_relation) VALUES ( ?, ?, ?);";
 		try(PreparedStatement ps = DBConnection.getConnection().prepareStatement(q, Statement.RETURN_GENERATED_KEYS)){
 			

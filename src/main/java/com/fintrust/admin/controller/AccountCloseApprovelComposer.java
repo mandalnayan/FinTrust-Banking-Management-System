@@ -1,7 +1,6 @@
 package com.fintrust.admin.controller;
 
 import java.util.List;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
@@ -13,18 +12,11 @@ import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Messagebox;
 
-<<<<<<< HEAD
 import com.fintrust.model.AccountCloseRequest;
 import com.fintrust.service.AccountServiceImpl;
-
 import com.fintrust.dao.impl.AccountCloseRequestDao;
 
-=======
-import com.fintrust.dao.impl.AccountCloseRequestDao;
-import com.fintrust.model.AccountCloseRequest;
-import com.fintrust.service.AccountServiceImpl;
 
->>>>>>> 14057b1 (Single account updation and accoun closer done)
 public class AccountCloseApprovelComposer extends SelectorComposer<Component>{
 	private final AccountCloseRequestDao accountCloseDao = new AccountCloseRequestDao();
 	

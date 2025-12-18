@@ -10,6 +10,7 @@ import org.zkoss.zul.Messagebox;
 import com.fintrust.dao.AccountDAO;
 import com.fintrust.db.DBConnection;
 import com.fintrust.model.Account;
+import com.fintrust.model.Account.AccountOwnershipType;
 import com.fintrust.model.Account.AccountStatus;
 import com.fintrust.model.Account.AccountType;
 
@@ -65,8 +66,8 @@ public class AccountDAOImpl implements AccountDAO {
    
         String sql = """
             INSERT INTO accounts
-            (user_id, branch_id, account_number, account_type, balance, nominee_id)
-            VALUES (?, ?, ?, ?, ?,?)
+            (user_id, branch_id, account_number, account_type , account_ownership_type , balance, nominee_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -74,8 +75,9 @@ public class AccountDAOImpl implements AccountDAO {
             ps.setLong(2, account.getBranchId());
             ps.setLong(3, account.getAccountNumber());
             ps.setString(4, account.getAccountType().toString());
-            ps.setDouble(5, account.getBalance());
-            ps.setLong(6, account.getNominee_id());
+            ps.setString(5, account.getAccountOwnershipType().toString());
+            ps.setDouble(6, account.getBalance());
+            ps.setLong(7, account.getNominee_id());
 
             ps.executeUpdate();
           
@@ -242,7 +244,7 @@ public class AccountDAOImpl implements AccountDAO {
 
 		Account account = new Account(rs.getLong("account_id"), rs.getLong("user_id"), rs.getLong("branch_id"),rs.getLong("nominee_id"),
 				rs.getLong("account_number"), AccountType.valueOf(rs.getString("account_type").toUpperCase()), rs.getBigDecimal("balance").doubleValue(),
-				rs.getString("currency"),AccountStatus.valueOf(rs.getString("status").toUpperCase()), rs.getTimestamp("opened_at").toLocalDateTime(),
+				rs.getString("currency"),AccountStatus.valueOf(rs.getString("status").toUpperCase()),  AccountOwnershipType.valueOf(rs.getString("account_ownership_type")), rs.getTimestamp("opened_at").toLocalDateTime(),
 				rs.getTimestamp("updated_at").toLocalDateTime());
 
 		return account;
