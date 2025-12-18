@@ -46,7 +46,7 @@ public class BlockUnblockVerification  extends SelectorComposer<Window>{
 	 public void statusChange()
 	 {
 		
-		//Executions.sendRedirect("/user/card/block_unblock_verification.zul");
+		//Executions.sendRedirect("/Card/block_unblock_verification.zul");
 		 String doStatus;
 	
 	    String currentStatus=(String) Sessions.getCurrent().getAttribute("blockOrUnblock");
@@ -89,7 +89,7 @@ public class BlockUnblockVerification  extends SelectorComposer<Window>{
 	   String btnValue=targetBtn.getLabel();
 	   if(btnValue.equalsIgnoreCase("Cancel"))
 	   {
-		   Executions.sendRedirect("/user/card/manageCard.zul");
+		   Executions.sendRedirect("/Card/manageCard.zul");
 	   }
 	   if(btnValue.equalsIgnoreCase("Verify Password"))
 	   {
@@ -163,7 +163,7 @@ public class BlockUnblockVerification  extends SelectorComposer<Window>{
 					);
 		 }
 	   }
-	   System.out.println((String) Sessions.getCurrent().getAttribute("blockOrUnblock"));
+	   
 	   if(btnValue.equalsIgnoreCase("Confirm"))
 	   {
 		   
@@ -181,7 +181,7 @@ public class BlockUnblockVerification  extends SelectorComposer<Window>{
 
 		 Clients.evalJavaScript(
 		     "setTimeout(function(){ window.location.href='" 
-		     + contextPath + "/user/card/manageCard.zul'; }, 3000);"
+		     + contextPath + "/Card/manageCard.zul'; }, 3000);"
 		 );
 
 

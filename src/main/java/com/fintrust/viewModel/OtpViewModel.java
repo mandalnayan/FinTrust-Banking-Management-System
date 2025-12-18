@@ -18,7 +18,7 @@ public class OtpViewModel {
 	private String statusMessage;
 	private final OtpService otpService;
 	private final String adminEmail = "nayanm417@gmail.com";
-	private final String password = "ackibmuewmmkfydp";
+	private final String password = "zxrhrgrielkhqxml";
 
 	private boolean success; // css file
 
@@ -29,7 +29,7 @@ public class OtpViewModel {
 		var mailSender = new com.fintrust.service.MailSenderWrapper("smtp.gmail.com", "587", adminEmail, password);
 
 		otpService = new OtpService(mailSender, repo);
-		email = "nayankm99@gmail.com";
+		email = (String) Sessions.getCurrent().getAttribute("userEmail");
 		statusMessage = (String) Sessions.getCurrent().getAttribute("statusMessage");
 	}
 

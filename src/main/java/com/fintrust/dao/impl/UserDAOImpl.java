@@ -104,9 +104,8 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public User findByEmail(String email) throws SQLException {
 		String sql = "SELECT * FROM users WHERE email = ?";
-		
-		try (Connection connection = DBConnection.getConnection();
-				PreparedStatement ps = connection.prepareStatement(sql);) {
+
+		try (PreparedStatement ps = connection.prepareStatement(sql)) {
 			ps.setString(1, email);
 			try (ResultSet rs = ps.executeQuery()) {
 				if (rs.next())
