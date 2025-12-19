@@ -9,6 +9,7 @@ import org.zkoss.zul.*;
 import com.fintrust.model.Account;
 import com.fintrust.service.AccountServiceImpl;
 import com.fintrust.service.NomineeServiceImp;
+import com.fintrust.util.NotificationUtil;
 import com.lowagie.text.Anchor;
 
 import java.util.*;
@@ -97,8 +98,15 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
 
     /** Edit account **/
     private void editAccount(Account acc) {
-    	// Store selected account number in session
-        Executions.getCurrent().getSession().setAttribute("selected_account_no", acc.getAccountNumber());
+//    	Checking status of account. Updation not happen if account is closed or inactive
+    	String accountStatus = acc.getAccount_status().name();
+        if (!accountStatus.equals("ACTIVE")) {
+        	NotificationUtil.showInstant("warning", "Your account is " + accountStatus + ".\n you can't update account");
+        	return;
+        }
+        
+     // Store selected account number in session
+    	Executions.getCurrent().getSession().setAttribute("selected_account_no", acc.getAccountNumber());
         // Redirect to details page
         //Executions.sendRedirect("/user/account/update_account.zul");        
         
@@ -108,6 +116,12 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
 
     /** Close account **/
     private void closeAccount(Account acc) {
+    	String accountStatus = acc.getAccount_status().name();
+        if (!accountStatus.equals("ACTIVE")) {
+        	NotificationUtil.showInstant("warning", "Your account is " + accountStatus + ". you can't delete account");
+        	return;
+        }
+    	
     	// Store selected account number in session
         Executions.getCurrent().getSession().setAttribute("selected_account_no", acc.getAccountNumber());
         // Redirect to details page

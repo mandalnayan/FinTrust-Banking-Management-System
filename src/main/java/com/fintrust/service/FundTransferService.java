@@ -28,10 +28,16 @@ public class FundTransferService {
 			validateBalance(fromAcc, amount);
 			validateReceiver(toAcc, ifscCode);
 
+			if (!dao.isAccountActive(fromAcc)) throw new IllegalArgumentException("Sender account is not active. Please contact to bank!");
+			if (!dao.isAccountActive(toAcc)) throw new IllegalArgumentException("Receiver bank server is down! or account is not active");
+			
 			dao.debit(fromAcc, amount);
 			dao.credit(toAcc, amount);
 
-			dao.insertTransaction(userId, fromAcc, toAcc, amount,
+			dao.insertTransaction(userId, fromAcc, toAcc, amount, "credit",
+					TransactionStatus.COMPLETED.name().toLowerCase());
+			
+			dao.insertTransaction(userId, fromAcc, toAcc, amount, "debit",
 					TransactionStatus.COMPLETED.name().toLowerCase());
 
 			connection.commit();
@@ -42,7 +48,7 @@ public class FundTransferService {
 			NotificationUtil.showInstant("error", "Fund transfer failed! " + e.getMessage());
 			try {
 				if (connection != null) {
-					dao.insertTransaction(userId, fromAcc, toAcc, amount,
+					dao.insertTransaction(userId, fromAcc, toAcc, amount,"debit",
 							TransactionStatus.FAILED.name().toLowerCase());
 				}
 			} catch (Exception ignore) {

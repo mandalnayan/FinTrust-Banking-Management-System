@@ -1,163 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <zk>
+   
 
-    <window border="normal" width="90%" 
-            apply="com.fintrust.controller.FundTransferController"
-            style="border-radius: 12px; background-color: #ffffff; 
-                   box-shadow: 0 8px 20px rgba(0,0,0,0.12); margin: auto; padding: 20px;">
+	<window width="100%" height="100%" border="normal"
+		apply="com.fintrust.controller.FundTransferController"
+		sclass="main-window">
 
-        <!-- TITLE -->
-        <hbox pack="center" style="margin-bottom:20px;">
-            <label value="Fund Transfer Portal"
-                   style="font-size:26px; font-weight:bold; color:#1e3a8a;"/>
-        </hbox>
+		<!-- MAIN LAYOUT -->
+		<vlayout vflex="1" hflex="1" sclass="main-layout">
 
-        <separator bar="true"/>
+			<!-- HEADER -->
+			<vbox sclass="header" align="center" hflex="1">
+				<label value="Fund Transfer Portal" sclass="title" />
+				<label value="Secure and Fast Money Transfer"
+					sclass="subtitle" />
+			</vbox>
 
-        <!-- FORM CONTAINER -->
-        <div sclass="form-scroll">
-            <grid sclass="form-grid responsive-grid" style="width:100%;">
-                <rows>
+			<!-- DIVIDER -->
+			<separator bar="true" />
 
-                    <row>
-                        <label value="From Account:"/>
-                        <combobox id = "accountsComboBox" width="100%" popupWidth="100%" autodrop="true" placeholder="Select your account"/>
-                    </row>
+			<!-- SCROLLABLE FORM AREA -->
+			<div vflex="1" sclass="form-scroll">
 
-                    <row>
-                        <label value="Beneficiary:"/>
-                        <combobox id = "beneficiaryComboBox" width="100%" autodrop="true" placeholder="Select beneficiary"/>
-                    </row>
+				<grid sclass="form-grid responsive-grid" width="100%">
+					<rows>
 
-                    <row>
-                        <label value="To Account:"/>
-                        <longbox id = "toAccountBox" width="100%" placeholder="Enter account number"/>
-                    </row>
+						<row>
+							<label value="From Account" />
+							<combobox id="accountsComboBox" width="100%"
+								autodrop="true" placeholder="Select your account" />
+						</row>
 
-                    <row>
-                        <label value="IFSC Code:"/>
-                        <textbox id = "ifsccodeBox" width="100%" placeholder="Enter IFSC code"/>
-                    </row>
+						<row>
+							<label value="Beneficiary" />
+							<combobox id="beneficiaryComboBox"
+								width="100%" autodrop="true" placeholder="Select beneficiary" />
+						</row>
 
-                    <row>
-                        <label value="Amount:"/>
-                        <doublebox id = "amountBox" width="100%" placeholder="Enter amount"/>
-                    </row>
+						<row>
+							<label value="To Account" />
+							<longbox id="toAccountBox" width="100%"
+								placeholder="Enter account number" />
+						</row>
 
-                    <row>
-                        <label value="Remarks:"/>
-                        <textbox width="100%" placeholder="Optional notes" maxlength="100"/>
-                    </row>
+						<row>
+							<label value="IFSC Code" />
+							<textbox id="ifsccodeBox" width="100%"
+								placeholder="Enter IFSC code" />
+						</row>
 
-                </rows>
-            </grid>
-        </div>
+						<row>
+							<label value="Amount" />
+							<doublebox id="amountBox" width="100%"
+								placeholder="Enter amount" />
+						</row>
 
-        <!-- ACTION BUTTONS -->
-        <hbox sclass="action-bar" pack="center" spacing="20px" style="margin-top:20px;">
-            <button id = "transferBtn" label="Transfer Funds" style="background-color:#1e3a8a;color:white;font-weight:bold;"/>
-            <button id = "clearBtn" label="Clear" style="background-color:#e5e7eb;color:#111;font-weight:bold;"/>
-            <button label="Add Beneficiary" style="background-color:#2563eb;color:white;font-weight:bold;"/>
-        </hbox>
+						<row>
+							<label value="Remarks" />
+							<textbox width="100%"
+								placeholder="Optional notes" maxlength="100" />
+						</row>
 
-    </window>
+					</rows>
+				</grid>
+			</div>
 
-    <style>
-        /* SCROLLABLE FORM */
-        .form-scroll {
-            max-height: 60vh;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-        .form-scroll::-webkit-scrollbar {
-            width: 6px;
-        }
-        .form-scroll::-webkit-scrollbar-thumb {
-            background-color: rgba(0,0,0,0.2);
-            border-radius: 3px;
-        }
+			<!-- STICKY ACTION BAR -->
+			<!-- STICKY ACTION BAR -->
+			<div sclass="action-bar">
+				<button id="transferBtn" label="Transfer Funds"
+					sclass="btn-primary" />
+				<button id="clearBtn" label="Clear"
+					sclass="btn-secondary" />
+				<button label="Add Beneficiary" sclass="btn-outline" />
+			</div>
 
-        /* GRID ROWS */
-        .form-grid .z-row {
-            padding: 12px 0;
-        }
-        .form-grid .z-label {
-            font-weight: 600;
-            font-size: 14px;
-            min-width: 120px;
-        }
-<!--         .z-combobox, .z-textbox, .z-longbox, .z-doublebox {
-            border-radius: 6px;
-            border: 1px solid #d1d5db;
-            padding: 6px 10px;
-            font-size: 14px;
-        } -->
 
-        /* BUTTON STYLES */
-        .z-button {
-            border-radius: 6px;
-            padding: 8px 20px;
-            font-size: 14px;
-            transition: 0.2s all;
-        }
-        .z-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-            cursor: pointer;
-        }
+		</vlayout>
+	</window>
 
-        /* RESPONSIVE DESIGN: MOBILE SINGLE COLUMN */
-        @media (max-width: 768px) {
+	<!-- ===================== CSS ===================== -->
+	<style>
+		/* ROOT WINDOW */ .main-window { border-radius: 14px;
+		background: #ffffff; box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+		animation: fadeIn 0.6s ease-in-out; }
 
-            /* Stack labels above inputs */
-             /* Combobox input itself */
-    .z-combobox, .z-textbox, .z-longbox, .z-doublebox {
-        width: 100% !important;
-    }
+		/* HEADER */ .header { text-align: center; padding: 20px 10px; }
 
-    /* Combobox popup */
-    .z-combobox-popup {
-        width: auto !important;
-        max-width: 95vw !important;
-        min-width: 100px !important;
-        height: auto !important;
-        max-height: 40vh !important;
-        overflow-y: auto !important;
-        box-sizing: border-box;
-    }
+		.title { font-size: 26px; font-weight: 700; color: #1e3a8a;
+		animation: slideDown 0.5s ease; }
 
-    /* Stack labels above inputs */
-    .responsive-grid .z-row {
-        display: flex;
+		.subtitle { font-size: 14px; color: #6b7280; }
+
+		/* FORM SCROLL AREA */ .form-scroll { padding: 20px; overflow-y:
+		auto; animation: fadeInUp 0.6s ease; }
+
+		.form-scroll::-webkit-scrollbar { width: 6px; }
+
+		.form-scroll::-webkit-scrollbar-thumb { background:
+		rgba(0,0,0,0.25); border-radius: 4px; }
+
+		/* GRID */ .form-grid .z-row { padding: 14px 0; }
+
+		.form-grid .z-label { font-weight: 600; color: #374151;
+		min-width: 130px; }
+
+		/* INPUTS */ .z-textbox, .z-longbox, .z-doublebox {
+		border-radius: 8px; border: 1px solid #d1d5db; padding: 8px
+		10px; transition: all 0.25s ease; font-size: 14px; }
+
+		.z-combobox:focus, .z-textbox:focus, .z-longbox:focus,
+		.z-doublebox:focus { border-color: #2563eb; box-shadow: 0 0 0
+		3px rgba(37,99,235,0.15); }
+
+		/* ACTION BAR (STICKY) */ /* ACTION BAR */ .action-bar {
+		position: sticky; bottom: 0; background: #ffffff; padding: 16px;
+		border-top: 1px solid #e5e7eb;
+
+		/* 🔥 FLEX LAYOUT */ display: flex; justify-content: center;
+		gap: 16px; }
+
+		/* BUTTONS */ .z-button { border-radius: 8px; padding: 10px
+		22px; font-weight: 600; font-size: 14px; transition: all 0.25s
+		ease; }
+
+		.btn-primary { background: linear-gradient(135deg, #1e3a8a,
+		#2563eb); color: white; }
+
+		.btn-secondary { background: #e5e7eb; color: #111827; }
+
+		.btn-outline { background: white; border: 1px solid #2563eb;
+		color: #2563eb; }
+
+		.z-button:hover { transform: translateY(-2px) scale(1.02);
+		box-shadow: 0 8px 20px rgba(0,0,0,0.18); }
+
+		/* RESPONSIVE */ @media (max-width: 768px) {
+		
+		.header { padding: 0px; }
+
+		/* Stack form rows */ .responsive-grid .z-row { display: flex;
+		flex-direction: column; gap: 6px; }
+
+		.form-grid .z-label { min-width: unset; }
+
+ .action-bar {
+        position: relative !important; /* relative or static works */
         flex-direction: column;
-        gap: 6px;
+        align-items: stretch;
     }
+		.action-bar .z-button { width: 100%; } }
 
-    .action-bar {
-        flex-direction: column !important;
-        gap: 12px;
-    }
-            
-            
-            .responsive-grid .z-row {
-                display: flex;
-                flex-direction: column;
-                gap: 6px;
-            }
 
-            .responsive-grid .z-row .z-label {
-                width: 100%;
-                margin-bottom: 2px;
-            }
+		/* ANIMATIONS */ @keyframes fadeIn { from { opacity: 0; } to {
+		opacity: 1; } }
 
-            .z-combobox, .z-textbox, .z-longbox, .z-doublebox {
-                width: 100% !important;
-            }
+		@keyframes fadeInUp { from { opacity: 0; transform:
+		translateY(15px); } to { opacity: 1; transform: translateY(0); }
+		}
 
-            /* Stack buttons vertically */
-            .action-bar {
-                flex-direction: column !important;
-                gap: 12px;
-            }
-        }
-    </style>
+		@keyframes slideDown { from { opacity: 0; transform:
+		translateY(-10px); } to { opacity: 1; transform: translateY(0);
+		} }
+
+		@keyframes slideUp { from { opacity: 0; transform:
+		translateY(10px); } to { opacity: 1; transform: translateY(0); }
+		}
+	</style>
+
 </zk>

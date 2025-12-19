@@ -60,7 +60,7 @@
                             <label value="Transfer to saved beneficiaries" class="widget-desc"/>
                             <button label="Transfer Now"
                                     class="widget-btn"
-                                    onClick="@command('go', page='account/fundtransfer')"/>
+                                    onClick="@command('tranfer', page='fundtransfer')"/>
                         </vbox>
 
                         <vbox class="widget widget-card">

@@ -3,6 +3,7 @@ package com.fintrust.dao.impl;
 import java.sql.*;
 
 import com.fintrust.db.DBConnection;
+import com.fintrust.util.NotificationUtil;
 
 public class FundTransferDAO {
 
@@ -57,7 +58,7 @@ public class FundTransferDAO {
     public int debit(Long accountNumber, double amount)
             throws SQLException {
 
-        String sql = "UPDATE accounts SET balance = balance - ? WHERE account_number = ?";
+        String sql = "UPDATE accounts SET balance = balance - ? WHERE account_number = ? and status = 'ACTIVE'";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setDouble(1, amount);
             ps.setLong(2, accountNumber);
@@ -68,24 +69,36 @@ public class FundTransferDAO {
     public int credit(Long accountNumber, double amount)
             throws SQLException {
 
-        String sql = "UPDATE accounts SET balance = balance + ? WHERE account_number = ?";
+        String sql = "UPDATE accounts SET balance = balance + ? WHERE account_number = ? and status = 'ACTIVE'";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setDouble(1, amount);
             ps.setLong(2, accountNumber);
-            return ps.executeUpdate();
+            int resValue = ps.executeUpdate();
+            return resValue;
         }
     }
 
+    public boolean isAccountActive(Long accountNumber) throws SQLException {
+    	String sql = "SELECT 1 FROM accounts WHERE account_number = ? and status = 'ACTIVE'";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setLong(1, accountNumber);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        }
+    }
+    
     public void insertTransaction(Long userId,
                                   Long fromAcc,
                                   Long toAcc,
                                   double amount,
+                                  String txn_type,
                                   String status) throws SQLException {
 
         String sql = """
             INSERT INTO transactions
-            (user_id, account_number, counterparty_account_number, amount, status)
-            VALUES (?, ?, ?, ?, ?)
+            (user_id, account_number, counterparty_account_number, amount, txn_type, status)
+            VALUES (?, ?, ?, ?, ?, ?)
         """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -93,7 +106,8 @@ public class FundTransferDAO {
             ps.setLong(2, fromAcc);
             ps.setLong(3, toAcc);
             ps.setDouble(4, amount);
-            ps.setString(5, status);
+            ps.setString(5, txn_type);
+            ps.setString(6, status);
             ps.executeUpdate();
         }
     }
