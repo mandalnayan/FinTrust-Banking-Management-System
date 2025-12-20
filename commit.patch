@@ -1,0 +1,716 @@
+commit bd28a074962f7a8bed3ddb56273b33e68e34c25a
+Author: vikas maddheshiya <vikasmaddheshiya003@gmail.com>
+Date:   Wed Dec 17 18:23:00 2025 +0530
+
+    change manage card zul page
+
+diff --git a/src/main/java/com/fintrust/cards/controller/BlockUnblockVerification.java b/src/main/java/com/fintrust/cards/controller/BlockUnblockVerification.java
+index 0a1560f..29d5ee5 100644
+--- a/src/main/java/com/fintrust/cards/controller/BlockUnblockVerification.java
++++ b/src/main/java/com/fintrust/cards/controller/BlockUnblockVerification.java
+@@ -46,7 +46,7 @@ public class BlockUnblockVerification  extends SelectorComposer<Window>{
+ 	 public void statusChange()
+ 	 {
+ 		
+-		//Executions.sendRedirect("/Card/block_unblock_verification.zul");
++		//Executions.sendRedirect("/user/card/block_unblock_verification.zul");
+ 		 String doStatus;
+ 	
+ 	    String currentStatus=(String) Sessions.getCurrent().getAttribute("blockOrUnblock");
+@@ -89,7 +89,7 @@ public class BlockUnblockVerification  extends SelectorComposer<Window>{
+ 	   String btnValue=targetBtn.getLabel();
+ 	   if(btnValue.equalsIgnoreCase("Cancel"))
+ 	   {
+-		   Executions.sendRedirect("/Card/manageCard.zul");
++		   Executions.sendRedirect("/user/card/manageCard.zul");
+ 	   }
+ 	   if(btnValue.equalsIgnoreCase("Verify Password"))
+ 	   {
+@@ -163,7 +163,7 @@ public class BlockUnblockVerification  extends SelectorComposer<Window>{
+ 					);
+ 		 }
+ 	   }
+-	   
++	   System.out.println((String) Sessions.getCurrent().getAttribute("blockOrUnblock"));
+ 	   if(btnValue.equalsIgnoreCase("Confirm"))
+ 	   {
+ 		   
+@@ -181,7 +181,7 @@ public class BlockUnblockVerification  extends SelectorComposer<Window>{
+ 
+ 		 Clients.evalJavaScript(
+ 		     "setTimeout(function(){ window.location.href='" 
+-		     + contextPath + "/Card/manageCard.zul'; }, 3000);"
++		     + contextPath + "/user/card/manageCard.zul'; }, 3000);"
+ 		 );
+ 
+ 
+diff --git a/src/main/java/com/fintrust/cards/controller/CardDetailsComposer.java b/src/main/java/com/fintrust/cards/controller/CardDetailsComposer.java
+index e69de88..759662d 100644
+--- a/src/main/java/com/fintrust/cards/controller/CardDetailsComposer.java
++++ b/src/main/java/com/fintrust/cards/controller/CardDetailsComposer.java
+@@ -96,7 +96,7 @@ public class CardDetailsComposer extends SelectorComposer<Window> {
+ 		Button b = (Button) e.getTarget();
+ 		String blkOrUblk = b.getLabel();
+ 		Sessions.getCurrent().setAttribute("blockOrUnblock", blkOrUblk);
+-		Executions.sendRedirect("/Card/block_unblock_verification.zul");
++		Executions.sendRedirect("/user/card/block_unblock_verification.zul");
+ //		 String doStatus;
+ //		Button b=(Button) e.getTarget();
+ //	    String s=b.getLabel();
+diff --git a/src/main/java/com/fintrust/cards/controller/manageCardController.java b/src/main/java/com/fintrust/cards/controller/manageCardController.java
+index 72a1184..981e9da 100644
+--- a/src/main/java/com/fintrust/cards/controller/manageCardController.java
++++ b/src/main/java/com/fintrust/cards/controller/manageCardController.java
+@@ -47,7 +47,7 @@ public class manageCardController extends SelectorComposer<Window> {
+             String sql = "SELECT * FROM cards where user_id=?";
+             PreparedStatement ps = con.prepareStatement(sql);
+             Long user_id = (Long) Sessions.getCurrent().getAttribute("user_id");                                    //take it from session**(((((((((((
+-
++          
+             ps.setLong(1, user_id);
+             ResultSet rs = ps.executeQuery();
+ 
+@@ -60,9 +60,9 @@ public class manageCardController extends SelectorComposer<Window> {
+                 row.add(rs.getLong("account_number")+"");
+                // row.add(rs.getString("cvv"));
+                // row.add(rs.getString("pin"));
+-                row.add(String.valueOf(rs.getDate("issued_at")));
++                row.add(String.valueOf(rs.getDate("issued_date")));
+                 row.add(String.valueOf(rs.getDate("expiry_date")));
+-                row.add(rs.getString("status"));
++                row.add(rs.getString("card_status"));
+                 cardData.add(row);
+             }
+ 
+@@ -89,8 +89,8 @@ public class manageCardController extends SelectorComposer<Window> {
+           
+           Sessions.getCurrent().setAttribute("card_number_masked", card_number_masked);
+           
+-          Executions.sendRedirect("/Card/cardDetails.zul");
++          Executions.sendRedirect("/user/card/cardDetails.zul");
+              
+     } 
+-    
++ 
+       }
+diff --git a/src/main/java/com/fintrust/db/DBConnection.java b/src/main/java/com/fintrust/db/DBConnection.java
+index 23076be..992d762 100644
+--- a/src/main/java/com/fintrust/db/DBConnection.java
++++ b/src/main/java/com/fintrust/db/DBConnection.java
+@@ -15,7 +15,7 @@ public class DBConnection {
+     // Database configuration constants
+     private static final String URL = "jdbc:mysql://localhost:3306/fintrust_bank";
+     private static final String USER = "root";
+-    private static final String PASSWORD = "root123";
++    private static final String PASSWORD = "Root@123";
+     private static Connection connection = null;
+ 
+     // Private constructor to prevent external instantiation
+diff --git a/src/main/webapp/user/card/ApplyNewCard.zul b/src/main/webapp/user/card/ApplyNewCard.zul
+index 8720dff..1fcae3b 100644
+--- a/src/main/webapp/user/card/ApplyNewCard.zul
++++ b/src/main/webapp/user/card/ApplyNewCard.zul
+@@ -4,8 +4,11 @@
+ <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
+ 
+ <zk>
+-       <privateNavbar width="100%"></privateNavbar>
++
+        
++
++       <privateNavbar width="100%"></privateNavbar>
++     
+     <!-- FIXED: Removed height="130%" and added vflex="min" -->
+      <a href="/user/card/cardHome.zul" class="top-back-btn">
+         ← Back
+@@ -71,11 +74,19 @@
+                                 placeholder="e.g., Need card urgently" />
+                         </row>
+ 
+-                        <row>
+-                            <label />
+-                            <checkbox id="terms"
+-                                label="I accept the Terms and Conditions of FinTrust Bank" />
+-                        </row>
++   <row>
++    <label />
++    <hlayout spacing="5px" valign="middle">
++        <checkbox id="terms" />
++        <label value="I accept the " />
++        <a label="Terms and Conditions"
++           sclass="terms-link"
++            href="/user/card/termAndCondition.zul" />
++        <label value=" of FinTrust Bank" />
++    </hlayout>
++</row>
++
++
+                     </rows>
+                 </grid>
+ 
+@@ -145,7 +156,7 @@
+                 min-width: 200px;
+             }
+ 
+-            .input { width: 100% !important; }
++            
+ 
+             /* Buttons */
+             .button-row {
+diff --git a/src/main/webapp/user/card/Card_status.zul b/src/main/webapp/user/card/Card_status.zul
+index b80f229..e8c7782 100644
+--- a/src/main/webapp/user/card/Card_status.zul
++++ b/src/main/webapp/user/card/Card_status.zul
+@@ -1,4 +1,4 @@
+- 
++<!--  
+   <?init class="com.fintrust.security.AuthenticationController" ?>
+ <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
+ 
+@@ -8,10 +8,10 @@
+                overflow:auto;"
+         apply="com.fintrust.cards.controller.card_status_controller">
+ 
+-        <!-- ================= FIXED NAVBAR ================= -->
++        ================= FIXED NAVBAR =================
+ <privateNavbar width="100%"></privateNavbar>
+ 
+-        <!-- ================= MAIN CONTENT ================= -->
++        ================= MAIN CONTENT =================
+         <div style="
+             padding-top:70px;
+             padding-left:20px;
+@@ -21,7 +21,7 @@
+             align-items:center;
+         ">
+ 
+-            <!-- ===== PAGE HEADER ===== -->
++            ===== PAGE HEADER =====
+             <div style="text-align:center; margin-bottom:20px;">
+                 <label value="🧾 Card Request Management"
+                     style="font-size:22px;font-weight:bold;color:#003366;" />
+@@ -29,10 +29,10 @@
+                 <label value="View pending or approved card requests"
+                     style="color:#555;font-size:13px;" />
+             </div>
+-             <!--   <a href="/user/card/cardHome.zul" class="top-back-btn">
++               <a href="/user/card/cardHome.zul" class="top-back-btn">
+                  ← Back
+-             </a> -->
+-            <!-- ===== DATA CARD ===== -->
++             </a>
++            ===== DATA CARD =====
+             <div style="
+                 width:100%;
+                 max-width:1100px;
+@@ -42,7 +42,7 @@
+                 box-shadow:0 4px 12px rgba(0,0,0,0.1);
+             ">
+ 
+-                <!-- ===== SCROLL CONTAINER ===== -->
++                ===== SCROLL CONTAINER =====
+                 <div style="width:100%; overflow-x:auto;">
+ 
+                     <listbox id="atmRequestList"
+@@ -52,7 +52,7 @@
+                         pagingPosition="bottom"
+                         style="border:none; min-width:90%;">
+ 
+-                        <!-- ===== TABLE HEADER ===== -->
++                        ===== TABLE HEADER =====
+                         <listhead>
+                             <listheader label="Request No" width="100px" />
+                             <listheader label="Account No" width="140px" />
+@@ -63,7 +63,7 @@
+                             <listheader label="Status" width="100px" />
+                         </listhead>
+ 
+-                        <!-- ===== TABLE DATA ===== -->
++                        ===== TABLE DATA =====
+                         <template name="model">
+                             <listitem>
+ 
+@@ -83,19 +83,19 @@
+                                     <label value="${each.card_category}" />
+                                 </listcell>
+ 
+-                                <!-- ADDRESS WRAP -->
++                                ADDRESS WRAP
+                                 <listcell>
+                                     <label value="${each.delivery_address}"
+                                         style="white-space:normal; word-break:break-word;" />
+                                 </listcell>
+ 
+-                                <!-- REMARKS WRAP -->
++                                REMARKS WRAP
+                                 <listcell>
+                                     <label value="${each.remarks}"
+                                         style="white-space:normal; word-break:break-word;" />
+                                 </listcell>
+ 
+-                                <!-- STATUS COLOR -->
++                                STATUS COLOR
+                                 <listcell>
+                                     <label value="${each.card_request_status}"
+                                         style="
+@@ -115,7 +115,7 @@
+             </div>
+         </div>
+ 
+-        <!-- ================= STYLES ================= -->
++        ================= STYLES =================
+         <style>
+             listcell label {
+                 white-space: normal;
+@@ -180,4 +180,196 @@
+   
+   
+   
+-  
+\ No newline at end of file
++   -->
++   
++   
++   
++   <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
++
++<zk>
++
++    <!-- ================= FIXED NAVBAR ================= -->
++    <privateNavbar width="100%"></privateNavbar>
++
++    <!-- ================= MAIN WINDOW ================= -->
++    <window border="none"
++            width="100%"
++            height="100%"
++            apply="com.fintrust.cards.controller.manageCardController"
++            style="
++                background: linear-gradient(135deg, #e6f0ff, #ffffff);
++                overflow:auto;
++            ">
++
++        <!-- ================= CONTENT WRAPPER ================= -->
++        <div style="
++            padding-top:70px;
++            padding-left:20px;
++            padding-right:20px;
++            display:flex;
++            flex-direction:column;
++            align-items:center;
++        ">
++
++            <!-- ===== PAGE HEADER ===== -->
++            <div style="text-align:center; margin-bottom:20px; width:100%; max-width:1100px; position:relative;">
++
++                <!-- Back Button -->
++                <button label="← Back"
++                        onClick='Executions.sendRedirect("/user/card/cardHome.zul")'
++                        class="top-back-btn"/>
++
++                <!-- Title -->
++                <label value="Manage Existing Cards"
++                       style="font-size:22px;font-weight:bold;color:#003366;" />
++                <separator />
++                <label value="View and manage your issued ATM cards"
++                       style="color:#555;font-size:13px;" />
++            </div>
++
++            <!-- ================= DATA CARD ================= -->
++            <div style="
++                width:100%;
++                max-width:1100px;
++                background:white;
++                border-radius:12px;
++                padding:15px;
++                box-shadow:0 4px 12px rgba(0,0,0,0.1);
++            ">
++
++                <!-- ===== SCROLL CONTAINER ===== -->
++                <div style="width:100%; overflow-x:auto;">
++
++                    <listbox id="cardListbox"
++                             mold="paging"
++                             pageSize="6"
++                             pagingPosition="bottom"
++                             width="100%"
++                             style="border:none; min-width:900px;">
++
++                        <!-- ===== TABLE HEADER ===== -->
++                        <listhead>
++                            <listheader label="ATM Card No" width="180px"/>
++                            <listheader label="Card Type" width="140px"/>
++                            <listheader label="Account No" width="160px"/>
++                            <listheader label="Issued Date" width="130px"/>
++                            <listheader label="Expiry Date" width="130px"/>
++                            <listheader label="Status" width="120px"/>
++                            <listheader label="Action" width="120px"/>
++                        </listhead>
++
++                        <!-- ===== TABLE DATA ===== -->
++                        <template name="model">
++                            <listitem>
++
++                                <listcell>
++                                    <label value="${each[0]}" />
++                                </listcell>
++
++                                <listcell>
++                                    <label value="${each[1]}" />
++                                </listcell>
++
++                                <listcell>
++                                    <label value="${each[2]}" />
++                                </listcell>
++
++                                <listcell>
++                                    <label value="${each[3]}" />
++                                </listcell>
++
++                                <listcell>
++                                    <label value="${each[4]}" />
++                                </listcell>
++
++                                <listcell>
++                                    <label value="${each[5]}"
++                                           style="font-weight:600;" />
++                                </listcell>
++
++                                <listcell>
++                                    <button label="Manage"
++                                            class="manage-btn"/>
++                                </listcell>
++
++                            </listitem>
++                        </template>
++
++                    </listbox>
++
++                </div>
++            </div>
++        </div>
++
++        <!-- ================= STYLES ================= -->
++        <style>
++            listcell label {
++                white-space: normal;
++                word-break: break-word;
++            }
++
++            listheader {
++                font-weight: 600;
++            }
++
++            .manage-btn {
++                padding: 5px 12px;
++                font-size: 13px;
++                background: #0a66c2;
++                color: white;
++                border: none;
++                border-radius: 6px;
++            }
++
++            .manage-btn:hover {
++                background: #084c9e;
++            }
++
++            .top-back-btn {
++                position: absolute;
++                left: 0;
++                top: 0;
++                background: white;
++                color: #004080;
++                padding: 6px 14px;
++                border-radius: 20px;
++                font-size: 13px;
++                font-weight: 600;
++                border: none;
++                cursor: pointer;
++                box-shadow: 0 2px 8px rgba(0,0,0,0.15);
++                transition: all 0.3s ease;
++            }
++
++            .top-back-btn:hover {
++                background: #004080;
++                color: white;
++                transform: translateX(-3px);
++            }
++
++            /* ===== Tablet ===== */
++            @media (max-width: 768px) {
++                listbox {
++                    font-size: 12px;
++                }
++
++                listheader {
++                    font-size: 12px;
++                }
++            }
++
++            /* ===== Mobile ===== */
++            @media (max-width: 480px) {
++                listbox {
++                    font-size: 11px;
++                }
++
++                div[style*="max-width"] {
++                    padding: 10px !important;
++                }
++            }
++        </style>
++
++    </window>
++</zk>
++   
+\ No newline at end of file
+diff --git a/src/main/webapp/user/card/cardDetails.zul b/src/main/webapp/user/card/cardDetails.zul
+index 6ecc801..d1a34f8 100644
+--- a/src/main/webapp/user/card/cardDetails.zul
++++ b/src/main/webapp/user/card/cardDetails.zul
+@@ -1,5 +1,5 @@
+-<zk>
+-    <!-- ================= Main Card Details Window ================= -->
++<!-- <zk>
++    ================= Main Card Details Window =================
+     <window title="💳 Card Details"
+             border="normal"
+             width="100%" height="100%"
+@@ -12,7 +12,7 @@
+         <vlayout spacing="0px" width="100%" height="auto">
+               <div style="position:relative; width:100%; height:40px;">
+ 
+-                <!-- Back Button (LEFT) -->
++                Back Button (LEFT)
+                 <button label="← Back to Manage Cards"
+                         onClick='Executions.sendRedirect("manageCard.zul")'
+                         style="
+@@ -28,7 +28,7 @@
+                             font-size:14px;
+                         "/>
+ 
+-                <!-- Center Title (ALWAYS CENTERED) -->
++                Center Title (ALWAYS CENTERED)
+                 <label value="FinTrust Bank - Card Details"
+                        style="
+                            position:absolute;
+@@ -39,17 +39,17 @@
+                            color:#004080;
+                        "/>
+             </div>
+-            <!-- Header -->
+-            <!-- <hlayout width="100%" style="justify-content:space-between;align-items:center;">
++            Header
++            <hlayout width="100%" style="justify-content:space-between;align-items:center;">
+                 <label value="FinTrust Bank - Card Details"
+                        style="font-size:20px;font-weight:bold;color:#003399;letter-spacing:0.5px;"/>
+                 <button label="← Back to Manage Cards"
+                         onClick='Executions.sendRedirect("manageCard.zul")'
+                         style="background:#003399;color:white;border:none;border-radius:8px;
+                                padding:6px 14px;font-weight:500;cursor:pointer;transition:background 0.3s;"/>
+-            </hlayout> -->
++            </hlayout>
+ 
+-            <!-- Card Information -->
++            Card Information
+             <div style="background:white;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,0.08);
+                         padding:20px;width:100%;">
+                 <label value="Card Information"
+@@ -103,7 +103,7 @@
+                 </grid>
+             </div>
+ 
+-            <!-- Buttons -->
++            Buttons
+             <div style="display:flex;justify-content:center;gap:20px;margin-top:25px;flex-wrap:wrap;"> 
+                 <button id="btnBlock" label="Block Card"
+                         onClick="@command('openPopup','action','block')"
+@@ -123,3 +123,189 @@
+ 
+   
+ </zk>
++ -->
++ 
++ 
++ 
++ 
++ <zk>
++    <style>
++        /* ================= Mobile-first responsive layout ================= */
++        @media screen and (max-width: 600px) {
++
++            /* Window padding */
++            .card-window {
++                padding: 12px !important;
++            }
++
++            /* Header - stack back button and title */
++            .header-container {
++                height: auto !important;
++                text-align: center;
++                display: flex;
++                flex-direction: column;
++                align-items: center;
++                gap: 8px;
++            }
++
++            .back-btn {
++                position: static !important;
++                width: 100% !important;
++                max-width: 250px;
++                margin: 0 auto;
++            }
++
++            .header-title {
++                position: static !important;
++                transform: none !important;
++                font-size: 20px !important;
++                text-align: center;
++            }
++
++            /* Card info grid -> single column */
++            .z-grid table, .z-grid tbody, .z-grid tr {
++                display: block;
++                width: 100%;
++            }
++
++            .z-grid td {
++                display: flex;
++                flex-direction: column;
++                padding: 6px 0 !important;
++                width: 100% !important;
++            }
++
++            /* Slider and selected limit */
++            .slider-container {
++                display: flex;
++                flex-direction: column;
++                gap: 12px;
++                width: 100%;
++            }
++
++            /* Action buttons stack vertically */
++            .action-btns {
++                flex-direction: column;
++                gap: 12px;
++                width: 100%;
++            }
++
++            .action-btns button {
++                width: 100% !important;
++            }
++        }
++    </style>
++
++    <!-- ================= Main Card Details Window ================= -->
++    <window title="💳 Card Details"
++            border="normal"
++            width="100%" height="100%"
++            apply="com.fintrust.cards.controller.CardDetailsComposer"
++            class="card-window"
++            style="background:linear-gradient(180deg,#f4f8ff,#ffffff);
++                   border-radius:15px;
++                   box-shadow:0 4px 12px rgba(0,0,0,0.12);
++                   padding:25px;"> 
++              
++        <vlayout spacing="0px" width="100%" height="auto">
++              
++            <!-- Header -->
++            <div class="header-container"
++                 style="position:relative; width:100%; height:40px;">
++
++                <!-- Back Button -->
++                <button class="back-btn" label="← Back to Manage Cards"
++                        onClick='Executions.sendRedirect("manageCard.zul")'
++                        style="
++                            background:#004080;
++                            color:white;
++                            border:none;
++                            border-radius:6px;
++                            padding:6px 14px;
++                            font-weight:bold;
++                            cursor:pointer;
++                            font-size:14px;
++                        "/>
++
++                <!-- Center Title -->
++                <label class="header-title" value="FinTrust Bank - Card Details"
++                       style="
++                           font-size:30px;
++                           font-weight:bold;
++                           color:#004080;
++                       "/>
++            </div>
++
++            <!-- Card Information -->
++            <div style="background:white;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,0.08);
++                        padding:20px;width:100%;">
++                <label value="Card Information"
++                       style="font-weight:bold;font-size:16px;color:#0a66c2;margin-bottom:10px;"/>
++
++                <grid width="100%">
++                    <rows>
++                        <row>
++                            <label value="Card Number:" style="color:#333;font-weight:600;"/>
++                            <label id="lblCardNo" style="color:#004aad;font-weight:bold;"/>
++                        </row>
++                        <row>
++                            <label value="Card Type:" style="color:#333;font-weight:600;"/>
++                            <label id="lblType" style="color:#444;"/>
++                        </row>
++                        <row>
++                            <label value="Card Status:" style="color:#333;font-weight:600;"/>
++                            <label id="lblStatus" style="font-weight:bold;color:green;"/>
++                        </row>
++                        <row>
++                            <label value="Maximum Daily Limit:" style="color:#333;font-weight:600;"/>
++                            <label id="lblMaxLimit" style="color:#444;"/>
++                        </row>
++                        <row id="dailyLimitRow" >
++                            <label value="Current Daily Limit:" style="color:#333;font-weight:600;"/>
++                            <label id="lblCurLimit" value="50000" style="color:#444;"/>
++                        </row>
++                        <row id="sliderRow">
++                            <label value="Set Daily Limit:" style="color:#333;font-weight:600;"/>
++                            <vlayout class="slider-container">
++                                <slider id="limitSlider"
++                                        width="100%" minpos="0" maxpos="50000"
++                                        orient="horizontal"
++                                        onScroll="lblDailyLimit.setValue('₹' + String.valueOf(event.pos));"
++                                        style="margin-top:8px;"/>
++
++                                <hlayout spacing="8px">
++                                    <label value="Selected Limit:" style="color:#333;"/>
++                                    <label id="lblDailyLimit" value="₹0"
++                                           style="font-weight:bold;color:#004aad;"/>
++
++                                    <button id="btnUpdateLimit" label="Update Limit"
++                                            style="background:#28a745;color:white;border:none;
++                                                   border-radius:6px;padding:5px 12px;cursor:pointer;
++                                                   font-weight:500;transition:background 0.3s;"/>
++                                </hlayout>
++                            </vlayout>
++                        </row>
++                    </rows>
++                </grid>
++            </div>
++
++            <!-- Action Buttons -->
++            <div class="action-btns"
++                 style="display:flex;justify-content:center;gap:20px;margin-top:25px;flex-wrap:wrap;"> 
++                <button id="btnBlock" label="Block Card"
++                        onClick="@command('openPopup','action','block')"
++                        style="background:#dc3545;color:white;border:none;border-radius:10px;
++                               padding:10px 22px;font-weight:bold;box-shadow:0 2px 5px rgba(0,0,0,0.15);
++                               cursor:pointer;transition:background 0.3s;"/>
++
++                <button id="btnUnblock" label="Unblock Card"
++                        onClick="@command('openPopup','action','unblock')"
++                        style="background:#28a745;color:white;border:none;border-radius:10px;
++                               padding:10px 22px;font-weight:bold;box-shadow:0 2px 5px rgba(0,0,0,0.15);
++                               cursor:pointer;transition:background 0.3s;"/>
++            </div>
++
++        </vlayout>
++    </window>
++</zk>
++ 
+\ No newline at end of file

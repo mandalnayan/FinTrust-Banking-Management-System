@@ -84,12 +84,12 @@ public class manageCardController extends SelectorComposer<Window> {
           Listitem item =  (Listitem) targetButton.getParent().getParent();
           
           String card_number_masked = ((Listcell) item.getChildren().get(0)).getLabel();
-          alert(card_number_masked);
+         // alert(card_number_masked);
           System.out.println(card_number_masked);
           
           Sessions.getCurrent().setAttribute("card_number_masked", card_number_masked);
           
-         // Executions.sendRedirect("/user/card/cardDetails.zul");
+          Executions.sendRedirect("/user/card/cardDetails.zul");
              
     } 
     
