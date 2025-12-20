@@ -1,10 +1,12 @@
-  
+ 
    <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 
 <zk>
 
     <!-- ================= FIXED NAVBAR ================= -->
-   <privateNavbar width="100%"></privateNavbar>
+    <div class="navbar-fixed">
+        <include src="/WEB-INF/components/privateNavbar.zul" />
+    </div>
 
     <!-- ================= MAIN CONTENT ================= -->
     <window width="100%"
@@ -18,7 +20,7 @@
 
                 <!-- Back Button -->
                 <button label="← Back"
-                        onClick='Executions.sendRedirect("/user/card/cardHome.zul")'
+                        onClick='Executions.sendRedirect("cardHome.zul")'
                         class="back-btn"/>
 
                 <!-- Center Title -->
@@ -156,7 +158,6 @@
     </style>
 
 </zk>
-   
    
    
    

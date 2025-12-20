@@ -1,16 +1,17 @@
- 
- <!-- Make sure page shouldn't render without login -->
+<!-- Make sure page shouldn't render without login -->
 
 <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 
 <zk>
-
-       
-
-       <privateNavbar width="100%"></privateNavbar>
-     
+        <include src="/WEB-INF/components/privateNavbar.zul" style="
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            z-index: 999;
+        " /> 
     <!-- FIXED: Removed height="130%" and added vflex="min" -->
-     <a href="/user/card/cardHome.zul" class="top-back-btn">
+     <a href="/Card/cardHome.zul" class="top-back-btn">
         ← Back
     </a>
     <window border="none" width="100%" height="auto" vflex="min"
@@ -74,19 +75,11 @@
                                 placeholder="e.g., Need card urgently" />
                         </row>
 
-   <row>
-    <label />
-    <hlayout spacing="5px" valign="middle">
-        <checkbox id="terms" />
-        <label value="I accept the " />
-        <a label="Terms and Conditions"
-           sclass="terms-link"
-            href="/user/card/termAndCondition.zul" />
-        <label value=" of FinTrust Bank" />
-    </hlayout>
-</row>
-
-
+                        <row>
+                            <label />
+                            <checkbox id="terms"
+                                label="I accept the Terms and Conditions of FinTrust Bank" />
+                        </row>
                     </rows>
                 </grid>
 
@@ -156,7 +149,7 @@
                 min-width: 200px;
             }
 
-            
+            .input { width: 100% !important; }
 
             /* Buttons */
             .button-row {
@@ -256,8 +249,4 @@
 
     </window>
 </zk>
- 
- 
- 
-
  

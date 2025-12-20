@@ -1,17 +1,15 @@
- 
- 
  <?init class="com.fintrust.security.AuthenticationController" ?>
 <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 
 <zk>
 
     <!-- ================= FIXED NAVBAR ================= -->
-   <!--  <div class="fixed-navbar">
+    <div class="fixed-navbar">
         <include src="/WEB-INF/components/privateNavbar.zul" />
-    </div> -->
-<privateNavbar width="100%"></privateNavbar>
+    </div>
+
     <!-- ================= TOP BACK BUTTON ================= -->
-    <a href="/user/card/cardHome.zul" class="top-back-btn">
+    <a href="/Card/cardHome.zul" class="top-back-btn">
         ← Back
     </a>
 
@@ -229,4 +227,3 @@
 
     </window>
 </zk>
- 

@@ -1,13 +1,13 @@
+
 <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 
 
 <?init class="com.fintrust.security.AuthenticationController" ?>
 
 <zk>
-     <privateNavbar width="100%"></privateNavbar>
+     <include src="/WEB-INF/components/privateNavbar.zul" /> 
     <window border="none" width="100%" height="90%" sclass="p-4">      
       
-        
         <div style="display:flex;flex-direction:column;align-items:center;padding:30px; height:100vh; overflow-y:auto;">
             <label value="💳 Card Management Portal"
                    style="font-weight:bold;font-size:24px;color:#004080;margin-bottom:20px;" />
@@ -64,7 +64,7 @@
                 flex-wrap: wrap;
                 justify-content: center;
                 gap: 25px;
-                width: 80%;
+                width: 100%;
                 max-width: 1200px;
             }
 

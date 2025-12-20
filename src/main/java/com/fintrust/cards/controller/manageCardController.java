@@ -36,7 +36,41 @@ public class manageCardController extends SelectorComposer<Window> {
      
     @Wire
     private Button manageBtn;
-       
+
+   private static boolean createCardShemea() {
+	   String query = """
+			    CREATE TABLE IF NOT EXISTS card (
+			        card_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,   -- internal ID
+			        card_number CHAR(16) NOT NULL UNIQUE,              -- real card number
+			        customer_id BIGINT UNSIGNED NOT NULL,
+			        account_no BIGINT  NOT NULL,
+			        cvv CHAR(3) NOT NULL,
+			        pin CHAR(4) NOT NULL,
+			        issued_date DATE DEFAULT (CURDATE()),
+			        expiry_date DATE GENERATED ALWAYS AS (issued_date + INTERVAL 3 YEAR) STORED,
+			        card_status VARCHAR(20) DEFAULT 'Active',
+			        maximum_limit INT DEFAULT 50000,
+
+			        PRIMARY KEY (card_id),
+			        FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
+			        FOREIGN KEY (account_no) REFERENCES account(account_no)
+			    ) ENGINE=InnoDB;
+			""";
+
+    	Statement stmt;
+		try {
+			stmt = DBConnection.getConnection().createStatement();
+			stmt.executeUpdate(query);
+			return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println("ERROR: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return false;
+    	
+    }
+    
     @Override
     public void doAfterCompose(Window comp) throws Exception {
         super.doAfterCompose(comp);
@@ -46,9 +80,10 @@ public class manageCardController extends SelectorComposer<Window> {
         try (Connection con = DBConnection.getConnection()) {
             String sql = "SELECT * FROM cards where user_id=?";
             PreparedStatement ps = con.prepareStatement(sql);
-            Long user_id = (Long) Sessions.getCurrent().getAttribute("user_id");                                    //take it from session**(((((((((((
-          
-            ps.setLong(1, user_id);
+            Long userId = (Long) Sessions.getCurrent().getAttribute("user_id");                                 //take it from session**(((((((((((
+            if (userId == null) return;
+            
+            ps.setLong(1, userId);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -84,13 +119,22 @@ public class manageCardController extends SelectorComposer<Window> {
           Listitem item =  (Listitem) targetButton.getParent().getParent();
           
           String card_number_masked = ((Listcell) item.getChildren().get(0)).getLabel();
-         // alert(card_number_masked);
-          System.out.println(card_number_masked);
           
+          System.out.println(card_number_masked);
+          alert(card_number_masked + "");
           Sessions.getCurrent().setAttribute("card_number_masked", card_number_masked);
           
           Executions.sendRedirect("/user/card/cardDetails.zul");
              
-    } 
- 
+    }
+    
+    public static void main(String args[]) {
+    	
+    	boolean isCreated = createCardShemea();
+    	
+    	System.out.println(isCreated);
+    
+    }
+  
+    
       }

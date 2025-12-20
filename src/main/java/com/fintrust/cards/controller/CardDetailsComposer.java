@@ -58,6 +58,7 @@ public class CardDetailsComposer extends SelectorComposer<Window> {
             
 			lblCardNo.setValue(formattedCard);
 			lblType.setValue(rs.getString("card_type"));
+			lblMaxLimit.setValue(rs.getString("maximum_limit"));
 			lblStatus.setValue(rs.getString("card_status"));
 			lblCurLimit.setValue(rs.getString("current_limit"));
 			if (rs.getString("card_status").equalsIgnoreCase("Blocked")) {
@@ -68,7 +69,7 @@ public class CardDetailsComposer extends SelectorComposer<Window> {
 				// btnUnblock.setVisible(false);
 				// btnBlock.setDisabled(true);
 			} else {
-				if (rs.getString("card_status").equalsIgnoreCase("Expired")) {
+				if (rs.getString("card_status").equalsIgnoreCase("Expired") || rs.getString("card_status").equalsIgnoreCase("hotlisted")) {
 					dailyLimitRow.setVisible(false);
 					sliderRow.setVisible(false);
 					lblStatus.setStyle("color: red; font-weight: bold;");
@@ -90,7 +91,7 @@ public class CardDetailsComposer extends SelectorComposer<Window> {
 
 	}
 
-	@Listen("onClick=#btnBlock,#btnUnblock")
+	@Listen("onClick=#btnBlock, #btnUnblock")
 	public void statusChange(Event e) {
 		Button b = (Button) e.getTarget();
 		String blkOrUblk = b.getLabel();
@@ -129,18 +130,20 @@ public class CardDetailsComposer extends SelectorComposer<Window> {
 
 	@Listen("onClick=#btnUpdateLimit")
 	public void updateLimit() throws NumberFormatException, SQLException {
+		System.out.println("hii");
 		Connection con = DBConnection.getConnection();
 		
 		String sql = "UPDATE cards SET current_limit = ? WHERE card_number_masked = ?";
 		PreparedStatement pst=con.prepareStatement(sql);
 	   
 		String card_number_masked = (String) Sessions.getCurrent().getAttribute("card_number_masked");
-        String str=lblDailyLimit.getValue().substring(1);
-        System.out.println(str);
-		pst.setBigDecimal(1,new BigDecimal(lblDailyLimit.getValue().substring(1)));
+		 alert(card_number_masked + "");
+		 String str = lblDailyLimit.getValue().substring(1);
+     
+		pst.setBigDecimal(1, new BigDecimal(str));
 		
 
-		pst.setLong(2, Long.parseLong(card_number_masked));
+		pst.setString(2, card_number_masked);
 	
 		int n=pst.executeUpdate();
 	

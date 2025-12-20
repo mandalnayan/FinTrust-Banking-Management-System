@@ -30,7 +30,9 @@ public class card_status_controller extends SelectorComposer<Window> {
 	public void doAfterCompose(Window comp) throws Exception {
 		// TODO Auto-generated method stub
 		super.doAfterCompose(comp);
-		Connection connection = DBConnection.getConnection();		
+		Connection connection = DBConnection.getConnection();
+		// String atmCardNumber=(String)Sessions.getCurrent().getAttribute("atmNumber");
+		// long atmNumber = (Long) Long.parseLong(atmCardNumber);
 
 		String sql = "select * from card_request where user_id =?";
 		PreparedStatement ptsm = connection.prepareStatement(sql);
@@ -60,6 +62,7 @@ public class card_status_controller extends SelectorComposer<Window> {
 
 			lc = new Listcell((String) rs.getString("card_request_status"));
 			li.appendChild(lc);
+
 
 			atmRequestList.appendChild(li);
 		}
