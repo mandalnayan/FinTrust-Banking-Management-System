@@ -11,7 +11,7 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
 
-public class OtpViewModel {
+public class KycOtpAuthentication {
 
 	private String email;
 	private String otpCode;
@@ -20,8 +20,8 @@ public class OtpViewModel {
 
 	private boolean success; // css file
 
-	public OtpViewModel() {
-		// Initialize manually (since no Spring)
+// Initialize manually (since no Spring)
+	public KycOtpAuthentication() {
 
 		otpService = new OtpService();
 		email = (String) Sessions.getCurrent().getAttribute("userEmail");
@@ -65,7 +65,7 @@ public class OtpViewModel {
 				return;
 			}
 			if (Sessions.getCurrent().getAttribute("userEmail") == null) {
-				Sessions.getCurrent().setAttribute("userEmail", email);
+				Executions.sendRedirect("/user/login.zul");
 			}
 			User user = new UserServiceImpl().getUserByUserName(email);
 			if (user == null) {
@@ -76,7 +76,8 @@ public class OtpViewModel {
 			Sessions.getCurrent().setAttribute("otp_allowed", true);
 			success = true;
 			int emailLen = email.length();
-			statusMessage = "OTP sent to " + email.substring(0, emailLen-7).replaceAll("[a-z0-9]", "x") + email.substring(emailLen-7);
+			statusMessage = "OTP sent to " + email.substring(0, emailLen - 3).replaceAll("[a-z0-9]", "x")
+					+ email.substring(emailLen - 3);
 			Executions.sendRedirect("/auth/verifyOtp.zul");
 		} catch (Exception e) {
 			statusMessage = "Failed to send OTP: " + e.getMessage();
@@ -108,7 +109,7 @@ public class OtpViewModel {
 	}
 
 	public static void main(String args[]) {
-		OtpViewModel om = new OtpViewModel();
+		KycOtpAuthentication om = new KycOtpAuthentication();
 		om.sendOtp();
 	}
 }

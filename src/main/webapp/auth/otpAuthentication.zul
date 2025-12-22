@@ -1,0 +1,48 @@
+<?page title="Verify OTP - FinTrust Bank" contentType="text/html;charset=UTF-8"?>
+
+<!--  It will ensure page will render after sending otp-->
+
+<?link rel="stylesheet" type="text/css" href="/resources/css/auth-common.css"?>
+
+<zk xmlns:h="xhtml">
+
+<window viewModel="@id('vm') @init('com.fintrust.viewModel.OtpVerificationVM')">
+
+    <div sclass="login-wrapper" width="90%">
+        
+       <!-- RIGHT PANEL -->
+        <div class="login-right">
+
+            <label value="OTP Verification" class="login-title"/>
+            <label value="Enter the 6-digit OTP sent to your registered email/phone" 
+                   class="login-subtitle"/>
+
+            <vlayout spacing="15px" width="100%" sclass="login-form">
+
+                <!-- OTP INPUT -->
+                <textbox id="otp" 
+                         placeholder="Enter 6-digit OTP" 
+                         maxlength="6"
+                         sclass="input-field"
+                         constraint="no empty"
+                         value="@bind(vm.otpCode)"/>
+
+                <!-- VERIFY BUTTON -->
+                <button label="Verify OTP" 
+                        sclass="login-btn"
+                        onClick="@command('verifyOtp')"/>
+
+                <!-- RESEND LINK -->
+                <hlayout sclass="signup-redirect">
+                    <label value="Didn't receive the OTP?"/>
+                    <a href="#" onClick="@command('resendOtp')">Resend OTP</a>
+                </hlayout>
+ 			<label value="@bind(vm.statusMessage)" style="color:blue"/>
+
+            </vlayout>
+
+        </div>
+
+    </div>
+</window>
+</zk>

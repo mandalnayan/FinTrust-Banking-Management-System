@@ -14,7 +14,7 @@
 
                 <!-- Back Button (LEFT) -->
                 <button label="← Back to Manage Cards"
-                        onClick='Executions.sendRedirect("manageCard.zul")'
+                        onClick='Executions.sendRedirect("/user/card/manageCard.zul")'
                         style="
                             position:absolute;
                             left:0;
@@ -51,7 +51,7 @@
 
             <!-- Card Information -->
             <div style="background:white;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,0.08);
-                        padding:20px;width:100%;">
+                        padding:50px;width:100%;">
                 <label value="Card Information"
                        style="font-weight:bold;font-size:16px;color:#0a66c2;margin-bottom:10px;"/>
 

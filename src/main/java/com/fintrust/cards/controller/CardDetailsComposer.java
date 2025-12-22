@@ -129,19 +129,19 @@ public class CardDetailsComposer extends SelectorComposer<Window> {
 	}
 
 	@Listen("onClick=#btnUpdateLimit")
-	public void updateLimit() throws NumberFormatException, SQLException {
-		System.out.println("hii");
+	public void updateLimit() throws NumberFormatException, SQLException {		
 		Connection con = DBConnection.getConnection();
 		
 		String sql = "UPDATE cards SET current_limit = ? WHERE card_number_masked = ?";
 		PreparedStatement pst=con.prepareStatement(sql);
 	   
 		String card_number_masked = (String) Sessions.getCurrent().getAttribute("card_number_masked");
-		 alert(card_number_masked + "");
+		 if (card_number_masked == null) {
+			 Executions.sendRedirect("/user/login.zul");
+		 }
 		 String str = lblDailyLimit.getValue().substring(1);
      
-		pst.setBigDecimal(1, new BigDecimal(str));
-		
+		pst.setBigDecimal(1, new BigDecimal(str));		
 
 		pst.setString(2, card_number_masked);
 	
@@ -156,9 +156,7 @@ public class CardDetailsComposer extends SelectorComposer<Window> {
 				    null,
 				    "top_center",
 				    3000
-				);
-
-			
+				);			
 		}
 		else
 			Clients.showNotification("Failed to update Daily Limit ");

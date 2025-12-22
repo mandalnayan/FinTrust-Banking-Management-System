@@ -9,7 +9,7 @@
     </div>
 
     <!-- ================= TOP BACK BUTTON ================= -->
-    <a href="/Card/cardHome.zul" class="top-back-btn">
+    <a href="/user/card/cardHome.zul" class="top-back-btn">
         ← Back
     </a>
 

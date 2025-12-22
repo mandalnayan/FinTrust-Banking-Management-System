@@ -11,7 +11,7 @@
             z-index: 999;
         " /> 
     <!-- FIXED: Removed height="130%" and added vflex="min" -->
-     <a href="/Card/cardHome.zul" class="top-back-btn">
+     <a href="/user/card/cardHome.zul" class="top-back-btn">
         ← Back
     </a>
     <window border="none" width="100%" height="auto" vflex="min"

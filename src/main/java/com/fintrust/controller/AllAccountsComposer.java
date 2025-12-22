@@ -99,7 +99,7 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
     /** Edit account **/
     private void editAccount(Account acc) {
 //    	Checking status of account. Updation not happen if account is closed or inactive
-    	String accountStatus = acc.getAccount_status().name();
+    		String accountStatus = acc.getAccount_status().name();
         if (!accountStatus.equals("ACTIVE")) {
         	NotificationUtil.showInstant("warning", "Your account is " + accountStatus + ".\n you can't update account");
         	return;

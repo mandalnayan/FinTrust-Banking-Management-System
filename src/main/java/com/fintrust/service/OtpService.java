@@ -14,11 +14,21 @@ import jakarta.mail.MessagingException;
 
 	    private final MailSenderWrapper mailSender;
 	    private final OtpRepository otpRepository;
+	    private final String adminEmail = "nayanm417@gmail.com";
+		private final String password = "ackibmuewmmkfydp";
 
+		 /**
+		  * Default initialization
+		  */
+	    public OtpService() {
+	        this.mailSender = new com.fintrust.service.MailSenderWrapper("smtp.gmail.com", "587", adminEmail, password);
+	        this.otpRepository = new com.fintrust.repository.OtpRepository();
+	    }
+		
 	    public OtpService(MailSenderWrapper mailSender, OtpRepository otpRepository) {
 	        this.mailSender = mailSender;
 	        this.otpRepository = otpRepository;
-	    }
+	    }	  
 
 	    public void generateAndSendOtp(String email) throws MessagingException {
 	    
@@ -31,10 +41,8 @@ import jakarta.mail.MessagingException;
 
 	    public boolean verifyOtp(String email, String code) {
 	        OtpRecord rec = otpRepository.findLatestForEmail(email);
-	        System.out.println(rec + " outside verifyOtp");
 	        if (rec == null || rec.isUsed() || rec.getExpiry().isBefore(Instant.now()) || !rec.getCode().equals(code))
-	        {
-	        	  System.out.println(rec.toString() + "inside verifyOtp");
+	        {	        	 
 	        	return false;
 	        }
 

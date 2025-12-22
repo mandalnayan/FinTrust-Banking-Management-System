@@ -12,17 +12,23 @@ import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Path;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.select.Selectors;
+import org.zkoss.zul.Include;
 import org.zkoss.zul.Radio;
 
 import com.fintrust.model.UserDetails;
 import com.fintrust.model.User;
 import com.fintrust.model.UserKycDTO;
+import com.fintrust.service.OtpService;
 import com.fintrust.service.UserDetailsServiceImpl;
 import com.fintrust.service.UserServiceImpl;
 import com.fintrust.util.NotificationUtil;
+
+import jakarta.mail.MessagingException;
 
 public class KycFormVM {
 
@@ -34,29 +40,30 @@ public class KycFormVM {
     private byte[] addressProofFile;
     
     private String photoLabel;
-    private byte[] photoFile;
+    private byte[] photoFile;    
+    private String statusMessage;
+    private String otpCode;
     
-
     private UserServiceImpl userService = new UserServiceImpl();
+    private OtpService otpService;
     private UserDetailsServiceImpl userDetailsService = new UserDetailsServiceImpl();  
    
     @Init
     public void init() {
         // Load logged-in user's KYC details
         userDetails = userDetailsService.getLogedInDetails();
+        otpService = new OtpService();
         if (userDetails == null) {
-        	NotificationUtil.showInstant("error", "Server error. Failed to load userdetails");            
+        		NotificationUtil.showInstant("error", "Server error. Failed to load userdetails");            
             return;
         }     
        
         user = userDetails.getUser();
-        System.out.println(userDetails);
 
         // Map entity to DTO
         userKycDTO = mapEntityToDTO(userDetails);    
         addressProofLabel = userKycDTO.getAddressProofFileName();
-        photoLabel = userKycDTO.getPhotoFileName();  
-        System.out.println("KYC " + userKycDTO);
+        photoLabel = userKycDTO.getPhotoFileName(); 
     }
 
     public UserKycDTO getUserKycDTO() {
@@ -72,12 +79,24 @@ public class KycFormVM {
     }
 
     public void setGender(String gender) {
-    	System.out.println("Updating gender");
+    //	System.out.println("Updating gender");
         userKycDTO.setGender(gender);
     }
     
+    public String getOtpCode() {
+		return otpCode;
+	}
+
+	public void setOtpCode(String otpCode) {
+		this.otpCode = otpCode;
+	}
+	
+	public String getStatusMessage() {
+		return this.statusMessage;
+	}
+    
     public String getAddressProofLabel() {
-    		System.out.println("invoked " + userKycDTO.getAddressProofFileName());
+    		//System.out.println("invoked " + userKycDTO.getAddressProofFileName());
         if (userKycDTO.getAddressProofFileName() == null 
             || userKycDTO.getAddressProofFileName().isBlank()) {
             return "Upload address";
@@ -126,9 +145,8 @@ public class KycFormVM {
     public void uploadAddressProof(@org.zkoss.bind.annotation.BindingParam("event") UploadEvent event) {
         addressProofFile = event.getMedia().getByteData();
         addressProofLabel = event.getMedia().getName();
-        userKycDTO.setAddressProofFileName(addressProofLabel);
-         
-        System.out.println(addressProofLabel);
+        userKycDTO.setAddressProofFileName(addressProofLabel);      
+        
     }
 
     @Command
@@ -136,8 +154,7 @@ public class KycFormVM {
     public void uploadPhoto(@org.zkoss.bind.annotation.BindingParam("event") UploadEvent event) {
         photoFile = event.getMedia().getByteData();
         photoLabel = event.getMedia().getName();
-        userKycDTO.setPhotoFileName(photoLabel);
-        System.out.println(photoLabel);
+        userKycDTO.setPhotoFileName(photoLabel);     
     }
 
     // --------------------------
@@ -153,15 +170,11 @@ public class KycFormVM {
         }
 
         // Map DTO back to entity
-        userDetails = mapDTOToEntity(userKycDTO, userDetails);
-        System.out.println("submitting " + userDetails);
-
-        boolean updated = userDetailsService.updateKyc(userDetails);
-        if (updated) {
-            NotificationUtil.showInstant("info", "KYC submitted successfully!");
-        } else {
-            NotificationUtil.showInstant("error", "Failed to save KYC details!");
-        }
+        userDetails = mapDTOToEntity(userKycDTO, userDetails);       
+        System.out.println("submitting-1 " + userDetails);
+        
+//        OTP verification before submitting kyc        
+        sendOtp();      
     }
 
     // --------------------------
@@ -181,6 +194,7 @@ public class KycFormVM {
         if (entity.getGender() != null) {
             dto.setGender(entity.getGender());
         }
+        
         dto.setAadhaarNumber(entity.getAadhaarMasked());
         dto.setPanNumber(entity.getPanMasked());
         dto.setCountry(entity.getCountry());
@@ -257,6 +271,23 @@ public class KycFormVM {
             return "Pincode must be 6 digits";
 
         return null;
+    }    
+    
+    /*
+     * OTP authentication 
+     */
+    public void sendOtp() {
+        try {
+		otpService.generateAndSendOtp("nayankm99@gmail.com");
+		 
+        Sessions.getCurrent().setAttribute("userDetails", userDetails);
+        Sessions.getCurrent().setAttribute("otpService", otpService);
+
+        Include inc = (Include) Sessions.getCurrent().getAttribute("main_content_sec");
+        inc.setSrc("/auth/otpAuthentication.zul");
+        }catch (MessagingException e) {
+			e.printStackTrace();
+		}
     }
 
 }

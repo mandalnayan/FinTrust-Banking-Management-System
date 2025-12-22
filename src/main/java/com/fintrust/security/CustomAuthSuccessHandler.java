@@ -39,6 +39,7 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler {
 	        httpSession.setAttribute("user_id", user.getId());
 	        httpSession.setAttribute("admin_user_id", user.getId());
 	        httpSession.setAttribute("user_name", user.getFullName());
+	        httpSession.setAttribute("user_email", user.getEmail());
 	        
 	    }
 
