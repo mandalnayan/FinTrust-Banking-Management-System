@@ -14,10 +14,16 @@
 	<addon-uri>/WEB-INF/lang-addon.xml</addon-uri>
 	</language-config>
 	
-	<!-- ========== Restrict file size ===========  -->
-	   <library-property>
-        <name>upload.max.file.size</name>
-        <value>5242880</value> <!-- 5 MB -->
+    <!-- Photo max size: 50 KB  51200 -->
+    <library-property>
+        <name>upload.photo.max.size</name>
+        <value>51200</value>
+    </library-property>
+
+    <!-- Address proof max size: 5 MB  5242880 -->
+    <library-property>
+        <name>upload.address.max.size</name>
+        <value>5242880</value>
     </library-property>
 	
 </zk>

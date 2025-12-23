@@ -83,7 +83,7 @@
                         <label value="Recent Transactions" sclass="section-title"/>
 
                         <grid model="@load(vm.recentTransactions)" 
-                              sclass="transactions-grid" mold="paging" pageSize="1">
+                              sclass="transactions-grid" mold="paging" pageSize="1" emptyMessage="No transaction done">
 
                             <columns>
                                 <column label="Date"/>

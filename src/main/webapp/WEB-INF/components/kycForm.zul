@@ -135,7 +135,7 @@
 						</vlayout>
 						<vlayout hflex="1">
 							<label value="Photo" />
-							<fileupload label="@bind(vm.photoLabel)"
+							<fileupload label="@bind(vm.photoLabel)" 
 								onUpload="@command('uploadPhoto', event=event)" />
 						</vlayout>
 					</hbox>
