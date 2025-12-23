@@ -20,6 +20,8 @@
 <!-- account forms -->
 <?link rel="stylesheet" type="text/css" href="/resources/css/openAccount.css"?>
 
+<!-- OTP authentication page -->
+<?link rel="stylesheet" type="text/css" href="/resources/css/auth-common.css"?>
 
 <!-- Before loading page it ensuer page should not render -->
 <?init class = "com.fintrust.security.AuthenticationController" ?>

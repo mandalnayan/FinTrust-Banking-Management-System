@@ -278,7 +278,7 @@ public class KycFormVM {
      */
     public void sendOtp() {
         try {
-		otpService.generateAndSendOtp("nayankm99@gmail.com");
+		otpService.generateAndSendOtp(user.getEmail());
 		 
         Sessions.getCurrent().setAttribute("userDetails", userDetails);
         Sessions.getCurrent().setAttribute("otpService", otpService);

@@ -26,14 +26,11 @@ public class cardStatusController  extends SelectorComposer<Window>{
 		long atmNumber = (Long) Long.parseLong(atmCardNumber);
 		String sql="select * from card_request where atm_card_number =?" ;         
 		PreparedStatement ptsm=connection.prepareStatement(sql);
-		ptsm.setLong(1, atmNumber);
-		
-		
-		
+		ptsm.setLong(1, atmNumber);	
+				
 		ResultSet rs=ptsm.executeQuery();
 		while(rs.next())
-		{
-			
+		{			
 		   lblCardNo.setValue(atmCardNumber);
 		   lblType.setValue("Debit Card");
 		   lblMaxLimit.setValue("50000");         //Add a column in Table for this max value 

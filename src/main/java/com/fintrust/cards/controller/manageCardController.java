@@ -134,7 +134,6 @@ public class manageCardController extends SelectorComposer<Window> {
     	
     	System.out.println(isCreated);
     
-    }
-  
+    }  
     
       }

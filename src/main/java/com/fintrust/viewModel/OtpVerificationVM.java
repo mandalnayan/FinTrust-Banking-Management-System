@@ -33,7 +33,7 @@ public class OtpVerificationVM {
 	@NotifyChange({ "statusMessage", "success" })
 	public void verifyOtp() {
 		
-		if (otpService.verifyOtp("nayankm99@gmail.com", otpCode)) {		
+		if (otpService.verifyOtp(userDetails.getUser().getEmail(), otpCode)) {		
 	        System.out.println("submitting-1 " + userDetails);	        
 
 			statusMessage = "Verification successful!";			
@@ -56,7 +56,6 @@ public class OtpVerificationVM {
         try {
 			otpService.generateAndSendOtp(userDetails.getUser().getEmail());
 		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }

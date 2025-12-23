@@ -2,22 +2,17 @@
 
 <!--  It will ensure page will render after sending otp-->
 
-<?link rel="stylesheet" type="text/css" href="/resources/css/auth-common.css"?>
-
 <zk xmlns:h="xhtml">
 
-<window viewModel="@id('vm') @init('com.fintrust.viewModel.OtpVerificationVM')">
-
-    <div sclass="login-wrapper" width="90%">
+<window viewModel="@id('vm') @init('com.fintrust.viewModel.OtpVerificationVM')">   
         
-       <!-- RIGHT PANEL -->
-        <div class="login-right">
+      
+            <vbox spacing="15px" hflex="1" pack="center" align="center" sclass="login-form" style="margin: auto;">
 
             <label value="OTP Verification" class="login-title"/>
             <label value="Enter the 6-digit OTP sent to your registered email/phone" 
                    class="login-subtitle"/>
 
-            <vlayout spacing="15px" width="100%" sclass="login-form">
 
                 <!-- OTP INPUT -->
                 <textbox id="otp" 
@@ -39,10 +34,8 @@
                 </hlayout>
  			<label value="@bind(vm.statusMessage)" style="color:blue"/>
 
-            </vlayout>
+            </vbox>
 
-        </div>
 
-    </div>
 </window>
 </zk>
