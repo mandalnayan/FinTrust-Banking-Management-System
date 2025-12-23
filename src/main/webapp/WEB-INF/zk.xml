@@ -13,4 +13,11 @@
 	<language-config>
 	<addon-uri>/WEB-INF/lang-addon.xml</addon-uri>
 	</language-config>
+	
+	<!-- ========== Restrict file size ===========  -->
+	   <library-property>
+        <name>upload.max.file.size</name>
+        <value>5242880</value> <!-- 5 MB -->
+    </library-property>
+	
 </zk>

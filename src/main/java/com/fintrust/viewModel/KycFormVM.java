@@ -11,10 +11,13 @@ import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.lang.Library;
+import org.zkoss.util.media.Media;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zul.Include;
@@ -143,7 +146,12 @@ public class KycFormVM {
     @Command
     @NotifyChange("*")
     public void uploadAddressProof(@org.zkoss.bind.annotation.BindingParam("event") UploadEvent event) {
-        addressProofFile = event.getMedia().getByteData();
+    	 Media media = event.getMedia();
+    	 addressProofFile = media.getByteData();
+         photoLabel = media.getName();
+         String type = media.getContentType();
+         long size = photoFile.length;
+    	addressProofFile = event.getMedia().getByteData();
         addressProofLabel = event.getMedia().getName();
         userKycDTO.setAddressProofFileName(addressProofLabel);      
         
@@ -152,8 +160,21 @@ public class KycFormVM {
     @Command
     @NotifyChange("*")
     public void uploadPhoto(@org.zkoss.bind.annotation.BindingParam("event") UploadEvent event) {
-        photoFile = event.getMedia().getByteData();
-        photoLabel = event.getMedia().getName();
+        Media media = event.getMedia();
+    	photoFile = media.getByteData();
+        photoLabel = media.getName();
+        String type = media.getContentType();
+        long size = photoFile.length;
+        
+        long maxSize = Long.parseLong(
+                Library.getProperty("upload.max.file.size")
+        );
+
+        if (size > maxSize) {
+            NotificationUtil.showInstant("warning", "File size exceeds allowed limit. maximum limit 5MB");
+        }        	
+        	
+        NotificationUtil.showInstant("warning", "size " + photoFile.length + " type " + event.getMedia().getFormat());
         userKycDTO.setPhotoFileName(photoLabel);     
     }
 
@@ -269,6 +290,8 @@ public class KycFormVM {
 
         if (dto.getPincode() == null || !dto.getPincode().matches("^[0-9]{6}$"))
             return "Pincode must be 6 digits";
+        if (addressProofLabel == null ) return "address proof is required";        
+        if (photoLabel == null) return "Photo must be required";
 
         return null;
     }    
