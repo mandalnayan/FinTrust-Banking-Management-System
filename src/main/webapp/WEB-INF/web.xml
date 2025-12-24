@@ -13,13 +13,11 @@
 	</listener>
 
 	<!-- Loads the Spring application context configuration -->
-<listener>
-    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-</listener>
-<!-- <context-param>
-    <param-name>contextConfigLocation</param-name>
-    <param-value>com.fintrust.config</param-value>
-</context-param> -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<!-- <context-param> <param-name>contextConfigLocation</param-name> <param-value>com.fintrust.config</param-value> 
+		</context-param> -->
 
 	<!-- For using web scoped bean -->
 	<listener>
