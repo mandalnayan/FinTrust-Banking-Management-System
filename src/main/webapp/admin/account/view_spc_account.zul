@@ -52,7 +52,7 @@
 <hbox width="100%" height="100%" align="center" pack="center" sclass="outer-bg" style=" background-color: #003366;">
 
     <!-- KEEP YOUR MVC CONTROLLER -->
-    <window border="none" apply="com.fintrust.controller.SingleAccountDetails"
+    <window border="none" apply="com.fintrust.admin.controller.SingleAccountDetails"
             sclass="account-box">
 
         <!-- Header -->

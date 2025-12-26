@@ -83,11 +83,12 @@ public class AccountUpdateRequestDao {
 	}
 	
 	public Boolean isRequestExists(Long account_number) {
-	    String sql = "SELECT * FROM account_update_request WHERE account_number = ? ;";
+	    String sql = "SELECT * FROM account_update_request WHERE account_number = ? and status=?;";
 
 	    try (Connection conn = DBConnection.getConnection();
 	         PreparedStatement pstmt = conn.prepareStatement(sql);){
 	    	 pstmt.setLong(1, account_number);
+	    	 pstmt.setString(2, "PENDING");
 	    	
 	         ResultSet rs = pstmt.executeQuery(); 
 

@@ -103,6 +103,10 @@ public class UpdateAccountRequest extends SelectorComposer<Component> {
 			inc.setSrc("/WEB-INF/components/view_all_account.zul");
 		} else {
 			NotificationUtil.showInstant("warning", "Requested is already submitted. Please check status");
+			
+			Component root = getSelf();
+			Include inc = (Include) root.getPage().getFellow("main_content_sec");
+			inc.setSrc("/WEB-INF/components/view_all_account.zul");
 		}
 	}
 

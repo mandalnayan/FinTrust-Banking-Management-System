@@ -63,7 +63,7 @@ public class NomineeDAO {
 			ResultSet rs = statement.executeQuery();
 			if(rs.next()) {
 				System.out.println("Nominee already present in db");
-				return rs.getLong("id");
+				return rs.getLong("nominee_id");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

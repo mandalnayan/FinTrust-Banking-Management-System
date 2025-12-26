@@ -64,7 +64,6 @@ public class EmployeeApprovalController extends SelectorComposer<Component> {
         dao.approveRequest(req.getRequestId(), currentEmployeeId);
         loadPendingRequests();
         NotificationUtil.showInstant("info", "Request approved successfully!");
-      
     }
 
     @Listen("onClick = #rejectBtn")

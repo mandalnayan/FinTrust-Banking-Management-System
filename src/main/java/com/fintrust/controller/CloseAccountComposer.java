@@ -48,13 +48,23 @@ public class CloseAccountComposer extends SelectorComposer<Component>{
 		
 		if(!confirmClose.isChecked()) {
 			NotificationUtil.showInstant("warning", "Please confirm first!");
-
 			return;
 		}
 		
 		if(closeRequetService.saveReq(accReq)) {
 			NotificationUtil.showInstant("info", "Request send Successfully for closing the account");
+			
+			Component root = getSelf();
+			Include inc = (Include) root.getPage().getFellow("main_content_sec");
+			inc.setSrc("/WEB-INF/components/view_all_account.zul");
 		} 
+		else {
+			NotificationUtil.showInstant("warning", "Request is already submitted for closing the account");
+			
+			Component root = getSelf();
+			Include inc = (Include) root.getPage().getFellow("main_content_sec");
+			inc.setSrc("/WEB-INF/components/view_all_account.zul");
+		}
 	}
 	
 	@Listen("onClick=#btnReset")

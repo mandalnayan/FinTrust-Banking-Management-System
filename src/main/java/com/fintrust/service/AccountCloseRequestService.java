@@ -19,8 +19,6 @@ public class AccountCloseRequestService {
 			System.out.println("DB error");
 		} else if(!isExist) {
 			return closeReqDao.saveRequest(req);
-		} else {
-			Messagebox.show("You have already requested!!");
 		}
 		return false;
 		

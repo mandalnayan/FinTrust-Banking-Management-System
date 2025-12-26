@@ -30,7 +30,7 @@ public class AdminDashboardController extends SelectorComposer<Component>{
     
     @Wire Include main_content_sec; 
     
-    @Wire Toolbarbutton userdashboard, users, accounts, closeAccount, cards,profile,updateAccount;
+    @Wire Toolbarbutton admindashboard, users, accounts, closeAccount, cards,profile,updateAccount;
     
     private List<Include> includes = new ArrayList<>();
     
@@ -38,37 +38,32 @@ public class AdminDashboardController extends SelectorComposer<Component>{
     public void doAfterCompose(Component comp) throws Exception {
     	super.doAfterCompose(comp);
     	Sessions.getCurrent().setAttribute("main_content_sec", main_content_sec);
-    }   
+    } 
+    
+    @Listen("onClick=#users")
+    public void viewUsers() {
+ 	   main_content_sec.setSrc("/admin/customerDetails_copy.zul");
+    }
+    
+    @Listen("onClick=#admindashboard")
+    public void adminDashboard() {
+ 	   main_content_sec.setSrc("/admin/dashboard.zul");
+    }
     
     @Listen("onClick=#accounts")
     public void viewAccount() {
  	   main_content_sec.setSrc("/admin/account/view_all_account.zul");
- 	   updateAccount.addSclass("active"); 
- 	   userdashboard.removeSclass("active");
- 	   users.removeSclass("active"); 
- 	   profile.removeSclass("active");
- 	   accounts.removeSclass("active");
     }
    
-   @Listen("onClick=#updateAccount")
-   public void updateAccount() {
+    @Listen("onClick=#updateAccount")
+    public void updateAccount() {
 	   main_content_sec.setSrc("/admin/account/employee_requests_list.zul");
-	   updateAccount.addSclass("active"); 
-	   userdashboard.removeSclass("active");
-	   users.removeSclass("active"); 
-	   profile.removeSclass("active");
-	   accounts.removeSclass("active");
-   }
+    }
    
-   @Listen("onClick=#closeAccount")
-   public void closeAccount() {
-	   main_content_sec.setSrc("/admin/account/close_account_customer_list.zul");
-	   updateAccount.addSclass("active"); 
-	   userdashboard.removeSclass("active");
-	   users.removeSclass("active"); 
-	   profile.removeSclass("active");
-	   accounts.removeSclass("active");
-   }
+    @Listen("onClick=#closeAccount")
+    public void closeAccount() {
+	   main_content_sec.setSrc("/admin/account/close_account_customer_list.zul"); 
+    }
    
     // getters for data binding if you bind via MVVM (optional)   
     public int getPendingCount() { return pendingCount; }
