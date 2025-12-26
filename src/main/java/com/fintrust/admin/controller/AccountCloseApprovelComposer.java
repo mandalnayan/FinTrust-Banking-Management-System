@@ -16,6 +16,7 @@ import org.zkoss.zul.Messagebox;
 
 import com.fintrust.model.AccountCloseRequest;
 import com.fintrust.service.AccountServiceImpl;
+import com.fintrust.service.EmailService;
 import com.fintrust.util.NotificationUtil;
 import com.fintrust.dao.impl.AccountCloseRequestDao;
 
@@ -70,25 +71,11 @@ public class AccountCloseApprovelComposer extends SelectorComposer<Component>{
 		
 		if(new AccountServiceImpl().checkBalance(req.getAccountNo()) > 0) {
 			NotificationUtil.showInstant("warning", "First of all withdrawal your balance then do request for account closing");
-		
-//			EmailService email = new EmailService();
-//		        email.sendEmail(
-//		            "hk5511073@gmail.com",
-//		            "Update regarding Account Closing request",
-//		            "First of all withdrawal your balance then do request for account closing"
-//		    );
 		    return;
 		}
 		
         accountCloseDao.approveRequest(req.getRequestId(), currentEmployeeId, "");
-      
         loadPendingRequests();
-//        EmailService email = new EmailService();
-//        email.sendEmail(
-//            "hk5511073@gmail.com",
-//            "Account Update Approvel",
-//            "Your request has been approve."
-//        );
 	}
 	
 	@Listen("onClick=#rejectBtn")

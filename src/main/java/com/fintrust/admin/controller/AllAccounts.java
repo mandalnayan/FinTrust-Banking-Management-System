@@ -5,7 +5,7 @@ import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.*;
 import org.zkoss.zul.*;
 
-import com.fintrust.model_copy.Account;
+import com.fintrust.model.Account;
 import com.fintrust.service.AccountServiceImpl;
 import com.fintrust.service.NomineeServiceImp;
 
@@ -34,16 +34,16 @@ public class AllAccounts extends SelectorComposer<Window> {
 
     /** Load all accounts initially **/
     private void loadAccounts() {
-        allAccounts = acconntService.listAllAccounts();
+        allAccounts = acconntService.getAllAccounts();
         renderAccountList(allAccounts);
     }
     
-    private void renderAccountList(List<Account> accounts) {
+    private void renderAccountList(List<Account> allAccounts2) {
         accountListbox.getItems().clear();
-        for (Account acc : accounts) {
+        for (com.fintrust.model.Account acc : allAccounts2) {
             Listitem item = new Listitem();
-            item.appendChild(new Listcell(acc.getAccount_no()+""));
-            item.appendChild(new Listcell(acc.getAccount_type().name()));
+            item.appendChild(new Listcell(acc.getAccountNumber()+""));
+            item.appendChild(new Listcell(acc.getAccountType().name()));
             item.appendChild(new Listcell(acc.getBalance()+""));
             item.appendChild(new Listcell(acc.getAccount_status().name()));
 
@@ -68,18 +68,19 @@ public class AllAccounts extends SelectorComposer<Window> {
             return;
         }
 
-        List<Account> filtered = allAccounts.stream()
-                .filter(acc -> (acc.getAccount_no()+"").contains(searchText))
+        List<com.fintrust.model.Account> filtered = allAccounts.stream()
+                .filter(acc -> (acc.getAccountNumber()+"").contains(searchText))
                 .collect(Collectors.toList());
 
         renderAccountList(filtered);
     }
 
-    private void openAccountDetail(Account acc) {
+    private void openAccountDetail(com.fintrust.model.Account acc) {
         // Store selected account number in session
-        Executions.getCurrent().getSession().setAttribute("selected_account_no", acc.getAccount_no());
+        Executions.getCurrent().getSession().setAttribute("selected_account_no", acc.getAccountNumber());
         // Redirect to details page
-        Executions.sendRedirect("view_spc_account.zul");
+        Include centerArea = (Include) getPage().getFellow("main_content_sec");
+        centerArea.setSrc("/admin/account/view_spc_account.zul");
     }
 
     @Listen("onClick = #backBtn")

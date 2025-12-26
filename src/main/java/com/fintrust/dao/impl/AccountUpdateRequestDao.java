@@ -14,6 +14,7 @@ import com.fintrust.dao.impl.BranchDao;
 import com.fintrust.db.DBConnection;
 import com.fintrust.model.AccountUpdateRequest;
 import com.fintrust.model.Branch;
+import com.fintrust.service.EmailService;
 
 public class AccountUpdateRequestDao {
 	
@@ -131,7 +132,7 @@ public class AccountUpdateRequestDao {
 	}
 
 
-	public void approveRequest(long reqId, long empId) {
+	public void approveRequest(long reqId, long empId) throws Exception {
 	    String fetchSql = "SELECT * FROM account_update_request WHERE request_id = ?";
 	    String updateAccSql = "UPDATE accounts SET account_type = ?, branch_id = ?, mode_of_operation = ? WHERE account_number = ?";
 	    String updateReqSql = "UPDATE account_update_request SET status = 'APPROVED', reviewed_by = ?, review_date = NOW() WHERE request_id = ?";
@@ -173,7 +174,7 @@ public class AccountUpdateRequestDao {
 
 	        conn.commit(); // all good — commit transaction
 	        Messagebox.show("Request approved successfully!", "Success", Messagebox.OK, Messagebox.INFORMATION);
-
+	        
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	        Messagebox.show("Error while approving request:\n" + e.getMessage(),
@@ -188,7 +189,7 @@ public class AccountUpdateRequestDao {
 	    }
 	}
 
-	public void rejectRequest(long reqId, long empId) {
+	public void rejectRequest(long reqId, long empId) throws Exception {
 	    String sql = "UPDATE account_update_request SET status = 'REJECTED', reviewed_by = ?, review_date = NOW() " +
 	                 "WHERE request_id = ?";
 

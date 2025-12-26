@@ -21,7 +21,7 @@
 
 <zk xmlns:h="xhtml">
   <!-- Use borderlayout for predictable ZK structure -->
-  <borderlayout  sclass="dashboard-window" >
+  <borderlayout  sclass="dashboard-window" apply="com.fintrust.admin.controller.AdminDashboardController">
 
     <!-- NORTH: Top header (compact) -->
   <north >    
@@ -40,12 +40,10 @@
         <vbox sclass="sidebar-menu" vflex="1" spacing="6px" >
           <toolbarbutton label="Dashboard" sclass="menu-item active" id = "userdashboard"/>
           <toolbarbutton label="Users" sclass="menu-item" id = "users" onClick='Executions.sendRedirect("/customerDetails.zul")'/>
-                   <toolbarbutton label="View Accounts" sclass="menu-item" id = "accounts" onClick='Executions.sendRedirect("/admin/account/view_all_account.zul")'/> 
-
-          <toolbarbutton label="Update Request" sclass="menu-item" id = "transactions" onClick='Executions.sendRedirect("/admin/account/employee_requests_list.zul")'/> 
-              <toolbarbutton label="Close Request" sclass="menu-item" id = "closeAccount" onClick='Executions.sendRedirect("/admin/account/close_account_customer_list.zul")'/>
+          <toolbarbutton label="View Accounts" sclass="menu-item" id = "accounts"/> 
+          <toolbarbutton label="Update Request" sclass="menu-item" id = "updateAccount"/> 
+          <toolbarbutton label="Close Request" sclass="menu-item" id = "closeAccount"/>
           <toolbarbutton label="Cards request" sclass="menu-item" id = "cards" disabled="false"/>
-          
           <toolbarbutton label="Admin Profile" sclass="menu-item" id = "profile" disabled="true"/>
         </vbox>
         
@@ -69,6 +67,12 @@
     <!-- CENTER: Main content area -->
    
     <center sclass = "zero-padding">
+    
+    	<div zclass="no-defaultCSS"
+				style="height:100%; width:100%;">
+				<include id="main_content_sec"
+					src="/WEB-INF/components/dashboard.zul" vflex="1" hflex="1" />
+		</div>
     <!-- Admin dashboard content -->
     <!-- <h:div >
      <include id = "userdashboard_sec" src="dashboard.zul" visible="true"/> 

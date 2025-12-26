@@ -62,6 +62,6 @@ public class SingleAccountDetails extends SelectorComposer<Window> {
         //Executions.sendRedirect("/user/userDashboard.zul");
       	Component root = getSelf();
 		Include inc = (Include) root.getPage().getFellow("main_content_sec");
-		inc.setSrc("/WEB-INF/components/view_all_account.zul");
+		inc.setSrc("/admin/account/view_all_account.zul");
     }
 }

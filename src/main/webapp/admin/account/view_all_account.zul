@@ -3,8 +3,8 @@
 
 <style>
     .container {
-        width: 95%;
-        max-width: 900px;
+        min-width: 40%;
+        max-width: 75%;
         margin: 30px auto;
         background: #fff;
         padding: 25px;
@@ -52,9 +52,9 @@
             </listhead>
         </listbox>
 
-        <hbox pack="center" style="margin-top:15px;">
+       <!--  <hbox pack="center" style="margin-top:15px;">
             <button id="backBtn" label="Back to Dashboard" sclass="btn"/>
-        </hbox>
+        </hbox> -->
     </vlayout>
 </window>
 </hbox>
