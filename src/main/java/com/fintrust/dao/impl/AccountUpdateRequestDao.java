@@ -135,7 +135,7 @@ public class AccountUpdateRequestDao {
 
 	public void approveRequest(long reqId, long empId) throws Exception {
 	    String fetchSql = "SELECT * FROM account_update_request WHERE request_id = ?";
-	    String updateAccSql = "UPDATE accounts SET account_type = ?, branch_id = ?, mode_of_operation = ? WHERE account_number = ?";
+	    String updateAccSql = "UPDATE accounts SET account_type = ?, branch_id = ?, account_ownership_type = ? WHERE account_number = ?";
 	    String updateReqSql = "UPDATE account_update_request SET status = 'APPROVED', reviewed_by = ?, review_date = NOW() WHERE request_id = ?";
 
 	    try (Connection conn = DBConnection.getConnection()) {

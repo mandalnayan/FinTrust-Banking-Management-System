@@ -57,7 +57,7 @@ public class AdminDashboardController extends SelectorComposer<Component>{
    
     @Listen("onClick=#updateAccount")
     public void updateAccount() {
-	   main_content_sec.setSrc("/admin/account/employee_requests_list.zul");
+	   main_content_sec.setSrc("/admin/account/update_account_customer.zul");
     }
    
     @Listen("onClick=#closeAccount")
