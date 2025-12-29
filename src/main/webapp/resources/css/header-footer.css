@@ -88,15 +88,24 @@ html, body {
   font-size: 20px;
   cursor: pointer;
   padding: 6px 10px;
-  position: relative;
+   position: relative; 
 }
+
+.icon-tooltip {
+    padding: 6px 10px;
+    color: #ffffff;    
+    font-size: 12px;
+    box-shadow: 0 4px 10px rgba(229,215,215,0.25);
+    border: none !important;
+}
+
 
 .icon-btn:hover {
   color: #ffd700;
 }
 
 /* Notification badge */
-.icon-btn::after {
+.ntf-icon-btn::after {
   content: "3"; /* change dynamically via Java if needed */
   position: absolute;
   top: 3px;

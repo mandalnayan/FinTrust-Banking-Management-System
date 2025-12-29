@@ -20,6 +20,7 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler {
 
 	private final UserService userService;
 
+	
 	public CustomAuthSuccessHandler(UserService userService) {
 		this.userService = userService;
 	}
@@ -28,11 +29,11 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler {
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 	                                    Authentication authentication) throws IOException, ServletException {
 
-	    System.out.println("Successfully login");
+	    System.out.println("Successfully login");	    
 
 	    String email = authentication.getName();
 	    User user = userService.getUserByUserName(email);
-
+	    System.out.println(user);
 	    if (user != null) {
 	        // Use HttpSession instead of ZK Session
 	        HttpSession httpSession = request.getSession(true);
@@ -45,8 +46,11 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler {
 
 	    // notification via ZK requires ZK session, so delay it to ZUL page
 	   //  NotificationUtil.push("info", "Welcome back " + user.getFullName());
-
-	    response.sendRedirect(request.getContextPath() + "/user/userDashboard.zul");
+	    if (user.getRole().name().equalsIgnoreCase("ROLE_USER")) {
+	    	response.sendRedirect(request.getContextPath() + "/user/userDashboard.zul");
+	    } else {
+	    	response.sendRedirect(request.getContextPath() + "/admin/adminDashboard.zul");
+	    }	    
 	}
 
 }

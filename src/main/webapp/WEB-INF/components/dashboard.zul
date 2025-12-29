@@ -102,7 +102,10 @@
 
                                         <label value="@load(each.txnType)"/>
                                         <label value="@load(each.mode)"/>
-                                        <label value="@load(each.amount)"/>
+                                       <label value="@load(vm.getFormattedAmount(each))"
+                                       	 style="@load(each.txnType eq 'credit' ? 'color:green' : 'color:red')"
+                                       />
+
                                           <label value="@load(each.accountNumber)"/>
                                           <label value="@load(each.counterparty_account_number)"/>
                                         <label value="@load(each.status)"/>

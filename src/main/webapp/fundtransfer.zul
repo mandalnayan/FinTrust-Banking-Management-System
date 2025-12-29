@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+
+    <window width="100%" height="100%" border="normal"
+            apply="com.fintrust.controller.FundTransferController"
+            sclass="main-window">
+
+        <vlayout vflex="1" hflex="1">
+
+            <!-- HEADER -->
+            <vbox sclass="header" align="center">
+                <label value="Fund Transfer Portal" sclass="title"/>
+                <label value="Secure and Fast Money Transfer" sclass="subtitle"/>
+            </vbox>
+
+            <separator bar="true"/>
+
+            <!-- FORM AREA -->
+            <div vflex="1" sclass="form-scroll">
+
+                <grid sclass="form-grid" width="100%">
+                    <!-- ZK NATIVE COLUMNS -->
+                    <columns>
+                        <column width="15%"/>
+                        <column width="35%"/>
+                        <column width="15%"/>
+                        <column width="35%"/>
+                    </columns>
+
+                    <rows>
+
+                        <row>
+                            <label value="From Account"/>
+                            <combobox id="accountsComboBox" width="100%"
+                                      autodrop="true"
+                                      placeholder="Select your account"/>
+
+                            <label value="Beneficiary"/>
+                            <combobox id="beneficiaryComboBox" width="100%"
+                                      autodrop="true"
+                                      placeholder="Select beneficiary"/>
+                        </row>
+
+                        <row>
+                            <label value="To Account"/>
+                            <longbox id="toAccountBox" width="100%"
+                                     placeholder="Enter account number"/>
+
+                            <label value="IFSC Code"/>
+                            <textbox id="ifsccodeBox" width="100%"
+                                     placeholder="Enter IFSC code"/>
+                        </row>
+
+                        <row>
+                            <label value="Amount"/>
+                            <doublebox id="amountBox" width="100%"
+                                       placeholder="Enter amount"/>
+
+                            <label value="Remarks"/>
+                            <textbox width="100%"
+                                     placeholder="Optional notes"
+                                     maxlength="100"/>
+                        </row>
+
+                    </rows>
+                </grid>
+            </div>
+
+            <!-- ACTION BAR -->
+            <div sclass="action-bar">
+                <button id="transferBtn" label="Transfer Funds" sclass="btn-primary"/>
+                <button id="clearBtn" label="Clear" sclass="btn-secondary"/>
+                <button label="Add Beneficiary" sclass="btn-outline"/>
+            </div>
+
+        </vlayout>
+    </window>
+
+    <!-- ===================== CSS ===================== -->
+    <style>
+        /* ROOT */
+        .main-window {
+            border-radius: 14px;
+            background: #ffffff;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        /* HEADER */
+        .header {
+            text-align: center;
+            padding: 20px 10px;
+        }
+
+        .title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        /* FORM AREA */
+        .form-scroll {
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        /* GRID */
+        .form-grid .z-row {
+            padding: 14px 0;
+        }
+
+        .form-grid .z-label {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        /* INPUTS */
+        .z-textbox,
+        .z-longbox,
+        .z-doublebox,
+        .z-combobox {
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            padding: 8px 10px;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .z-textbox:focus,
+        .z-longbox:focus,
+        .z-doublebox:focus,
+        .z-combobox:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+        }
+
+        /* ACTION BAR */
+        .action-bar {
+            position: sticky;
+            bottom: 0;
+            background: #ffffff;
+            padding: 16px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        /* BUTTONS */
+        .z-button {
+            border-radius: 8px;
+            padding: 10px 22px;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 1px solid #2563eb;
+            color: #2563eb;
+        }
+
+        /* MOBILE */
+        @media (max-width: 768px) {
+
+            .form-grid tr {
+                display: block;
+            }
+
+            .form-grid td {
+                display: block;
+                width: 100% !important;
+            }
+
+            .action-bar {
+                position: relative;
+                flex-direction: column;
+            }
+
+            .action-bar .z-button {
+                width: 100%;
+            }
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+
+</zk>

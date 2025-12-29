@@ -92,7 +92,7 @@ html, body {
 }
 
 .icon-btn:hover {
-  color: #ffd700;
+  color: #ffd700 !important;
 }
 
 /* Notification badge */

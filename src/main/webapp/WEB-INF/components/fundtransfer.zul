@@ -1,171 +1,132 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zk>
-   
 
-	<window width="100%" height="100%" border="normal"
-		apply="com.fintrust.controller.FundTransferController"
-		sclass="main-window">
+<window width="100%" height="100%" border="normal"
+    apply="com.fintrust.controller.FundTransferController"
+    sclass="main-window">
 
-		<!-- MAIN LAYOUT -->
-		<vlayout vflex="1" hflex="1" sclass="main-layout">
+    <vlayout vflex="1" hflex="1" sclass="main-layout">
 
-			<!-- HEADER -->
-			<vbox sclass="header" align="center" hflex="1">
-				<label value="Fund Transfer Portal" sclass="title" />
-				<label value="Secure and Fast Money Transfer"
-					sclass="subtitle" />
-			</vbox>
+        <!-- HEADER -->
+        <vbox sclass="header" align="center">
+            <label value="Fund Transfer Portal" sclass="title"/>
+            <label value="Secure and Fast Money Transfer" sclass="subtitle"/>
+        </vbox>
 
-			<!-- DIVIDER -->
-			<separator bar="true" />
+        <separator bar="true"/>
 
-			<!-- SCROLLABLE FORM AREA -->
-			<div vflex="1" sclass="form-scroll">
+        <!-- SCROLLABLE FORM AREA -->
+        <div vflex="1" sclass="form-scroll">
 
-				<grid sclass="form-grid responsive-grid" width="100%">
-					<rows>
+            <vlayout sclass="form-wrapper" width="100%" spacing="20px">
 
-						<row>
-							<label value="From Account" />
-							<combobox id="accountsComboBox" width="100%"
-								autodrop="true" placeholder="Select your account" />
-						</row>
+                <!-- First Row -->
+                <hbox spacing="20px" class="form-row">
+                    <vbox hflex="1">
+                        <label value="From Account"/>
+                        <combobox id="accountsComboBox" width="100%" autodrop="true"
+                                  placeholder="Select your account"/>
+                    </vbox>
 
-						<row>
-							<label value="Beneficiary" />
-							<combobox id="beneficiaryComboBox"
-								width="100%" autodrop="true" placeholder="Select beneficiary" />
-						</row>
+                    <vbox hflex="1">
+                        <label value="Beneficiary"/>
+                        <combobox id="beneficiaryComboBox" width="100%" autodrop="true"
+                                  placeholder="Select beneficiary"/>
+                    </vbox>
+                </hbox>
 
-						<row>
-							<label value="To Account" />
-							<longbox id="toAccountBox" width="100%"
-								placeholder="Enter account number" />
-						</row>
+                <!-- Second Row -->
+                <hbox spacing="20px" class="form-row">
+                    <vbox hflex="1">
+                        <label value="To Account"/>
+                        <longbox id="toAccountBox" width="100%" placeholder="Enter account number"/>
+                    </vbox>
 
-						<row>
-							<label value="IFSC Code" />
-							<textbox id="ifsccodeBox" width="100%"
-								placeholder="Enter IFSC code" />
-						</row>
+                    <vbox hflex="1">
+                        <label value="IFSC Code"/>
+                        <textbox id="ifsccodeBox" width="100%" placeholder="Enter IFSC code"/>
+                    </vbox>
+                </hbox>
 
-						<row>
-							<label value="Amount" />
-							<doublebox id="amountBox" width="100%"
-								placeholder="Enter amount" />
-						</row>
+                <!-- Third Row -->
+                <hbox spacing="20px" class="form-row">
+                    <vbox hflex="1">
+                        <label value="Amount"/>
+                        <doublebox id="amountBox" width="100%" placeholder="Enter amount"/>
+                    </vbox>
 
-						<row>
-							<label value="Remarks" />
-							<textbox width="100%"
-								placeholder="Optional notes" maxlength="100" />
-						</row>
+                    <vbox hflex="1">
+                        <label value="Remarks"/>
+                        <textbox width="100%" placeholder="Optional notes" maxlength="100"/>
+                    </vbox>
+                </hbox>
 
-					</rows>
-				</grid>
-			</div>
+            </vlayout>
+        </div>
 
-			<!-- STICKY ACTION BAR -->
-			<!-- STICKY ACTION BAR -->
-			<div sclass="action-bar">
-				<button id="transferBtn" label="Transfer Funds"
-					sclass="btn-primary" />
-				<button id="clearBtn" label="Clear"
-					sclass="btn-secondary" />
-				<button label="Add Beneficiary" sclass="btn-outline" />
-			</div>
+        <!-- ACTION BAR -->
+        <div sclass="action-bar">
+            <button id="transferBtn" label="Transfer Funds" sclass="btn-primary"/>
+            <button id="clearBtn" label="Clear" sclass="btn-secondary"/>
+            <button label="Add Beneficiary" sclass="btn-outline"/>
+        </div>
 
+    </vlayout>
+</window>
 
-		</vlayout>
-	</window>
+<style>
+/* ROOT WINDOW */
+.main-window {
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    font-family: 'Poppins', sans-serif;
+}
 
-	<!-- ===================== CSS ===================== -->
-	<style>
-		/* ROOT WINDOW */ .main-window { border-radius: 14px;
-		background: #ffffff; box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-		animation: fadeIn 0.6s ease-in-out; }
+/* HEADER */
+.header { text-align: center; padding: 20px 10px; }
+.title { font-size: 26px; font-weight: 700; color: #1e3a8a; }
+.subtitle { font-size: 14px; color: #6b7280; }
 
-		/* HEADER */ .header { text-align: center; padding: 20px 10px; }
+/* FORM SCROLL AREA */
+.form-scroll { padding: 20px; overflow-y: auto; }
+.form-wrapper .form-row { display:flex; gap:20px; }
 
-		.title { font-size: 26px; font-weight: 700; color: #1e3a8a;
-		animation: slideDown 0.5s ease; }
+/* INPUTS */
+.z-textbox, .z-longbox, .z-doublebox, .z-combobox {
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+   // padding: 8px 10px;
+    font-size: 14px;
+    width: 100%;
+}
+.z-textbox:focus, .z-longbox:focus, .z-doublebox:focus, .z-combobox:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
 
-		.subtitle { font-size: 14px; color: #6b7280; }
+/* ACTION BAR */
+.action-bar {
+    position: sticky;
+    bottom: 0;
+    background: #ffffff;
+    padding: 16px;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+.z-button { border-radius: 8px; padding: 10px 22px; font-weight: 600; }
+.btn-primary { background: linear-gradient(135deg,#1e3a8a,#2563eb); color:white; }
+.btn-secondary { background:#e5e7eb; color:#111827; }
+.btn-outline { background:white; border:1px solid #2563eb; color:#2563eb; }
 
-		/* FORM SCROLL AREA */ .form-scroll { padding: 20px; overflow-y:
-		auto; animation: fadeInUp 0.6s ease; }
-
-		.form-scroll::-webkit-scrollbar { width: 6px; }
-
-		.form-scroll::-webkit-scrollbar-thumb { background:
-		rgba(0,0,0,0.25); border-radius: 4px; }
-
-		/* GRID */ .form-grid .z-row { padding: 14px 0; }
-
-		.form-grid .z-label { font-weight: 600; color: #374151;
-		min-width: 130px; }
-
-		/* INPUTS */ .z-textbox, .z-longbox, .z-doublebox {
-		border-radius: 8px; border: 1px solid #d1d5db; padding: 8px
-		10px; transition: all 0.25s ease; font-size: 14px; }
-
-		.z-combobox:focus, .z-textbox:focus, .z-longbox:focus,
-		.z-doublebox:focus { border-color: #2563eb; box-shadow: 0 0 0
-		3px rgba(37,99,235,0.15); }
-
-		/* ACTION BAR (STICKY) */ /* ACTION BAR */ .action-bar {
-		position: sticky; bottom: 0; background: #ffffff; padding: 16px;
-		border-top: 1px solid #e5e7eb;
-
-		/* 🔥 FLEX LAYOUT */ display: flex; justify-content: center;
-		gap: 16px; }
-
-		/* BUTTONS */ .z-button { border-radius: 8px; padding: 10px
-		22px; font-weight: 600; font-size: 14px; transition: all 0.25s
-		ease; }
-
-		.btn-primary { background: linear-gradient(135deg, #1e3a8a,
-		#2563eb); color: white; }
-
-		.btn-secondary { background: #e5e7eb; color: #111827; }
-
-		.btn-outline { background: white; border: 1px solid #2563eb;
-		color: #2563eb; }
-
-		.z-button:hover { transform: translateY(-2px) scale(1.02);
-		box-shadow: 0 8px 20px rgba(0,0,0,0.18); }
-
-		/* RESPONSIVE */ @media (max-width: 768px) {
-		
-		.header { padding: 0px; }
-
-		/* Stack form rows */ .responsive-grid .z-row { display: flex;
-		flex-direction: column; gap: 6px; }
-
-		.form-grid .z-label { min-width: unset; }
-
- .action-bar {
-        position: relative !important; /* relative or static works */
-        flex-direction: column;
-        align-items: stretch;
-    }
-		.action-bar .z-button { width: 100%; } }
-
-
-		/* ANIMATIONS */ @keyframes fadeIn { from { opacity: 0; } to {
-		opacity: 1; } }
-
-		@keyframes fadeInUp { from { opacity: 0; transform:
-		translateY(15px); } to { opacity: 1; transform: translateY(0); }
-		}
-
-		@keyframes slideDown { from { opacity: 0; transform:
-		translateY(-10px); } to { opacity: 1; transform: translateY(0);
-		} }
-
-		@keyframes slideUp { from { opacity: 0; transform:
-		translateY(10px); } to { opacity: 1; transform: translateY(0); }
-		}
-	</style>
+/* MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+    .form-wrapper .form-row { flex-direction: column !important; }
+    .action-bar { flex-direction: column; align-items: stretch; }
+    .action-bar .z-button { width: 100%; }
+}
+</style>
 
 </zk>
