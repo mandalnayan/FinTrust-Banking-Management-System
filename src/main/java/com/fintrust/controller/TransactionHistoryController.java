@@ -69,7 +69,17 @@ public class TransactionHistoryController extends SelectorComposer<Component> {
             item.appendChild(new Listcell(String.valueOf(t.getTransactionId())));
             item.appendChild(new Listcell(String.valueOf(t.getAccountNumber())));
             item.appendChild(new Listcell(String.valueOf(t.getCounterparty_account_number())));
-            item.appendChild(new Listcell(String.format("%.2f", t.getAmount())));
+            String amountIcon = "+", amountColor = "green";
+            
+            if (t.getTxnType().equalsIgnoreCase("debit")) {
+            	amountIcon = "-";
+            	amountColor = "red";
+            }
+            
+            String amount = amountIcon + String.format("%.2f", t.getAmount()) + "₹"; 
+            Listcell amountLC = new Listcell(amount);
+            amountLC.setStyle("color:" + amountColor);
+            item.appendChild(amountLC);
             item.appendChild(new Listcell(t.getStatus()));
             item.appendChild(new Listcell(t.getCreatedAt().toString()));
 

@@ -10,7 +10,7 @@
 <?link rel="stylesheet" type="text/css" href="/resources/css/dashboard.css"?>
 <!-- Profile css -->
 <?link rel="stylesheet" type="text/css" href="/resources/css/profile.css"?>
-<!-- head footer csss -->
+<!-- head-footer css -->
 <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 <!-- Global css -->
 <?link rel="stylesheet" type="text/css" href="/resources/css/global.css"?>

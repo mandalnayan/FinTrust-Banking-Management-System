@@ -47,8 +47,7 @@ public class DBConnection {
         	logger.fatal("❌ JDBC Driver not found: {}", e);
         } catch (SQLException e) {
        // 	Clients.showNotification("❌ Database Connection Error:", Clients.NOTIFICATION_TYPE_ERROR, null, 100, 100, 2000);
-       //     System.err.println("❌ Database Connection Error: " + e.getMessage());
-            logger.fatal("❌ Database Connection Error: {}", e);
+        	logger.fatal("❌ Database Connection Error: {}", e);
         }
         return connection;
     }
