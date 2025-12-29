@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import com.fintrust.dao.impl.BranchDao;
 import com.fintrust.db.DBConnection;
 import com.fintrust.model.AccountUpdateRequest;
 import com.fintrust.model.Branch;
+import com.fintrust.model.CardRequest;
 
 public class AccountUpdateRequestDao {
 	
@@ -131,6 +133,10 @@ public class AccountUpdateRequestDao {
 	}
 
 
+	
+	
+	
+	
 	public void approveRequest(long reqId, long empId) {
 	    String fetchSql = "SELECT * FROM account_update_request WHERE request_id = ?";
 	    String updateAccSql = "UPDATE accounts SET account_type = ?, branch_id = ?, mode_of_operation = ? WHERE account_number = ?";
