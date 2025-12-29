@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,13 +15,17 @@ import com.fintrust.dao.impl.BranchDao;
 import com.fintrust.db.DBConnection;
 import com.fintrust.model.AccountUpdateRequest;
 import com.fintrust.model.Branch;
+
 import com.fintrust.service.EmailService;
 
+import com.fintrust.model.CardRequest;
+
 public class AccountUpdateRequestDao {
-	
+
 	public AccountUpdateRequestDao() {
 		createSchema();
 	}
+
 	public boolean createSchema() {
 		String query = """
 					CREATE TABLE IF NOT EXISTS account_update_request (
@@ -58,159 +63,157 @@ public class AccountUpdateRequestDao {
 	}
 
 	public boolean save(AccountUpdateRequest req) {
-	    String sql = "INSERT INTO account_update_request " +
-	                 "(account_number, new_account_type, new_branch_id, new_mode_of_operation, requested_by) " +
-	                 "VALUES (?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO account_update_request "
+				+ "(account_number, new_account_type, new_branch_id, new_mode_of_operation, requested_by) "
+				+ "VALUES (?, ?, ?, ?, ?)";
 
-	    try (Connection conn = DBConnection.getConnection();
-	         PreparedStatement ps = conn.prepareStatement(sql)) {
+		try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
-	        ps.setLong(1, req.getAccountNo());
-	        ps.setString(2, req.getNewAccountType());
-	        ps.setLong(3, req.getBranchId());
-	        ps.setString(4, req.getNewModeOfOperation());
-	        ps.setLong(5, req.getRequestedBy());
+			ps.setLong(1, req.getAccountNo());
+			ps.setString(2, req.getNewAccountType());
+			ps.setLong(3, req.getBranchId());
+			ps.setString(4, req.getNewModeOfOperation());
+			ps.setLong(5, req.getRequestedBy());
 
-	        if(ps.executeUpdate()>0) {
-	        	return true;
-	        }
+			if (ps.executeUpdate() > 0) {
+				return true;
+			}
 
-	    } catch (SQLException e) {
-	    	Messagebox.show("Error while saving account update request:\n" + e.getMessage());
-	        e.printStackTrace(); 
-	    }
-	    return false;
+		} catch (SQLException e) {
+			Messagebox.show("Error while saving account update request:\n" + e.getMessage());
+			e.printStackTrace();
+		}
+		return false;
 	}
-	
+
 	public Boolean isRequestExists(Long account_number) {
-	    String sql = "SELECT * FROM account_update_request WHERE account_number = ? and status=?;";
+		String sql = "SELECT * FROM account_update_request WHERE account_number = ? and status=?;";
 
-	    try (Connection conn = DBConnection.getConnection();
-	         PreparedStatement pstmt = conn.prepareStatement(sql);){
-	    	 pstmt.setLong(1, account_number);
-	    	 pstmt.setString(2, "PENDING");
-	    	
-	         ResultSet rs = pstmt.executeQuery(); 
+		try (Connection conn = DBConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
+			pstmt.setLong(1, account_number);
+			pstmt.setString(2, "PENDING");
 
-	         return rs.next();
+			ResultSet rs = pstmt.executeQuery();
 
-	    } catch (SQLException e) {
-	    	Messagebox.show("Error while fetching pending account update requests:\n" + e.getMessage());
-	        e.printStackTrace(); 
-	    }
-	    return null;
+			return rs.next();
+
+		} catch (SQLException e) {
+			Messagebox.show("Error while fetching pending account update requests:\n" + e.getMessage());
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public List<AccountUpdateRequest> getPendingRequests() {
-	    List<AccountUpdateRequest> list = new ArrayList<>();
-	    String sql = "SELECT * FROM account_update_request WHERE status = 'PENDING'";
+		List<AccountUpdateRequest> list = new ArrayList<>();
+		String sql = "SELECT * FROM account_update_request WHERE status = 'PENDING'";
 
-	    try (Connection conn = DBConnection.getConnection();
-	         Statement stmt = conn.createStatement();
-	         ResultSet rs = stmt.executeQuery(sql)) {
+		try (Connection conn = DBConnection.getConnection();
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(sql)) {
 
-	        while (rs.next()) {
-	            AccountUpdateRequest r = new AccountUpdateRequest();
-	            r.setRequestId(rs.getLong("request_id"));
-	            r.setAccountNo(rs.getLong("account_number"));
-	            r.setNewAccountType(rs.getString("new_account_type"));
-	            r.setBranchId(rs.getLong("new_branch_id"));
-	            r.setNewModeOfOperation(rs.getString("new_mode_of_operation"));
-	            r.setStatus(rs.getString("status"));
-	            r.setRequestedBy(rs.getLong("requested_by"));
-	            
-	            // Setting branch name by branch id
-	            Branch branch = new BranchDao().findById(r.getBranchId());
-	            r.setNewBranchName(branch.getBranchName());
-	            list.add(r);
-	        }
+			while (rs.next()) {
+				AccountUpdateRequest r = new AccountUpdateRequest();
+				r.setRequestId(rs.getLong("request_id"));
+				r.setAccountNo(rs.getLong("account_number"));
+				r.setNewAccountType(rs.getString("new_account_type"));
+				r.setBranchId(rs.getLong("new_branch_id"));
+				r.setNewModeOfOperation(rs.getString("new_mode_of_operation"));
+				r.setStatus(rs.getString("status"));
+				r.setRequestedBy(rs.getLong("requested_by"));
 
-	    } catch (SQLException e) {
-	    	Messagebox.show("Error while fetching pending account update requests:\n" + e.getMessage());
-	        e.printStackTrace(); 
-	    }
-	    return list;
+				// Setting branch name by branch id
+				Branch branch = new BranchDao().findById(r.getBranchId());
+				r.setNewBranchName(branch.getBranchName());
+				list.add(r);
+			}
+
+		} catch (SQLException e) {
+			Messagebox.show("Error while fetching pending account update requests:\n" + e.getMessage());
+			e.printStackTrace();
+		}
+		return list;
 	}
 
+	public void approveRequest(long reqId, long empId) {
 
-	public void approveRequest(long reqId, long empId) throws Exception {
-	    String fetchSql = "SELECT * FROM account_update_request WHERE request_id = ?";
-	    String updateAccSql = "UPDATE accounts SET account_type = ?, branch_id = ?, account_ownership_type = ? WHERE account_number = ?";
-	    String updateReqSql = "UPDATE account_update_request SET status = 'APPROVED', reviewed_by = ?, review_date = NOW() WHERE request_id = ?";
+		String fetchSql = "SELECT * FROM account_update_request WHERE request_id = ?";
+		String updateAccSql = "UPDATE accounts SET account_type = ?, branch_id = ?, account_ownership_type = ? WHERE account_number = ?";
+		String updateReqSql = "UPDATE account_update_request SET status = 'APPROVED', reviewed_by = ?, review_date = NOW() WHERE request_id = ?";
 
-	    try (Connection conn = DBConnection.getConnection()) {
-	        conn.setAutoCommit(false); // start transaction
+		try (Connection conn = DBConnection.getConnection()) {
+			conn.setAutoCommit(false); // start transaction
 
-	        // Step 1: Get request details
-	        try (PreparedStatement ps = conn.prepareStatement(fetchSql)) {
-	            ps.setLong(1, reqId);
-	            try (ResultSet rs = ps.executeQuery()) {
-	                if (rs.next()) {
-	                    long accNo = rs.getLong("account_number");
-	                    String type = rs.getString("new_account_type");
-	                    Long branchId = rs.getLong("new_branch_id");
-	                    String mode = rs.getString("new_mode_of_operation");
+			// Step 1: Get request details
+			try (PreparedStatement ps = conn.prepareStatement(fetchSql)) {
+				ps.setLong(1, reqId);
+				try (ResultSet rs = ps.executeQuery()) {
+					if (rs.next()) {
+						long accNo = rs.getLong("account_number");
+						String type = rs.getString("new_account_type");
+						Long branchId = rs.getLong("new_branch_id");
+						String mode = rs.getString("new_mode_of_operation");
 
-	                    // Step 2: Update account details
-	                    try (PreparedStatement upd = conn.prepareStatement(updateAccSql)) {
-	                        upd.setString(1, type);
-	                        upd.setLong(2, branchId);
-	                        upd.setString(3, mode);
-	                        upd.setLong(4, accNo);
-	                        upd.executeUpdate();
-	                    }
-	                } else {
-	                    Messagebox.show("Request not found for ID: " + reqId, "Error", Messagebox.OK, Messagebox.EXCLAMATION);
-	                    return;
-	                }
-	            }
-	        }
+						// Step 2: Update account details
+						try (PreparedStatement upd = conn.prepareStatement(updateAccSql)) {
+							upd.setString(1, type);
+							upd.setLong(2, branchId);
+							upd.setString(3, mode);
+							upd.setLong(4, accNo);
+							upd.executeUpdate();
+						}
+					} else {
+						Messagebox.show("Request not found for ID: " + reqId, "Error", Messagebox.OK,
+								Messagebox.EXCLAMATION);
+						return;
+					}
+				}
+			}
 
-	        // Step 3: Update request status
-	        try (PreparedStatement updReq = conn.prepareStatement(updateReqSql)) {
-	            updReq.setLong(1, empId);
-	            updReq.setLong(2, reqId);
-	            updReq.executeUpdate();
-	        }
+			// Step 3: Update request status
+			try (PreparedStatement updReq = conn.prepareStatement(updateReqSql)) {
+				updReq.setLong(1, empId);
+				updReq.setLong(2, reqId);
+				updReq.executeUpdate();
+			}
 
-	        conn.commit(); // all good — commit transaction
-	        Messagebox.show("Request approved successfully!", "Success", Messagebox.OK, Messagebox.INFORMATION);
-	        
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	        Messagebox.show("Error while approving request:\n" + e.getMessage(),
-	                        "Database Error", Messagebox.OK, Messagebox.ERROR);
-	        try {
-	            // attempt rollback
-	            Connection conn = DBConnection.getConnection();
-	            conn.rollback();
-	        } catch (SQLException ex) {
-	            ex.printStackTrace();
-	        }
-	    }
+			conn.commit(); // all good — commit transaction
+			Messagebox.show("Request approved successfully!", "Success", Messagebox.OK, Messagebox.INFORMATION);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			Messagebox.show("Error while approving request:\n" + e.getMessage(), "Database Error", Messagebox.OK,
+					Messagebox.ERROR);
+			try {
+				// attempt rollback
+				Connection conn = DBConnection.getConnection();
+				conn.rollback();
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
 	}
 
 	public void rejectRequest(long reqId, long empId) throws Exception {
-	    String sql = "UPDATE account_update_request SET status = 'REJECTED', reviewed_by = ?, review_date = NOW() " +
-	                 "WHERE request_id = ?";
+		String sql = "UPDATE account_update_request SET status = 'REJECTED', reviewed_by = ?, review_date = NOW() "
+				+ "WHERE request_id = ?";
 
-	    try (Connection conn = DBConnection.getConnection();
-	         PreparedStatement ps = conn.prepareStatement(sql)) {
+		try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
-	        ps.setLong(1, empId);
-	        ps.setLong(2, reqId);
-	        int rows = ps.executeUpdate();
+			ps.setLong(1, empId);
+			ps.setLong(2, reqId);
+			int rows = ps.executeUpdate();
 
-	        if (rows > 0) {
-	            Messagebox.show("Request rejected successfully.");
-	        } else {
-	            Messagebox.show("No request found with ID: " + reqId);
-	        }
+			if (rows > 0) {
+				Messagebox.show("Request rejected successfully.");
+			} else {
+				Messagebox.show("No request found with ID: " + reqId);
+			}
 
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	        Messagebox.show("Database Error while rejecting request:\n" + e.getMessage());
-	    }
+		} catch (SQLException e) {
+			e.printStackTrace();
+			Messagebox.show("Database Error while rejecting request:\n" + e.getMessage());
+		}
 	}
 
 }

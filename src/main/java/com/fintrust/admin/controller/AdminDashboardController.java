@@ -65,6 +65,11 @@ public class AdminDashboardController extends SelectorComposer<Component>{
 	   main_content_sec.setSrc("/admin/account/close_account_customer_list.zul"); 
     }
    
+    	@Listen("onClick=#cardRequest")
+    public void cardReqest() {
+	   main_content_sec.setSrc("/admin/adminCards.zul"); 
+    }
+   
     // getters for data binding if you bind via MVVM (optional)   
     public int getPendingCount() { return pendingCount; }
     public int getRewardPoints() { return rewardPoints; }
