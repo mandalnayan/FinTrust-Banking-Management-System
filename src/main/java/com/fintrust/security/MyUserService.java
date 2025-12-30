@@ -17,24 +17,42 @@ public class MyUserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username)
+            throws UsernameNotFoundException {
 
-    	System.out.println("Inside method " + username);
         User user = userService.getUserByUserName(username);
         if (user == null) {
-          	System.out.println("user not found");
-            throw new UsernameNotFoundException("User not found");
-        }
-        System.out.println("after method " + user);
-        String role = user.getRole().name();
-        if (!role.startsWith("ROLE_")) {
-            role = "ROLE_" + role;
-        }
-
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),        // MUST be BCrypt encrypted
-                AuthorityUtils.createAuthorityList("ROLE_USER")
-        );
+//      	System.out.println("user not found");
+        throw new UsernameNotFoundException("User not found");
     }
+               
+
+        return org.springframework.security.core.userdetails.User
+                .withUsername(user.getEmail())
+                .password(user.getPassword())
+                .authorities(user.getRole().name()) // ROLE_ADMIN / ROLE_USER
+                .build();
+    }
+    
+//    @Override
+//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//
+//    	System.out.println("Inside method " + username);
+//        User user = userService.getUserByUserName(username);
+//        if (user == null) {
+//          	System.out.println("user not found");
+//            throw new UsernameNotFoundException("User not found");
+//        }
+//        System.out.println("after method " + user);
+//        String role = user.getRole().name();
+//        if (!role.startsWith("ROLE_")) {
+//            role = "ROLE_" + role;
+//        }
+//
+//        return new org.springframework.security.core.userdetails.User(
+//                user.getEmail(),
+//                user.getPassword(),        // MUST be BCrypt encrypted
+//                AuthorityUtils.createAuthorityList("ROLE_USER")
+//        );
+//    }
 }

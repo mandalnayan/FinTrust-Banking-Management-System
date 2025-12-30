@@ -30,13 +30,15 @@
 
     <!-- Pages that do NOT require login -->
     <security:intercept-url pattern="/zkau/**" access="permitAll"/>
+    <security:intercept-url pattern="/admin/login.zul" access="permitAll"/> 
     <security:intercept-url pattern="/user/login.zul" access="permitAll"/> 
     <security:intercept-url pattern="/user/signup.zul" access="permitAll"/>   
-   <!--  <security:intercept-url pattern="/auth/**" access="permitAll"/>      -->   
     <security:intercept-url pattern="/home.zul" access="permitAll"/>
 
     <!-- Protected Pages -->
-    <security:intercept-url pattern="/user/**" access="hasRole('ROLE_USER')"/>
+    <security:intercept-url pattern="/user/**" access="hasRole('USER')"/>
+     <!-- Protected Pages -->
+    <security:intercept-url pattern="/admin/**" access="hasRole('ADMIN')"/>
 </security:http>
 
 

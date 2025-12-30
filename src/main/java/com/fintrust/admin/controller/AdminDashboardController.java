@@ -57,12 +57,17 @@ public class AdminDashboardController extends SelectorComposer<Component>{
    
     @Listen("onClick=#updateAccount")
     public void updateAccount() {
-	   main_content_sec.setSrc("/admin/account/employee_requests_list.zul");
+	   main_content_sec.setSrc("/admin/account/update_account_customer.zul");
     }
    
     @Listen("onClick=#closeAccount")
     public void closeAccount() {
 	   main_content_sec.setSrc("/admin/account/close_account_customer_list.zul"); 
+    }
+   
+    	@Listen("onClick=#cardRequest")
+    public void cardReqest() {
+	   main_content_sec.setSrc("/admin/adminCards.zul"); 
     }
    
     // getters for data binding if you bind via MVVM (optional)   

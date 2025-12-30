@@ -17,7 +17,7 @@
 <?link rel="stylesheet" type="text/css" href="/resources/css/style.css"?>
 
 <zk xmlns:h="xhtml">
-    <window border="none" sclass="login-window"  width = "80vw" style = "margin: 0px auto;" apply = "com.fintrust.admin.controller.AdminLoginController">
+    <window border="none" sclass="login-window"  width = "80vw" style = "margin: 0px auto;" >
         <div sclass="login-container"  width = "100%">  
 
             <!-- Left Section (Image / Banner) -->

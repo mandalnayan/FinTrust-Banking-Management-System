@@ -4,6 +4,8 @@ import java.sql.Connection;
 
 import org.zkoss.zk.ui.Sessions;
 
+import com.fintrust.dao.AccountDAO;
+import com.fintrust.dao.impl.AccountDAOImpl;
 import com.fintrust.dao.impl.FundTransferDAO;
 import com.fintrust.db.DBConnection;
 import com.fintrust.model.Transaction.TransactionStatus;
@@ -11,8 +13,9 @@ import com.fintrust.util.NotificationUtil;
 
 public class FundTransferService {
 
-	Connection connection = DBConnection.getConnection();
+	private Connection connection = DBConnection.getConnection();
 	private final FundTransferDAO dao = new FundTransferDAO(connection);
+	private final AccountDAO accountDao = new AccountDAOImpl();
 
 	public boolean transferFunds(Long fromAcc, Long toAcc, String ifscCode, double amount) {
 
@@ -34,11 +37,14 @@ public class FundTransferService {
 			dao.debit(fromAcc, amount);
 			dao.credit(toAcc, amount);
 
-			dao.insertTransaction(userId, fromAcc, toAcc, amount, "credit",
-					TransactionStatus.COMPLETED.name().toLowerCase());
-			
 			dao.insertTransaction(userId, fromAcc, toAcc, amount, "debit",
 					TransactionStatus.COMPLETED.name().toLowerCase());
+			
+//			Get user id of other person
+			Long toUserId = accountDao.findUserIdByAccountNo(toAcc);
+			dao.insertTransaction(toUserId, fromAcc, toAcc, amount, "credit",
+					TransactionStatus.COMPLETED.name().toLowerCase());
+			
 
 			connection.commit();
 			return true;

@@ -99,6 +99,30 @@ public class AccountDAOImpl implements AccountDAO {
         return null;
     }
     
+    /**
+     * Finds the user ID associated with the given account number.
+     *
+     * @param accountNo the account number
+     * @return the user ID if found, otherwise {@code null}
+     * @throws SQLException if a database access error occurs
+     */
+    public Long findUserIdByAccountNo(Long accountNo) throws SQLException {
+        String sql = "SELECT user_id FROM accounts WHERE account_number = ? LIMIT 1";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setLong(1, accountNo);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    long userId = rs.getLong("user_id");
+                    return rs.wasNull() ? null : userId;
+                }
+            }
+        }
+        return null;
+    }
+
+    
     @Override
     public Account findById(long accountId) throws SQLException {
         String sql = "SELECT * FROM accounts WHERE account_id = ?";
@@ -111,6 +135,10 @@ public class AccountDAOImpl implements AccountDAO {
         }
         return null;
     }
+    
+    /**
+     * Get account by userId and account type
+     */
     public Account findByType(long userId, String type) throws SQLException{
     	   String sql = "SELECT * FROM accounts WHERE account_type = ? and user_id = ?";
 

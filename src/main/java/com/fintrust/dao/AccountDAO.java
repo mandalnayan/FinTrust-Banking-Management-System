@@ -66,6 +66,15 @@ public interface AccountDAO {
      */
     List<Long> findByNumberUserId(long userId) throws SQLException;
     
+    /**
+     * Finds the user ID associated with the given account number.
+     *
+     * @param accountNo the account number
+     * @return the user ID if found, otherwise {@code null}
+     * @throws SQLException if a database access error occurs
+     */
+    Long findUserIdByAccountNo(Long accountNo) throws SQLException;
+    
     Account findByType(long userId, String type) throws SQLException;
 
     /**

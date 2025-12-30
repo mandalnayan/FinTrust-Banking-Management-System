@@ -30,6 +30,7 @@ public class UserDashboardVM {
 	private int rewardPoints;
 	private Long activeCards;
 	private double availableBalance;
+	private String transferAmount;
 
 	private List<Transaction> recentTransactions;
 	private List<Account> accountList;
@@ -93,6 +94,10 @@ public class UserDashboardVM {
 
 	public Long getActiveCards() {
 		return activeCards;
+	}
+	
+	public String getFormattedAmount(Transaction t) {
+		return (t.getTxnType().equalsIgnoreCase("credit") ? "+" : "-") + String.format("%.2f", t.getAmount()) + "₹"; 
 	}
 
 	public List<Transaction> getRecentTransactions() {
