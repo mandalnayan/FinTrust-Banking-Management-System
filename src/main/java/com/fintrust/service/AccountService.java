@@ -15,7 +15,7 @@ public interface AccountService {
     List<Account> getAllAccounts();
     public List<Long> getAllAccountsNumber(); 
     
-    boolean isAccountExists(long user_id, String accountType);
+    boolean isAccountExists(long userId, String accountType);
 
     // Banking transactions
     boolean deposit(long accountNo, double amount);

@@ -49,7 +49,7 @@ public class AccountUpdateRequestDao {
 				    FOREIGN KEY (reviewed_by) REFERENCES users(user_id)
 				);
 
-								""";
+				""";
 		try {
 			Statement statement = DBConnection.getConnection().createStatement();
 			statement.executeUpdate(query);
