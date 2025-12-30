@@ -83,7 +83,7 @@ public interface AccountDAO {
      * @return list of account records
      * @throws SQLException if database operation fails
      */
-    List<Map<String, Object>> findAll() throws SQLException;
+    List<Account> findAll() throws SQLException;
 
     /**
      * Updates account information (excluding account number and balance).

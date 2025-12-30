@@ -37,14 +37,14 @@
                         <label value="@load(vm.rewardPoints)" sclass="summary-value"/>
                     </vbox>
 
-                    <hbox sclass="quick-actions" spacing="12px">
+                   <!--  <hbox sclass="quick-actions" hflex="1" pack="center" align="center" spacing="12px">
                         <button id = "fundTransfer" label="Transfer"
                                 sclass="action-btn"
                                 onClick="@command('tranfer', page='fundtransfer')"/>
                         <button label="Pay Bill"
                                 sclass="action-btn"
                                 onClick="@command('go', page='payBill')"/>
-                    </hbox>
+                    </hbox> -->
 
                 </hlayout>
             </north>

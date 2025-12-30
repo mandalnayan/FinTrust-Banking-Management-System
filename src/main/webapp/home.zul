@@ -10,13 +10,12 @@
 
 <zk xmlns:h="xhtml">
 	<!-- Use vflex and hflex for proper auto sizing -->
-	<window border="none" sclass="home-window" vflex="1" hflex="1"
-		style="padding-left: 0px; padding-right: 0px; padding-bottom: 0px">
+	<window border="none" zclass="home-window" vflex="1" hflex="1"
+		style="padding:0px">
 		
-		<vlayout sclass="home-layout" vflex="1" hflex="1">
+		<vlayout zclass="home-layout" vflex="1" hflex="1">
 			<!-- Navbar -->
-		<!-- 	<include src="/WEB-INF/components/navbar.zul"/> -->
-			
+					
 			 <navbar width = "100%" height="100%"> </navbar>		
 
 			<!-- Scrollable Content Wrapper -->

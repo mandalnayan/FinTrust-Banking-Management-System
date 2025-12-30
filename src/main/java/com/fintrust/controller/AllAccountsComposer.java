@@ -33,7 +33,7 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
             return;
         }
 
-        List<Account> accounts = acconntService.getAllAccounts();
+        List<Account> accounts = acconntService.getAllUserAccounts();
         if (accounts == null) return; //No account with this user id
         
         for (Account acc : accounts) {
@@ -87,7 +87,6 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
     	// Store selected account number in session
         Executions.getCurrent().getSession().setAttribute("selected_account_no", acc.getAccountNumber());
         // Redirect to details page
-        //Executions.sendRedirect("/user/account/view_spc_account.zul");
         
         //Find center area in dashboard
         Include centerArea = (Include) getPage().getFellow("main_content_sec");
@@ -107,9 +106,7 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
         
      // Store selected account number in session
     	Executions.getCurrent().getSession().setAttribute("selected_account_no", acc.getAccountNumber());
-        // Redirect to details page
-        //Executions.sendRedirect("/user/account/update_account.zul");        
-        
+       
         Include centerArea = (Include) getPage().getFellow("main_content_sec");
         centerArea.setSrc("/user/account/update_account.zul");
     }
@@ -125,7 +122,7 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
     	// Store selected account number in session
         Executions.getCurrent().getSession().setAttribute("selected_account_no", acc.getAccountNumber());
         // Redirect to details page
-        //Executions.sendRedirect("/user/account/close_account.zul");
+       
         Include centerArea = (Include) getPage().getFellow("main_content_sec");
         centerArea.setSrc("/user/account/close_account.zul");
     }

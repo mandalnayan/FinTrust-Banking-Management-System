@@ -37,19 +37,20 @@ public class AdminDashboardController extends SelectorComposer<Component>{
     @Override
     public void doAfterCompose(Component comp) throws Exception {
     	super.doAfterCompose(comp);
-    	Sessions.getCurrent().setAttribute("main_content_sec", main_content_sec);
+    	Sessions.getCurrent().setAttribute("admin_main_content_sec", main_content_sec);
     } 
-    
-    @Listen("onClick=#users")
-    public void viewUsers() {
- 	   main_content_sec.setSrc("/admin/customerDetails.zul");
-    }
     
     @Listen("onClick=#admindashboard")
     public void adminDashboard() {
  	   main_content_sec.setSrc("/admin/dashboard.zul");
     }
     
+    @Listen("onClick=#users")
+    public void viewUsers() {
+ 	   main_content_sec.setSrc("/admin/customerDetails.zul");
+    }
+    
+ 
     @Listen("onClick=#accounts")
     public void viewAccount() {
  	   main_content_sec.setSrc("/admin/account/view_all_account.zul");

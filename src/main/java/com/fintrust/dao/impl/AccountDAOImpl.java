@@ -38,10 +38,8 @@ public class AccountDAOImpl implements AccountDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			Messagebox.show(e.getMessage());
-		}
-		System.out.println(cardTypeList);
-		return cardTypeList;
-		
+		}		
+		return cardTypeList;		
 	}
 
 
@@ -121,7 +119,6 @@ public class AccountDAOImpl implements AccountDAO {
         }
         return null;
     }
-
     
     @Override
     public Account findById(long accountId) throws SQLException {
@@ -184,15 +181,15 @@ public class AccountDAOImpl implements AccountDAO {
     }
 
     @Override
-    public List<Map<String, Object>> findAll() throws SQLException {
+    public List<Account> findAll() throws SQLException {
         String sql = "SELECT * FROM accounts ORDER BY account_id ASC";
-        List<Map<String, Object>> list = new ArrayList<>();
+        List<Account> list = new ArrayList<>();
 
         try (PreparedStatement ps = connection.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                list.add(mapRow(rs));
+                list.add(mapRowtoAccount(rs));
             }
         }
         return list;
@@ -248,9 +245,7 @@ public class AccountDAOImpl implements AccountDAO {
 				ResultSet resultSet = statement.executeQuery()) {
 
 			if (resultSet.next()) {
-				long highestAccountNo = resultSet.getLong("account_number");
-				// System.out.println("Highest Account No: " + highestAccountNo);
-				return highestAccountNo;
+				return resultSet.getLong("account_number");
 			} else {
 				return 0l;
 			}
@@ -268,12 +263,11 @@ public class AccountDAOImpl implements AccountDAO {
      */
 	private Account mapRowtoAccount(ResultSet rs) throws SQLException {
 
-		Account account = new Account(rs.getLong("account_id"), rs.getLong("user_id"), rs.getLong("branch_id"),rs.getLong("nominee_id"),
+		return new Account(rs.getLong("account_id"), rs.getLong("user_id"), rs.getLong("branch_id"),rs.getLong("nominee_id"),
 				rs.getLong("account_number"), AccountType.valueOf(rs.getString("account_type").toUpperCase()), rs.getBigDecimal("balance").doubleValue(),
 				rs.getString("currency"),AccountStatus.valueOf(rs.getString("status").toUpperCase()), rs.getTimestamp("opened_at").toLocalDateTime(),
 				rs.getTimestamp("updated_at").toLocalDateTime());
 
-		return account;
 	}
 	
 

@@ -16,7 +16,6 @@ public class AllAccounts extends SelectorComposer<Window> {
 	private final AccountServiceImpl acconntService = new AccountServiceImpl();
 	private final NomineeServiceImp nomineeService = new NomineeServiceImp();
 	
-	
 	@Wire
 	private Textbox searchBox; 
 	
@@ -38,15 +37,27 @@ public class AllAccounts extends SelectorComposer<Window> {
         renderAccountList(allAccounts);
     }
     
-    private void renderAccountList(List<Account> allAccounts2) {
+    private void renderAccountList(List<Account> allAccounts) {
+    	System.out.println(allAccounts);
         accountListbox.getItems().clear();
-        for (com.fintrust.model.Account acc : allAccounts2) {
+        for (Account acc : allAccounts) {
             Listitem item = new Listitem();
             item.appendChild(new Listcell(acc.getAccountNumber()+""));
             item.appendChild(new Listcell(acc.getAccountType().name()));
             item.appendChild(new Listcell(acc.getBalance()+""));
-            item.appendChild(new Listcell(acc.getAccount_status().name()));
+            String accountStatus = acc.getAccount_status().name();
+            
+            item.appendChild(new Listcell(accountStatus));
 
+            String bgcolor = "#E8F5E9", border = "4px solid #2E7D32";
+            if (accountStatus.equalsIgnoreCase("inactive")) {
+            	bgcolor = "#FFF8E1";
+            	border = "4px solid #F9A825";
+            } else if(accountStatus.equalsIgnoreCase("inactive")) {
+            	bgcolor= "#FDECEA";   /* light red */
+            	border = "4px solid #C62828";
+            }
+            item.setStyle("background-color:" + bgcolor + ";border-left:" + border);
             // store account object as value
             item.setValue(acc);
 

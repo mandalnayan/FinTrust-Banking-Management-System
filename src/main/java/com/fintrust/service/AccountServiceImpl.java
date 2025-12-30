@@ -2,6 +2,7 @@ package com.fintrust.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -33,7 +34,6 @@ public class AccountServiceImpl implements AccountService {
 		try {
 			return accountDAO.findByType(user_id, accountType) != null;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
@@ -45,20 +45,20 @@ public class AccountServiceImpl implements AccountService {
 			// Unique account number generation (for demo)
 			connection.setAutoCommit(false);
 			long accountNo = generateAccountNumber();
-			Long user_id = (Long) Sessions.getCurrent().getAttribute("user_id");
-			account.setUserId(user_id);
+			Long userId = (Long) Sessions.getCurrent().getAttribute("user_id");
+			account.setUserId(userId);
 
-			if (accountNo == -1 || user_id == null) {
+			if (accountNo == -1 || userId == null) {
 				return new Notification("error", "Server error. \nPlease try again!!");
-			} else if(isAccountExists(user_id, account.getAccountType().toString())) {
+			} else if(isAccountExists(userId, account.getAccountType().toString())) {
 				return new Notification("warning", "Same type of account already exist. \n Sorry you can't create same account!!");
 			}	
 						
 			account.setAccountNumber(accountNo);
 			long account_id = accountDAO.create(account);
-			List<Account> accounts = accountDAO.findByUserId(user_id);
+			List<Account> accounts = accountDAO.findByUserId(userId);
 			if (accounts.size() == 1) {
-				userDetailsDAO.updatePrimaryAccount(user_id, account_id);
+				userDetailsDAO.updatePrimaryAccount(userId, account_id);
 			}
 			connection.commit();
 			return new Notification("info", "Account created successfully!!");
@@ -89,7 +89,6 @@ public class AccountServiceImpl implements AccountService {
 		try {
 			return accountDAO.findByNumber(accountNo);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -100,7 +99,6 @@ public class AccountServiceImpl implements AccountService {
 		try {
 			return accountDAO.findById(accountId);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -108,28 +106,40 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public List<Account> getAllAccounts() {
-		long user_id = (long) Sessions.getCurrent().getAttribute("user_id");
+		List<Account> accounts = new ArrayList<>();
 		try {
-			List<Account> accounts = accountDAO.findByUserId(user_id);
-			return accounts;
+			accounts = accountDAO.findAll();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		return accounts;
 	}
 
+	/**
+	 * Find all created accounts
+	 */
 	@Override
-	public List<Long> getAllAccountsNumber() {
-		long user_id = (long) Sessions.getCurrent().getAttribute("user_id");
+	public List<Account> getAllUserAccounts() {
+		long userId = (long) Sessions.getCurrent().getAttribute("user_id");
+		List<Account> accounts = new ArrayList<>();
 		try {
-			List<Long> accounts = accountDAO.findByNumberUserId(user_id);
-			return accounts;
+			accounts = accountDAO.findByUserId(userId);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		return accounts;
+	}
+	
+	@Override
+	public List<Long> getAllAccountsNumber() {
+		long userId = (long) Sessions.getCurrent().getAttribute("user_id");
+		List<Long> accounts = new ArrayList<>();
+		try {
+			accounts = accountDAO.findByNumberUserId(userId);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return accounts;
 	}
 
 	@Override
@@ -145,7 +155,6 @@ public class AccountServiceImpl implements AccountService {
 			double newBalance = acc.getBalance() + amount;
 			return accountDAO.updateBalance(accountNo, newBalance);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
@@ -160,7 +169,6 @@ public class AccountServiceImpl implements AccountService {
 		try {
 			acc = accountDAO.findById(accountNo);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if (acc == null || acc.getAccount_status() != AccountStatus.ACTIVE)
@@ -172,7 +180,6 @@ public class AccountServiceImpl implements AccountService {
 		try {
 			return accountDAO.updateBalance(accountNo, newBalance);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
@@ -184,7 +191,6 @@ public class AccountServiceImpl implements AccountService {
 		try {
 			acc = accountDAO.findByNumber(accountNo);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return (acc != null) ? acc.getBalance() : 0.0;
@@ -201,7 +207,6 @@ public class AccountServiceImpl implements AccountService {
 			fromAcc = accountDAO.findById(fromAccountNo);
 			toAcc = accountDAO.findById(toAccountNo);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -217,7 +222,6 @@ public class AccountServiceImpl implements AccountService {
 			return accountDAO.updateBalance(fromAccountNo, newFromBal)
 					&& accountDAO.updateBalance(toAccountNo, newToBal);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
@@ -235,20 +239,17 @@ public class AccountServiceImpl implements AccountService {
 		Random random = new Random();
 		long min = 100000000000L;
 		long max = 999999999999L;
-		int maxTry = 5;
-		while (maxTry-- > 0) {
-			long randomNo = GenerateRandomNumber.generateRandomNumber(min, max);  
-
+		
+		while (min++ < max) {
 			try {
-				if (accountDAO.findByNumber(randomNo) == null) {
-					return randomNo;
+				if (accountDAO.findByNumber(min) == null) {
+					return min;
 				}
 			} catch (SQLException e) {
 				System.out.println("ERROR to check account is present or not: " + e.getMessage());
 				e.printStackTrace();
 				return -1l;
 			}
-			// else loop — collision, try a new random again
 		}
 		return -1l;
 	}
