@@ -1,5 +1,7 @@
 package com.fintrust.service;
 
+import java.sql.SQLException;
+
 import com.fintrust.model.User;
 import com.fintrust.model.UserDetails;
 
@@ -46,5 +48,7 @@ public interface UserService {
 	boolean isAuthorize(String userName, String password);
 	
 	User getUserByUserName(String userName);
+	
+	User getUserByUserId(Long userId) throws SQLException;
     
 }

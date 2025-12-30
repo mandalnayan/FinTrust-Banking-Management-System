@@ -106,8 +106,10 @@
 	 </hbox>
     <listbox id="requestList" width="100%" mold="paging" pageSize="10">
        <listhead>
-       		<listheader>Request ID</listheader>
+       		<listheader width="100px">Request ID</listheader>
        		<listheader>accountNo</listheader>
+       		<listheader>Request By</listheader>
+       		<listheader>Requested At</listheader>
        		<listheader>Reason</listheader>
        			
        </listhead>
@@ -115,6 +117,8 @@
        		<listitem>
        			<listcell label="${each.requestId}"></listcell>
        			<listcell label="${each.accountNo}"></listcell>
+       			<listcell label="${each.requestedBy.fullName}"></listcell>
+       			<listcell label="${each.requestDate}"></listcell>
        			<listcell label="${each.reason}"></listcell>
        			
        		</listitem>

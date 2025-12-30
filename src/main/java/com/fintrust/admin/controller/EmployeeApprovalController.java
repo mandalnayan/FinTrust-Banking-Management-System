@@ -18,10 +18,13 @@ import java.util.*;
 
 public class EmployeeApprovalController extends SelectorComposer<Component> {
 
-    @Wire private Listbox requestList;
-    @Wire Button approveBtn,rejectBtn;
-    private Long currentEmployeeId;
+    private static final long serialVersionUID = 1L;
     
+	@Wire private Listbox requestList;
+    @Wire Button approveBtn;
+    @Wire Button  rejectBtn;
+    
+    private Long currentEmployeeId;
     private AccountUpdateRequestDao dao = new AccountUpdateRequestDao();
 
     @Override
@@ -34,7 +37,7 @@ public class EmployeeApprovalController extends SelectorComposer<Component> {
 
     private void loadPendingRequests() throws Exception {
         List<AccountUpdateRequest> list = dao.getPendingRequests();
-        if(list.size()==0) {
+        if(list.isEmpty()) {
         	approveBtn.setVisible(false);
         	rejectBtn.setVisible(false);
         	

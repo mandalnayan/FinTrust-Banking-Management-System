@@ -18,8 +18,9 @@ import com.fintrust.dao.impl.AccountUpdateRequestDao;
 import java.util.*;
 
 public class EmployeeApprovalControllercopy extends SelectorComposer<Component> {
-
-    @Wire private Listbox requestList;
+    private static final long serialVersionUID = 1L;
+    
+	@Wire private Listbox requestList;
     @Wire Button approveBtn,rejectBtn;
     private Long currentEmployeeId;
     
@@ -35,7 +36,7 @@ public class EmployeeApprovalControllercopy extends SelectorComposer<Component> 
 
     private void loadPendingRequests() throws Exception {
         List<AccountUpdateRequest> list = dao.getPendingRequests();
-        if(list.size()==0) {
+        if(list.isEmpty()) {
         	Hbox box = new Hbox();
         	box.setWidth("100%");
         	box.setHeight("50px");

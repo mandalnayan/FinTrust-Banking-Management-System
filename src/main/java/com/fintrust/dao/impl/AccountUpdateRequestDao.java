@@ -17,8 +17,10 @@ import com.fintrust.model.AccountUpdateRequest;
 import com.fintrust.model.Branch;
 
 import com.fintrust.service.EmailService;
-
+import com.fintrust.service.UserService;
+import com.fintrust.service.UserServiceImpl;
 import com.fintrust.model.CardRequest;
+import com.fintrust.model.User;
 
 public class AccountUpdateRequestDao {
 
@@ -73,7 +75,7 @@ public class AccountUpdateRequestDao {
 			ps.setString(2, req.getNewAccountType());
 			ps.setLong(3, req.getBranchId());
 			ps.setString(4, req.getNewModeOfOperation());
-			ps.setLong(5, req.getRequestedBy());
+			ps.setLong(5, req.getRequestedBy().getId());
 
 			if (ps.executeUpdate() > 0) {
 				return true;
@@ -120,8 +122,13 @@ public class AccountUpdateRequestDao {
 				r.setBranchId(rs.getLong("new_branch_id"));
 				r.setNewModeOfOperation(rs.getString("new_mode_of_operation"));
 				r.setStatus(rs.getString("status"));
-				r.setRequestedBy(rs.getLong("requested_by"));
-
+				long requestedBy = rs.getLong("requested_by");
+				
+			    User requestedUser = new UserServiceImpl().getUserByUserId(requestedBy);
+			    r.setRequestedBy(requestedUser);
+			    
+			    r.setRequestDate(rs.getTimestamp("request_date").toLocalDateTime());
+			    
 				// Setting branch name by branch id
 				Branch branch = new BranchDao().findById(r.getBranchId());
 				r.setNewBranchName(branch.getBranchName());

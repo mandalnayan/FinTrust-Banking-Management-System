@@ -1,5 +1,6 @@
 package com.fintrust.controller;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.zkoss.zk.ui.Component;
@@ -19,6 +20,7 @@ import com.fintrust.model.AccountUpdateRequest;
 import com.fintrust.model.Branch;
 import com.fintrust.service.AccountServiceImpl;
 import com.fintrust.service.RequestUpdateService;
+import com.fintrust.service.UserServiceImpl;
 import com.fintrust.util.NotificationUtil;
 import com.fasterxml.jackson.databind.introspect.AccessorNamingStrategy;
 import com.fintrust.dao.impl.AccountUpdateRequestDao;
@@ -74,13 +76,13 @@ public class UpdateAccountRequest extends SelectorComposer<Component> {
 
 	/**
 	 * Taking updatable data
+	 * @throws SQLException 
 	 */
 	@Listen("onClick=#update")
-	public void sendUpdateAccountReq() {
+	public void sendUpdateAccountReq() throws SQLException {
 		if (!isFormValid())
 			return;
 
-		// Messagebox.show("Request submitted successfully!");
 		String accType = accountTypeComboBox.getSelectedItem().getValue();
 		String accBranch = accountBranchBox.getSelectedItem().getValue();
 		String accMode = accountModeBox.getSelectedItem().getValue();
@@ -92,7 +94,7 @@ public class UpdateAccountRequest extends SelectorComposer<Component> {
 		req.setNewModeOfOperation(accMode);
 		System.out.println("Updating: " + accountNum);
 		Long user_id = (Long) Executions.getCurrent().getSession().getAttribute("user_id");
-		req.setRequestedBy(user_id);
+		req.setRequestedBy(new UserServiceImpl().getUserByUserId(user_id));
 
 		if (new RequestUpdateService().updateRequest(req)) {
 			NotificationUtil.showInstant("info",
@@ -112,7 +114,6 @@ public class UpdateAccountRequest extends SelectorComposer<Component> {
 
 	@Listen("onClick=#cancel")
 	public void cancelUpdateAccountReq() {
-		// Executions.sendRedirect("/user/userDashboard.zul");
 		Component root = getSelf();
 		Include inc = (Include) root.getPage().getFellow("main_content_sec");
 		inc.setSrc("/WEB-INF/components/view_all_account.zul");

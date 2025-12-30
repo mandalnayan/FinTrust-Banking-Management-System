@@ -12,6 +12,8 @@ import org.zkoss.zul.Messagebox;
 
 import com.fintrust.db.DBConnection;
 import com.fintrust.model.AccountCloseRequest;
+import com.fintrust.model.User;
+import com.fintrust.service.UserServiceImpl;
 import com.fintrust.util.NotificationUtil;
 
 
@@ -76,7 +78,7 @@ public class AccountCloseRequestDao {
 				try(PreparedStatement statement = con.prepareStatement(query)){
 					statement.setLong(1, req.getAccountNo());
 					statement.setString(2, req.getReason());
-					statement.setLong(3, req.getRequestedBy());
+					statement.setLong(3, req.getRequestedBy().getId());
 					
 					if(statement.executeUpdate() > 0) {
 						return true;
@@ -105,7 +107,7 @@ public class AccountCloseRequestDao {
 		} catch (SQLException e) {			
 			e.printStackTrace();
 		}
-		return null;
+		return false;
 	}
 	
 	/**
@@ -125,6 +127,12 @@ public class AccountCloseRequestDao {
 					req.setRequestId(rs.getLong("request_id"));
 					req.setAccountNo(rs.getLong("account_number"));
 					req.setReason(rs.getString("reason"));
+					
+					long requestedBy = rs.getLong("requested_by");
+				    User requestedUser = new UserServiceImpl().getUserByUserId(requestedBy);
+				    req.setRequestedBy(requestedUser);
+				    
+					req.setRequestDate(rs.getTimestamp("requested_date").toLocalDateTime());
 					list.add(req);
 				}
 			}

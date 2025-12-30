@@ -7,11 +7,17 @@ public class AccountCloseRequest {
 	private long accountNo;
 	private String reason;
 	private String status;
-	private long requestedBy;
-    private Long reviewedBy;
+	
+	//User details
+    private User requestedBy;
+    
+    //Admin details
+    private User reviewBy;
+    
     private LocalDateTime requestDate;
     private LocalDateTime reviewDate;
 	private String remarks;
+	
 	
 	public long getRequestId() {
 		return requestId;
@@ -37,17 +43,17 @@ public class AccountCloseRequest {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public long getRequestedBy() {
+	public User getRequestedBy() {
 		return requestedBy;
 	}
-	public void setRequestedBy(long requestedBy) {
+	public void setRequestedBy(User requestedBy) {
 		this.requestedBy = requestedBy;
 	}
-	public Long getReviewedBy() {
-		return reviewedBy;
+	public User getReviewBy() {
+		return reviewBy;
 	}
-	public void setReviewedBy(Long reviewedBy) {
-		this.reviewedBy = reviewedBy;
+	public void setReviewBy(User reviewBy) {
+		this.reviewBy = reviewBy;
 	}
 	public LocalDateTime getRequestDate() {
 		return requestDate;
@@ -67,10 +73,11 @@ public class AccountCloseRequest {
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
 	}
+	
 	@Override
 	public String toString() {
 		return "AccountCloseRequest [requestId=" + requestId + ", accountNo=" + accountNo + ", reason=" + reason
-				+ ", status=" + status + ", requestedBy=" + requestedBy + ", reviewedBy=" + reviewedBy
-				+ ", requestDate=" + requestDate + ", reviewDate=" + reviewDate + ", remarks=" + remarks + "]";
+				+ ", status=" + status + ", requestedBy=" + requestedBy + ", reviewBy=" + reviewBy + ", requestDate="
+				+ requestDate + ", reviewDate=" + reviewDate + ", remarks=" + remarks + "]";
 	}
 }
