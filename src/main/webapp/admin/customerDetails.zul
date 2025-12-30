@@ -1,5 +1,5 @@
 <zk>
-    <window apply="com.fintrust.admin.controller.CustomerDetailsComposer_copy" width="100%" style="padding:20px;">
+    <window apply="com.fintrust.admin.controller.CustomerDetailsComposer" width="100%" style="padding:20px;">
 
         <!-- ===== SUMMARY SECTION ===== -->
         <hlayout spacing="20px" style="margin:15px 0;">
@@ -67,16 +67,11 @@
             <listbox id="customerList" width="100%" mold="paging" pageSize="10">
                 <listhead>
                     <listheader label="ID" width="70px"/>
-                    <listheader label="Name"/>
-                    <listheader label="Email"/>
-                    <listheader label="Phone"/>
-                    <listheader label="Gender"/>
-                    <listheader label="DOB"/>
-                    <listheader label="City"/>
-                    <listheader label="Registered"/>
-                    <listheader label="Status"/>
-                    <listheader label="2FA"/>
-                    <listheader label="Actions" width="200px"/>
+                    <listheader label="Name" width="200px"/>
+                    <listheader label="Email" width="250px"/>
+                    <listheader label="Status" width="120px"/>
+                   <!--  <listheader label="2FA"/> -->
+                    <listheader label="Actions"/>
                 </listhead>
 
                 <template name="model">
@@ -84,13 +79,8 @@
                         <listcell label="${each.customer_id}"/>
                         <listcell label="${each.name}"/>
                         <listcell label="${each.email}"/>
-                        <listcell label="${each.phone}"/>
-                        <listcell label="${each.gender}"/>
-                        <listcell label="${each.dob}"/>
-                        <listcell label="${each.city}"/>
-                        <listcell label="${each.registered_date}"/>
                         <listcell label="${each.status}"/>
-                        <listcell label="${each.twoFactor == 1 ? 'Enabled' : 'Disabled'}"/>
+                       <!--  <listcell label="${each.twoFactor == 1 ? 'Enabled' : 'Disabled'}"/> -->
 
                         <listcell>
                             <hlayout spacing="5px">

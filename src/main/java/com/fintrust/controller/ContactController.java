@@ -128,9 +128,7 @@ public class ContactController extends SelectorComposer<Component> {
         fileList.appendChild(row);
     }
 
-
-
-    
+  
     private void submitTicket() {
         ContactModel model = new ContactModel();
 
@@ -152,7 +150,7 @@ public class ContactController extends SelectorComposer<Component> {
 
         model.setAttachments(fileNames);
 
-        service.saveTicket(model);
+       // service.saveTicket(model);
 
         Messagebox.show("Ticket Submitted Successfully!");
         clearForm();
@@ -170,30 +168,27 @@ public class ContactController extends SelectorComposer<Component> {
 
         try {
             long id = Long.parseLong(trackId.getValue());
-            ContactModel ticket = service.getTicketById(id);
+         //   ContactModel ticket = service.getTicketById(id);
 
-            if (ticket == null) {
-                Messagebox.show("Ticket not found!");
-                return;
-            }
+//            if (ticket == null) {
+//                Messagebox.show("Ticket not found!");
+//                return;
+//            }
 
-            String msg =
-                    "Ticket ID: " + ticket.getId() + "\n" +
-                    "Name: " + ticket.getCustomerName() + "\n" +
-                    "Category: " + ticket.getCategory() + "\n" +
-                    "Status: " + ticket.getStatus() + "\n" +
-                    "Created At: " + ticket.getCreatedAt();
-
-            Messagebox.show(msg, "Ticket Details", Messagebox.OK, Messagebox.INFORMATION);
+//            String msg =
+//                    "Ticket ID: " + ticket.getId() + "\n" +
+//                    "Name: " + ticket.getCustomerName() + "\n" +
+//                    "Category: " + ticket.getCategory() + "\n" +
+//                    "Status: " + ticket.getStatus() + "\n" +
+//                    "Created At: " + ticket.getCreatedAt();
+//
+//            Messagebox.show(msg, "Ticket Details", Messagebox.OK, Messagebox.INFORMATION);
 
         } catch (NumberFormatException e) {
             Messagebox.show("Enter a valid numeric Ticket ID.");
         }
     }
-
-
-
-    
+   
     private void clearForm() {
 
         fullName.setValue("");

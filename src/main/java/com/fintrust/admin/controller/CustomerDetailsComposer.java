@@ -14,7 +14,7 @@ import org.zkoss.zul.*;
 
 import com.fintrust.db.DBConnection;
 
-public class CustomerDetailsComposer_copy extends SelectorComposer<Window> {
+public class CustomerDetailsComposer extends SelectorComposer<Window> {
 
     @Wire
     private Listbox customerList;
@@ -43,7 +43,7 @@ public class CustomerDetailsComposer_copy extends SelectorComposer<Window> {
     private void loadAllCustomers() {
         try {
             Connection con = DBConnection.getConnection();
-            String sql = "SELECT * FROM users ORDER BY user_id DESC";
+            String sql = "SELECT * FROM users where role = 'ROLE_USER' ORDER BY user_id DESC";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();

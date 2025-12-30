@@ -10,7 +10,7 @@ public class Account {
     private AccountType accountType;   // savings/current/salary/fixed_deposit
     private Double balance;
     private String currency;
-    private AccountStatus account_status;
+    private AccountStatus accountStatus;
     private LocalDateTime openedAt;
     private LocalDateTime updatedAt;
     
@@ -28,19 +28,19 @@ public class Account {
     	
     }
 
-	public Account(Long accountId, Long userId, Long branchId, Long nominee_id, Long accountNumber,
-			AccountType accountType, Double balance, String currency, AccountStatus account_status,
+	public Account(Long accountId, Long userId, Long branchId, Long nomineeId, Long accountNumber,
+			AccountType accountType, Double balance, String currency, AccountStatus accountStatus,
 			LocalDateTime openedAt, LocalDateTime updatedAt) {
 		super();
 		this.accountId = accountId;
 		this.userId = userId;
 		this.branchId = branchId;
-		this.nominee_id = nominee_id;
+		this.nominee_id = nomineeId;
 		this.accountNumber = accountNumber;
 		this.accountType = accountType;
 		this.balance = balance;
 		this.currency = currency;
-		this.account_status = account_status;
+		this.accountStatus = accountStatus;
 		this.openedAt = openedAt;
 		this.updatedAt = updatedAt;
 	}
@@ -110,11 +110,11 @@ public class Account {
 	}
 
 	public AccountStatus getAccount_status() {
-		return account_status;
+		return accountStatus;
 	}
 
-	public void setAccount_status(AccountStatus account_status) {
-		this.account_status = account_status;
+	public void setAccountStatus(AccountStatus accountStatus) {
+		this.accountStatus = accountStatus;
 	}
 
 	public LocalDateTime getOpenedAt() {

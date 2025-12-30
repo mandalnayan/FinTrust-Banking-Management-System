@@ -1,0 +1,64 @@
+<!-- ============================================================
+	Page Name: transactionHistory.zul
+	Purpose: Displays all transactions made by the user.
+	Features: Filter by date/type, download as PDF or CSV.
+	Controller: TransactionHistoryController.java
+	============================================================ -->
+
+<!-- head footer csss -->
+<?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
+
+<!-- Before loading page it ensuer page should not render -->
+<?init class = "com.fintrust.security.AuthenticationController" ?>
+
+<?page title="Transactions" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window apply="com.fintrust.controller.TransactionHistoryController"
+		width="100%" vflex="1">
+
+			<vlayout spacing="30px" vflex="1">
+			<!-- Header -->
+			<hbox width="100%" pack="center" spacing="10px"
+				style="align-items:center; margin: 0px auto">
+				<label value="💳 Transaction History"
+					style="font-weight:bold; font-size:24px; color:#2b4b80;" />
+
+				<button label="⟳ " sclass="btn-refresh"
+					style="background:#2563eb; color:white; border:none; border-radius:6px; padding:6px 12px; font-weight:600; cursor:pointer;"
+					onClick='Executions.sendRedirect("");' />
+			</hbox>
+
+			<!-- Date range filter -->
+			<hbox width="100%" spacing="8px" pack="center"
+				style="padding-bottom:10px 0px; align-items:center;">
+				<label value="📅 From:" />
+				<datebox id="fromDate" width="50%" />
+
+				<label value="To:" />
+				<datebox id="toDate" width="50%" />
+
+				<button id="filterBtn" label="filter"
+					style="background:#16a34a; color:white; border:none; border-radius:6px; padding:6px 12px; font-weight:600; cursor:pointer;" />
+			</hbox>
+
+			<!-- Transaction list -->
+			<listbox id="transactionListbox" mold="paging" vflex="1" 
+				pageSize="4" sizedByContent="true"
+				itemRenderer="com.fintrust.renderview.TransactionRender"
+				style="border:1px solid #ccc; border-radius:8px;">
+				<listhead hflex="1">
+					<listheader label="Transaction ID" width="auto"
+						sort="auto" />
+					<listheader label="From Account" width="auto"
+						sort="auto" />
+					<listheader label="To Account" width="auto"
+						sort="auto" />
+					<listheader label="Amount" width="auto" sort="auto" />
+					<listheader label="Status" width="auto" sort="auto" />
+					<listheader label="Date" width="auto" sort="auto" />
+				</listhead>
+			</listbox>
+</vlayout>
+		
+	</window>
+</zk>
