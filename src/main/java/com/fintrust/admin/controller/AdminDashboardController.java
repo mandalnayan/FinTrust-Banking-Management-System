@@ -42,7 +42,7 @@ public class AdminDashboardController extends SelectorComposer<Component>{
     
     @Listen("onClick=#users")
     public void viewUsers() {
- 	   main_content_sec.setSrc("/admin/customerDetails_copy.zul");
+ 	   main_content_sec.setSrc("/admin/customerDetails.zul");
     }
     
     @Listen("onClick=#admindashboard")

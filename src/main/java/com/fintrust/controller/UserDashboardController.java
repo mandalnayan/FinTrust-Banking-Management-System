@@ -32,7 +32,7 @@ public class UserDashboardController extends SelectorComposer<Component> {
 	Include main_content_sec;
 
 	@Wire
-	Toolbarbutton userdashboard, profile, account, viewAccounts, kyc;
+	Toolbarbutton userdashboard, profile, account, viewAccounts, kyc, transactions;
 
 	private List<Include> includes = new ArrayList<>();
 
@@ -137,7 +137,12 @@ public class UserDashboardController extends SelectorComposer<Component> {
 
 	@Listen("onClick=#transactions")
 	public void transactions() {
-		Executions.sendRedirect("transactionHistory.zul");
+		main_content_sec.setSrc("/WEB-INF/components/transactionHistory.zul");
+		transactions.addSclass("active");
+		profile.removeSclass("active");
+		viewAccounts.removeSclass("active");
+		userdashboard.removeSclass("active");
+		account.removeSclass("active");
 	}
 
 	/*
