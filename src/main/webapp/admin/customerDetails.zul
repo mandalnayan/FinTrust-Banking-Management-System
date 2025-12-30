@@ -7,10 +7,8 @@
                    style="font-weight:bold;color:#004aad;"/>
             <label id="lblActive" value="Active: 0"
                    style="font-weight:bold;color:green;"/>
-            <label id="lblBlocked" value="Blocked: 0"
+            <label id="lblBlocked" value="Inactive: 0"
                    style="font-weight:bold;color:red;"/>
-            <label id="lbl2FA" value="2FA Enabled: 0"
-                   style="font-weight:bold;color:#6a1b9a;"/>
         </hlayout>
 
         <!-- ================= TOP FILTER BAR ================= -->
@@ -25,41 +23,29 @@
                     <comboitem label="Name" value="name"/>
                     <comboitem label="Email" value="email"/>
                     <comboitem label="Phone" value="phone"/>
-                    <comboitem label="City" value="city"/>
+                   <!--  <comboitem label="City" value="city"/>  -->
                 </combobox>
 
                 <textbox id="txtSearchValue" width="180px" placeholder="Enter value"/>
 
                 <button label="Search" id="Search"
-                        style="padding:4px 12px;background:#0a66c2;color:white;border:none;border-radius:4px;"/>
+                        style="padding:8px 12px;background:#0a66c2;color:white;border:none;border-radius:4px;"/>
 
                 <button label="Refresh"
                         onClick='Executions.sendRedirect("")'
-                        style="padding:4px 12px;background:#0a66c2;color:white;border:none;border-radius:4px;"/>
+                        style="padding:8px 12px;background:#0a66c2;color:white;border:none;border-radius:4px;"/>
             </hlayout>
+            
+            <hbox spacing="10px" style="align-items:center;" hflex="1" align="center" pack="right" >
+            	<label value="Status:" />
+            	<combobox id="cmbStatus" width="120px" readonly="true">
+            		<comboitem label="All" value="" />
+            		<comboitem label="Active" value="Active" />
+            		<comboitem label="Blocked" value="Blocked" />
+            	</combobox>
+            </hbox>
 
         </hlayout>
-
-        <!-- ========== ADVANCED FILTER SECTION ========== -->
-        <grid width="100%" style="margin-bottom:10px;">
-            <rows>
-                <row>
-                    <label value="Gender:"/>
-                    <combobox id="cmbGender" width="120px" onChange="filterList()">
-                        <comboitem label="All" value=""/>
-                        <comboitem label="Male" value="Male"/>
-                        <comboitem label="Female" value="Female"/>
-                    </combobox>
-
-                    <label value="Status:"/>
-                    <combobox id="cmbStatus" width="120px" onChange="filterList()">
-                        <comboitem label="All" value=""/>
-                        <comboitem label="Active" value="Active"/>
-                        <comboitem label="Blocked" value="Blocked"/>
-                    </combobox>
-                </row>
-            </rows>
-        </grid>
 
         <!-- ========== SCROLLABLE CUSTOMER LIST SECTION ========== -->
         <div style="height:450px; overflow-y:auto; border:1px solid #ddd; border-radius:5px;">
@@ -68,9 +54,9 @@
                 <listhead>
                     <listheader label="ID" width="70px"/>
                     <listheader label="Name" width="200px"/>
-                    <listheader label="Email" width="250px"/>
+                    <listheader label="Email" width="200px"/>
+                    <listheader label="Mobile No" width="120px"/>
                     <listheader label="Status" width="120px"/>
-                   <!--  <listheader label="2FA"/> -->
                     <listheader label="Actions"/>
                 </listhead>
 
@@ -79,8 +65,8 @@
                         <listcell label="${each.customer_id}"/>
                         <listcell label="${each.name}"/>
                         <listcell label="${each.email}"/>
+                        <listcell label="${each.phone}"/>
                         <listcell label="${each.status}"/>
-                       <!--  <listcell label="${each.twoFactor == 1 ? 'Enabled' : 'Disabled'}"/> -->
 
                         <listcell>
                             <hlayout spacing="5px">
@@ -91,10 +77,6 @@
                                 <button label="${each.status eq 'Active' ? 'Block' : 'Unblock'}"
                                         onClick='alert("Toggle status for: ${each.name}")'
                                         style="padding:3px 10px;background:#dc3545;color:white;border:none;border-radius:4px;"/>
-
-                                <button label="2FA"
-                                        onClick='alert("Toggle 2FA for: ${each.name}")'
-                                        style="padding:3px 10px;background:#6f42c1;color:white;border:none;border-radius:4px;"/>
                             </hlayout>
                         </listcell>
                     </listitem>

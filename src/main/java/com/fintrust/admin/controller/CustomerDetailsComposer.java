@@ -20,7 +20,7 @@ public class CustomerDetailsComposer extends SelectorComposer<Window> {
     private Listbox customerList;
 
     @Wire
-    private Combobox cmbSearchType, cmbGender, cmbStatus;
+    private Combobox cmbSearchType, cmbStatus;
 
     @Wire
     private Textbox txtSearchValue;
@@ -33,7 +33,8 @@ public class CustomerDetailsComposer extends SelectorComposer<Window> {
     @Override
     public void doAfterCompose(Window comp) throws Exception {
         super.doAfterCompose(comp);
-
+        cmbStatus.setSelectedIndex(0);
+        
         loadAllCustomers();         // Load from DB
 		applyModel(allCustomers);   // Set model to listbox
 		updateSummary(allCustomers); 
@@ -55,9 +56,8 @@ public class CustomerDetailsComposer extends SelectorComposer<Window> {
                 c.put("customer_id", rs.getLong("user_id"));
                 c.put("name", rs.getString("full_name"));
                 c.put("email", rs.getString("email"));
+                c.put("phone", rs.getString("phone"));
                 c.put("status", rs.getString("status"));
-                //c.put("twoFactor", rs.getInt("twoFactor"));
-
                 allCustomers.add(c);
             }
 
@@ -101,7 +101,7 @@ public class CustomerDetailsComposer extends SelectorComposer<Window> {
         updateSummary(filtered);
     }
 
-   
+    @Listen("onChange=#cmbStatus")
     public void filterList() {
         List<Map<String, Object>> filtered = applyAdvancedFilters(allCustomers);
         applyModel(filtered);
@@ -109,20 +109,14 @@ public class CustomerDetailsComposer extends SelectorComposer<Window> {
     }
 
     private List<Map<String, Object>> applyAdvancedFilters(List<Map<String, Object>> list) {
-
-        String gender = cmbGender.getValue();
         String status = cmbStatus.getValue();
 
         List<Map<String, Object>> filtered = new ArrayList<>();
 
         for (Map<String, Object> c : list) {
-
-            if (!gender.isEmpty() && !gender.equalsIgnoreCase((String) c.get("gender")))
-                continue;
-
             if (!status.isEmpty() && !status.equalsIgnoreCase((String) c.get("status")))
                 continue;
-
+ 
             filtered.add(c);
         }
 
@@ -132,10 +126,9 @@ public class CustomerDetailsComposer extends SelectorComposer<Window> {
     
     private void updateSummary(List<Map<String, Object>> list) {
 
-        int active = 0, blocked = 0, twoFA = 0;
+        int active = 0, blocked = 0;
 
         for (Map<String, Object> c : list) {
-
             String s = (String) c.get("status");
 
             if ("Active".equalsIgnoreCase(s))
@@ -143,16 +136,11 @@ public class CustomerDetailsComposer extends SelectorComposer<Window> {
 
             if ("Blocked".equalsIgnoreCase(s))
                 blocked++;
-
-			/*
-			 * if ((int) c.get("twoFactor") == 1) twoFA++;
-			 */
         }
 
         lblTotal.setValue("Total Customers: " + list.size());
         lblActive.setValue("Active: " + active);
         lblBlocked.setValue("Blocked: " + blocked);
-        lbl2FA.setValue("2FA Enabled: " + twoFA);
     }
     
     

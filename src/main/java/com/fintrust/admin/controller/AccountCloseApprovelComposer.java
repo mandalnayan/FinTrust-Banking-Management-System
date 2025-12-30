@@ -24,9 +24,11 @@ public class AccountCloseApprovelComposer extends SelectorComposer<Component>{
 	private final AccountCloseRequestDao accountCloseDao = new AccountCloseRequestDao();
 	
 	@Wire Listbox requestList;
-	@Wire Button approveBtn, rejectBtn;
+	@Wire Button approveBtn;
+	@Wire Button rejectBtn;
 	    
 	private Long currentEmployeeId;
+	private static final String WARNING = "warning";
 	
 	@Override
 	public void doAfterCompose(Component comp) throws Exception {
@@ -63,14 +65,14 @@ public class AccountCloseApprovelComposer extends SelectorComposer<Component>{
 	@Listen("onClick=#approveBtn")
 	public void approveRquest() throws Exception {
 		if(requestList.getSelectedItem()==null) {
-			NotificationUtil.showInstant("warning", "Please select one account first!");
+			NotificationUtil.showInstant(WARNING, "Please select one account first!");
 
         	return;
         }
 		AccountCloseRequest req = requestList.getSelectedItem().getValue();
 		
 		if(new AccountServiceImpl().checkBalance(req.getAccountNo()) > 0) {
-			NotificationUtil.showInstant("warning", "First of all withdrawal your balance then do request for account closing");
+			NotificationUtil.showInstant(WARNING, "First of all withdrawal your balance then do request for account closing");
 		    return;
 		}
 		
@@ -81,7 +83,7 @@ public class AccountCloseApprovelComposer extends SelectorComposer<Component>{
 	@Listen("onClick=#rejectBtn")
 	public void rejectRquest() throws Exception {
 		if(requestList.getSelectedItem()==null) {
-			NotificationUtil.showInstant("warning", "Please select one account first!");
+			NotificationUtil.showInstant(WARNING, "Please select one account first!");
         	return;
         }
 		AccountCloseRequest req = requestList.getSelectedItem().getValue();

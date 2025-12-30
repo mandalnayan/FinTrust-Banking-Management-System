@@ -12,10 +12,15 @@ import org.zkoss.zul.Messagebox;
 
 import com.fintrust.db.DBConnection;
 import com.fintrust.model.AccountCloseRequest;
+import com.fintrust.model.User;
+import com.fintrust.service.UserServiceImpl;
 import com.fintrust.util.NotificationUtil;
 
 
 public class AccountCloseRequestDao {
+	
+	private static final String SUCCESS = "success";
+	private static final String WARNING = "warning";
 
 	
 	public AccountCloseRequestDao() {
@@ -70,15 +75,14 @@ public class AccountCloseRequestDao {
 		
 		try(Connection con = DBConnection.getConnection()){
 			if(con != null) {
-				PreparedStatement statement = con.prepareStatement(query);
-				statement.setLong(1, req.getAccountNo());
-				statement.setString(2, req.getReason());
-				statement.setLong(3, req.getRequestedBy());
-				
-				if(statement.executeUpdate() > 0) {
-					//System.out.println("Account closer Request successfully save in db");
-					//Messagebox.show("Account closer Request successfully save in db");
-					return true;
+				try(PreparedStatement statement = con.prepareStatement(query)){
+					statement.setLong(1, req.getAccountNo());
+					statement.setString(2, req.getReason());
+					statement.setLong(3, req.getRequestedBy().getId());
+					
+					if(statement.executeUpdate() > 0) {
+						return true;
+					}
 				}
 			}
 		} catch (SQLException e) {
@@ -88,21 +92,22 @@ public class AccountCloseRequestDao {
 		return false;
 	}
 	
-	public Boolean isRequestExist(long account_number){
+	public Boolean isRequestExist(long accountNo){
 		String query = "select * from account_closer_request where account_number = ? and status = 'PENDING';";
 		
 		try(Connection con = DBConnection.getConnection()){
 			if(con != null) {
-				PreparedStatement pstmt = con.prepareStatement(query);
-				pstmt.setLong(1, account_number);
-				ResultSet rs = pstmt.executeQuery();
-				
-				return rs.next();
+				try(PreparedStatement pstmt = con.prepareStatement(query)){
+					pstmt.setLong(1, accountNo);
+					ResultSet rs = pstmt.executeQuery();
+					
+					return rs.next();
+				}
 			}
 		} catch (SQLException e) {			
 			e.printStackTrace();
 		}
-		return null;
+		return false;
 	}
 	
 	/**
@@ -122,6 +127,12 @@ public class AccountCloseRequestDao {
 					req.setRequestId(rs.getLong("request_id"));
 					req.setAccountNo(rs.getLong("account_number"));
 					req.setReason(rs.getString("reason"));
+					
+					long requestedBy = rs.getLong("requested_by");
+				    User requestedUser = new UserServiceImpl().getUserByUserId(requestedBy);
+				    req.setRequestedBy(requestedUser);
+				    
+					req.setRequestDate(rs.getTimestamp("requested_date").toLocalDateTime());
 					list.add(req);
 				}
 			}
@@ -136,7 +147,7 @@ public class AccountCloseRequestDao {
 		String fetchDetailsAboutRequest = "select * from account_closer_request where request_id = ? ;";
 		String closeAccountQuery = "UPDATE accounts SET status='closed' WHERE account_number=?";
 		
-		String UpdateStatusQuery = """
+		String updateStatusQuery = """
 											update account_closer_request 
 											set status='APPROVED' , review_by = ? , review_date = NOW() , remarks = ?
 											where request_id = ?
@@ -159,18 +170,18 @@ public class AccountCloseRequestDao {
 				ps.executeUpdate();
 			}
 			else {
-				NotificationUtil.showInstant("warning", "No request found with ID: ");
+				NotificationUtil.showInstant(WARNING, "No request found with ID: ");
 			}
 			
 			//step-3 update the closer request table 
-			ps = con.prepareStatement(UpdateStatusQuery);
+			ps = con.prepareStatement(updateStatusQuery);
 			ps.setLong(1, employeeId);
 			ps.setString(2, remarks);
 			ps.setLong(3, requestId);
 		
 			if(ps.executeUpdate()>0) {
 				con.commit(); // all good — commit transaction
-				 Messagebox.show("Request approved successfully!", "Success", Messagebox.OK, Messagebox.INFORMATION);
+				 Messagebox.show("Request approved successfully!", SUCCESS, Messagebox.OK, Messagebox.INFORMATION);
 				 return true;
 			}	
 			
@@ -197,7 +208,7 @@ public class AccountCloseRequestDao {
 	
 	
 	public boolean rejectRequest(long requestId , long employeeId , String remarks) {
-		String UpdateStatusQuery = """
+		String updateStatusQuery = """
 										update account_closer_request 
 										set status='REJECT' , review_by = ? , review_date = NOW() , remarks = ?
 										where request_id = ?
@@ -205,17 +216,17 @@ public class AccountCloseRequestDao {
 		PreparedStatement ps;
 		//step 1 :- find the account no by request id
 		try(Connection con = DBConnection.getConnection()){
-			ps = con.prepareStatement(UpdateStatusQuery);
+			ps = con.prepareStatement(updateStatusQuery);
 			ps.setLong(1, employeeId);
 			ps.setString(2, remarks);
 			ps.setLong(3, requestId);
 		
 			if(ps.executeUpdate()>0) {
-				 Messagebox.show("Request rejected!", "Success", Messagebox.OK, Messagebox.INFORMATION);
+				 Messagebox.show("Request rejected!", SUCCESS, Messagebox.OK, Messagebox.INFORMATION);
 				 return true;
 			}	
 			else {
-	            Messagebox.show("No request found with ID: " + requestId, "Success", Messagebox.OK, Messagebox.INFORMATION);
+	            Messagebox.show("No request found with ID: " + requestId, SUCCESS, Messagebox.OK, Messagebox.INFORMATION);
 	        }
 			
 		} catch (SQLException e) {

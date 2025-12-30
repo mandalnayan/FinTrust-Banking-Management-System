@@ -35,6 +35,16 @@ public class UserServiceImpl implements UserService {
 	public void setUserDetailsDAO(UserDetailsDAO userDetailsDAO) {
 		this.userDetailsDAO = userDetailsDAO;
 	}
+	
+	@Override
+	public User getUserByUserId(Long userId) throws SQLException {
+		User user = userDAO.findById(userId);
+		if(user != null) {
+			return user;
+		}
+		return null;
+	}
+
 
 	@Override
 	public boolean registerUser(User user) {
@@ -190,4 +200,5 @@ public class UserServiceImpl implements UserService {
 				return encryptedPassword;
 	}
 
+	
 }

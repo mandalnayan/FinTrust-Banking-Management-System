@@ -21,6 +21,17 @@ import com.fintrust.model.Account.AccountType;
  * and follow banking standards.
  */
 public class AccountDAOImpl implements AccountDAO {
+	private static final String USER_ID = "user_id";
+	private static final String ACCOUNT_NO = "account_number";
+	private static final String STATUS = "status";
+	private static final String BRANCH_ID = "branch_id";
+	private static final String ACCOUNT_TYPE = "account_type";
+	private static final String BALANCE = "balance";
+	private static final String NOMINEE_ID = "nominee_id";
+	private static final String CURRENCY = "currency";
+	private static final String ACCOUNT_ID = "account_id";
+	private static final String UPDATED_AT = "updated_at";
+	private static final String OPENED_AT = "opened_at";
 
     @Override	
 	public List<String> issuedCardTypeByAct(long actNumber)
@@ -112,7 +123,7 @@ public class AccountDAOImpl implements AccountDAO {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    long userId = rs.getLong("user_id");
+                    long userId = rs.getLong(USER_ID);
                     return rs.wasNull() ? null : userId;
                 }
             }
@@ -173,7 +184,7 @@ public class AccountDAOImpl implements AccountDAO {
             ps.setLong(1, userId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                	accounts.add(rs.getLong("account_number"));
+                	accounts.add(rs.getLong(ACCOUNT_NO));
                 }
             }
         }
@@ -245,7 +256,12 @@ public class AccountDAOImpl implements AccountDAO {
 				ResultSet resultSet = statement.executeQuery()) {
 
 			if (resultSet.next()) {
+<<<<<<< HEAD
 				return resultSet.getLong("account_number");
+=======
+				long highestAccountNo = resultSet.getLong(ACCOUNT_NO);
+				return highestAccountNo;
+>>>>>>> bdcdd6433a7948991c2dbbfa5c090c7fc33528d1
 			} else {
 				return 0l;
 			}
@@ -263,10 +279,17 @@ public class AccountDAOImpl implements AccountDAO {
      */
 	private Account mapRowtoAccount(ResultSet rs) throws SQLException {
 
+<<<<<<< HEAD
 		return new Account(rs.getLong("account_id"), rs.getLong("user_id"), rs.getLong("branch_id"),rs.getLong("nominee_id"),
 				rs.getLong("account_number"), AccountType.valueOf(rs.getString("account_type").toUpperCase()), rs.getBigDecimal("balance").doubleValue(),
 				rs.getString("currency"),AccountStatus.valueOf(rs.getString("status").toUpperCase()), rs.getTimestamp("opened_at").toLocalDateTime(),
 				rs.getTimestamp("updated_at").toLocalDateTime());
+=======
+		Account account = new Account(rs.getLong(ACCOUNT_ID), rs.getLong(USER_ID), rs.getLong(BRANCH_ID),rs.getLong(NOMINEE_ID),
+				rs.getLong(ACCOUNT_NO), AccountType.valueOf(rs.getString(ACCOUNT_TYPE).toUpperCase()), rs.getBigDecimal(BALANCE).doubleValue(),
+				rs.getString(CURRENCY),AccountStatus.valueOf(rs.getString(STATUS).toUpperCase()), rs.getTimestamp(OPENED_AT).toLocalDateTime(),
+				rs.getTimestamp(UPDATED_AT).toLocalDateTime());
+>>>>>>> bdcdd6433a7948991c2dbbfa5c090c7fc33528d1
 
 	}
 	
@@ -280,16 +303,16 @@ public class AccountDAOImpl implements AccountDAO {
      */
     private Map<String, Object> mapRow(ResultSet rs) throws SQLException {
         Map<String, Object> map = new HashMap<>();
-        map.put("account_id", rs.getLong("account_id"));
-        map.put("user_id", rs.getLong("user_id"));
-        map.put("branch_id", rs.getLong("branch_id"));
-        map.put("account_number", rs.getLong("account_number"));
-        map.put("account_type", rs.getString("account_type"));
-        map.put("balance", rs.getBigDecimal("balance"));
-        map.put("currency", rs.getString("currency"));
-        map.put("status", rs.getString("status"));
-        map.put("opened_at", rs.getTimestamp("opened_at"));
-        map.put("updated_at", rs.getTimestamp("updated_at"));
+        map.put(ACCOUNT_ID, rs.getLong(ACCOUNT_ID));
+        map.put(USER_ID, rs.getLong(USER_ID));
+        map.put(BRANCH_ID, rs.getLong(BRANCH_ID));
+        map.put(ACCOUNT_NO, rs.getLong(ACCOUNT_NO));
+        map.put(ACCOUNT_TYPE, rs.getString(ACCOUNT_TYPE));
+        map.put(BALANCE, rs.getBigDecimal(BALANCE));
+        map.put(CURRENCY, rs.getString(CURRENCY));
+        map.put(STATUS, rs.getString(STATUS));
+        map.put(OPENED_AT, rs.getTimestamp(OPENED_AT));
+        map.put(UPDATED_AT, rs.getTimestamp(UPDATED_AT));
         return map;
     }
 	

@@ -1,6 +1,7 @@
 package com.fintrust.controller;
 
 import java.security.MessageDigest;
+import java.sql.SQLException;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
@@ -11,15 +12,17 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Include;
 import org.zkoss.zul.Label;
-import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 
 import com.fintrust.model.AccountCloseRequest;
 import com.fintrust.service.AccountCloseRequestService;
+import com.fintrust.service.UserServiceImpl;
 import com.fintrust.util.NotificationUtil;
 
 
 public class CloseAccountComposer extends SelectorComposer<Component>{
+	private static final long serialVersionUID = 1L;
+	
 	@Wire private Label accountNo;
 	@Wire private Textbox reason;
 	@Wire private Checkbox confirmClose;
@@ -36,7 +39,7 @@ public class CloseAccountComposer extends SelectorComposer<Component>{
 	}
 	
 	@Listen("onClick=#btnSubmit")
-	public void submitCloseAccountRequest() {
+	public void submitCloseAccountRequest() throws SQLException {
 		String reasonClose = reason.getValue();
 		long accountNo = accountNum;
 		long userId = (long) Sessions.getCurrent().getAttribute("user_id");
@@ -44,7 +47,7 @@ public class CloseAccountComposer extends SelectorComposer<Component>{
 		AccountCloseRequest accReq = new AccountCloseRequest();
 		accReq.setAccountNo(accountNo);
 		accReq.setReason(reasonClose);
-		accReq.setRequestedBy(userId);
+		accReq.setRequestedBy(new UserServiceImpl().getUserByUserId(userId));
 		
 		if(!confirmClose.isChecked()) {
 			NotificationUtil.showInstant("warning", "Please confirm first!");
@@ -69,7 +72,6 @@ public class CloseAccountComposer extends SelectorComposer<Component>{
 	
 	@Listen("onClick=#btnReset")
 	public void resetRequest() {
-		//Executions.sendRedirect("/user/userDashboard.zul");
 		Component root = getSelf();
 		Include inc = (Include) root.getPage().getFellow("main_content_sec");
 		inc.setSrc("/WEB-INF/components/view_all_account.zul");

@@ -41,13 +41,13 @@ public class ViewUpdateData extends SelectorComposer<Component>{
         newBranchName.setValue(selected_request.getNewBranchName()+"");
         newModeOfOperation.setValue(selected_request.getNewModeOfOperation());
         status.setValue(selected_request.getStatus()+"");
-        requestedBy.setValue(selected_request.getRequestedBy()+"");
+        
+        requestedBy.setValue(selected_request.getRequestedBy().getFullName());
         
 	}
 	
 	@Listen("onClick = #backBtn")
     public void onBackClick() {
-        //Executions.sendRedirect("/user/userDashboard.zul");
       	Component root = getSelf();
 		Include inc = (Include) root.getPage().getFellow("main_content_sec");
 		inc.setSrc("/admin/account/update_account_customer.zul");

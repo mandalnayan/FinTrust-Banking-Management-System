@@ -23,6 +23,9 @@ public class AccountServiceImpl implements AccountService {
 	private final AccountDAO accountDAO;
 	private final UserDetailsDAO userDetailsDAO;
 	private Connection connection = DBConnection.getConnection();
+	
+	private static final String LOGIN_USER = "user_id";
+	
 
 	public AccountServiceImpl() {
 		this.accountDAO = new AccountDAOImpl(connection);
@@ -30,9 +33,9 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public boolean isAccountExists(long user_id, String accountType) {
+	public boolean isAccountExists(long userId, String accountType) {
 		try {
-			return accountDAO.findByType(user_id, accountType) != null;
+			return accountDAO.findByType(userId, accountType) != null;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -45,7 +48,11 @@ public class AccountServiceImpl implements AccountService {
 			// Unique account number generation (for demo)
 			connection.setAutoCommit(false);
 			long accountNo = generateAccountNumber();
+<<<<<<< HEAD
 			Long userId = (Long) Sessions.getCurrent().getAttribute("user_id");
+=======
+			Long userId = (Long) Sessions.getCurrent().getAttribute(LOGIN_USER);
+>>>>>>> bdcdd6433a7948991c2dbbfa5c090c7fc33528d1
 			account.setUserId(userId);
 
 			if (accountNo == -1 || userId == null) {
@@ -93,7 +100,7 @@ public class AccountServiceImpl implements AccountService {
 		}
 		return null;
 	}
-
+	
 	@Override
 	public Account getAccountById(long accountId) {
 		try {
@@ -106,7 +113,11 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public List<Account> getAllAccounts() {
+<<<<<<< HEAD
 		List<Account> accounts = new ArrayList<>();
+=======
+		long user_id = (long) Sessions.getCurrent().getAttribute(LOGIN_USER);
+>>>>>>> bdcdd6433a7948991c2dbbfa5c090c7fc33528d1
 		try {
 			accounts = accountDAO.findAll();
 		} catch (SQLException e) {
@@ -119,9 +130,14 @@ public class AccountServiceImpl implements AccountService {
 	 * Find all created accounts
 	 */
 	@Override
+<<<<<<< HEAD
 	public List<Account> getAllUserAccounts() {
 		long userId = (long) Sessions.getCurrent().getAttribute("user_id");
 		List<Account> accounts = new ArrayList<>();
+=======
+	public List<Long> getAllAccountsNumber() {
+		long user_id = (long) Sessions.getCurrent().getAttribute(LOGIN_USER);
+>>>>>>> bdcdd6433a7948991c2dbbfa5c090c7fc33528d1
 		try {
 			accounts = accountDAO.findByUserId(userId);
 		} catch (SQLException e) {

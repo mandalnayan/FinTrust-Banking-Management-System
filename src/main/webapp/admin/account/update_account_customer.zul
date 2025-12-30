@@ -45,19 +45,19 @@
 	 </hbox>
     <listbox id="requestList" width="100%" mold="paging" pageSize="10">
         <listhead>
-            <listheader label="Request Id"/>
+            <listheader label="Request Id" width="100px"/>
             <listheader label="Account No"/>
-            <listheader label="New Type"/>
-            <listheader label="New Branch"/>
-            <listheader label="New Mode"/>
+            <listheader label="Status"/>
+            <listheader label="Requested By"/>
+            <listheader label="Requested At"/>
         </listhead>
         <template name="model">
             <listitem>
                 <listcell label="${each.requestId}"/>
                 <listcell label="${each.accountNo}"/>
-                <listcell label="${each.newAccountType}"/>
-                <listcell label="${each.newBranchName}"/>
-                <listcell label="${each.newModeOfOperation}"/>
+                <listcell label="${each.status}"/>
+                <listcell label="${each.requestedBy.fullName}"/>
+                <listcell label="${each.requestDate}"/>
             </listitem>
         </template>
     </listbox>

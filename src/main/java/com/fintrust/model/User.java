@@ -22,7 +22,7 @@ public class User {
     private Status status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private KycStatus kycStatus ;
+    private KycStatus kycStatus;
 
     public enum Role {
         ROLE_USER,
