@@ -7,10 +7,10 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zul.*;
 
+import com.fintrust.dao.TransactionsDAO;
+import com.fintrust.dao.impl.TransactionsDAOImpl;
 import com.fintrust.db.DBConnection;
 import com.fintrust.model_copy.Transaction;
-
-import zcom.finrust.dao_copy.TransactionHistoryDAO;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -26,14 +26,17 @@ public class TransactionHistoryController extends SelectorComposer<Component> {
 
 	@Wire
 	private Datebox toDate;
+	
+	TransactionsDAO transactionHistoryDAO; 
 
 	@Override
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
-		List<Transaction> transactions = TransactionHistoryDAO.loadTransactionData(null, null);
-		transactionListbox.getItems().clear();
+		transactionHistoryDAO = new TransactionsDAOImpl(null);
+	//	List<Transaction> transactions = transactionHistoryDAO.findAll();
+	//	transactionListbox.getItems().clear();
 		
-		transactionListbox.setModel(new ListModelList(transactions));
+		//transactionListbox.setModel(new ListModelList(transactions));
 	}
 
 	@Listen("onClick = #filterBtn")
@@ -53,8 +56,8 @@ public class TransactionHistoryController extends SelectorComposer<Component> {
 			return;
 		}
 
-		List<Transaction> transactions = TransactionHistoryDAO.loadTransactionData(new java.sql.Date(from.getTime()), new java.sql.Date(to.getTime()));
-		transactionListbox.setModel(new ListModelList(transactions));
+//		List<Transaction> transactions = TransactionHistoryDAO.loadTransactionData(new java.sql.Date(from.getTime()), new java.sql.Date(to.getTime()));
+//		transactionListbox.setModel(new ListModelList(transactions));
 	}
 
 	

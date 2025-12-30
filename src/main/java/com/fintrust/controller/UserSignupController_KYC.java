@@ -73,7 +73,7 @@ public class UserSignupController_KYC extends SelectorComposer<Component> {
         user.setEmail(email.getValue());
         user.setPhone(phoneNumber.getValue());
         user.setPassword(password.getValue());
-        }
+        
 
         // Send data to service layer
         boolean success = userService.registerUser(user);

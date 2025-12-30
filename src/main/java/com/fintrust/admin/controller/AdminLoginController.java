@@ -1,5 +1,7 @@
 package com.fintrust.admin.controller;
 
+import java.sql.Connection;
+
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.SelectorComposer;
@@ -8,13 +10,25 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
-import zcom.finrust.dao_copy.UserDAO;
-import zcom.finrust.dao_copy.UserDAOImpl;
+import com.fintrust.dao.UserDAO;
+import com.fintrust.dao.impl.UserDAOImpl;
+import com.fintrust.db.DBConnection;
 
+/**
+ * Admin login. Will be use in future
+ */
 public class AdminLoginController extends SelectorComposer<Window>{
 
 	@Wire Textbox email, password;
-    private UserDAO userDAO = new UserDAOImpl();
+	
+	private UserDAO userDAO;
+	@Override
+		public void doAfterCompose(Window comp) throws Exception {			
+			super.doAfterCompose(comp);
+			
+			Connection connection = DBConnection.getConnection();
+			userDAO = new UserDAOImpl(connection);
+		}
 
 	@Listen("onClick=#submit")
 	public void login() {
@@ -22,7 +36,7 @@ public class AdminLoginController extends SelectorComposer<Window>{
 		String pasw = password.getText();
 		
 		if(isAuthorize(adminName, pasw)) {
-			// Set session for curren user
+			// Set session for current user
 			Sessions.getCurrent().setAttribute("userName", adminName);
 			alert(adminName + ":: " + pasw);
 			
