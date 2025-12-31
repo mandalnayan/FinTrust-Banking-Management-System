@@ -29,7 +29,7 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
         
         if (userId == null) {
             Messagebox.show("Session expired. Please log in again.", "Error", Messagebox.OK, Messagebox.ERROR);
-           Executions.sendRedirect("/userDashboard.zul");
+            Executions.sendRedirect("/userDashboard.zul");
             return;
         }
 
@@ -51,7 +51,7 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
                 border = "4px solid #C62828";
             }
 
-            String cellStyle = "background-color:" + bgcolor + ";border-bottom:" + border + ";";
+            String cellStyle = "background-color: " + bgcolor + ";border-bottom:" + border + ";";
 
             Listcell c1 = new Listcell(acc.getAccountNumber() + "");
             Listcell c2 = new Listcell(acc.getAccountType().name());
@@ -70,7 +70,6 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
             item.appendChild(c3);
             item.appendChild(c4);
             
-
             // View icon
             A viewIcon = new A();
             viewIcon.setIconSclass("z-icon-eye");

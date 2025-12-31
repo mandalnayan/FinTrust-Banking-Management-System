@@ -10,8 +10,9 @@
 <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 <?link rel="stylesheet" type="text/css" href="/resources/css/auth-common.css"?>
 
-<!-- Show notification if any exist  -->
-<!-- <?init class="com.fintrust.util.PageInitNotifier" ?> -->
+<!-- Show notification login credentials  -->
+<?init class="com.fintrust.util.LoginInit"?>
+
 
 <zk xmlns:h="xhtml" xmlns:n="native">
 
@@ -32,6 +33,12 @@
 
             <label value="Welcome Back" sclass="login-title"/>
             <label value="Login to your FinTrust digital banking account" sclass="login-subtitle"/>
+
+<label
+    value="Invalid username or password"
+    visible="${param.error == 'true'}"
+    sclass="error-text"/>
+
 
             <vlayout spacing="15px" width="100%" sclass="login-form">
        

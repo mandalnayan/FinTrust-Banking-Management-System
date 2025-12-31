@@ -20,37 +20,36 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler {
 
 	private final UserService userService;
 
-	
 	public CustomAuthSuccessHandler(UserService userService) {
 		this.userService = userService;
 	}
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-	                                    Authentication authentication) throws IOException, ServletException {
+			Authentication authentication) throws IOException, ServletException {
 
-	    System.out.println("Successfully login");	    
+		System.out.println("Successfully login");
 
-	    String email = authentication.getName();
-	    User user = userService.getUserByUserName(email);
-	    System.out.println(user);
-	    if (user != null) {
-	        // Use HttpSession instead of ZK Session
-	        HttpSession httpSession = request.getSession(true);
-	        httpSession.setAttribute("user_id", user.getId());
-	        httpSession.setAttribute("admin_user_id", user.getId());
-	        httpSession.setAttribute("user_name", user.getFullName());
-	        httpSession.setAttribute("user_email", user.getEmail());
-	        
-	    }
+		String email = authentication.getName();
+		User user = userService.getUserByUserName(email);
+		System.out.println(user);
+		if (user != null) {
 
-	    // notification via ZK requires ZK session, so delay it to ZUL page
-	   //  NotificationUtil.push("info", "Welcome back " + user.getFullName());
-	    if (user.getRole().name().equalsIgnoreCase("ROLE_USER")) {
-	    	response.sendRedirect(request.getContextPath() + "/user/userDashboard.zul");
-	    } else {
-	    	response.sendRedirect(request.getContextPath() + "/admin/adminDashboard.zul");
-	    }	    
+			HttpSession httpSession = request.getSession(true);
+//	    Role based access
+			if (user.getRole().name().equalsIgnoreCase("ROLE_USER")) {
+				// Use HttpSession instead of ZK Session
+				httpSession.setAttribute("user_id", user.getId());
+				httpSession.setAttribute("user_name", user.getFullName());
+				httpSession.setAttribute("user_email", user.getEmail());
+				response.sendRedirect(request.getContextPath() + "/user/userDashboard.zul");
+			} else {
+				httpSession.setAttribute("admin_user_id", user.getId());
+				httpSession.setAttribute("user_name", user.getFullName());
+				httpSession.setAttribute("admin_user_email", user.getEmail());
+				response.sendRedirect(request.getContextPath() + "/admin/adminDashboard.zul");
+			}
+		}
 	}
 
 }
