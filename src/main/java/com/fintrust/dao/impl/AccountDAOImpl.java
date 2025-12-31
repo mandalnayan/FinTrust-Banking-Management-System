@@ -256,12 +256,9 @@ public class AccountDAOImpl implements AccountDAO {
 				ResultSet resultSet = statement.executeQuery()) {
 
 			if (resultSet.next()) {
-<<<<<<< HEAD
+
 				return resultSet.getLong("account_number");
-=======
-				long highestAccountNo = resultSet.getLong(ACCOUNT_NO);
-				return highestAccountNo;
->>>>>>> bdcdd6433a7948991c2dbbfa5c090c7fc33528d1
+
 			} else {
 				return 0l;
 			}
@@ -279,17 +276,10 @@ public class AccountDAOImpl implements AccountDAO {
      */
 	private Account mapRowtoAccount(ResultSet rs) throws SQLException {
 
-<<<<<<< HEAD
 		return new Account(rs.getLong("account_id"), rs.getLong("user_id"), rs.getLong("branch_id"),rs.getLong("nominee_id"),
 				rs.getLong("account_number"), AccountType.valueOf(rs.getString("account_type").toUpperCase()), rs.getBigDecimal("balance").doubleValue(),
 				rs.getString("currency"),AccountStatus.valueOf(rs.getString("status").toUpperCase()), rs.getTimestamp("opened_at").toLocalDateTime(),
 				rs.getTimestamp("updated_at").toLocalDateTime());
-=======
-		Account account = new Account(rs.getLong(ACCOUNT_ID), rs.getLong(USER_ID), rs.getLong(BRANCH_ID),rs.getLong(NOMINEE_ID),
-				rs.getLong(ACCOUNT_NO), AccountType.valueOf(rs.getString(ACCOUNT_TYPE).toUpperCase()), rs.getBigDecimal(BALANCE).doubleValue(),
-				rs.getString(CURRENCY),AccountStatus.valueOf(rs.getString(STATUS).toUpperCase()), rs.getTimestamp(OPENED_AT).toLocalDateTime(),
-				rs.getTimestamp(UPDATED_AT).toLocalDateTime());
->>>>>>> bdcdd6433a7948991c2dbbfa5c090c7fc33528d1
 
 	}
 	

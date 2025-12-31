@@ -38,36 +38,50 @@ public class AllAccounts extends SelectorComposer<Window> {
     }
     
     private void renderAccountList(List<Account> allAccounts) {
-    	System.out.println(allAccounts);
+  
         accountListbox.getItems().clear();
         for (Account acc : allAccounts) {
-            Listitem item = new Listitem();
-            item.appendChild(new Listcell(acc.getAccountNumber()+""));
-            item.appendChild(new Listcell(acc.getAccountType().name()));
-            item.appendChild(new Listcell(acc.getBalance()+""));
-            String accountStatus = acc.getAccount_status().name();
-            
-            item.appendChild(new Listcell(accountStatus));
+        	 Listitem item = new Listitem();
+        	 String accountStatus = acc.getAccount_status().name();
 
-            String bgcolor = "#E8F5E9", border = "4px solid #2E7D32";
-            if (accountStatus.equalsIgnoreCase("inactive")) {
-            	bgcolor = "#FFF8E1";
-            	border = "4px solid #F9A825";
-            } else if(accountStatus.equalsIgnoreCase("inactive")) {
-            	bgcolor= "#FDECEA";   /* light red */
-            	border = "4px solid #C62828";
-            }
-            item.setStyle("background-color:" + bgcolor + ";border-left:" + border);
-            // store account object as value
-            item.setValue(acc);
+             String bgcolor = "#E8F5E9";
+             String border = "4px solid #2E7D32";
 
-            // make item clickable
-            item.addEventListener("onClick", e -> openAccountDetail(acc));
+             if (accountStatus.equalsIgnoreCase("inactive")) {
+                 bgcolor = "#FFF8E1";
+                 border = "4px solid #F9A825";
+             } else if (accountStatus.equalsIgnoreCase("closed")) {
+                 bgcolor = "#FDECEA";
+                 border = "4px solid #C62828";
+             }
 
-            accountListbox.appendChild(item);
+             String cellStyle = "background-color:" + bgcolor + ";border-bottom:" + border + ";";
+
+             Listcell c1 = new Listcell(acc.getAccountNumber() + "");
+             Listcell c2 = new Listcell(acc.getAccountType().name());
+             Listcell c3 = new Listcell(String.format("%.2f", acc.getBalance()));
+             Listcell c4 = new Listcell(accountStatus);
+
+             c1.setStyle(cellStyle);
+             c2.setStyle(cellStyle);
+             c3.setStyle(cellStyle);
+             c4.setStyle(cellStyle);
+
+             item.appendChild(c1);
+             item.appendChild(c2);
+             item.appendChild(c3);
+             item.appendChild(c4);
+
+             item.setValue(acc);
+             item.addEventListener("onClick", e -> openAccountDetail(acc));
+
+             accountListbox.appendChild(item);
         }
         
     }
+    
+ 
+
     
     /** Search event **/
     @Listen("onClick = #searchBtn")

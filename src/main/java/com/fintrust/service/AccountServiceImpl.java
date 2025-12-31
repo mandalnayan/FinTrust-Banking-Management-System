@@ -48,11 +48,9 @@ public class AccountServiceImpl implements AccountService {
 			// Unique account number generation (for demo)
 			connection.setAutoCommit(false);
 			long accountNo = generateAccountNumber();
-<<<<<<< HEAD
+
 			Long userId = (Long) Sessions.getCurrent().getAttribute("user_id");
-=======
-			Long userId = (Long) Sessions.getCurrent().getAttribute(LOGIN_USER);
->>>>>>> bdcdd6433a7948991c2dbbfa5c090c7fc33528d1
+
 			account.setUserId(userId);
 
 			if (accountNo == -1 || userId == null) {
@@ -113,11 +111,9 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public List<Account> getAllAccounts() {
-<<<<<<< HEAD
+
 		List<Account> accounts = new ArrayList<>();
-=======
-		long user_id = (long) Sessions.getCurrent().getAttribute(LOGIN_USER);
->>>>>>> bdcdd6433a7948991c2dbbfa5c090c7fc33528d1
+
 		try {
 			accounts = accountDAO.findAll();
 		} catch (SQLException e) {
@@ -130,14 +126,9 @@ public class AccountServiceImpl implements AccountService {
 	 * Find all created accounts
 	 */
 	@Override
-<<<<<<< HEAD
 	public List<Account> getAllUserAccounts() {
 		long userId = (long) Sessions.getCurrent().getAttribute("user_id");
 		List<Account> accounts = new ArrayList<>();
-=======
-	public List<Long> getAllAccountsNumber() {
-		long user_id = (long) Sessions.getCurrent().getAttribute(LOGIN_USER);
->>>>>>> bdcdd6433a7948991c2dbbfa5c090c7fc33528d1
 		try {
 			accounts = accountDAO.findByUserId(userId);
 		} catch (SQLException e) {

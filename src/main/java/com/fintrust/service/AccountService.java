@@ -17,19 +17,6 @@ import com.fintrust.model.Notification;
  * @author FinTrust
  */
 public interface AccountService {
-<<<<<<< HEAD
-=======
-	// Account management
-    Notification openAccount(Account account);
-    boolean closeAccount(long accountNo);
-    boolean updateAccountDetails(Account account);
-    Account getAccountDetails(long accountNo);
-    Account getAccountById(long accountId);
-    List<Account> getAllAccounts();
-    public List<Long> getAllAccountsNumber(); 
-    
-    boolean isAccountExists(long userId, String accountType);
->>>>>>> bdcdd6433a7948991c2dbbfa5c090c7fc33528d1
 
     /* ===================== Account Management ===================== */
 
