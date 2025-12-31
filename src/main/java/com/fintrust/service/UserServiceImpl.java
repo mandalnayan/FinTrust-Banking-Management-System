@@ -3,6 +3,8 @@ package com.fintrust.service;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import com.fintrust.dao.impl.UserDetailsDAOImpl;
 import com.fintrust.db.DBConnection;
 import com.fintrust.model.User;
 import com.fintrust.model.UserDetails;
+import com.fintrust.util.NotificationUtil;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -22,6 +25,8 @@ public class UserServiceImpl implements UserService {
 	private Connection connection = DBConnection.getConnection();
 	private UserDAO userDAO = new UserDAOImpl(connection);
 	private UserDetailsDAO userDetailsDAO = new UserDetailsDAOImpl(connection);
+	
+	private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -60,9 +65,7 @@ public class UserServiceImpl implements UserService {
 			e.printStackTrace();
 		}
 
-		// Encrypt password (optional, we will add later)
-		// user.setPassword(PasswordUtil.encrypt(user.getPassword()));
-
+		
 		// Encrypted the password
 		String encrypted = encryptPassword(user.getPassword());
 		user.setPassword(encrypted);
@@ -86,7 +89,6 @@ public class UserServiceImpl implements UserService {
 			try {
 				connection.rollback();
 			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
@@ -101,29 +103,44 @@ public class UserServiceImpl implements UserService {
 		try {
 			return userDAO.findById(userId);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return new User();
 		}
 	}
 
+	/**
+	 * Updating user details
+	 * @param user
+	 */
 	public boolean updateUser(User user) {
 
 		try {
 			return userDAO.update(user);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("❌ Failed to update user Error", e);
 			return false;
 		}
 	}
-
+	
+	/**
+	 * Getting total registered users details
+	 */
+	public Long getTotalUsers() {
+		try {
+			return userDAO.getTotalUsers();
+		} catch (SQLException e) {
+			NotificationUtil.showInstant("error", "Failed to load user count." + e.getMessage());
+			logger.error("❌ Failed to load user count Error:", e);
+		}
+		return 0l;
+	}
+	
 	/**
 	 * Future implementation
 	 */
 	@Override
 	public void update2FA(UserDetails user) {
-		// TODO Auto-generated method stub
+	
 
 	}
 
@@ -136,7 +153,6 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public boolean isAuthorize(String userName, String password) {
-		// String digestPassword = MessageDigestion.digestPassword(password);
 		password = encryptPassword(password);
 		// converting password into digest password
 		try {
@@ -148,7 +164,6 @@ public class UserServiceImpl implements UserService {
 				return true;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
@@ -169,7 +184,6 @@ public class UserServiceImpl implements UserService {
 			User user = userDAO.findByEmail(userName);
 			return user;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -188,7 +202,6 @@ public class UserServiceImpl implements UserService {
 				return false;
 			return userDAO.updatePassword(email, encryptedPassword);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;

@@ -39,8 +39,7 @@ public class UserDashboardController extends SelectorComposer<Component> {
 	@Override
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
-//    	main_content_sec = (Include) Sessions.getCurrent().getAttribute("main_content_sec");
-//    	if (main_content_sec == null) 
+
 		Sessions.getCurrent().setAttribute("main_content_sec", main_content_sec);
 	}
 

@@ -174,6 +174,17 @@ public class UserDAOImpl implements UserDAO {
 			return ps.executeUpdate() > 0;
 		}
 	}
+	
+	@Override
+	public Long getTotalUsers() throws SQLException {
+		String sql = "Select count(*) from users";
+		
+		try(Statement stmt = connection.createStatement()) {
+			ResultSet rs = stmt.executeQuery(sql);
+			if (rs.next()) return rs.getLong(1);
+		}
+		return 0l;
+	}
 
 	/**
 	 * Maps a ResultSet row into a Map representing the user record.

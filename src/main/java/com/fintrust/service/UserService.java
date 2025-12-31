@@ -47,8 +47,26 @@ public interface UserService {
 	 */
 	boolean isAuthorize(String userName, String password);
 	
+	/**
+	 * Get user by user name (email)
+	 * @param userName
+	 * @return
+	 */
 	User getUserByUserName(String userName);
 	
+	/**
+	 * Get user by user id
+	 * @param userId
+	 * @return
+	 * @throws SQLException
+	 */
 	User getUserByUserId(Long userId) throws SQLException;
+	
+	/**
+	 * Get total users
+	 * @return
+	 * @throws SQLException
+	 */
+	Long getTotalUsers();
     
 }

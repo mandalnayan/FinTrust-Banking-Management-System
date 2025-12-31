@@ -72,7 +72,37 @@ public class UserDetailsServiceImpl {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		NotificationUtil.showInstant("error", "Faild to load user details. Please refresh the page.");
+		return new UserDetails();
+	}
+	
+	/**
+	 * Getting the logined admin details
+	 * 
+	 * @return
+	 */
+	public UserDetails getLogedInAdminDetails() {
+		try {			
+			Long userId = (Long) Sessions.getCurrent().getAttribute("admin_id");
+
+			if (userId != null) {
+				UserDetails ud = userDetailsDAOImpl.findByUserId(userId);
+				if (ud.getAadhaarMasked() != null) {
+					String aadharUnmasked = EncryptUtil.decrypt(ud.getAadhaarMasked(), secretKey);
+					ud.setAadhaarMasked(aadharUnmasked);
+				}
+				if (ud.getPanMasked() != null) {
+					String panUnmasked = EncryptUtil.decrypt(ud.getPanMasked(), secretKey);
+					ud.setPanMasked(panUnmasked);
+				}
+				if (ud != null)
+					return ud;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		NotificationUtil.showInstant("error", "Faild to load user details. Please refresh the page.");

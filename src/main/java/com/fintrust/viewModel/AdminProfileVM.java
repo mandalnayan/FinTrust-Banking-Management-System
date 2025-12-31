@@ -30,42 +30,23 @@ import com.fintrust.util.NotificationUtil;
 /**
  * This profile is rendering by both user and admin
  */
-public class UserProfileVM {
+public class AdminProfileVM {
 
 	private UserDetailsServiceImpl userService;
-	private AccountService accountService;
 	private UserDetails userDetails;
 	private Account selectedAccount;
 	private String placeholderMsg;
 	private boolean editMode = false;
 
-	private List<Account> accountList;
-
 	@Init
 	@NotifyChange("userDetails")
 	public void init() {
-		accountService = new AccountServiceImpl();
-
-		accountList = accountService.getAllAccounts();
-		if (accountList == null || accountList.size() == 0) {
-			NotificationUtil.showInstant("error", "Faild to load account details. \nPlease refresh the page");
-			placeholderMsg = "Account is not available";
-		} else {
-			selectedAccount = accountList.get(0);
-			placeholderMsg = "Select account";
-		}
+	
 		userService = new UserDetailsServiceImpl();
-		userDetails = userService.getLogedInDetails();
+		userDetails = userService.getLogedInAdminDetails();
 		Sessions.getCurrent().setAttribute("user", userDetails);
 	}
 
-	@NotifyChange("selectedAccount")
-	public void setSelectedAccount(Account selectedAccount) {
-		if (selectedAccount != null) {
-			this.selectedAccount = selectedAccount;
-			userService.updatePrimaryAccount(selectedAccount.getAccountId());
-		}
-	}
 
 	@Command
 	@NotifyChange("editMode")
@@ -105,11 +86,6 @@ public class UserProfileVM {
 	// Getters and setters
 	public UserDetails getUserDetails() {
 		return userDetails;
-	}
-
-	// Return accountlist
-	public List<Account> getAccountList() {
-		return accountList;
 	}
 
 	// Get Selected Account

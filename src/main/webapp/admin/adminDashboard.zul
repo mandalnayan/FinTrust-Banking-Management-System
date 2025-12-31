@@ -45,7 +45,7 @@
           <toolbarbutton label="Close Request" sclass="menu-item" id = "closeAccount"/>
 
           <toolbarbutton label="Cards request" sclass="menu-item" id = "cardRequest" />
-          <toolbarbutton label="Admin Profile" sclass="menu-item" id = "profile" disabled="true"/>
+          <toolbarbutton label="Admin Profile" sclass="menu-item" id = "profile"/>
         </vbox>
 
         <div sclass="sidebar-footer">
@@ -59,7 +59,7 @@
    
     <center sclass = "zero-padding">
     	<div zclass="no-defaultCSS" style="height:100%; width:100%;">
-    		<include id="main_content_sec" src="/WEB-INF/components/dashboard.zul" vflex="1" hflex="1" />
+    		<include id="main_content_sec" src="/WEB-INF/components/admin_dashboard.zul" vflex="1" hflex="1" />
     	</div>
     </center>
 

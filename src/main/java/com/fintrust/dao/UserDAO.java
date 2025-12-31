@@ -84,6 +84,13 @@ public interface UserDAO {
      * @throws SQLException if database operation fails
      */
     boolean updatePassword(String email, String password) throws SQLException;
+    
+    /**
+     * Getting total registered users
+     * @return
+     * @throws SQLException
+     */
+    Long getTotalUsers() throws SQLException;
 
     /**
      * Deletes a user record. Banking systems recommend soft delete,

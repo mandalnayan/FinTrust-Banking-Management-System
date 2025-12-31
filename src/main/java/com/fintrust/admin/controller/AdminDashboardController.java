@@ -42,7 +42,7 @@ public class AdminDashboardController extends SelectorComposer<Component>{
     
     @Listen("onClick=#admindashboard")
     public void adminDashboard() {
- 	   main_content_sec.setSrc("/admin/dashboard.zul");
+ 	   main_content_sec.setSrc("/WEB-INF/components/admin_dashboard.zul");
     }
     
     @Listen("onClick=#users")
@@ -70,6 +70,11 @@ public class AdminDashboardController extends SelectorComposer<Component>{
     public void cardReqest() {
 	   main_content_sec.setSrc("/admin/adminCards.zul"); 
     }
+    	
+     	@Listen("onClick=#profile")
+        public void profile() {
+    	   main_content_sec.setSrc("/WEB-INF/components/adminProfile.zul"); 
+        }
    
     // getters for data binding if you bind via MVVM (optional)   
     public int getPendingCount() { return pendingCount; }

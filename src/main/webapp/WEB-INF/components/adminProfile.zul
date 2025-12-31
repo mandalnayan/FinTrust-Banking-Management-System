@@ -1,0 +1,120 @@
+<?page title="user Profile - FinTrust Bank" contentType="text/html;charset=UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/resources/css/profile.css"?>
+<?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
+
+<zk xmlns:h="xhtml">
+	<window width="100%" vflex="1" zclass="wnd"
+		viewModel="@id('vm') @init('com.fintrust.viewModel.AdminProfileVM')">
+
+		<!-- CENTER: Main Profile Content -->
+
+		<vlayout sclass="profile-container" height="100%"
+			style="display:flex; flex-direction:column;" hflex="1">
+
+			<!-- Header (fixed) -->
+			<hbox align="center" pack="center" sclass="profile-header"
+				spacing="16px" hflex="1">
+				<image src="/resources/images/default.jpg"
+					sclass="profile-avatar" />
+				<vbox hflex="1">
+					<label value="@load(vm.userDetails.user.fullName)"
+						sclass="profile-name" />
+					<label value="@load(vm.userDetails.user.email)"
+						sclass="profile-email" />
+					<hbox>
+						<label value="Joined on:" sclass="profile-date" />
+						<label value="@load(vm.registeredDateFormatted)"
+							sclass="profile-date" />
+					</hbox>
+				</vbox>
+
+			</hbox>
+
+			<!-- Scrollable Form Section -->
+			<vlayout vflex="1"
+				sclass="profile-form-wrapper hide-scrollbar"
+				style="padding-top:20px;">
+
+				<!-- Profile Form -->
+				<vbox sclass="profile-form" spacing="15px"
+					width="100%">
+					<hbox pack="center" hflex="1">
+						<label value="Personal Information"
+							sclass="section-title" />
+					</hbox>
+					<grid width="100%" height="100%"
+						sclass="info-grid">
+						<rows>
+							<row>
+								<label value="Full Name:" />
+								<textbox
+									value="@bind(vm.userDetails.user.fullName)" hflex="1"
+									placeholder="full name" />
+							</row>
+							<row>
+								<label value="Email:" />
+								<textbox
+									value="@load(vm.userDetails.user.email)" hflex="1"
+									readonly="true" />
+							</row>
+							<row>
+								<label value="Phone:" />
+								<textbox
+									value="@bind(vm.userDetails.user.phone)" hflex="1"
+									placeholder="Enter phone number" />
+							</row>
+							<row>
+								<label value="Date of Birth:" />
+								<datebox value="@load(vm.dob)" hflex="1"
+									format="yyyy-MM-dd" readonly="true" disabled="true" />
+							</row>
+							<row>
+								<label value="Country:" />
+								<textbox
+									value="@bind(vm.userDetails.country)" hflex="1" />
+							</row>
+							<row>
+								<label value="State:" />
+								<textbox
+									value="@bind(vm.userDetails.state)" hflex="1" />
+							</row>
+							<row>
+								<label value="City:" />
+								<textbox
+									value="@bind(vm.userDetails.city)" hflex="1" />
+							</row>
+							<row>
+								<label value="Pincode:" />
+								<textbox
+									value="@bind(vm.userDetails.pincode)" hflex="1" />
+							</row>
+						</rows>
+					</grid>
+
+					<hbox spacing="10px" align="center" pack="center"
+						sclass="profile-btn-row">
+						<button label="Update Profile"
+							sclass="update-btn" onClick="@command('updateProfile')" />
+						<button label="Change Password"
+							sclass="secondary-btn" onClick="@command('changePassword')" />
+					</hbox>
+				</vbox>
+
+				<!-- Security Section -->
+				<vbox spacing="15px" sclass="security-section"
+					align="center" hflex="1" pack="center"
+					style="background-color:#f2f6ff; border-radius:10px; padding:20px;">
+					<label value="Security Settings"
+						sclass="section-title" />
+					<hbox spacing="10px" align="center">
+						<label value="Two-Factor Authentication:" />
+						<checkbox label="Enable"
+							onCheck="@command('toggle2FA')" />
+						<!-- checked="@bind(vm.user.twoFactor)" -->
+					</hbox>
+				</vbox>
+
+			</vlayout>
+		</vlayout>
+	</window>
+</zk>

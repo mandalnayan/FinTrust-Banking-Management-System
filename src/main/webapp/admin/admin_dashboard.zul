@@ -1,0 +1,113 @@
+<?page title="Admin Dashboard"?>
+
+<zk height="100%" width="100%">
+<style>
+.admin-card {
+    min-width: 220px;
+}
+
+.admin-card.highlight {
+    border-left: 4px solid #1976d2;
+}
+
+.admin-card.danger {
+    border-left: 4px solid #d32f2f;
+}
+
+</style>
+    <window viewModel="@id('vm') @init('com.fintrust.viewModel.AdminDashboardVM')"
+            width="100%" vflex="1" border="none" sclass="wind">
+
+        <borderlayout width="100%" vflex="1">
+
+            <!-- NORTH: KPI CARDS -->
+            <north sclass="card-sec">
+                <hlayout sclass="summary-row" spacing="16px" hflex="1" style="flex-wrap:wrap">
+
+                    <vbox sclass="summary-card admin-card">
+                        <label value="Total Customers" sclass="summary-title"/>
+                        <label value="@load(vm.totalUsers)" sclass="summary-value"/>
+                    </vbox>
+
+                    <vbox sclass="summary-card admin-card">
+                        <label value="Total Accounts" sclass="summary-title"/>
+                        <label value="@load(vm.totalAccounts)" sclass="summary-value"/>
+                    </vbox>
+
+                    <vbox sclass="summary-card admin-card highlight">
+                        <label value="Today's Transactions" sclass="summary-title"/>
+                        <label value="@load(vm.todayTransactions)" sclass="summary-value"/>
+                    </vbox>
+
+                    <vbox sclass="summary-card admin-card danger">
+                        <label value="Pending Approvals" sclass="summary-title"/>
+                        <label value="@load(vm.pendingApprovals)" sclass="summary-value"/>
+                    </vbox>
+
+                </hlayout>
+            </north>
+
+            <!-- CENTER -->
+            <center sclass="card-sec card-sec-padding" vflex="1">
+                <vlayout vflex="1" style="overflow:auto;">
+
+                    <!-- Charts + Alerts -->
+                    <hlayout spacing="18px" style="flex-wrap:wrap">
+
+                        <vbox sclass="widget widget-chart" hflex="1" minWidth="320px">
+                            <label value="Transaction Volume (30 Days)" sclass="widget-title"/>
+                            <image src="/resources/images/chart-placeholder.png"
+                                   sclass="widget-chart-img"/>
+                        </vbox>
+
+                        <vbox sclass="widget widget-alerts" hflex="1" minWidth="320px">
+                            <label value="System Alerts" sclass="widget-title"/>
+                            <listbox model="@load(vm.alerts)" height="220px">
+                                <template name="model">
+                                    <listitem>
+                                        <listcell label="@load(each)"/>
+                                    </listitem>
+                                </template>
+                            </listbox>
+                        </vbox>
+
+                    </hlayout>
+
+                    <!-- Recent Activity -->
+                    <vbox>
+                        <label value="Recent Transactions" sclass="section-title"/>
+
+                        <grid model="@load(vm.recentTransactions)"
+                              sclass="transactions-grid"
+                              mold="paging"
+                              pageSize="5"
+                              emptyMessage="No transactions">
+
+                            <columns>
+                                <column label="Date"/>
+                                <column label="User"/>
+                                <column label="Type"/>
+                                <column label="Amount"/>
+                                <column label="Status"/>
+                            </columns>
+
+                            <rows>
+                                <template name="model">
+                                    <row>
+                                        <label value="@load(each.createdAt)"/>
+                                        <label value="@load(each.userId)"/>
+                                        <label value="@load(each.txnType)"/>
+                                        <label value="@load(each.amount)"/>
+                                        <label value="@load(each.status)"/>
+                                    </row>
+                                </template>
+                            </rows>
+                        </grid>
+                    </vbox>
+
+                </vlayout>
+            </center>
+
+        </borderlayout>
+    </window>
+</zk>
