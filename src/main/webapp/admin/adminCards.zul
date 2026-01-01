@@ -1,33 +1,46 @@
 <zk>
 
 	<style>
-		.form-container { min-width: 40%; /* Prevent it from shrinking
-		too much */ max-width: 90%; /* Prevent it from stretching too
-		wide */ border-radius: 15px; padding: 20px; box-shadow: 0 5px
-		15px rgba(0,0,0,0.2); background-color: #fff; animation: fadeIn
-		0.5s ease-in; margin: 0px auto; }
-
+	  .container {
+        min-width: 40%;
+        max-width: 90%;
+        margin: 30px auto;
+        background: #fff;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        animation: fadeIn 0.5s ease-in; margin: 0px auto;
+    }
+		
 		label { font-weight: bold; color: #333; }
-
 
 		.btn-primary { background: linear-gradient(135deg, #6c63ff,
 		#8e7dff); color: white; border: none; padding: 10px 0;
 		border-radius: 10px; font-size: 12pt; cursor: pointer;
 		transition: 0.3s all; width: 150px; }
 
-		.btn-primary:hover { background: linear-gradient(135deg,
+		.btn-primary:hover {background: linear-gradient(135deg,
 		#574fd6, #6c63ff); transform: translateY(-2px); box-shadow: 0
 		3px 10px rgba(0,0,0,0.2); }
+		
+		  @keyframes fadeIn {
+        0% {opacity: 0; transform: translateY(20px);}
+        100% {opacity: 1; transform: translateY(0);}
+    }
 
 	</style>
 
 	<hbox align="center" pack="center" width="100%" height="100%"
 		style=" background-color: #B7AEC8;">
-		<window title="Pending Card Requests" sclass="form-container"
+		<window zclass="container" vflex="1"
 			border="normal"
 			apply="com.fintrust.cards.controller.CardApprovalController">
+			<hbox pack="center" align="center">
+			<label value="Pending Card Requests" style="font-weight:bold; font-size:20px;"/>
+			</hbox>
+			<space spacing="20px"/>
 			<listbox id="requestList" width="100%" mold="paging"
-				pageSize="5">
+				pageSize="5" vflex="1">
 				<listhead>
 					<listheader label="Request Id" />
 					<listheader label="User ID" />

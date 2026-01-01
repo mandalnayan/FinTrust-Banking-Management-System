@@ -1,5 +1,11 @@
 package com.fintrust.viewModel;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -54,6 +60,9 @@ public class KycFormVM {
 	private UserServiceImpl userService = new UserServiceImpl();
 	private OtpService otpService;
 	private UserDetailsServiceImpl userDetailsService = new UserDetailsServiceImpl();
+	
+	// Directory where files will be saved
+    String uploadDir = "/src/main/webapp/WEB-INF/resources/uploads/address-proof/"; // change as needed
 
 	private static final Logger logger = LogManager.getLogger(KycFormVM.class);
 
@@ -88,7 +97,6 @@ public class KycFormVM {
 	}
 
 	public void setGender(String gender) {
-		// System.out.println("Updating gender");
 		userKycDTO.setGender(gender);
 	}
 
@@ -105,7 +113,6 @@ public class KycFormVM {
 	}
 
 	public String getAddressProofLabel() {
-		// System.out.println("invoked " + userKycDTO.getAddressProofFileName());
 		if (userKycDTO.getAddressProofFileName() == null || userKycDTO.getAddressProofFileName().isBlank()) {
 			return "Upload address";
 		}
@@ -150,23 +157,50 @@ public class KycFormVM {
 	// --------------------------
 	@Command
 	@NotifyChange("*")
-	public void uploadAddressProof(@org.zkoss.bind.annotation.BindingParam("event") UploadEvent event) {
-		Media media = event.getMedia();
+	public void uploadAddressProof(
+	        @org.zkoss.bind.annotation.BindingParam("event") UploadEvent event) {
 
-		try {
-			validateFile(media, "upload.address.max.size", addressType, "Address proof must be less than 5 MB");
-//			addressProofFile = media.getByteData();
-			addressProofLabel = media.getName();
-//			String type = media.getContentType();
+	    Media media = event.getMedia();
 
-			userKycDTO.setAddressProofFileName(addressProofLabel);
-			// NotificationUtil.showInstant("warning", "size " + photoFile.length + " type "
-			// + type);
-		} catch (WrongValueException ex) {
-			NotificationUtil.showInstant("warning", ex.getMessage());
-			logger.error("File formate or size is not supported");
-		}
+	    try {
+	        // validate file (existing logic)
+	        validateFile(media, "upload.address.max.size", addressType,
+	                "Address proof must be less than 5 MB");
 
+	        // File name
+	        String fileName = media.getName();
+	        addressProofLabel = fileName;
+	        userKycDTO.setAddressProofFileName(fileName);
+
+	        File dir = new File(uploadDir);
+	        if (!dir.exists()) {
+	            dir.mkdirs();
+	        }
+
+	        // Target file
+	        File file = new File(uploadDir + File.separator + fileName);
+
+	        // Save file
+	        if (media.isBinary()) {
+	            try (FileOutputStream fos = new FileOutputStream(file)) {
+	                fos.write(media.getByteData());
+	            }
+	        } else {
+	            // For text-based media
+	            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))) {
+	                writer.write(media.getStringData());
+	            }
+	        }
+
+	        NotificationUtil.showInstant("success", "File uploaded successfully");
+
+	    } catch (WrongValueException ex) {
+	        NotificationUtil.showInstant("warning", ex.getMessage());
+	        logger.error("File format or size is not supported", ex);
+	    } catch (IOException ex) {
+	        NotificationUtil.showInstant("error", "Failed to save file" + ex.getMessage());
+	        logger.error("File saving failed", ex);
+	    }
 	}
 
 	@Command
@@ -180,10 +214,36 @@ public class KycFormVM {
 			photoLabel = media.getName();
 			String type = media.getContentType();
 			userKycDTO.setPhotoFileName(photoLabel);
+			
+//			Saving into local file system
+			File dir = new File(uploadDir);
+	        if (!dir.exists()) {
+	            dir.mkdirs();
+	        }
+	        
+	     // Target file
+	        File file = new File(uploadDir + File.separator + photoLabel);
+
+	        // Save file
+	        if (media.isBinary()) {
+	            try (FileOutputStream fos = new FileOutputStream(file)) {
+	                fos.write(media.getByteData());
+	            }
+	        } else {
+	            // For text-based media
+	            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))) {
+	                writer.write(media.getStringData());
+	            }
+	        }
+			
 			NotificationUtil.showInstant("warning", "size " + photoFile.length + " type " + type);
-		} catch (WrongValueException ex) {
-			NotificationUtil.showInstant("warning", ex.getMessage());
-		}
+		 } catch (WrongValueException ex) {
+		        NotificationUtil.showInstant("warning", ex.getMessage());
+		        logger.error("File format or size is not supported", ex);
+		    } catch (IOException ex) {
+		        NotificationUtil.showInstant("error", "Failed to save file" + ex.getMessage());
+		        logger.error("File saving failed", ex);
+		    }
 
 	}
 

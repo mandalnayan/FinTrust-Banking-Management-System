@@ -13,10 +13,18 @@
 
 <?page title="Transactions" contentType="text/html;charset=UTF-8"?>
 <zk>
-	<window apply="com.fintrust.controller.TransactionHistoryController"
-		width="100%" vflex="1">
 
-			<vlayout spacing="30px" vflex="1">
+	<style>
+		/* animation */ .wnd{ animation: fadeIn 0.5s ease-in; }
+
+		@keyframes fadeIn { 0% {opacity: 0; transform:
+		translateY(20px);} 100% {opacity: 1; transform: translateY(0);}
+		}
+	</style>
+	<window apply="com.fintrust.controller.TransactionHistoryController"
+		zclass="wnd" width="100%" vflex="1">
+
+		<vlayout spacing="30px" vflex="1">
 			<!-- Header -->
 			<hbox width="100%" pack="center" spacing="10px"
 				style="align-items:center; margin: 0px auto">
@@ -42,7 +50,7 @@
 			</hbox>
 
 			<!-- Transaction list -->
-			<listbox id="transactionListbox" mold="paging" vflex="1" 
+			<listbox id="transactionListbox" mold="paging" vflex="1"
 				pageSize="4" sizedByContent="true"
 				itemRenderer="com.fintrust.renderview.TransactionRender"
 				style="border:1px solid #ccc; border-radius:8px;">
@@ -58,7 +66,7 @@
 					<listheader label="Date" width="auto" sort="auto" />
 				</listhead>
 			</listbox>
-</vlayout>
-		
+		</vlayout>
+
 	</window>
 </zk>

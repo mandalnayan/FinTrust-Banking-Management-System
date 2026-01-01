@@ -1,6 +1,8 @@
 <?page title="Customer KYC - FinTrust Bank" contentType="text/html;charset=UTF-8"?>
 <?link rel="stylesheet" type="text/css" href="/resources/css/bankingForms.css"?>
 
+
+
 <zk xmlns="http://www.zkoss.org/2005/zul" xmlns:h="xhtml">
 
 	<window width="100%" vflex="1" zclass="wnd" id="windw"
@@ -62,13 +64,14 @@
 						class="form-row">
 						<vlayout hflex="1">
 							<label value="Gender" />
-							<radiogroup style="display: flex; column-gap: 12px;" 
+							<radiogroup
+								style="display: flex; column-gap: 12px;"
 								selectedItem="@bind(vm.userKycDTO.gender)">
 								<radio label="Male" value="male" />
 								<radio label="Female" value="female" />
 								<radio label="Other" value="other" />
 							</radiogroup>
-							
+
 						</vlayout>
 
 						<vlayout hflex="1">
@@ -130,13 +133,22 @@
 						class="form-row">
 						<vlayout hflex="1">
 							<label value="Address Proof" />
-							<fileupload label="@bind(vm.addressProofLabel)"
-								onUpload="@command('uploadAddressProof', event=event)" />
+							<hbox hflex="1" vflex="1" pack="start" align="center">
+								<fileupload label="upload"
+									onUpload="@command('uploadAddressProof', event=event)" />
+								<label
+									value="@bind(vm.addressProofLabel)" onClick='Executions.sendRedirect("/addressProofView.zul")'/>
+							</hbox>
+
 						</vlayout>
 						<vlayout hflex="1">
 							<label value="Photo" />
-							<fileupload label="@bind(vm.photoLabel)" 
-								onUpload="@command('uploadPhoto', event=event)" />
+							<hbox hflex="1" vflex="1" pack="start" align="center">
+								<fileupload label="upload"
+									onUpload="@command('uploadPhoto', event=event)" />
+								<label
+									value="@bind(vm.addressProofLabel)" onClick='Executions.sendRedirect("/addressProofView.zul")'/>
+							</hbox>
 						</vlayout>
 					</hbox>
 

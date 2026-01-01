@@ -1,3 +1,14 @@
+
+/* animation */
+.wnd{
+	animation: fadeIn 0.5s ease-in;
+}
+
+	 @keyframes fadeIn {
+        0% {opacity: 0; transform: translateY(20px);}
+        100% {opacity: 1; transform: translateY(0);}
+    }
+
 /* KYC Form - FinTrust */
 .kyc-container { display:flex; flex-direction:column; height:100%; padding:10px 40px; background:#f5f8fc; }
 

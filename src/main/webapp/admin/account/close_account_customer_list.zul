@@ -11,7 +11,7 @@
 
     .form-container {
         min-width: 40%;
-        max-width: 75%;
+        max-width: 90%;
         border-radius: 15px;
         padding: 25px;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
@@ -99,12 +99,13 @@
 </style>
 
 <hbox align = "center" pack = "center" width="100%" height = "100%" style = " background-color: #003366;">
-<window sclass="form-container" border="normal" apply="com.fintrust.admin.controller.AccountCloseApprovelComposer">
+<window zclass="form-container" vflex="1" border="normal" apply="com.fintrust.admin.controller.AccountCloseApprovelComposer">
 
-	 <hbox align="center" pack="center" spacing="10px" height="50px" width="100%">
+	 <hbox align="center" pack="center" hflex="1">
 	 	<label value="Pending Account Closing Requests" style="font-size:20px; font-weight:bold; color:#333" />
 	 </hbox>
-    <listbox id="requestList" width="100%" mold="paging" pageSize="10">
+	 <space/>
+    <listbox id="requestList" width="100%" mold="paging" pageSize="10" vflex="1">
        <listhead>
        		<listheader width="100px">Request ID</listheader>
        		<listheader>accountNo</listheader>
