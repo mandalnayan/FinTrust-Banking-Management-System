@@ -14,7 +14,7 @@
 			<hbox align="center" sclass="kyc-header" spacing="16px"
 				hflex="1">
 				<vbox hflex="1" align="center">
-					<label value="Customer KYC Verification"
+					<label value="Customer KYC Updation"
 						sclass="kyc-title" />
 					<label
 						value="Please fill in your KYC details to activate your account."
@@ -50,7 +50,7 @@
 							<label value="Email Address" />
 							<textbox width="100%"
 								value="@bind(vm.userKycDTO.email)"
-								placeholder="example@mail.com" />
+								placeholder="example@mail.com" readonly="true"/>
 						</vlayout>
 						<vlayout hflex="1">
 							<label value="Date of Birth" />
@@ -146,9 +146,10 @@
 							<hbox hflex="1" vflex="1" pack="start" align="center">
 								<fileupload label="upload"
 									onUpload="@command('uploadPhoto', event=event)" />
-								<label
-									value="@bind(vm.addressProofLabel)" onClick='Executions.sendRedirect("/addressProofView.zul")'/>
-							</hbox>
+								<a href="@bind(vm.addressProofView)" target="_blank" style="color:blue;">
+    <label value="@bind(vm.addressProofLabel)" />
+</a>
+</hbox>
 						</vlayout>
 					</hbox>
 

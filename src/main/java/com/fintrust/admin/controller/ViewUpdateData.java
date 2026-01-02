@@ -25,7 +25,7 @@ public class ViewUpdateData extends SelectorComposer<Component>{
 	@Override
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
-		currentEmployeeId = (Long) Sessions.getCurrent().getAttribute("admin_user_id");
+		currentEmployeeId = (Long) Sessions.getCurrent().getAttribute("admin_id");
         if (currentEmployeeId == null) return;
 		selected_request = (AccountUpdateRequest) Executions.getCurrent().getSession().getAttribute("selected_request");
      

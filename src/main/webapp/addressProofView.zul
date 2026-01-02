@@ -1,6 +1,24 @@
-<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?page title="PDF Viewer" contentType="text/html;charset=UTF-8"?>
 <zk>
-<window title="new page title" border="normal">
-New Content Here!
-</window>
+    <window title="PDF Viewer" border="normal" mode="popup"
+            width="900px" height="600px" position="center">
+
+        <vbox hflex="1" vflex="1">
+            <iframe id="pdfFrame" hflex="1" vflex="1"/>
+        </vbox>
+
+        <zscript><![CDATA[
+           
+            // Get the real path of PDF
+            String path = Executions.getCurrent().getDesktop().getWebApp().getRealPath("/report.pdf");
+            File file = new File(path);
+
+            AMedia media = new AMedia("report.pdf", "pdf", "application/pdf", new FileInputStream(file));
+
+            // Set PDF content to ZK iframe
+            Iframe iframe = (Iframe) getFellow("pdfFrame");
+            iframe.setContent(media);
+        ]]></zscript>
+
+    </window>
 </zk>

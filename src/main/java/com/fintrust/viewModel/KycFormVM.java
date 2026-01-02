@@ -49,6 +49,8 @@ public class KycFormVM {
 	private User user;
 
 	private String addressProofLabel;
+	private String addressProofView;
+	
 	private byte[] addressProofFile;
 	Set<String> addressType = Set.of("application/pdf");
 
@@ -119,12 +121,19 @@ public class KycFormVM {
 		return userKycDTO.getAddressProofFileName();
 	}
 
-	public String getPhotoLabel() {
-		System.out.println("invoked photo " + userKycDTO.getPhotoFileName());
+	public String getPhotoLabel() {	
 		if (userKycDTO.getPhotoFileName() == null || userKycDTO.getPhotoFileName().isBlank()) {
 			return "Upload photo";
 		}
 		return userKycDTO.getPhotoFileName();
+	}
+	
+	public String getAddressProofView() {
+		System.out.println("invoked photo " + userKycDTO.getPhotoFileName());
+		String addressPath = "addressProofView";
+		String addressProof = "/" + addressPath + ".zul";
+		
+		return addressProof;
 	}
 
 	/**
