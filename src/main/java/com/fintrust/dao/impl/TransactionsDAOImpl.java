@@ -5,7 +5,15 @@ package com.fintrust.dao.impl;
 import java.sql.*;
 import java.util.*;
 
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
+
 import com.fintrust.dao.TransactionsDAO;
+import com.fintrust.db.DBConnection;
+import com.fintrust.model.Transaction;
+
 
 /**
  * JDBC implementation of TransactionsDAO for banking systems.
@@ -74,7 +82,7 @@ public class TransactionsDAOImpl implements TransactionsDAO {
 
         return null;
     }
-
+   
     @Override
     public List<Map<String, Object>> findByAccountId(long accountId) throws SQLException {
         String sql = "SELECT * FROM transactions WHERE account_id = ? ORDER BY created_at DESC";
@@ -151,4 +159,71 @@ public class TransactionsDAOImpl implements TransactionsDAO {
         map.put("created_at", rs.getTimestamp("created_at"));
         return map;
     }
+
+    public List<Transaction> allCurrentUserTransactions() throws SQLException {
+
+        List<Transaction> list = new ArrayList<>();
+
+//        Session session = Executions.getCurrent().getSession();
+//        Long userId = Long.parseLong((String) session.getAttribute("user_id"));
+
+        String sql = "SELECT * FROM transactions WHERE user_id = ? ORDER BY created_at DESC";
+
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {
+
+            pst.setLong(1, 2);
+
+            try (ResultSet rs = pst.executeQuery()) {
+
+                while (rs.next()) {
+                    Transaction tx = new Transaction();
+
+                    tx.setTransactionId(rs.getLong("transaction_id"));
+                    tx.setUserId(rs.getLong("user_id"));
+                    tx.setAccountNumber(rs.getLong("account_number"));
+
+                    // Nullable columns
+                    tx.setCounterpartyAccountNumber(
+                            rs.getObject("counterparty_account_number", Long.class)
+                    );
+                    tx.setBeneficiaryId(
+                            rs.getObject("beneficiary_id", Long.class)
+                    );
+
+                    tx.setTxnReference(rs.getString("txn_reference"));
+                    tx.setTxnType(rs.getString("txn_type"));
+                    tx.setMode(rs.getString("mode"));
+                    tx.setAmount(rs.getBigDecimal("amount"));
+                    tx.setBalanceAfter(rs.getBigDecimal("balance_after"));
+                    tx.setDescription(rs.getString("description"));
+                    tx.setStatus(rs.getString("status"));
+
+                    // TIMESTAMP → LocalDateTime
+                    Timestamp ts = rs.getTimestamp("created_at");
+                    if (ts != null) {
+                        tx.setCreatedAt(ts.toLocalDateTime());
+                    }
+
+                    list.add(tx);
+                }
+            }
+        }
+
+        return list;
+    }
+
+    public static void main(String[] args) {
+    	
+    	TransactionsDAOImpl ob=new TransactionsDAOImpl(DBConnection.getConnection());
+    	 try {
+			List<Transaction> txx= ob.allCurrentUserTransactions();
+			System.out.println(txx);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	
+	}
+	
 }

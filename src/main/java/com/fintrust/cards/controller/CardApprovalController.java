@@ -42,10 +42,10 @@ public class CardApprovalController extends SelectorComposer<Component> {
 			rejectBtn.setVisible(false);
 
 			Hbox box = new Hbox();
-			box.setWidth("100%");
-			box.setHeight("50px");
-			box.setPack("center");
-			box.setAlign("center");
+			 box.setWidth("100%");
+			 box.setHeight("50px");
+			 box.setPack("center");
+			 box.setAlign("center");
 
 			Label label = new Label("No Card Request Pending for the Approvel");
 			label.setStyle("font-size:22px");
