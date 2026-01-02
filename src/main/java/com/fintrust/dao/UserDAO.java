@@ -74,6 +74,15 @@ public interface UserDAO {
      * @throws SQLException if database operation fails
      */
     boolean update(User user) throws SQLException;
+    
+    /**
+     * Update kyc status of user
+     * @param userId
+     * @param status
+     * @return
+     * @throws SQLException
+     */
+    boolean updateKycStatus(Long userId, String status) throws SQLException;
 
     /**
      * Updates only the password hash for a user.

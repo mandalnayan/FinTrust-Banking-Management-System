@@ -10,6 +10,8 @@ import org.zkoss.zul.Include;
 import com.fintrust.dao.impl.TransactionDAO;
 import com.fintrust.model.Account;
 import com.fintrust.model.Transaction;
+import com.fintrust.model.User;
+import com.fintrust.model.UserDetails;
 import com.fintrust.service.AccountService;
 import com.fintrust.service.AccountServiceImpl;
 import com.fintrust.service.CardServices;
@@ -23,7 +25,7 @@ public class UserDashboardVM {
 	private UserDetailsServiceImpl userDetailsServiceImpl;
 	private TransactionDAO transactionDAO = new TransactionDAO();
 	private CardServices cardService = new CardServices();
-	
+
 	private Account selectedAccount;
 	private Long selectedAccountNo;
 	private int pendingCount;
@@ -31,6 +33,8 @@ public class UserDashboardVM {
 	private Long activeCards;
 	private double availableBalance;
 	private String transferAmount;
+	private User user;
+	private String kycStatus;
 
 	private List<Transaction> recentTransactions;
 	private List<Account> accountList;
@@ -38,20 +42,23 @@ public class UserDashboardVM {
 	// ==========================
 	// INITIALIZATION
 	// ==========================
-	@Init	
-	public void init() {	
-		accountService  = new AccountServiceImpl();
-		userDetailsServiceImpl = new UserDetailsServiceImpl();		
+	@Init
+	public void init() {
+		accountService = new AccountServiceImpl();
+		userDetailsServiceImpl = new UserDetailsServiceImpl();
 		Long userId = (Long) Sessions.getCurrent().getAttribute("user_id");
 		if (userId == null) {
 			return;
 		}
 
 		Long accountId = userDetailsServiceImpl.getPrimaryAccount(userId);
+		user = userDetailsServiceImpl.getLogedInUser();
+		kycStatus = user.getKycStatus().name().toUpperCase();
+		
 		if (accountId == -1) {
 			return;
 		}
-		
+
 		selectedAccount = accountService.getAccountById(accountId);
 		if (selectedAccount == null)
 			return;
@@ -62,7 +69,7 @@ public class UserDashboardVM {
 		activeCards = cardService.getActiveCardCount();
 
 		// Load sample transactions
-		recentTransactions = transactionDAO.getTransactions(userId, null, null);				
+		recentTransactions = transactionDAO.getTransactions(userId, null, null);
 	}
 
 	// ==========================
@@ -75,12 +82,12 @@ public class UserDashboardVM {
 	}
 
 	// This dynamically returns balance of the selected account
-	
-	public Double getAvailableBalance() {		
+
+	public Double getAvailableBalance() {
 		return availableBalance;
 	}
 
-	public Long getSelectedAccountNo() {		
+	public Long getSelectedAccountNo() {
 		return selectedAccountNo;
 	}
 
@@ -95,9 +102,20 @@ public class UserDashboardVM {
 	public Long getActiveCards() {
 		return activeCards;
 	}
-	
+
+	public String getKycLabel() {
+	    return "UPDATED".equals(kycStatus) ? "UPDATED 🎉" : "PENDING ⚠️";
+	}
+
+	public String getKycStyle() {
+	    return "UPDATED".equals(kycStatus)
+	        ? "font-weight:bold;color:green;"
+	        : "font-weight:bold;color:red;";
+	}
+
+
 	public String getFormattedAmount(Transaction t) {
-		return (t.getTxnType().equalsIgnoreCase("credit") ? "+" : "-") + String.format("%.2f", t.getAmount()) + "₹"; 
+		return (t.getTxnType().equalsIgnoreCase("credit") ? "+" : "-") + String.format("%.2f", t.getAmount()) + "₹";
 	}
 
 	public List<Transaction> getRecentTransactions() {
@@ -111,13 +129,21 @@ public class UserDashboardVM {
 	public void go(@BindingParam("page") String page) {
 		Executions.sendRedirect("/user/" + page + ".zul");
 	}
-	
-	  @Command
-	   public void tranfer(@BindingParam("page") String url) {
-		  Include main_content_sec = (Include) Sessions.getCurrent().getAttribute("main_content_sec");
-				  
-		  main_content_sec.setSrc("/WEB-INF/components/" + url + ".zul");
-		   
-	   }
+
+	@Command
+	public void tranfer(@BindingParam("page") String url) {
+		Include mainContentSec = (Include) Sessions.getCurrent().getAttribute("main_content_sec");
+
+		mainContentSec.setSrc("/WEB-INF/components/" + url + ".zul");
 
 	}
+	
+	@Command
+	public void kycUpdate(@BindingParam("page") String url) {
+		Include mainContentSec = (Include) Sessions.getCurrent().getAttribute("main_content_sec");
+
+		mainContentSec.setSrc("/WEB-INF/components/" + url + ".zul");
+
+	}
+
+}

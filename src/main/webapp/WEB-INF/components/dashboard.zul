@@ -1,131 +1,155 @@
 <!-- ============================================================
- Page Name: Dashboard.zul
- Purpose: Displays user overview after login.
- Features: Shows account summary, recent transactions, quick links.
- Controller: UserDashboardController.java
- ============================================================ -->
+	Page Name: Dashboard.zul
+	Purpose: Displays user overview after login.
+	Features: Shows account summary, recent transactions, quick links.
+	Controller: UserDashboardController.java
+	============================================================ -->
 <?page title="User Dashboard"?>
 
-<zk height="100%" width="100%"> <!-- set height on root -->
-    <!-- Attach ViewModel -->
-    <window viewModel="@id('vm') @init('com.fintrust.viewModel.UserDashboardVM')" 
-            width="100%" vflex="1" border="none" zclass="wind">
+<zk height="100%" width="100%"><!-- set height on root -->
+	<!-- Attach ViewModel -->
+	<window
+		viewModel="@id('vm') @init('com.fintrust.viewModel.UserDashboardVM')"
+		width="100%" vflex="1" border="none" zclass="wind">
 
-        <borderlayout width="100%" vflex="1">
+		<borderlayout width="100%" vflex="1">
 
-            <!-- NORTH: Summary -->
-            <north sclass="card-sec">
-                <hlayout class="summary-row" spacing="18px">
+			<!-- NORTH: Summary -->
+			<north sclass="card-sec">
+				<hlayout class="summary-row" spacing="18px">
 
-                    <vbox sclass="summary-card"
-                    	style="text-align:center;" pack="center">
-                    	<label value="Account Number"
-                    		sclass="summary-title" />
-                    		<label value="@bind(vm.selectedAccountNo)"
-                    		sclass="summary-value" style="font-weight:bold;" />                 
-                    </vbox>
+					<vbox sclass="summary-card"
+						style="text-align:center;" pack="center">
+						<label value="Account Number"
+							sclass="summary-title" />
+						<label value="@bind(vm.selectedAccountNo)"
+							sclass="summary-value" style="font-weight:bold;" />
+					</vbox>
 
-                    <vbox class="summary-card" style="text-align:center;" pack="center">
-                        <label value="Available Balance"
-                    		sclass="summary-title" />
-                    	<label value="@bind(vm.availableBalance)"
-                    		sclass="summary-value" style="font-weight:bold;" />
-                    </vbox>
+					<vbox class="summary-card"
+						style="text-align:center;" pack="center">
+						<label value="Available Balance"
+							sclass="summary-title" />
+						<label value="@bind(vm.availableBalance)"
+							sclass="summary-value" style="font-weight:bold;" />
+					</vbox>
 
-                    <vbox class="summary-card" style="text-align:center;" pack="center">
-                        <label value="Reward Points" sclass="summary-title"/>
-                        <label value="@load(vm.rewardPoints)" sclass="summary-value"/>
-                    </vbox>
+					<vbox class="summary-card"
+						style="text-align:center;" pack="center">
+						<label value="Reward Points"
+							sclass="summary-title" />
+						<label value="@load(vm.rewardPoints)"
+							sclass="summary-value" />
+					</vbox>
 
-                   <!--  <hbox sclass="quick-actions" hflex="1" pack="center" align="center" spacing="12px">
-                        <button id = "fundTransfer" label="Transfer"
-                                sclass="action-btn"
-                                onClick="@command('tranfer', page='fundtransfer')"/>
-                        <button label="Pay Bill"
-                                sclass="action-btn"
-                                onClick="@command('go', page='payBill')"/>
-                    </hbox> -->
+					<!--  <hbox sclass="quick-actions" hflex="1" pack="center" align="center" spacing="12px">
+						<button id = "fundTransfer" label="Transfer"
+						sclass="action-btn"
+						onClick="@command('tranfer', page='fundtransfer')"/>
+						<button label="Pay Bill"
+						sclass="action-btn"
+						onClick="@command('go', page='payBill')"/>
+						</hbox> -->
 
-                </hlayout>
-            </north>
+				</hlayout>
+			</north>
 
-            <!-- CENTER -->
-            <center sclass="card-sec card-sec-padding" vflex="1">
-                <vlayout vflex="1" style="overflow-y:auto; min-height:0; padding:0;">
+			<!-- CENTER -->
+			<center sclass="card-sec card-sec-padding" vflex="1">
+				<vlayout vflex="1"
+					style="overflow-y:auto; min-height:0; padding:0;">
 
-                    <!-- Widgets -->
-                    <hlayout sclass="widgets-row">
-                        <vbox sclass="widget widget-card">
-                            <label value="Quick Transfer" class="widget-title"/>
-                            <label value="Transfer to saved beneficiaries" class="widget-desc"/>
-                            <button label="Transfer Now"
-                                    class="widget-btn"
-                                    onClick="@command('tranfer', page='fundtransfer')"/>
-                        </vbox>
+					<!-- Widgets -->
+					<hlayout sclass="widgets-row">
+						<vbox sclass="widget widget-card">
+							<label value="Quick Transfer"
+								class="widget-title" />
+							<label
+								value="Transfer to saved beneficiaries" class="widget-desc" />
+							<button label="Transfer Now"
+								class="widget-btn"
+								onClick="@command('tranfer', page='fundtransfer')" />
+						</vbox>
 
-                        <vbox class="widget widget-card">
-                            <label value="Active Cards" class="widget-title"/>
-                            <label value="@load(vm.activeCards)" class="widget-desc summary-value"/>
-                            <button label="Manage Cards"
-                                    class="widget-btn"
-                                    onClick="@command('go', page='card/cardHome')"/>
-                        </vbox>
+						<vbox class="widget widget-card">
+							<label value="Active Cards"
+								class="widget-title" />
+							<label value="@load(vm.activeCards)"
+								class="widget-desc summary-value" />
+							<button label="Manage Cards"
+								class="widget-btn"
+								onClick="@command('go', page='card/cardHome')" />
+						</vbox>
 
-                        <vbox class="widget widget-chart">
-                            <label value="Spending (30 days)" class="widget-title"/>
-                            <image src="/resources/images/chart-placeholder.png"
-                                   class="widget-chart-img"/>
-                        </vbox>
-                    </hlayout>
+						<vbox class="widget widget-chart">
+							<label value="Kyc Status"
+								class="widget-title" />
+							<label
+    value="@load(vm.kycLabel)"
+    style="@load(vm.kycStyle)"
+    sclass="widget-desc summary-value"/>
 
-                    <!-- Transactions Table -->
-                    <vbox>
-                        <label value="Recent Transactions" sclass="section-title"/>
+							
+							<button label="Update" class="widget-btn"
+								onClick="@command('kycUpdate', page='kycForm')" />
+						</vbox>
+					</hlayout>
 
-                        <grid model="@load(vm.recentTransactions)" 
-                              sclass="transactions-grid" mold="paging" pageSize="1" emptyMessage="No transaction done">
+					<!-- Transactions Table -->
+					<vbox>
+						<label value="Recent Transactions"
+							sclass="section-title" />
 
-                            <columns>
-                                <column label="Date"/>
-                                <column label="Type"/>
-                                <column label="Mode"/>
-                                <column label="Amount"/>
-                                <column label="From"/>
-                                <column label="To"/>
-                                <column label="Status"/>
-                            </columns>
+						<grid model="@load(vm.recentTransactions)"
+							sclass="transactions-grid" mold="paging" pageSize="1"
+							emptyMessage="No transaction done">
 
-                            <rows>
-                                <template name="model">
-                                    <row>
-                                        <label value="@load(each.createdAt)" />
+							<columns>
+								<column label="Date" />
+								<column label="Type" />
+								<column label="Mode" />
+								<column label="Amount" />
+								<column label="From" />
+								<column label="To" />
+								<column label="Status" />
+							</columns>
 
-                                        <label value="@load(each.txnType)"/>
-                                        <label value="@load(each.mode)"/>
-                                       <label value="@load(vm.getFormattedAmount(each))"
-                                       	 style="@load(each.txnType eq 'credit' ? 'color:green' : 'color:red')"
-                                       />
+							<rows>
+								<template name="model">
+									<row>
+										<label
+											value="@load(each.createdAt)" />
 
-                                          <label value="@load(each.accountNumber)"/>
-                                          <label value="@load(each.counterparty_account_number)"/>
-                                        <label value="@load(each.status)"/>
-                                    </row>
-                                </template>
-                            </rows>
-                        </grid>
+										<label
+											value="@load(each.txnType)" />
+										<label value="@load(each.mode)" />
+										<label
+											value="@load(vm.getFormattedAmount(each))"
+											style="@load(each.txnType eq 'credit' ? 'color:green' : 'color:red')" />
 
-                        <hbox style="justify-content:flex-end; ">
-                            <button label="View All Transactions"
-                                    class="view-all-btn"
-                                    onClick="@command('go', page='transactionHistory')"/>
-                        </hbox>
-                    </vbox>
+										<label
+											value="@load(each.accountNumber)" />
+										<label
+											value="@load(each.counterparty_account_number)" />
+										<label
+											value="@load(each.status)" />
+									</row>
+								</template>
+							</rows>
+						</grid>
 
-                </vlayout>
-            </center>
+						<hbox style="justify-content:flex-end; ">
+							<button label="View All Transactions"
+								class="view-all-btn"
+								onClick="@command('go', page='transactionHistory')" />
+						</hbox>
+					</vbox>
 
-        </borderlayout>
-    </window>
+				</vlayout>
+			</center>
+
+		</borderlayout>
+	</window>
 </zk>
 
 

@@ -1,0 +1,27 @@
+<?page title="Document Preview" contentType="text/html;charset=UTF-8"?>
+
+<window
+    title="Document Preview"
+    width="80%"
+    height="90%"
+    mode="modal"
+    closable="true"
+    sizable="true"
+    position="center"
+    border="normal"
+    apply="org.zkoss.bind.BindComposer">
+
+<html>
+        <img
+            src="@load(arg.pdfContent)"
+            style="width:100%; height:100%; object-fit:contain;"/>
+    </html>
+
+    <!-- <html>
+        <embed
+            width="100%"
+            height="100%"
+            type="@load(arg.pdfContent.contentType)"
+            src="@load(arg.pdfContent)"/>
+    </html> -->
+</window>

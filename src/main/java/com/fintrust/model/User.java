@@ -38,7 +38,7 @@ public class User {
     
     public enum KycStatus {
         PENDING,
-        Active,
+        UPDATED,
         EXPIRED
     }
 

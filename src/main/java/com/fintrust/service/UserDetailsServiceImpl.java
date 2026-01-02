@@ -12,6 +12,7 @@ import com.fintrust.dao.UserDetailsDAO;
 import com.fintrust.dao.impl.UserDAOImpl;
 import com.fintrust.dao.impl.UserDetailsDAOImpl;
 import com.fintrust.db.DBConnection;
+import com.fintrust.model.User;
 import com.fintrust.model.UserDetails;
 import com.fintrust.util.EncryptUtil;
 import com.fintrust.util.KeyUtil;
@@ -79,6 +80,30 @@ public class UserDetailsServiceImpl {
 	}
 	
 	/**
+	 * Getting the logined user details
+	 * 
+	 * @return
+	 */
+	public User getLogedInUser() {
+		try {			
+			Long userId = (Long) Sessions.getCurrent().getAttribute("user_id");
+
+			if (userId != null) {
+				User ud = userDAOImpl.findById(userId);
+				
+				if (ud != null)
+					return ud;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		NotificationUtil.showInstant("error", "Faild to load user. Please refresh the page.");
+		return new User();
+	}
+	
+	/**
 	 * Getting the logined admin details
 	 * 
 	 * @return
@@ -97,7 +122,7 @@ public class UserDetailsServiceImpl {
 					String panUnmasked = EncryptUtil.decrypt(ud.getPanMasked(), secretKey);
 					ud.setPanMasked(panUnmasked);
 				}
-				if (ud != null)
+				
 					return ud;
 			}
 		} catch (SQLException e) {
@@ -140,10 +165,10 @@ public class UserDetailsServiceImpl {
 			String panMasked = EncryptUtil.encrypt(ud.getPanMasked(), secretKey);
 			ud.setPanMasked(panMasked);
 			
-//			Make connection auto commit false. To make sure either both will update or nore
+//			Make connection auto commit false. To make sure either both will update or none
 			connection.setAutoCommit(false);
-			System.out.println(ud.getUser());
-			//			Update user details 
+			
+			//Update user details 
 			if (userDAOImpl.update(ud.getUser()) && userDetailsDAOImpl.updateKyc(ud)) {
 				connection.commit();
 				return true;

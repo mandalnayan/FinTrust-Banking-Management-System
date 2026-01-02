@@ -9,6 +9,8 @@ import java.io.Writer;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
@@ -21,6 +23,7 @@ import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.lang.Library;
+import org.zkoss.util.media.AMedia;
 import org.zkoss.util.media.Media;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
@@ -30,7 +33,9 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zul.Include;
+import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Radio;
+import org.zkoss.zul.Window;
 
 import com.fintrust.model.UserDetails;
 import com.fintrust.model.User;
@@ -255,6 +260,40 @@ public class KycFormVM {
 		    }
 
 	}
+	
+	@Command
+	public void viewPhoto() {
+	    String fileName = "airtle2.png";
+
+	    File file = new File(fileName);
+	    if (!file.exists()) {
+	        Messagebox.show(
+	            "File not found: " + file.getAbsolutePath(),
+	            "Missing File",
+	            Messagebox.OK,
+	            Messagebox.EXCLAMATION
+	        );
+	        return;
+	    }
+
+	    try {
+	        AMedia media = new AMedia(file, null, null);
+
+	        Map<String, Object> args = new HashMap<>();
+	        args.put("pdfContent", media);
+
+	        Window win = (Window) Executions.createComponents(
+	            "/user/documents/pdf_preview_frame.zul",
+	            null,
+	            args
+	        );
+	        win.doModal();
+
+	    } catch (Exception e) {
+	        Messagebox.show("Error opening file: " + e.getMessage());
+	    }
+	}
+
 
 	// --------------------------
 	// SUBMIT KYC

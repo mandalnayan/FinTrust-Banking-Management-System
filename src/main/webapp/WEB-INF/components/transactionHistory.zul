@@ -37,10 +37,10 @@
 			</hbox>
 
 			<!-- Date range filter -->
-			<hbox width="100%" spacing="8px" pack="center"
+			<hbox hflex="1" spacing="8px" pack="center" align="center"
 				style="padding-bottom:10px 0px; align-items:center;">
 				<label value="📅 From:" />
-				<datebox id="fromDate" width="50%" />
+				<datebox id="fromDate" width="100%" />
 
 				<label value="To:" />
 				<datebox id="toDate" width="50%" />

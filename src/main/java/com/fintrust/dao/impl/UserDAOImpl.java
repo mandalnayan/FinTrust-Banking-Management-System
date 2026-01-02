@@ -132,25 +132,35 @@ public class UserDAOImpl implements UserDAO {
 		return list;
 	}
 
-//    	will work  **********
 	@Override
 	public boolean update(User user) throws SQLException {
 
-    	String sql = """
-            UPDATE users SET
-        		full_name = ?,
-                phone = ?
-            WHERE user_id = ?
-        """;
+    	String sql = "UPDATE users SET full_name = ?, phone = ?,kyc_status = ? WHERE user_id = ? ";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
         	
             ps.setString(1, user.getFullName());
             ps.setString(2, user.getPhone());
-            ps.setLong(3, user.getId());
+            ps.setString(3, "UPDATED");
+            ps.setLong(4, user.getId());
 
             return ps.executeUpdate() > 0;
         }
+	}
+	
+	@Override
+	public boolean updateKycStatus(Long userId, String status) throws SQLException {
+
+		String sql = "UPDATE users SET kyc_status = ? WHERE user_id = ? ";
+
+		try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+			ps.setString(1, status);
+			ps.setLong(2, userId);
+
+			return ps.executeUpdate() > 0;
+		}
+
 	}
 
 	@Override
@@ -220,9 +230,10 @@ public class UserDAOImpl implements UserDAO {
 	        rs.getString("phone"),
 	        rs.getString("role"),
 	        rs.getString("status"),
-	        rs.getTimestamp("created_at"),
+	        rs.getTimestamp("created_at"),	      
 	        rs.getTimestamp("updated_at")
 	    );
+	    user.setKycStatus(User.KycStatus.valueOf(rs.getString("kyc_status")));
 	    user.setPassword(rs.getString("password_hash"));
 	    return user;
 	}

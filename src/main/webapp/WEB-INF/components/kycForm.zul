@@ -146,8 +146,8 @@
 							<hbox hflex="1" vflex="1" pack="start" align="center">
 								<fileupload label="upload"
 									onUpload="@command('uploadPhoto', event=event)" />
-								<a href="@bind(vm.addressProofView)" target="_blank" style="color:blue;">
-    <label value="@bind(vm.addressProofLabel)" />
+								<a>
+    <label value="@bind(vm.addressProofLabel)" onClick="@command('viewPhoto')"  style="color:blue;" />
 </a>
 </hbox>
 						</vlayout>
