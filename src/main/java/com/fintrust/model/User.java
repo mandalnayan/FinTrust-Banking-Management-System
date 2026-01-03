@@ -38,6 +38,8 @@ public class User {
     
     public enum KycStatus {
         PENDING,
+        REQUESTED,
+        REJECTED,
         UPDATED,
         EXPIRED
     }

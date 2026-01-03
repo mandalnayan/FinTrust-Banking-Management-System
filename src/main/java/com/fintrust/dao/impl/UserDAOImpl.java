@@ -235,7 +235,7 @@ public class UserDAOImpl implements UserDAO {
 	        rs.getTimestamp("created_at"),	      
 	        rs.getTimestamp("updated_at")
 	    );
-	    user.setKycStatus(User.KycStatus.valueOf(rs.getString("kyc_status")));
+	    user.setKycStatus(User.KycStatus.valueOf(rs.getString("kyc_status").toUpperCase()));
 	    user.setPassword(rs.getString("password_hash"));
 	    return user;
 	}
