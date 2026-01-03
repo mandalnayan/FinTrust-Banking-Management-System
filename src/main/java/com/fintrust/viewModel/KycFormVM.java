@@ -1,7 +1,9 @@
 package com.fintrust.viewModel;
 
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -22,6 +24,7 @@ import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.image.AImage;
 import org.zkoss.lang.Library;
 import org.zkoss.util.media.AMedia;
 import org.zkoss.util.media.Media;
@@ -55,21 +58,24 @@ public class KycFormVM {
 
 	private String addressProofLabel;
 	private String addressProofView;
-	
+	private String addressFilePath;
+
 	private byte[] addressProofFile;
 	Set<String> addressType = Set.of("application/pdf");
 
 	private String photoLabel;
 	private byte[] photoFile;
+	private String photoFilePath;
+
 	private String statusMessage;
 	private String otpCode;
 	Set<String> photoType = Set.of("image/jpeg", "image/png");
 	private UserServiceImpl userService = new UserServiceImpl();
 	private OtpService otpService;
 	private UserDetailsServiceImpl userDetailsService = new UserDetailsServiceImpl();
-	
+
 	// Directory where files will be saved
-    String uploadDir = "/src/main/webapp/WEB-INF/resources/uploads/address-proof/"; // change as needed
+	String uploadDir = "/user/documents/"; // change as needed
 
 	private static final Logger logger = LogManager.getLogger(KycFormVM.class);
 
@@ -126,19 +132,28 @@ public class KycFormVM {
 		return userKycDTO.getAddressProofFileName();
 	}
 
-	public String getPhotoLabel() {	
+	public String getPhotoLabel() {
 		if (userKycDTO.getPhotoFileName() == null || userKycDTO.getPhotoFileName().isBlank()) {
 			return "Upload photo";
 		}
 		return userKycDTO.getPhotoFileName();
 	}
-	
+
 	public String getAddressProofView() {
 		System.out.println("invoked photo " + userKycDTO.getPhotoFileName());
 		String addressPath = "addressProofView";
 		String addressProof = "/" + addressPath + ".zul";
-		
+
 		return addressProof;
+	}
+
+	/**
+	 * Get file path
+	 * 
+	 * @return
+	 */
+	public String getAddressFilePath() {
+		return uploadDir + "Fintrust_DB.pdf";
 	}
 
 	/**
@@ -171,50 +186,48 @@ public class KycFormVM {
 	// --------------------------
 	@Command
 	@NotifyChange("*")
-	public void uploadAddressProof(
-	        @org.zkoss.bind.annotation.BindingParam("event") UploadEvent event) {
+	public void uploadAddressProof(@org.zkoss.bind.annotation.BindingParam("event") UploadEvent event) {
 
-	    Media media = event.getMedia();
+		Media media = event.getMedia();
 
-	    try {
-	        // validate file (existing logic)
-	        validateFile(media, "upload.address.max.size", addressType,
-	                "Address proof must be less than 5 MB");
+		try {
+			// validate file (existing logic)
+			validateFile(media, "upload.address.max.size", addressType, "Address proof must be less than 5 MB");
 
-	        // File name
-	        String fileName = media.getName();
-	        addressProofLabel = fileName;
-	        userKycDTO.setAddressProofFileName(fileName);
+			// File name
+			String fileName = media.getName();
+			addressProofLabel = fileName;
+			userKycDTO.setAddressProofFileName(fileName);
 
-	        File dir = new File(uploadDir);
-	        if (!dir.exists()) {
-	            dir.mkdirs();
-	        }
+			File dir = new File(uploadDir);
+			if (!dir.exists()) {
+				dir.mkdirs();
+			}
 
-	        // Target file
-	        File file = new File(uploadDir + File.separator + fileName);
+			// Target file
+			File file = new File(uploadDir + File.separator + fileName);
 
-	        // Save file
-	        if (media.isBinary()) {
-	            try (FileOutputStream fos = new FileOutputStream(file)) {
-	                fos.write(media.getByteData());
-	            }
-	        } else {
-	            // For text-based media
-	            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))) {
-	                writer.write(media.getStringData());
-	            }
-	        }
+			// Save file
+			if (media.isBinary()) {
+				try (FileOutputStream fos = new FileOutputStream(file)) {
+					fos.write(media.getByteData());
+				}
+			} else {
+				// For text-based media
+				try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))) {
+					writer.write(media.getStringData());
+				}
+			}
 
-	        NotificationUtil.showInstant("success", "File uploaded successfully");
+			NotificationUtil.showInstant("success", "File uploaded successfully");
 
-	    } catch (WrongValueException ex) {
-	        NotificationUtil.showInstant("warning", ex.getMessage());
-	        logger.error("File format or size is not supported", ex);
-	    } catch (IOException ex) {
-	        NotificationUtil.showInstant("error", "Failed to save file" + ex.getMessage());
-	        logger.error("File saving failed", ex);
-	    }
+		} catch (WrongValueException ex) {
+			NotificationUtil.showInstant("warning", ex.getMessage());
+			logger.error("File format or size is not supported", ex);
+		} catch (IOException ex) {
+			NotificationUtil.showInstant("error", "Failed to save file" + ex.getMessage());
+			logger.error("File saving failed", ex);
+		}
 	}
 
 	@Command
@@ -228,72 +241,70 @@ public class KycFormVM {
 			photoLabel = media.getName();
 			String type = media.getContentType();
 			userKycDTO.setPhotoFileName(photoLabel);
-			
+
 //			Saving into local file system
 			File dir = new File(uploadDir);
-	        if (!dir.exists()) {
-	            dir.mkdirs();
-	        }
-	        
-	     // Target file
-	        File file = new File(uploadDir + File.separator + photoLabel);
+			if (!dir.exists()) {
+				dir.mkdirs();
+			}
 
-	        // Save file
-	        if (media.isBinary()) {
-	            try (FileOutputStream fos = new FileOutputStream(file)) {
-	                fos.write(media.getByteData());
-	            }
-	        } else {
-	            // For text-based media
-	            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))) {
-	                writer.write(media.getStringData());
-	            }
-	        }
-			
+			// Target file
+			File file = new File(uploadDir + File.separator + photoLabel);
+
+			// Save file
+			if (media.isBinary()) {
+				try (FileOutputStream fos = new FileOutputStream(file)) {
+					fos.write(media.getByteData());
+				}
+			} else {
+				// For text-based media
+				try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))) {
+					writer.write(media.getStringData());
+				}
+			}
+
 			NotificationUtil.showInstant("warning", "size " + photoFile.length + " type " + type);
-		 } catch (WrongValueException ex) {
-		        NotificationUtil.showInstant("warning", ex.getMessage());
-		        logger.error("File format or size is not supported", ex);
-		    } catch (IOException ex) {
-		        NotificationUtil.showInstant("error", "Failed to save file" + ex.getMessage());
-		        logger.error("File saving failed", ex);
-		    }
+		} catch (WrongValueException ex) {
+			NotificationUtil.showInstant("warning", ex.getMessage());
+			logger.error("File format or size is not supported", ex);
+		} catch (IOException ex) {
+			NotificationUtil.showInstant("error", "Failed to save file" + ex.getMessage());
+			logger.error("File saving failed", ex);
+		}
 
 	}
-	
+
 	@Command
+	@NotifyChange("photoFilePath")
 	public void viewPhoto() {
-	    String fileName = "airtle2.png";
+		File file = new File("airtle2.png");
 
-	    File file = new File(fileName);
-	    if (!file.exists()) {
-	        Messagebox.show(
-	            "File not found: " + file.getAbsolutePath(),
-	            "Missing File",
-	            Messagebox.OK,
-	            Messagebox.EXCLAMATION
-	        );
-	        return;
-	    }
+		if (!file.exists()) {
+			Messagebox.show("File not found: " + file.getAbsolutePath());
+			return;
+		}
 
-	    try {
-	        AMedia media = new AMedia(file, null, null);
+		try {
+			AImage image = new AImage(file);
 
-	        Map<String, Object> args = new HashMap<>();
-	        args.put("pdfContent", media);
+			Map<String, Object> args = new HashMap<>();
+			args.put("pdfContent", image);
 
-	        Window win = (Window) Executions.createComponents(
-	            "/user/documents/pdf_preview_frame.zul",
-	            null,
-	            args
-	        );
-	        win.doModal();
+			Window win = (Window) Executions.createComponents("/user/documents/image_preview_frame.zul", null, args);
+			win.doModal();
 
-	    } catch (Exception e) {
-	        Messagebox.show("Error opening file: " + e.getMessage());
-	    }
+		} catch (Exception e) {
+			Messagebox.show("Error opening file: " + e.getMessage());
+		}
 	}
 
+	@Command
+	@NotifyChange("addressFilePath")
+	public void viewPDF() throws IOException {
+		Window win = (Window) Executions.createComponents("/user/documents/pdf_preview_frame.zul", null, null);
+		win.doModal();
+
+	}	
 
 	// --------------------------
 	// SUBMIT KYC

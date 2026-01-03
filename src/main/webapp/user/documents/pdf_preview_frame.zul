@@ -1,27 +1,43 @@
-<?page title="Document Preview" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:w="client">
 
-<window
-    title="Document Preview"
-    width="80%"
-    height="90%"
-    mode="modal"
-    closable="true"
-    sizable="true"
-    position="center"
-    border="normal"
-    apply="org.zkoss.bind.BindComposer">
 
-<html>
-        <img
-            src="@load(arg.pdfContent)"
-            style="width:100%; height:100%; object-fit:contain;"/>
-    </html>
 
-    <!-- <html>
-        <embed
-            width="100%"
-            height="100%"
-            type="@load(arg.pdfContent.contentType)"
-            src="@load(arg.pdfContent)"/>
-    </html> -->
-</window>
+	<window title="Document Preview" width="90%" height="90%" border="none"
+		closable="true"
+		style="margin:0 auto; padding: 5px; display:flex; flex-direction:column; box-shadow:0 4px 12px rgba(0,0,0,0.15); border-radius:8px;"
+		viewModel="@id('vm') @init('com.fintrust.viewModel.KycFormVM')">
+
+		<!-- Toolbar -->
+		<toolbar
+			style="background:#f8f9fa; padding:4px 8px; display:flex; align-items:center; gap:8px; border-bottom:1px solid #e0e0e0;">
+			<toolbarbutton iconSclass="z-icon-arrows-alt"
+				w:onClick="zk.$('$pv2').toggleFullscreen()"
+				tooltiptext="Full Screen Mode" style="width:28px; height:28px;" />
+			<toolbarbutton iconSclass="z-icon-fw z-icon-fast-backward"
+				onClick="pv2.firstPage()" tooltiptext="Go to First Page"
+				style="width:28px; height:28px;" />
+			<toolbarbutton iconSclass="z-icon-fw z-icon-chevron-left"
+				onClick="pv2.previousPage()" tooltiptext="Previous Page"
+				style="width:28px; height:28px;" />
+			<toolbarbutton iconSclass="z-icon-fw z-icon-chevron-right"
+				onClick="pv2.nextPage()" tooltiptext="Next Page"
+				style="width:28px; height:28px;" />
+			<toolbarbutton iconSclass="z-icon-fw z-icon-fast-forward"
+				onClick="pv2.lastPage()" tooltiptext="Go to Last Page"
+				style="width:28px; height:28px;" />
+		</toolbar>
+
+		<!-- PDF Viewer -->
+		<pdfviewer id="pv2" src="@bind(vm.addressFilePath)"
+			zoom="fit-page-width" vflex="1"
+			style="flex:1; border:none; border-radius:0 0 8px 8px; background:#ffffff; box-shadow: inset 0 0 5px rgba(0,0,0,0.05);">
+		</pdfviewer>
+
+	</window>
+	<style>
+    .z-toolbar { 
+        display: none !important; 
+    }
+</style>
+	
+</zk>

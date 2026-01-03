@@ -1,0 +1,17 @@
+<window
+    title="Document Preview"
+    width="80%"
+    height="90%"
+    mode="modal"
+    closable="true"
+    sizable="true"
+    position="center"
+    border="normal"
+    apply="org.zkoss.bind.BindComposer">
+
+    <image vflex="1"
+        content="@load(arg.pdfContent)"
+        width="100%"
+        style="object-fit:contain;" />
+
+</window>

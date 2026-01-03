@@ -43,6 +43,18 @@ public class UserDashboardController extends SelectorComposer<Component> {
 		Sessions.getCurrent().setAttribute("main_content_sec", main_content_sec);
 	}
 
+	@Listen("onClick=#home")
+	public void home() {
+		Session session = Sessions.getCurrent();
+		Object userRole = session.getAttribute("user_id");
+		if (userRole != null) {
+			Executions.sendRedirect("/user/userDashboard.zul");
+		} else {
+			Executions.sendRedirect("/admin/adminDashboard.zul");
+		}
+		
+	}
+	
 	// commands wired from ZUL
 	@Listen("onClick=#logout")
 	public void logout() {
