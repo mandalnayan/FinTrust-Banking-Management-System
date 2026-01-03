@@ -1,41 +1,50 @@
 <?page title="Verify OTP - FinTrust Bank" contentType="text/html;charset=UTF-8"?>
 
-<!--  It will ensure page will render after sending otp-->
+<?link rel="stylesheet" type="text/css" href="/resources/css/reset-password-minimal.css"?>
 
 <zk xmlns:h="xhtml">
 
-<window viewModel="@id('vm') @init('com.fintrust.viewModel.OtpVerificationVM')">   
-        
-      
-            <vbox spacing="15px" hflex="1" pack="center" align="center" sclass="login-form" style="margin: auto;">
+    <window
+    title=""
+        width="400px"
+        mode="popup"
+        closable="true"
+        sizable="false"
+        position="center"
+        border="none"
+        sclass="reset-window"
+        viewModel="@id('vm') @init('com.fintrust.viewModel.OtpVerificationVM')">
 
-            <label value="OTP Verification" class="login-title"/>
-            <label value="Enter the 6-digit OTP sent to your registered email/phone" 
-                   class="login-subtitle"/>
+        <vlayout spacing="16px"
+                 sclass="reset-container">
 
+            <label value="OTP Verification"
+                   sclass="reset-title"/>
 
-                <!-- OTP INPUT -->
-                <textbox id="otp" 
-                         placeholder="Enter 6-digit OTP" 
-                         maxlength="6"
-                         sclass="input-field"
-                         constraint="no empty"
-                         value="@bind(vm.otpCode)"/>
+            <label value="Enter the 6-digit OTP sent to your registered email or phone"
+                   sclass="reset-subtitle"/>
 
-                <!-- VERIFY BUTTON -->
-                <button label="Verify OTP" 
-                        sclass="login-btn"
-                        onClick="@command('verifyOtp')"/>
+            <textbox id="otp"
+                     placeholder="Enter 6-digit OTP"
+                     maxlength="6"
+                     sclass="reset-input"
+                     constraint="no empty"
+                     value="@bind(vm.otpCode)"/>
 
-                <!-- RESEND LINK -->
-                <hlayout sclass="signup-redirect">
-                    <label value="Didn't receive the OTP?"/>
-                    <a href="#" onClick="@command('resendOtp')">Resend OTP</a>
-                </hlayout>
- 			<label value="@bind(vm.statusMessage)" style="color:blue"/>
+            <button label="Verify OTP"
+                    sclass="reset-btn"
+                    onClick="@command('verifyOtp')"/>
 
-            </vbox>
+            <label value="@bind(vm.statusMessage)"
+                   sclass="reset-status"
+                   style="color:#2563eb"/>
 
+            <a href="#"
+               sclass="reset-link"
+               onClick="@command('resendOtp')">
+                Resend OTP
+            </a>
 
-</window>
+        </vlayout>
+    </window>
 </zk>

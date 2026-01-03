@@ -8,13 +8,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.annotation.Command;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Include;
 import org.zkoss.zul.Messagebox;
+import org.zkoss.zul.Window;
 
 import com.fintrust.model.Account;
 import com.fintrust.model.User;
@@ -84,13 +87,14 @@ public class UserProfileVM {
 		}
 	}
 
+	/**
+	 * change password
+	 * @param url
+	 */
 	@Command
-	public void changePassword() {
-		// Logic for password change dialog
-		Clients.showNotification("Invoked", "info", null, "top_center", 3000);
-
-		Executions.createComponents("/change-password.zul", null, null);
-		Executions.sendRedirect("/change-password.zul");
+	public void changePasswd(@BindingParam("page") String url) {		
+		Window win = (Window) Executions.createComponents("/WEB-INF/components/" + url + ".zul", null, null);
+		win.doModal();
 	}
 
 	@Command

@@ -1,0 +1,19 @@
+<window
+    title="Document Preview"
+    width="70%"
+    height="80%"
+    mode="popup"
+    closable="true"
+    sizable="true"
+    position="center"
+    border="normal"
+ 	style="padding: 10px;"
+    viewModel="@id('vm') @init('com.fintrust.viewModel.KycFormVM')">
+    
+
+    <image vflex="1"
+        src="@load(vm.photoFilePath)"
+        width="100%"
+        style="object-fit:contain;" />
+
+</window>

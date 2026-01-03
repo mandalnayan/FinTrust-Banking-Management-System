@@ -24,7 +24,7 @@ public class OtpViewModel {
 		// Initialize manually (since no Spring)
 
 		otpService = new OtpService();
-		email = (String) Sessions.getCurrent().getAttribute("userEmail");
+		email = (String) Sessions.getCurrent().getAttribute("user_email");
 		statusMessage = (String) Sessions.getCurrent().getAttribute("statusMessage");
 	}
 
@@ -64,8 +64,8 @@ public class OtpViewModel {
 				statusMessage = "Enter a valid email";
 				return;
 			}
-			if (Sessions.getCurrent().getAttribute("userEmail") == null) {
-				Sessions.getCurrent().setAttribute("userEmail", email);
+			if (Sessions.getCurrent().getAttribute("user_email") == null) {
+				Sessions.getCurrent().setAttribute("user_email", email);
 			}
 			User user = new UserServiceImpl().getUserByUserName(email);
 			if (user == null) {

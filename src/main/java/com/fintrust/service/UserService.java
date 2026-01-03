@@ -22,6 +22,19 @@ public interface UserService {
     User getLoggedInUser();
     
     /**
+     * Fetch loggedIn user password
+     * @return
+     */
+	String getLoggedInUserPassword();
+	
+	/**
+	 * matching password
+	 * @param encodedPassword
+	 * @param value
+	 * @return
+	 */
+	boolean isPasswordMatch(String encodedPassword, String value);
+    /**
      * Updated user data
      * @param user
      * @return
@@ -74,4 +87,5 @@ public interface UserService {
 	boolean changeUserStatus(Long userId , Status updatedStatus);
 	
 	List<User> getAllUser() throws SQLException ;
+
 }

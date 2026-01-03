@@ -104,6 +104,20 @@ public class UserDAOImpl implements UserDAO {
 	}
 	
 	@Override
+	public String findPasswordById(long userId) throws SQLException {
+		String sql = "SELECT password_hash FROM users WHERE user_id = ?";
+
+		try (PreparedStatement ps = connection.prepareStatement(sql)) {
+			ps.setLong(1, userId);
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next())
+					return rs.getString(1);
+			}
+		}
+		return null;
+	}
+	
+	@Override
 	public User findByEmail(String email) throws SQLException {
 		String sql = "SELECT * FROM users WHERE email = ?";
 

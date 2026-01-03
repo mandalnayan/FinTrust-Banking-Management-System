@@ -5,7 +5,7 @@
 		apply="com.fintrust.controller.UserDashboardController">
 
 		<hbox sclass="top-left" hflex="1" pack="start"
-			onClick='Executions.sendRedirect("/user/userDashboard.zul")'
+			id = "home"
 			style="cursor:pointer;">
 			<image src="/resources/images/logo.png" sclass="top-logo" />
 			<label value="FinTrust Bank" sclass="top-title" />

@@ -24,7 +24,7 @@ public class KycOtpAuthentication {
 	public KycOtpAuthentication() {
 
 		otpService = new OtpService();
-		email = (String) Sessions.getCurrent().getAttribute("userEmail");
+		email = (String) Sessions.getCurrent().getAttribute("user_email");
 		statusMessage = (String) Sessions.getCurrent().getAttribute("statusMessage");
 	}
 

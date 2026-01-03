@@ -48,6 +48,14 @@ public interface UserDAO {
     User findById(long Id) throws SQLException;
     
     /**
+     * Finds a user password by ID.
+     *
+     * @param userId the user ID
+     * @return a Map representing column names and values, or null if not found
+     * @throws SQLException if database operation fails
+     */
+    public String findPasswordById(long userId) throws SQLException;
+    /**
      * Find user by email
      * @param eamil
      * @return

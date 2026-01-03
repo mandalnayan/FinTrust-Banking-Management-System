@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
+	
 	@Autowired
 	public void setUserDAO(UserDAO userDAO) {
 		this.userDAO = userDAO;
@@ -109,6 +109,25 @@ public class UserServiceImpl implements UserService {
 			e.printStackTrace();
 			return new User();
 		}
+	}
+	
+	/**
+	 * Fetching logned user password user details
+	 */
+	public String getLoggedInUserPassword() {
+		Long userId = (Long) Sessions.getCurrent().getAttribute("user_id");
+		try {
+			return userDAO.findPasswordById(userId);
+			
+			 
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public boolean isPasswordMatch(String rawPassword, String encodedPassword) {
+		return passwordEncoder.matches(rawPassword, encodedPassword);
 	}
 
 	/**
@@ -200,7 +219,7 @@ public class UserServiceImpl implements UserService {
 	public boolean updatePassword(String password) {
 		String encryptedPassword = encryptPassword(password);
 		try {
-			String email = (String) Sessions.getCurrent().getAttribute("userEmail");
+			String email = (String) Sessions.getCurrent().getAttribute("user_email");
 			if (email == null)
 				return false;
 			return userDAO.updatePassword(email, encryptedPassword);
