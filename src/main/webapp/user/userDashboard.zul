@@ -24,10 +24,10 @@
 <?link rel="stylesheet" type="text/css" href="/resources/css/auth-common.css"?>
 
 <!-- Before loading page it ensuer page should not render -->
-<?init class = "com.fintrust.security.AuthenticationController" ?>
+ <?init class = "com.fintrust.security.AuthenticationController" ?> 
 
 <!-- Show notification if any exist  -->
-<?init class="com.fintrust.util.PageInitNotifier" ?>
+ <?init class="com.fintrust.util.PageInitNotifier" ?> 
 
 <zk xmlns:h="xhtml">
 	<!-- Use borderlayout for predictable ZK structure -->

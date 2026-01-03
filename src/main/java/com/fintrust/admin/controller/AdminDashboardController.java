@@ -70,6 +70,12 @@ public class AdminDashboardController extends SelectorComposer<Component>{
     public void cardReqest() {
 	   main_content_sec.setSrc("/admin/adminCards.zul"); 
     }
+    	
+    	@Listen("onClick=#kycRequest")
+    	public void kycRequest() {
+    		 main_content_sec.setSrc("/admin/adminKyc.zul"); 
+    	}
+    	
    
     // getters for data binding if you bind via MVVM (optional)   
     public int getPendingCount() { return pendingCount; }

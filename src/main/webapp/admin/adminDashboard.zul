@@ -43,7 +43,8 @@
           <toolbarbutton label="View Accounts" sclass="menu-item" id = "accounts"/> 
           <toolbarbutton label="Update Request" sclass="menu-item" id = "updateAccount"/> 
           <toolbarbutton label="Close Request" sclass="menu-item" id = "closeAccount"/>
-
+			
+		  <toolbarbutton label="Kyc Request" sclass="menu-item" id = "kycRequest" />
           <toolbarbutton label="Cards request" sclass="menu-item" id = "cardRequest" />
           <toolbarbutton label="Admin Profile" sclass="menu-item" id = "profile" disabled="true"/>
         </vbox>

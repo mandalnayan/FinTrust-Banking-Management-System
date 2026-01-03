@@ -9,6 +9,7 @@ package com.fintrust.util;
 	public class EncryptUtil {
 
 	    private static final int GCM_TAG_LENGTH = 128;
+	    private static final String secretKey = "fgso98/uasjX4kblCr/YSD0UW31DOmAslKZnvC6Rxfg=";
 
 	    public static String encrypt(String plainText, String base64Key) throws Exception {
 	        byte[] keyBytes = Base64.getDecoder().decode(base64Key);
@@ -52,6 +53,12 @@ package com.fintrust.util;
 	        byte[] plain = cipher.doFinal(cipherText);
 	        return new String(plain);
 	    }
+	    
+	    
+	    public static String getSecretKey() {
+	    	return secretKey;
+	    }
+	    
 
 	}
 

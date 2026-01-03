@@ -24,7 +24,7 @@ public class UserDetailsServiceImpl {
 	 	private UserDAOImpl userDAOImpl;
 	 	
 	 	private Connection connection = DBConnection.getConnection();
-	 	private final String secretKey = "fgso98/uasjX4kblCr/YSD0UW31DOmAslKZnvC6Rxfg=";
+	 	private final String secretKey = EncryptUtil.getSecretKey();
 	   	
 	 	public UserDetailsServiceImpl() {
 	 		userDetailsDAOImpl = new UserDetailsDAOImpl(connection);	
