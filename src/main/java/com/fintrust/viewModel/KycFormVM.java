@@ -1,9 +1,7 @@
 package com.fintrust.viewModel;
 
 import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -11,36 +9,26 @@ import java.io.Writer;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zkoss.bind.annotation.AfterCompose;
-import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
-import org.zkoss.bind.annotation.ContextParam;
-import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
-import org.zkoss.image.AImage;
 import org.zkoss.lang.Library;
-import org.zkoss.util.media.AMedia;
 import org.zkoss.util.media.Media;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Path;
+import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.UploadEvent;
-import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zul.Include;
 import org.zkoss.zul.Messagebox;
-import org.zkoss.zul.Radio;
 import org.zkoss.zul.Window;
 
 import com.fintrust.model.UserDetails;
+import com.fintrust.model.UserDocument;
 import com.fintrust.model.User;
 import com.fintrust.model.UserKycDTO;
 import com.fintrust.service.OtpService;
@@ -75,7 +63,11 @@ public class KycFormVM {
 	private UserDetailsServiceImpl userDetailsService = new UserDetailsServiceImpl();
 
 	// Directory where files will be saved
-	String uploadDir = "/user/documents/"; // change as needed
+	String photoUploadDir = "/resources/uploads/photo/"; // change as needed
+	String pdfUploadDir = "/resources/uploads/addressProof/"; // change as needed
+
+//	File uploaded
+	UserDocument photoDoc, addressProofDoc;
 
 	private static final Logger logger = LogManager.getLogger(KycFormVM.class);
 
@@ -84,6 +76,7 @@ public class KycFormVM {
 		// Load logged-in user's KYC details
 		userDetails = userDetailsService.getLogedInDetails();
 		otpService = new OtpService();
+
 		if (userDetails == null) {
 			NotificationUtil.showInstant("error", "Server error. Failed to load userdetails");
 			return;
@@ -140,7 +133,6 @@ public class KycFormVM {
 	}
 
 	public String getAddressProofView() {
-		System.out.println("invoked photo " + userKycDTO.getPhotoFileName());
 		String addressPath = "addressProofView";
 		String addressProof = "/" + addressPath + ".zul";
 
@@ -152,8 +144,17 @@ public class KycFormVM {
 	 * 
 	 * @return
 	 */
+	public String getPhotoFilePath() {
+		return photoUploadDir + photoLabel;
+	}
+
+	/**
+	 * Get file path
+	 * 
+	 * @return
+	 */
 	public String getAddressFilePath() {
-		return uploadDir + "Fintrust_DB.pdf";
+		return pdfUploadDir + addressProofLabel;
 	}
 
 	/**
@@ -178,7 +179,7 @@ public class KycFormVM {
 	// --------------------------
 	@NotifyChange("userKycDTO.gender")
 	public void updateGender() {
-		System.out.println("Updating..");
+	//	System.out.println("Updating..");
 	}
 
 	// --------------------------
@@ -188,114 +189,76 @@ public class KycFormVM {
 	@NotifyChange("*")
 	public void uploadAddressProof(@org.zkoss.bind.annotation.BindingParam("event") UploadEvent event) {
 
-		Media media = event.getMedia();
-
+		Media addressMedia = event.getMedia();
+		addressProofDoc.setMedia(addressMedia);
+		addressProofDoc.setStoragePath(pdfUploadDir);
 		try {
 			// validate file (existing logic)
-			validateFile(media, "upload.address.max.size", addressType, "Address proof must be less than 5 MB");
+			validateFile(addressMedia, "upload.address.max.size", addressType, "Address proof must be less than 5 MB");
 
 			// File name
-			String fileName = media.getName();
+			String fileName = addressMedia.getName();
+
 			addressProofLabel = fileName;
 			userKycDTO.setAddressProofFileName(fileName);
-
-			File dir = new File(uploadDir);
-			if (!dir.exists()) {
-				dir.mkdirs();
-			}
-
-			// Target file
-			File file = new File(uploadDir + File.separator + fileName);
-
-			// Save file
-			if (media.isBinary()) {
-				try (FileOutputStream fos = new FileOutputStream(file)) {
-					fos.write(media.getByteData());
-				}
-			} else {
-				// For text-based media
-				try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))) {
-					writer.write(media.getStringData());
-				}
-			}
 
 			NotificationUtil.showInstant("success", "File uploaded successfully");
 
 		} catch (WrongValueException ex) {
 			NotificationUtil.showInstant("warning", ex.getMessage());
 			logger.error("File format or size is not supported", ex);
-		} catch (IOException ex) {
-			NotificationUtil.showInstant("error", "Failed to save file" + ex.getMessage());
-			logger.error("File saving failed", ex);
 		}
-	}
+	}	
 
 	@Command
 	@NotifyChange("*")
 	public void uploadPhoto(@org.zkoss.bind.annotation.BindingParam("event") UploadEvent event) {
-		Media media = event.getMedia();
-
+		Media photoMedia = event.getMedia();
+		photoDoc.setMedia(photoMedia);
+		photoDoc.setStoragePath(photoUploadDir);
 		try {
-			validateFile(media, "upload.photo.max.size", photoType, "Photo must be less than 50 KB");
-			photoFile = media.getByteData();
-			photoLabel = media.getName();
-			String type = media.getContentType();
-			userKycDTO.setPhotoFileName(photoLabel);
+			validateFile(photoMedia, "upload.photo.max.size", photoType, "Photo must be less than 50 KB");
+			photoFile = photoMedia.getByteData();
+			String fileName = photoMedia.getName();
 
-//			Saving into local file system
-			File dir = new File(uploadDir);
-			if (!dir.exists()) {
-				dir.mkdirs();
-			}
+//			String type = media.getContentType();
+//			String realPath = Executions.getCurrent().getDesktop().getWebApp().getRealPath(photoUploadDir);
+//
+////			Saving into local file system
+//			File dir = new File(realPath);
+//			if (!dir.exists()) {
+//				dir.mkdirs();
+//			}
+//
+//			// Target file
+//			File file = new File(realPath + File.separator + fileName);
+//
+//			// Save file
+//			if (media.isBinary()) {
+//				try (FileOutputStream fos = new FileOutputStream(file)) {
+//					fos.write(media.getByteData());
+//				}
+//			} else {
+//				// For text-based media
+//				try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))) {
+//					writer.write(media.getStringData());
+//				}
+//			}
+			photoLabel = fileName;
+			userKycDTO.setPhotoFileName(fileName);
 
-			// Target file
-			File file = new File(uploadDir + File.separator + photoLabel);
-
-			// Save file
-			if (media.isBinary()) {
-				try (FileOutputStream fos = new FileOutputStream(file)) {
-					fos.write(media.getByteData());
-				}
-			} else {
-				// For text-based media
-				try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))) {
-					writer.write(media.getStringData());
-				}
-			}
-
-			NotificationUtil.showInstant("warning", "size " + photoFile.length + " type " + type);
+			NotificationUtil.showInstant("success", "File uploaded successfully");
 		} catch (WrongValueException ex) {
 			NotificationUtil.showInstant("warning", ex.getMessage());
 			logger.error("File format or size is not supported", ex);
-		} catch (IOException ex) {
-			NotificationUtil.showInstant("error", "Failed to save file" + ex.getMessage());
-			logger.error("File saving failed", ex);
-		}
-
+		} 
 	}
 
 	@Command
 	@NotifyChange("photoFilePath")
 	public void viewPhoto() {
-		File file = new File("airtle2.png");
-
-		if (!file.exists()) {
-			Messagebox.show("File not found: " + file.getAbsolutePath());
-			return;
-		}
-
-		try {
-			AImage image = new AImage(file);
-
-			Map<String, Object> args = new HashMap<>();
-			args.put("pdfContent", image);
-
-			Window win = (Window) Executions.createComponents("/user/documents/image_preview_frame.zul", null, args);
-			win.doModal();
-
-		} catch (Exception e) {
-			Messagebox.show("Error opening file: " + e.getMessage());
-		}
+		Window win = (Window) Executions.createComponents("/user/documents/image_preview_frame.zul", null, null);
+		win.doModal();
 	}
 
 	@Command
@@ -304,7 +267,7 @@ public class KycFormVM {
 		Window win = (Window) Executions.createComponents("/user/documents/pdf_preview_frame.zul", null, null);
 		win.doModal();
 
-	}	
+	}
 
 	// --------------------------
 	// SUBMIT KYC
@@ -457,10 +420,11 @@ public class KycFormVM {
 	public void sendOtp() {
 		try {
 			otpService.generateAndSendOtp(user.getEmail());
-
-			Sessions.getCurrent().setAttribute("userDetails", userDetails);
-			Sessions.getCurrent().setAttribute("otpService", otpService);
-
+			Session session = Sessions.getCurrent();
+			session.setAttribute("userDetails", userDetails);
+			session.setAttribute("otpService", otpService);
+			session.setAttribute("photoDoc", photoDoc);
+			session.setAttribute("addressMedia", addressProofDoc);
 			Include inc = (Include) Sessions.getCurrent().getAttribute("main_content_sec");
 			inc.setSrc("/WEB-INF/components/otpAuthentication.zul");
 		} catch (MessagingException e) {

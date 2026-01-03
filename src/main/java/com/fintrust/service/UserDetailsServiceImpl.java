@@ -1,11 +1,20 @@
 package com.fintrust.service;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.zkoss.util.media.Media;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 
 import com.fintrust.dao.UserDetailsDAO;
@@ -14,6 +23,7 @@ import com.fintrust.dao.impl.UserDetailsDAOImpl;
 import com.fintrust.db.DBConnection;
 import com.fintrust.model.User;
 import com.fintrust.model.UserDetails;
+import com.fintrust.model.UserDocument;
 import com.fintrust.util.EncryptUtil;
 import com.fintrust.util.KeyUtil;
 import com.fintrust.util.NotificationUtil;
@@ -27,6 +37,9 @@ public class UserDetailsServiceImpl {
 	 	private Connection connection = DBConnection.getConnection();
 	 	private final String secretKey = "fgso98/uasjX4kblCr/YSD0UW31DOmAslKZnvC6Rxfg=";
 	   	
+//	    Media file
+	    private UserDocument addressDoc, photoDoc;
+	 	
 	 	public UserDetailsServiceImpl() {
 	 		userDetailsDAOImpl = new UserDetailsDAOImpl(connection);	
 	 		userDAOImpl = new UserDAOImpl(connection);
@@ -156,6 +169,12 @@ public class UserDetailsServiceImpl {
 	 */
 	public boolean updateKyc(UserDetails ud) {
 		try {
+			
+			// loading document
+			Session session = Sessions.getCurrent();
+			 addressDoc = (UserDocument) session.getAttribute("addressMedia");
+		     photoDoc = (UserDocument) session.getAttribute("photoMedia");
+			
 			// Encryptng aadhar no
 			if (userDetailsDAOImpl == null) return false;
 			String aadharMasked = EncryptUtil.encrypt(ud.getAadhaarMasked(), secretKey);
@@ -170,6 +189,9 @@ public class UserDetailsServiceImpl {
 			
 			//Update user details 
 			if (userDAOImpl.update(ud.getUser()) && userDetailsDAOImpl.updateKyc(ud)) {
+				// Saving document
+	        	saveDocument(addressDoc);
+	        	saveDocument(photoDoc);
 				connection.commit();
 				return true;
 			}
@@ -181,6 +203,7 @@ public class UserDetailsServiceImpl {
 				e1.printStackTrace();
 			}
 			e.printStackTrace();
+			NotificationUtil.showInstant("error", e.getMessage());
 		}
 		return false;
 	}
@@ -205,5 +228,41 @@ public class UserDetailsServiceImpl {
 		NotificationUtil.push("warning", "You haven't created account yet. Please create account.");
 		return -1l;
 	}
+	
+	// Save document    
+    private void saveDocument(UserDocument doc) throws IOException {
+    	Media media = doc.getMedia();
+    	String filePath = doc.getStoragePath();
+    	
+		// if media is null
+		if (media == null || filePath == null || filePath.isBlank())
+			return;
+		// File name
+		String fileName = media.getName();
+
+		String realPath = Executions.getCurrent().getDesktop().getWebApp().getRealPath(filePath);
+
+		File dir = new File(realPath);
+		if (!dir.exists()) {
+			dir.mkdirs();
+		}
+
+		// Target file
+		File file = new File(realPath + File.separator + fileName);
+		
+			// Save file
+			if (media.isBinary()) {
+				try (FileOutputStream fos = new FileOutputStream(file)) {
+					fos.write(media.getByteData());
+				}
+			} else {
+				// For text-based media
+				try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))) {
+					writer.write(media.getStringData());
+				}
+			}
+
+	}
+
 
 }

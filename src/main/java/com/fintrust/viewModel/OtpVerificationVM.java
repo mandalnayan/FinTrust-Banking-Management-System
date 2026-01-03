@@ -1,12 +1,24 @@
 package com.fintrust.viewModel;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.util.media.Media;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.annotation.Command;
 
 import com.fintrust.model.UserDetails;
+import com.fintrust.model.UserDocument;
 import com.fintrust.service.OtpService;
 import com.fintrust.service.UserDetailsServiceImpl;
 import com.fintrust.util.NotificationUtil;
@@ -20,12 +32,16 @@ public class OtpVerificationVM {
     private OtpService otpService;
     private UserDetails userDetails;
     private UserDetailsServiceImpl userDetailsService;
+    
+   
+    private static final Logger logger = LogManager.getLogger(OtpVerificationVM.class);
 
     @Init
     public void init() {
-        otpService = (OtpService) Sessions.getCurrent().getAttribute("otpService");
-        userDetails = (UserDetails) Sessions.getCurrent().getAttribute("userDetails");
-        statusMessage = (String) Sessions.getCurrent().getAttribute("statusMessage");
+    	Session session = Sessions.getCurrent();
+        otpService = (OtpService) session.getAttribute("otpService");
+        userDetails = (UserDetails) session.getAttribute("userDetails");
+        statusMessage = (String) session.getAttribute("statusMessage");       
         userDetailsService = new UserDetailsServiceImpl();
     }
 
@@ -34,22 +50,24 @@ public class OtpVerificationVM {
 	public void verifyOtp() {
 		
 		if (otpService.verifyOtp(userDetails.getUser().getEmail(), otpCode)) {		
-	        System.out.println("submitting-1 " + userDetails);	        
-
+	         
 			statusMessage = "Verification successful!";			
 			boolean updated = userDetailsService.updateKyc(userDetails);
-	        if (updated) {
+	       
+			if (updated) {
+	        		        	
 	            NotificationUtil.push("info", "KYC submitted successfully!");
 	            Executions.sendRedirect("");
 	        } else {
 	            NotificationUtil.showInstant("error", "Failed to save KYC details!");
 	        }
-			
-		} else {
+		}
+		 else {
 			statusMessage = "Invalid or expired OTP";
 		}
 		Sessions.getCurrent().setAttribute("statusMessage", statusMessage);
 	}
+   
 
     @Command
     public void resendOtp() {
@@ -59,7 +77,7 @@ public class OtpVerificationVM {
 			e.printStackTrace();
 		}
     }
-
+    
     // getters/setters
     public String getOtpCode() {
 		return otpCode;

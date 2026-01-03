@@ -1,14 +1,12 @@
 <zk xmlns:w="client">
 
-
-
-	<window title="Document Preview" width="90%" height="90%" border="none"
+	<window title="Document Preview"  mode="modal" width="90%" height="80%" border="none" sclass="docWind"
 		closable="true"
 		style="margin:0 auto; padding: 5px; display:flex; flex-direction:column; box-shadow:0 4px 12px rgba(0,0,0,0.15); border-radius:8px;"
 		viewModel="@id('vm') @init('com.fintrust.viewModel.KycFormVM')">
 
 		<!-- Toolbar -->
-		<toolbar
+		<toolbar width="100%"
 			style="background:#f8f9fa; padding:4px 8px; display:flex; align-items:center; gap:8px; border-bottom:1px solid #e0e0e0;">
 			<toolbarbutton iconSclass="z-icon-arrows-alt"
 				w:onClick="zk.$('$pv2').toggleFullscreen()"
@@ -29,7 +27,7 @@
 
 		<!-- PDF Viewer -->
 		<pdfviewer id="pv2" src="@bind(vm.addressFilePath)"
-			zoom="fit-page-width" vflex="1"
+			zoom="fit-page-height" vflex="1"
 			style="flex:1; border:none; border-radius:0 0 8px 8px; background:#ffffff; box-shadow: inset 0 0 5px rgba(0,0,0,0.05);">
 		</pdfviewer>
 
@@ -38,6 +36,12 @@
     .z-toolbar { 
         display: none !important; 
     }
+    @media (max-width: 700px) {
+    .docWind {
+        width: 100% !important;
+    }
+}
+
 </style>
 	
 </zk>

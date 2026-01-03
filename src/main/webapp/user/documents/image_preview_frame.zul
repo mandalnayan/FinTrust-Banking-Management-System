@@ -1,16 +1,18 @@
 <window
     title="Document Preview"
-    width="80%"
-    height="90%"
-    mode="modal"
+    width="70%"
+    height="80%"
+    mode="popup"
     closable="true"
     sizable="true"
     position="center"
     border="normal"
-    apply="org.zkoss.bind.BindComposer">
+ 	style="padding: 10px;"
+    viewModel="@id('vm') @init('com.fintrust.viewModel.KycFormVM')">
+    
 
     <image vflex="1"
-        content="@load(arg.pdfContent)"
+        src="@load(vm.photoFilePath)"
         width="100%"
         style="object-fit:contain;" />
 
