@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.fintrust.model.User;
+import com.fintrust.model.User.Status;
 import com.fintrust.model.UserDetails;
 
 /**
@@ -110,4 +111,6 @@ public interface UserDAO {
      * @throws SQLException if database operation fails
      */
     boolean delete(long userId) throws SQLException;
+    
+    boolean updateUserStatus(long userId , Status updatedStatus) throws SQLException;
 }

@@ -4,10 +4,12 @@ import java.sql.*;
 import java.util.*;
 
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.util.Clients;
 
 import com.fintrust.dao.UserDAO;
 import com.fintrust.db.DBConnection;
 import com.fintrust.model.User;
+import com.fintrust.model.User.Status;
 
 /**
  * JDBC implementation of UserDAO for banking systems.
@@ -236,5 +238,20 @@ public class UserDAOImpl implements UserDAO {
 	    user.setKycStatus(User.KycStatus.valueOf(rs.getString("kyc_status")));
 	    user.setPassword(rs.getString("password_hash"));
 	    return user;
+	}
+
+	@Override
+	public boolean updateUserStatus(long userId , Status updatedStatus) throws SQLException {
+		String sql = "UPDATE users SET status = ? WHERE user_id = ?";
+		
+		try (Connection con = DBConnection.getConnection(); 
+			PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setString(1, updatedStatus.toString().toLowerCase());
+			ps.setLong(2, userId);
+			if(ps.executeUpdate() > 0) {
+				return true;
+			}
+			return false;
+		}
 	}
 }

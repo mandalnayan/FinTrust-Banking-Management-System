@@ -139,6 +139,11 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
+    public boolean isActive() {
+        return status == Status.ACTIVE;
+    }
+
+    
     @Override
     public String toString() {
         return "User{" +

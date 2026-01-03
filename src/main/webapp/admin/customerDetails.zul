@@ -59,32 +59,9 @@
                     <listheader label="Status" width="120px"/>
                     <listheader label="Actions"/>
                 </listhead>
-
-                <template name="model">
-                    <listitem>
-                        <listcell label="${each.customer_id}"/>
-                        <listcell label="${each.name}"/>
-                        <listcell label="${each.email}"/>
-                        <listcell label="${each.phone}"/>
-                        <listcell label="${each.status}"/>
-
-                        <listcell>
-                            <hlayout spacing="5px">
-                                <button label="View"
-                                        onClick='alert("Show full profile for: ${each.name}")'
-                                        style="padding:3px 10px;background:#007bff;color:white;border:none;border-radius:4px;"/>
-
-                                <button label="${each.status eq 'Active' ? 'Block' : 'Unblock'}"
-                                        onClick='alert("Toggle status for: ${each.name}")'
-                                        style="padding:3px 10px;background:#dc3545;color:white;border:none;border-radius:4px;"/>
-                            </hlayout>
-                        </listcell>
-                    </listitem>
-                </template>
-
             </listbox>
-
+            <!-- CENTER AREA FOR VIEW -->
+        	<include id="main_content_sec"/>
         </div>
-
     </window>
 </zk>

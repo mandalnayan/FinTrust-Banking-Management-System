@@ -5,16 +5,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.*;
 
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.*;
 
 import com.fintrust.db.DBConnection;
+import com.fintrust.model.User;
+import com.fintrust.model.User.Status;
+import com.fintrust.service.UserServiceImpl;
 
 public class CustomerDetailsComposer extends SelectorComposer<Window> {
+
+    private static final long serialVersionUID = 1L;
 
     @Wire
     private Listbox customerList;
@@ -26,150 +30,179 @@ public class CustomerDetailsComposer extends SelectorComposer<Window> {
     private Textbox txtSearchValue;
 
     @Wire
-    private Label lblTotal, lblActive, lblBlocked, lbl2FA;
+    private Label lblTotal, lblActive, lblBlocked;
 
-    private List<Map<String, Object>> allCustomers = new ArrayList<>();
+    private final UserServiceImpl userService = new UserServiceImpl();
+
+    private List<User> allCustomers = new ArrayList<>();
+    private ListModelList<User> model;
 
     @Override
     public void doAfterCompose(Window comp) throws Exception {
         super.doAfterCompose(comp);
+
         cmbStatus.setSelectedIndex(0);
-        
-        loadAllCustomers();         // Load from DB
-		applyModel(allCustomers);   // Set model to listbox
-		updateSummary(allCustomers); 
+
+        allCustomers = loadAllCustomers();
+        model = new ListModelList<>(allCustomers);
+        customerList.setModel(model);
+
+        // IMPORTANT: use anonymous renderer (NOT method reference)
+        customerList.setItemRenderer(new ListitemRenderer<User>() {
+            @Override
+            public void render(Listitem item, User user, int index) {
+                renderRow(item, user);
+            }
+        });
+
+        updateSummary(allCustomers);
     }
 
-    
-    private void loadAllCustomers() {
-        try {
-            Connection con = DBConnection.getConnection();
-            String sql = "SELECT * FROM users where role = 'ROLE_USER' ORDER BY user_id DESC";
+    /* ================= ROW RENDERER ================= */
 
-            PreparedStatement ps = con.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
+    private void renderRow(Listitem item, User user) {
 
-            allCustomers.clear();
+        item.setValue(user);
 
-            while (rs.next()) {
-                Map<String, Object> c = new HashMap<>();
-                c.put("customer_id", rs.getLong("user_id"));
-                c.put("name", rs.getString("full_name"));
-                c.put("email", rs.getString("email"));
-                c.put("phone", rs.getString("phone"));
-                c.put("status", rs.getString("status"));
-                allCustomers.add(c);
-            }
+        item.appendChild(new Listcell(String.valueOf(user.getId())));
+        item.appendChild(new Listcell(user.getFullName()));
+        item.appendChild(new Listcell(user.getEmail()));
+        item.appendChild(new Listcell(user.getPhone()));
 
-            con.close();
+        Listcell statusCell = new Listcell(user.getStatus().name());
+        item.appendChild(statusCell);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            Messagebox.show("Error loading customers: " + e.getMessage());
+        // ACTIONS
+        Hbox actions = new Hbox();
+        actions.setSpacing("8px");
+
+        // VIEW
+        Button viewBtn = new Button("View");
+        viewBtn.setStyle("padding:3px 10px;background:#007bff;color:white;border:none;border-radius:4px; width:80px;");
+        viewBtn.addEventListener("onClick", e -> {
+            Sessions.getCurrent().setAttribute("selected_user_id", user.getId());
+            Include center = (Include) item.getPage().getFellow("main_content_sec");
+            center.setSrc("/admin/userDetailsPopup.zul");
+        });
+
+        // BLOCK / UNBLOCK
+        Button statusBtn = new Button(user.getStatus() == Status.ACTIVE ? "Block" : "Unblock");
+        statusBtn.setStyle("padding:3px 10px;background:#dc3545;color:white;border:none;border-radius:4px; width:80px;");
+        statusBtn.addEventListener("onClick", e -> toggleStatus(user, statusCell, statusBtn));
+
+        
+        actions.appendChild(viewBtn);
+        actions.appendChild(statusBtn);
+
+        Listcell actionCell = new Listcell();
+        actionCell.appendChild(actions);
+        item.appendChild(actionCell);
+    }
+
+    /* ================= STATUS TOGGLE ================= */
+
+    private void toggleStatus(User user, Listcell statusCell, Button btn) {
+
+        Status newStatus = (user.getStatus() == Status.ACTIVE)
+                ? Status.BLOCKED
+                : Status.ACTIVE;
+
+        if (userService.changeUserStatus(user.getId(), newStatus)) {
+            user.setStatus(newStatus);
+
+            statusCell.setLabel(newStatus.name());
+            btn.setLabel(newStatus == Status.ACTIVE ? "Block" : "Unblock");
+
+            updateSummary(model);
         }
     }
 
-   
-    private void applyModel(List<Map<String, Object>> list) {
-        customerList.setModel(new ListModelList<>(list));
+    /* ================= LOAD USERS ================= */
+
+    private List<User> loadAllCustomers() {
+
+        List<User> list = new ArrayList<>();
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(
+                     "SELECT * FROM users WHERE role='ROLE_USER' ORDER BY user_id DESC");
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                User u = new User();
+                u.setId(rs.getLong("user_id"));
+                u.setFullName(rs.getString("full_name"));
+                u.setEmail(rs.getString("email"));
+                u.setPhone(rs.getString("phone"));
+                u.setStatus(Status.valueOf(rs.getString("status").toUpperCase()));
+                list.add(u);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
     }
 
-    
-    public void searchBySpecificField() {
+    /* ================= SEARCH ================= */
+
+    @Listen("onClick=#Search")
+    public void search() {
 
         String field = cmbSearchType.getValue();
-        String searchValue = txtSearchValue.getValue().trim().toLowerCase();
+        String value = txtSearchValue.getValue().trim();
 
         if (field == null || field.isEmpty()) {
             Messagebox.show("Please choose a search type!");
             return;
         }
 
-        List<Map<String, Object>> filtered = new ArrayList<>();
+        List<User> filtered = new ArrayList<>();
 
-        for (Map<String, Object> c : allCustomers) {
-            String columnValue = String.valueOf(c.get(field)).toLowerCase();
+        for (User u : allCustomers) {
+            if ("Name".equalsIgnoreCase(field) && u.getFullName().contains(value)) filtered.add(u);
+            if ("Email".equalsIgnoreCase(field) && u.getEmail().contains(value)) filtered.add(u);
+            if ("Phone".equalsIgnoreCase(field) && u.getPhone().contains(value)) filtered.add(u);
+        }
 
-            if (columnValue.contains(searchValue)) {
-                filtered.add(c);
+        model.clear();
+        model.addAll(filtered);
+        updateSummary(filtered);
+    }
+
+    /* ================= STATUS FILTER ================= */
+
+    @Listen("onChange=#cmbStatus")
+    public void filterByStatus() {
+
+        String status = cmbStatus.getValue();
+        List<User> filtered = new ArrayList<>();
+
+        for (User u : allCustomers) {
+            if (status == null || status.isEmpty()
+                    || status.equalsIgnoreCase(u.getStatus().name())) {
+                filtered.add(u);
             }
         }
 
-        // Also apply gender & status filters
-        filtered = applyAdvancedFilters(filtered);
-        applyModel(filtered);
+        model.clear();
+        model.addAll(filtered);
         updateSummary(filtered);
     }
 
-    @Listen("onChange=#cmbStatus")
-    public void filterList() {
-        List<Map<String, Object>> filtered = applyAdvancedFilters(allCustomers);
-        applyModel(filtered);
-        updateSummary(filtered);
-    }
+    /* ================= SUMMARY ================= */
 
-    private List<Map<String, Object>> applyAdvancedFilters(List<Map<String, Object>> list) {
-        String status = cmbStatus.getValue();
-
-        List<Map<String, Object>> filtered = new ArrayList<>();
-
-        for (Map<String, Object> c : list) {
-            if (!status.isEmpty() && !status.equalsIgnoreCase((String) c.get("status")))
-                continue;
- 
-            filtered.add(c);
-        }
-
-        return filtered;
-    }
-
-    
-    private void updateSummary(List<Map<String, Object>> list) {
+    private void updateSummary(Collection<User> list) {
 
         int active = 0, blocked = 0;
 
-        for (Map<String, Object> c : list) {
-            String s = (String) c.get("status");
-
-            if ("Active".equalsIgnoreCase(s))
-                active++;
-
-            if ("Blocked".equalsIgnoreCase(s))
-                blocked++;
+        for (User u : list) {
+            if (u.getStatus() == Status.ACTIVE) active++;
+            if (u.getStatus() == Status.BLOCKED) blocked++;
         }
 
         lblTotal.setValue("Total Customers: " + list.size());
         lblActive.setValue("Active: " + active);
         lblBlocked.setValue("Blocked: " + blocked);
     }
-    
-    
-    @Listen("onClick=#Search")
-    public void searchByFilter(Event e) {
-
-        Comboitem selected = cmbSearchType.getSelectedItem();
-        if (selected == null) {
-            Messagebox.show("Please choose a search type!");
-            return;
-        }
-
-        String field = selected.getValue();   // <--- FIXED
-        String searchValue = txtSearchValue.getValue().trim().toLowerCase();
-
-        List<Map<String, Object>> filtered = new ArrayList<>();
-
-        for (Map<String, Object> c : allCustomers) {
-
-            String columnValue = String.valueOf(c.get(field)).toLowerCase();
-
-            if (columnValue.contains(searchValue)) {
-                filtered.add(c);
-            }
-        }
-
-        customerList.setModel(new ListModelList<>(filtered));
-    }
-
-    
-    
 }

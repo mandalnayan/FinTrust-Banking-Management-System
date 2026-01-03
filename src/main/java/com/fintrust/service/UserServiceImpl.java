@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.util.Clients;
 
 import com.fintrust.dao.UserDAO;
 import com.fintrust.dao.UserDetailsDAO;
@@ -16,6 +17,7 @@ import com.fintrust.dao.impl.UserDAOImpl;
 import com.fintrust.dao.impl.UserDetailsDAOImpl;
 import com.fintrust.db.DBConnection;
 import com.fintrust.model.User;
+import com.fintrust.model.User.Status;
 import com.fintrust.model.UserDetails;
 import com.fintrust.util.NotificationUtil;
 
@@ -211,6 +213,19 @@ public class UserServiceImpl implements UserService {
 		// Encrypted the password
 				String encryptedPassword = passwordEncoder.encode(password);
 				return encryptedPassword;
+	}
+
+	@Override
+	public boolean changeUserStatus(Long userId , Status updatedStatus)  {
+		try {
+			if(userDAO.updateUserStatus(userId, updatedStatus)){
+				return true;
+			}
+			return false;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	

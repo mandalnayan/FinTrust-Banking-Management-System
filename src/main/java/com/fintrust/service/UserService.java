@@ -3,6 +3,7 @@ package com.fintrust.service;
 import java.sql.SQLException;
 
 import com.fintrust.model.User;
+import com.fintrust.model.User.Status;
 import com.fintrust.model.UserDetails;
 
 public interface UserService {
@@ -68,5 +69,7 @@ public interface UserService {
 	 * @throws SQLException
 	 */
 	Long getTotalUsers();
+	
+	boolean changeUserStatus(Long userId , Status updatedStatus);
     
 }

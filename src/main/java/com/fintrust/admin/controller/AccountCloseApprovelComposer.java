@@ -33,7 +33,7 @@ public class AccountCloseApprovelComposer extends SelectorComposer<Component>{
 	@Override
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
-		currentEmployeeId = (Long) Sessions.getCurrent().getAttribute("admin_user_id");
+		currentEmployeeId = (Long) Sessions.getCurrent().getAttribute("admin_id");
 		if (currentEmployeeId == null) return;
 		loadPendingRequests();
 	}

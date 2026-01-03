@@ -205,5 +205,14 @@ public class UserDetailsServiceImpl {
 		NotificationUtil.push("warning", "You haven't created account yet. Please create account.");
 		return -1l;
 	}
+	
+	
+	public UserDetails getUserDetails(Long userId) throws SQLException {
+		UserDetails userDetail = userDetailsDAOImpl.findByUserId(userId);
+		if(userDetail != null) {
+			return userDetail;
+		}
+		return null;
+	}
 
 }
