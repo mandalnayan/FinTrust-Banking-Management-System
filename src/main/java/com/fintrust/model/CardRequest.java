@@ -5,19 +5,28 @@ import java.time.LocalDateTime;
 
 public class CardRequest {
     private long request_no;
+    private long user_id;
+    private Long reviewedBy;
+    private long account_no;
     private String card_type;
     private String card_category;
     private String address;
     private String remarks;
     private String card_request_status;
-    private long user_id;
-    private long account_no;
     private LocalDateTime requested_at;
     private LocalDateTime approved_at;
+    
 	public long getRequest_no() {
 		return request_no;
 	}
 	public void setRequest_no(long request_no) {
+		this.reviewedBy = request_no;
+	}
+	
+	public long getReviewedBy() {
+		return this.reviewedBy;
+	}
+	public void setReviewedBy(long request_no) {
 		this.request_no = request_no;
 	}
 	public String getCard_type() {

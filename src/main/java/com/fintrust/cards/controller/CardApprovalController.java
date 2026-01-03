@@ -3,6 +3,7 @@ package com.fintrust.cards.controller;
 import org.zkoss.zk.ui.select.annotation.*;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.*;
 
@@ -21,22 +22,25 @@ public class CardApprovalController extends SelectorComposer<Component> {
 	private Listbox requestList;
 	@Wire
 	Button approveBtn, rejectBtn;
-	private Long currentUserId;
+	private Long adminId;
 
 	private AccountUpdateRequestDao dao = new AccountUpdateRequestDao();
 
 	@Override
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
-		currentUserId = (Long) Sessions.getCurrent().getAttribute("user_id");
-		if (currentUserId == null)
-			return;
+		adminId = (Long) Sessions.getCurrent().getAttribute("admin_id");
+		if (adminId == null) {
+			Executions.sendRedirect("/user/login.zul");
+		}
+		Messagebox.show(adminId +"");
 		loadPendingCardRequests();
 	}
 
 	private void loadPendingCardRequests() throws Exception {
 		CardsDAOImpl ob = new CardsDAOImpl();
 		List<CardRequest> list = ob.getPendingCardRequests();
+		
 		if (list.size() == 0) {
 			approveBtn.setVisible(false);
 			rejectBtn.setVisible(false);
@@ -67,7 +71,8 @@ public class CardApprovalController extends SelectorComposer<Component> {
 		CardRequest req = requestList.getSelectedItem().getValue();
 
 		CardsDAOImpl ob = new CardsDAOImpl();
-		System.out.println(req);
+		//System.out.println(req);
+		req.setReviewedBy(adminId);
 		ob.approveCardRequests(req);
 		loadPendingCardRequests();
 		NotificationUtil.showInstant("info", "Request Card approved successfully!");
@@ -81,6 +86,7 @@ public class CardApprovalController extends SelectorComposer<Component> {
 			return;
 		}
 		CardRequest req = requestList.getSelectedItem().getValue();
+		req.setReviewedBy(adminId);
 		CardsDAOImpl ob = new CardsDAOImpl();
 		ob.rejectCardRequests(req);
 

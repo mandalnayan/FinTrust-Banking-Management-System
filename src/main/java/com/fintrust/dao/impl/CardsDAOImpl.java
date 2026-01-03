@@ -186,90 +186,87 @@ public class CardsDAOImpl implements CardsDAO {
 	}
 
 	public void approveCardRequests(CardRequest cr) {
-      System.out.println(cr);
-    
-        String uuid = UUID.randomUUID().toString();
-        String digitsOnly = uuid.replaceAll("\\D", "");
-        String cardNumber = digitsOnly.substring(0, 16);
-        String pin = ThreadLocalRandom.current().nextInt(100, 1000) + "";
+		System.out.println(cr);
 
-        String sql = "INSERT INTO cards " +
-                     "(user_id, card_number_masked, last4, pin_hash, expiry_date, provider, card_type, account_number) " +
-                     "VALUES (?,?,?,?,?,?,?,?)";
+		String uuid = UUID.randomUUID().toString();
+		String digitsOnly = uuid.replaceAll("\\D", "");
+		String cardNumber = digitsOnly.substring(0, 16);
+		String pin = ThreadLocalRandom.current().nextInt(100, 1000) + "";
 
-        try (Connection con = DBConnection.getConnection();
-             PreparedStatement pst = con.prepareStatement(sql)) {
+		String sql = "INSERT INTO cards "
+				+ "(user_id, card_number_masked, last4, pin_hash, expiry_date, provider, card_type, account_number) "
+				+ "VALUES (?,?,?,?,?,?,?,?)";
 
-            pst.setLong(1, cr.getUser_id());
-            pst.setString(2, cardNumber);                
-            pst.setString(3, cardNumber.substring(12));
-            pst.setString(4, pin);
-            pst.setDate(5, java.sql.Date.valueOf(LocalDate.now().plusYears(3)));
-            if(cr.getCard_category().equalsIgnoreCase("visa"))
-            	 pst.setString(6, "visa"); 
-            else {
-            	
-            	if(cr.getCard_category().equalsIgnoreCase("mastercard"))
-            		 pst.setString(6, "mastercard");
-            	else
-            		 pst.setString(6, "rupay"); 
-            	
-            }
-            
-          
-            if(cr.getCard_category().equalsIgnoreCase("Credit Card"))
-            	 pst.setString(7, "Credit");
-            else
-            {
-            	if(cr.getCard_category().equalsIgnoreCase("Debit Card")) {
-            	   pst.setString(7, "Debit");
-            	}
-            	else {
-            		pst.setString(7, "Prepaid");
-            	}
-            	}  
-            
-            pst.setLong(8, cr.getAccount_no());
+		try (Connection con = DBConnection.getConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
 
-            int n = pst.executeUpdate();
-          
-            
-                String sqlUpdate = "UPDATE card_request SET card_request_status=?, approved_at=NOW() WHERE request_no=?";
-                try (PreparedStatement pst1 = con.prepareStatement(sqlUpdate)) {
-                    pst1.setString(1, "APPROVED");
-                    pst1.setLong(2, cr.getRequest_no());
-                    pst1.executeUpdate();
-             }
+			pst.setLong(1, cr.getUser_id());
+			pst.setString(2, cardNumber);
+			pst.setString(3, cardNumber.substring(12));
+			pst.setString(4, pin);
+			pst.setDate(5, java.sql.Date.valueOf(LocalDate.now().plusYears(3)));
+			if (cr.getCard_category().equalsIgnoreCase("visa"))
+				pst.setString(6, "visa");
+			else {
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+				if (cr.getCard_category().equalsIgnoreCase("mastercard"))
+					pst.setString(6, "mastercard");
+				else
+					pst.setString(6, "rupay");
+			}
+
+			if (cr.getCard_category().equalsIgnoreCase("Credit Card"))
+				pst.setString(7, "Credit");
+			else {
+				if (cr.getCard_category().equalsIgnoreCase("Debit Card")) {
+					pst.setString(7, "Debit");
+				} else {
+					pst.setString(7, "Prepaid");
+				}
+			}
+
+			pst.setLong(8, cr.getAccount_no());
+
+			int n = pst.executeUpdate();
+
+			String sqlUpdate = "UPDATE card_request SET card_request_status=?, reviewed_by=?, approved_at=NOW() WHERE request_no=?";
+			try (PreparedStatement pst1 = con.prepareStatement(sqlUpdate)) {
+				pst1.setString(1, "APPROVED");
+				pst1.setLong(2, cr.getReviewedBy());
+				pst1.setLong(3, cr.getRequest_no());
+				pst1.executeUpdate();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void rejectCardRequests(CardRequest cr) {
-		
-		   String sqlUpdate = "UPDATE card_request SET card_request_status=?, approved_at=NOW() WHERE request_no=?";
-           try ( Connection con=DBConnection.getConnection()  ;PreparedStatement pst1 = con.prepareStatement(sqlUpdate)) {
-               pst1.setString(1, "REJECTED");
-               pst1.setLong(2, cr.getRequest_no());
-               pst1.executeUpdate();
-        
-           } catch (Exception e) {
-                 e.printStackTrace();
-        }
-		
-	   }
-	
+
+		String sqlUpdate = "UPDATE card_request SET card_request_status=?, reviewed_by=?, approved_at=NOW() WHERE request_no=?";
+		try (Connection con = DBConnection.getConnection(); PreparedStatement pst1 = con.prepareStatement(sqlUpdate)) {
+			pst1.setString(1, "REJECTED");
+			pst1.setLong(2, cr.getReviewedBy());
+			pst1.setLong(3, cr.getRequest_no());
+			pst1.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
 	public Long getNumberOfPendingRequest() throws SQLException {
 		String sql = "SELECT count(*) FROM card_request WHERE card_request_status = 'PENDING'";
-		
-		try(PreparedStatement ps =  DBConnection.getConnection().prepareStatement(sql)) {
+
+		try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {
 			ResultSet rs = ps.executeQuery();
-			if (rs.next()) return rs.getLong(1);
+			if (rs.next())
+				return rs.getLong(1);
 		}
 		return 0l;
 	}
-	
+
 	public static void main(String[] args) {
 		CardsDAOImpl ob = new CardsDAOImpl();
 		System.err.println(ob.getPendingCardRequests());
