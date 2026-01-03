@@ -8,6 +8,8 @@ import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Include;
 
 import com.fintrust.dao.impl.TransactionDAO;
+import com.fintrust.dao.impl.TransactionsDAOImpl;
+import com.fintrust.db.DBConnection;
 import com.fintrust.model.Account;
 import com.fintrust.model.Transaction;
 import com.fintrust.service.AccountService;
@@ -15,13 +17,14 @@ import com.fintrust.service.AccountServiceImpl;
 import com.fintrust.service.CardServices;
 import com.fintrust.service.UserDetailsServiceImpl;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class UserDashboardVM {
 
 	private AccountService accountService;
 	private UserDetailsServiceImpl userDetailsServiceImpl;
-	private TransactionDAO transactionDAO = new TransactionDAO();
+	private TransactionsDAOImpl transactionDAO ;
 	private CardServices cardService = new CardServices();
 	
 	private Account selectedAccount;
@@ -60,9 +63,15 @@ public class UserDashboardVM {
 		pendingCount = 5;
 		rewardPoints = 125;
 		activeCards = cardService.getActiveCardCount();
-
+      
 		// Load sample transactions
-		recentTransactions = transactionDAO.getTransactions(userId, null, null);				
+		transactionDAO=new TransactionsDAOImpl(DBConnection.getConnection());
+		try {
+			recentTransactions = transactionDAO.allCurrentUserTransactions(null,null);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}				
 	}
 
 	// ==========================

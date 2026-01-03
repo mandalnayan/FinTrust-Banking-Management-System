@@ -30,10 +30,11 @@ public class TransactionsDAOImpl implements TransactionsDAO {
      *
      * @param connection JDBC connection managed externally
      */
+    
     public TransactionsDAOImpl(Connection connection) {
         this.connection = connection;
     }
-
+    
     @Override
     public long create(long accountId, Long relatedAccountId, Long beneficiaryId,
                        String txnReference, String txnType, String mode,
@@ -69,6 +70,75 @@ public class TransactionsDAOImpl implements TransactionsDAO {
         return -1;
     }
 
+    public List<Transaction> allCurrentUserTransactions(java.sql.Date from, java.sql.Date to) throws SQLException {
+
+        List<Transaction> list = new ArrayList<>();
+
+//        Session session = Executions.getCurrent().getSession();
+//        Long userId = Long.parseLong((String) session.getAttribute("user_id"));
+
+//        String sql = "SELECT * FROM transactions WHERE user_id = ? ORDER BY created_at DESC";
+        
+        String sql = "SELECT * FROM transactions WHERE user_id = ?";
+
+      if (from != null && to != null) {
+    	  sql += " AND DATE(created_at) BETWEEN ? AND ?";
+      }
+
+      sql += " ORDER BY created_at DESC";
+
+        
+
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {
+        	  pst.setLong(1, 2);         //take it from session..............
+        	 if (from != null && to != null) {
+        		 pst.setDate(2, from);
+        		 pst.setDate(3, to);
+             }
+        	
+        	
+         
+            try (ResultSet rs = pst.executeQuery()) {
+
+                while (rs.next()) {
+                    Transaction tx = new Transaction();
+
+                    tx.setTransactionId(rs.getLong("transaction_id"));
+                    tx.setUserId(rs.getLong("user_id"));
+                    tx.setAccountNumber(rs.getLong("account_number"));
+
+                    // Nullable columns
+                    tx.setCounterpartyAccountNumber(
+                            rs.getObject("counterparty_account_number", Long.class)
+                    );
+                    tx.setBeneficiaryId(
+                            rs.getObject("beneficiary_id", Long.class)
+                    );
+
+                    tx.setTxnReference(rs.getString("txn_reference"));
+                    tx.setTxnType(rs.getString("txn_type"));
+                    tx.setMode(rs.getString("mode"));
+                    tx.setAmount(rs.getBigDecimal("amount"));
+                    tx.setBalanceAfter(rs.getBigDecimal("balance_after"));
+                    tx.setDescription(rs.getString("description"));
+                    tx.setStatus(rs.getString("status"));
+
+                    // TIMESTAMP → LocalDateTime
+                    Timestamp ts = rs.getTimestamp("created_at");
+                    if (ts != null) {
+                        tx.setCreatedAt(ts.toLocalDateTime());
+                    }
+
+                    list.add(tx);
+                }
+            }
+        }
+
+        return list;
+    }
+
+    
+    
     @Override
     public Map<String, Object> findById(long transactionId) throws SQLException {
         String sql = "SELECT * FROM transactions WHERE transaction_id = ?";
@@ -135,7 +205,17 @@ public class TransactionsDAOImpl implements TransactionsDAO {
             return ps.executeUpdate() > 0;
         }
     }
-
+//    public static void main(String[] args) {
+//    	TransactionsDAOImpl ob=new TransactionsDAOImpl(DBConnection.getConnection());
+//    	try {
+//			List<Transaction> list=ob.allCurrentUserTransactions();
+//			System.out.println(list);
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//    	
+//	}
     /**
      * Maps a ResultSet row into a Map representing the transaction record.
      *
@@ -160,63 +240,63 @@ public class TransactionsDAOImpl implements TransactionsDAO {
         return map;
     }
 
-    public List<Transaction> allCurrentUserTransactions() throws SQLException {
-
-        List<Transaction> list = new ArrayList<>();
-
-//        Session session = Executions.getCurrent().getSession();
-//        Long userId = Long.parseLong((String) session.getAttribute("user_id"));
-
-        String sql = "SELECT * FROM transactions WHERE user_id = ? ORDER BY created_at DESC";
-
-        try (PreparedStatement pst = connection.prepareStatement(sql)) {
-
-            pst.setLong(1, 2);
-
-            try (ResultSet rs = pst.executeQuery()) {
-
-                while (rs.next()) {
-                    Transaction tx = new Transaction();
-
-                    tx.setTransactionId(rs.getLong("transaction_id"));
-                    tx.setUserId(rs.getLong("user_id"));
-                    tx.setAccountNumber(rs.getLong("account_number"));
-
-                    // Nullable columns
-                    tx.setCounterpartyAccountNumber(
-                            rs.getObject("counterparty_account_number", Long.class)
-                    );
-                    tx.setBeneficiaryId(
-                            rs.getObject("beneficiary_id", Long.class)
-                    );
-
-                    tx.setTxnReference(rs.getString("txn_reference"));
-                    tx.setTxnType(rs.getString("txn_type"));
-                    tx.setMode(rs.getString("mode"));
-                    tx.setAmount(rs.getBigDecimal("amount"));
-                    tx.setBalanceAfter(rs.getBigDecimal("balance_after"));
-                    tx.setDescription(rs.getString("description"));
-                    tx.setStatus(rs.getString("status"));
-
-                    // TIMESTAMP → LocalDateTime
-                    Timestamp ts = rs.getTimestamp("created_at");
-                    if (ts != null) {
-                        tx.setCreatedAt(ts.toLocalDateTime());
-                    }
-
-                    list.add(tx);
-                }
-            }
-        }
-
-        return list;
-    }
+//    public List<Transaction> allCurrentUserTransactions() throws SQLException {
+//
+//        List<Transaction> list = new ArrayList<>();
+//
+////        Session session = Executions.getCurrent().getSession();
+////        Long userId = Long.parseLong((String) session.getAttribute("user_id"));
+//
+//        String sql = "SELECT * FROM transactions WHERE user_id = ? ORDER BY created_at DESC";
+//
+//        try (PreparedStatement pst = connection.prepareStatement(sql)) {
+//
+//            pst.setLong(1, 2);
+//
+//            try (ResultSet rs = pst.executeQuery()) {
+//
+//                while (rs.next()) {
+//                    Transaction tx = new Transaction();
+//
+//                    tx.setTransactionId(rs.getLong("transaction_id"));
+//                    tx.setUserId(rs.getLong("user_id"));
+//                    tx.setAccountNumber(rs.getLong("account_number"));
+//
+//                    // Nullable columns
+//                    tx.setCounterpartyAccountNumber(
+//                            rs.getObject("counterparty_account_number", Long.class)
+//                    );
+//                    tx.setBeneficiaryId(
+//                            rs.getObject("beneficiary_id", Long.class)
+//                    );
+//
+//                    tx.setTxnReference(rs.getString("txn_reference"));
+//                    tx.setTxnType(rs.getString("txn_type"));
+//                    tx.setMode(rs.getString("mode"));
+//                    tx.setAmount(rs.getBigDecimal("amount"));
+//                    tx.setBalanceAfter(rs.getBigDecimal("balance_after"));
+//                    tx.setDescription(rs.getString("description"));
+//                    tx.setStatus(rs.getString("status"));
+//
+//                    // TIMESTAMP → LocalDateTime
+//                    Timestamp ts = rs.getTimestamp("created_at");
+//                    if (ts != null) {
+//                        tx.setCreatedAt(ts.toLocalDateTime());
+//                    }
+//
+//                    list.add(tx);
+//                }
+//            }
+//        }
+//
+//        return list;
+//    }
 
     public static void main(String[] args) {
     	
     	TransactionsDAOImpl ob=new TransactionsDAOImpl(DBConnection.getConnection());
     	 try {
-			List<Transaction> txx= ob.allCurrentUserTransactions();
+			List<Transaction> txx= ob.allCurrentUserTransactions(null,null);
 			System.out.println(txx);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

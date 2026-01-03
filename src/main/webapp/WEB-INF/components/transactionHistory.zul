@@ -6,16 +6,14 @@
         sizable="true"
         vflex="1"
         hflex="1"
-       apply = "com.fintrust.controller.NewTransactionHistoryController"
-
-
+       apply="com.fintrust.transaction.UpdatedTransactionHistoryController"
         >
 
         <vlayout spacing="10px" vflex="1" hflex="1">
 
             <!-- Header -->
             <hlayout width="100%" spacing="10px" style="align-items:center;">
-                <label value="💳 Transaction History"
+                <label value="💳 ttTransaction History"
                        style="font-weight:bold; font-size:18px; color:#2b4b80;"/>
 
                 <button label="⟳ Refresh" sclass="btn-refresh" 
@@ -24,7 +22,7 @@
 
                 <!-- NEW BUTTON FOR PDF DOWNLOAD -->
                 <button id="btnDownloadPdf"
-                        label="📄 Download 33-Month Statement"
+                        label="📄 Download 53-Month Statement"
                         style="background:#1e293b; color:white; border:none; 
                                border-radius:6px; padding:6px 12px; 
                                font-weight:600; cursor:pointer; margin-left:auto;"/>
@@ -51,14 +49,14 @@
                      sizedByContent="true"
                      style="border:1px solid #ccc; border-radius:8px;">
                <listhead hflex="1">
-					<listheader label="Transaction ID" width="auto" sort="auto"/>
+					<listheader label="T_ID" width="auto" sort="auto"/>
 					<listheader label="From Account" width="auto" sort="auto"/>
 					<listheader label="To Account" width="auto" sort="auto"/>
 					<listheader label="Amount" width="auto" sort="auto"/>
 					<listheader label="Status" width="auto" sort="auto"/>
 					<listheader label="Date" width="auto" sort="auto"/>
 					<listheader label="Mode" width="auto" sort="auto"/>
-					<listheader label="Remaining Balance" width="auto" sort="auto"/>
+					<listheader label="Balance" width="auto" sort="auto"/>
 					<listheader label="Type" width="auto" sort="auto"/>
 			</listhead>
             </listbox>
@@ -68,3 +66,4 @@
 </zk>
  
  
+
