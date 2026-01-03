@@ -41,8 +41,8 @@ public class AccountCloseApprovelComposer extends SelectorComposer<Component>{
 	private void loadPendingRequests() {
 		requestList.getItems().clear();
 		List<AccountCloseRequest> list = accountCloseDao.getAllPendingRequest();
-	
-		if(list.size() == 0) {
+		
+		if(list.isEmpty()) {
 	        	approveBtn.setVisible(false);
 	        	rejectBtn.setVisible(false);
 	        	
@@ -66,7 +66,6 @@ public class AccountCloseApprovelComposer extends SelectorComposer<Component>{
 	public void approveRquest() throws Exception {
 		if(requestList.getSelectedItem()==null) {
 			NotificationUtil.showInstant(WARNING, "Please select one account first!");
-
         	return;
         }
 		AccountCloseRequest req = requestList.getSelectedItem().getValue();
@@ -77,6 +76,7 @@ public class AccountCloseApprovelComposer extends SelectorComposer<Component>{
 		}
 		
         accountCloseDao.approveRequest(req.getRequestId(), currentEmployeeId, "");
+        NotificationUtil.showInstant("info", "Request approved successfully!");
         loadPendingRequests();
 	}
 	
@@ -88,7 +88,7 @@ public class AccountCloseApprovelComposer extends SelectorComposer<Component>{
         }
 		AccountCloseRequest req = requestList.getSelectedItem().getValue();
         accountCloseDao.rejectRequest(req.getRequestId(), currentEmployeeId, "");
-        
+        NotificationUtil.showInstant("info", "Request rejected successfully!");
         loadPendingRequests();
 	}
 }

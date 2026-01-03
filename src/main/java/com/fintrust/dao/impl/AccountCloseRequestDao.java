@@ -222,25 +222,22 @@ public class AccountCloseRequestDao {
 			ps.setLong(3, requestId);
 		
 			if(ps.executeUpdate()>0) {
-				 Messagebox.show("Request rejected!", SUCCESS, Messagebox.OK, Messagebox.INFORMATION);
 				 return true;
 			}	
-			else {
-	            Messagebox.show("No request found with ID: " + requestId, SUCCESS, Messagebox.OK, Messagebox.INFORMATION);
-	        }
 			
 		} catch (SQLException e) {
-			Messagebox.show("Error while rejecting request:\n" + e.getMessage(),
-                    "Database Error", Messagebox.OK, Messagebox.ERROR);
 			e.printStackTrace();
 		}
 		return false;
 	}
 	
-	
-	
-	
-	
-	
-	
+	public Long getNumberOfPendingRequest() throws SQLException {
+		String sql = "SELECT count(*) FROM account_closer_request WHERE status = 'PENDING'";
+		
+		try(PreparedStatement ps =  DBConnection.getConnection().prepareStatement(sql)) {
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) return rs.getLong(1);
+		}
+		return 0l;
+	}
 }

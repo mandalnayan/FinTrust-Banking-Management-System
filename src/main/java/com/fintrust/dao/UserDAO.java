@@ -113,4 +113,6 @@ public interface UserDAO {
     boolean delete(long userId) throws SQLException;
     
     boolean updateUserStatus(long userId , Status updatedStatus) throws SQLException;
+    
+    List<User> findAllUsers() throws SQLException;
 }

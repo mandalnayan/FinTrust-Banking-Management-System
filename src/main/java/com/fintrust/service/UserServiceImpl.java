@@ -2,6 +2,7 @@ package com.fintrust.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -228,5 +229,12 @@ public class UserServiceImpl implements UserService {
 		return false;
 	}
 
-	
+	@Override
+	public List<User> getAllUser() throws SQLException {
+		List<User> allUsers = userDAO.findAllUsers();
+		if(allUsers == null) {
+			NotificationUtil.showInstant("warning", "No user found in database !");
+		}
+		return allUsers;
+	}
 }

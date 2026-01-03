@@ -2,11 +2,16 @@ package com.fintrust.viewModel;
 
 import org.zkoss.bind.annotation.Init;
 import java.util.List;
+import java.sql.SQLException;
 import java.util.Arrays;
 
 import com.fintrust.dao.UserDAO;
+import com.fintrust.dao.impl.AccountCloseRequestDao;
+import com.fintrust.dao.impl.AccountUpdateRequestDao;
+import com.fintrust.dao.impl.CardsDAOImpl;
 import com.fintrust.dao.impl.TransactionDAO;
 import com.fintrust.dao.impl.UserDAOImpl;
+import com.fintrust.model.AccountCloseRequest;
 import com.fintrust.model.Transaction;
 import com.fintrust.service.AccountService;
 import com.fintrust.service.AccountServiceImpl;
@@ -29,14 +34,18 @@ public class AdminDashboardVM {
     private TransactionDAO transactionDAO = new TransactionDAO();
 
     @Init
-    public void init() {
+    public void init() throws SQLException {
     	accountService = new AccountServiceImpl();
     	userService = new UserServiceImpl();    	
     	
         totalUsers = userService.getTotalUsers();
         totalAccounts = accountService.getAllAccounts().size();
+        Long numberOfUpdateAccountPendingRequest = new AccountUpdateRequestDao().getNumberOfPendingRequest();
+        Long numberOfCloseAccountPendingRequest = new AccountCloseRequestDao().getNumberOfPendingRequest();
+        Long numberOfPendingCardRequest = new CardsDAOImpl().getNumberOfPendingRequest();
+        
         todayTransactions = 158;
-        pendingApprovals = 12;
+        pendingApprovals = (int) (numberOfUpdateAccountPendingRequest + numberOfCloseAccountPendingRequest + numberOfPendingCardRequest);
 
         alerts = Arrays.asList(
             "⚠ 5 failed login attempts detected",

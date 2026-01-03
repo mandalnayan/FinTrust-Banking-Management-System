@@ -55,11 +55,9 @@ public class AccountUpdateRequestDao {
 		try {
 			Statement statement = DBConnection.getConnection().createStatement();
 			statement.executeUpdate(query);
-			System.out.println("updation table created");
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			Messagebox.show(e.getMessage());
 		}
 		return false;
 	}
@@ -82,7 +80,6 @@ public class AccountUpdateRequestDao {
 			}
 
 		} catch (SQLException e) {
-			Messagebox.show("Error while saving account update request:\n" + e.getMessage());
 			e.printStackTrace();
 		}
 		return false;
@@ -96,7 +93,6 @@ public class AccountUpdateRequestDao {
 			pstmt.setString(2, "PENDING");
 
 			ResultSet rs = pstmt.executeQuery();
-
 			return rs.next();
 
 		} catch (SQLException e) {
@@ -136,7 +132,6 @@ public class AccountUpdateRequestDao {
 			}
 
 		} catch (SQLException e) {
-			Messagebox.show("Error while fetching pending account update requests:\n" + e.getMessage());
 			e.printStackTrace();
 		}
 		return list;
@@ -170,8 +165,6 @@ public class AccountUpdateRequestDao {
 							upd.executeUpdate();
 						}
 					} else {
-						Messagebox.show("Request not found for ID: " + reqId, "Error", Messagebox.OK,
-								Messagebox.EXCLAMATION);
 						return;
 					}
 				}
@@ -185,12 +178,8 @@ public class AccountUpdateRequestDao {
 			}
 
 			conn.commit(); // all good — commit transaction
-			Messagebox.show("Request approved successfully!", "Success", Messagebox.OK, Messagebox.INFORMATION);
-
 		} catch (SQLException e) {
 			e.printStackTrace();
-			Messagebox.show("Error while approving request:\n" + e.getMessage(), "Database Error", Messagebox.OK,
-					Messagebox.ERROR);
 			try {
 				// attempt rollback
 				Connection conn = DBConnection.getConnection();
@@ -206,21 +195,22 @@ public class AccountUpdateRequestDao {
 				+ "WHERE request_id = ?";
 
 		try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-
 			ps.setLong(1, empId);
 			ps.setLong(2, reqId);
-			int rows = ps.executeUpdate();
-
-			if (rows > 0) {
-				Messagebox.show("Request rejected successfully.");
-			} else {
-				Messagebox.show("No request found with ID: " + reqId);
-			}
+			ps.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			Messagebox.show("Database Error while rejecting request:\n" + e.getMessage());
 		}
 	}
-
+	
+	public Long getNumberOfPendingRequest() throws SQLException {
+		String sql = "SELECT count(*) FROM account_update_request WHERE status = 'PENDING'";
+		
+		try(PreparedStatement ps =  DBConnection.getConnection().prepareStatement(sql)) {
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) return rs.getLong(1);
+		}
+		return 0l;
+	}
 }

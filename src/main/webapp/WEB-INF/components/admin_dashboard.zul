@@ -40,7 +40,7 @@
                     </vbox>
 
                     <vbox sclass="summary-card admin-card danger">
-                        <label value="Pending Approvals" sclass="summary-title"/>
+                        <label value="Total Pending Approvals" sclass="summary-title"/>
                         <label value="@load(vm.pendingApprovals)" sclass="summary-value"/>
                     </vbox>
 

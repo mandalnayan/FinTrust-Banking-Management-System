@@ -3,6 +3,7 @@ package com.fintrust.admin.controller;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 import org.zkoss.zk.ui.Sessions;
@@ -15,6 +16,7 @@ import com.fintrust.db.DBConnection;
 import com.fintrust.model.User;
 import com.fintrust.model.User.Status;
 import com.fintrust.service.UserServiceImpl;
+import com.fintrust.util.NotificationUtil;
 
 public class CustomerDetailsComposer extends SelectorComposer<Window> {
 
@@ -32,6 +34,7 @@ public class CustomerDetailsComposer extends SelectorComposer<Window> {
     @Wire
     private Label lblTotal, lblActive, lblBlocked;
 
+    
     private final UserServiceImpl userService = new UserServiceImpl();
 
     private List<User> allCustomers = new ArrayList<>();
@@ -79,7 +82,13 @@ public class CustomerDetailsComposer extends SelectorComposer<Window> {
         // VIEW
         Button viewBtn = new Button("View");
         viewBtn.setStyle("padding:3px 10px;background:#007bff;color:white;border:none;border-radius:4px; width:80px;");
+        
         viewBtn.addEventListener("onClick", e -> {
+        	if(user.getKycStatus().toString().toLowerCase().equals(User.KycStatus.PENDING.toString().toLowerCase())) {
+        		NotificationUtil.showInstant("info", "User kyc detail is not updated!");
+        		return;
+        	}
+        	
             Sessions.getCurrent().setAttribute("selected_user_id", user.getId());
             Include center = (Include) item.getPage().getFellow("main_content_sec");
             center.setSrc("/admin/userDetailsPopup.zul");
@@ -108,6 +117,9 @@ public class CustomerDetailsComposer extends SelectorComposer<Window> {
                 : Status.ACTIVE;
 
         if (userService.changeUserStatus(user.getId(), newStatus)) {
+        	
+        	NotificationUtil.showInstant("info", "User status changes successfully!");
+        	
             user.setStatus(newStatus);
 
             statusCell.setLabel(newStatus.name());
@@ -119,29 +131,8 @@ public class CustomerDetailsComposer extends SelectorComposer<Window> {
 
     /* ================= LOAD USERS ================= */
 
-    private List<User> loadAllCustomers() {
-
-        List<User> list = new ArrayList<>();
-
-        try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(
-                     "SELECT * FROM users WHERE role='ROLE_USER' ORDER BY user_id DESC");
-             ResultSet rs = ps.executeQuery()) {
-
-            while (rs.next()) {
-                User u = new User();
-                u.setId(rs.getLong("user_id"));
-                u.setFullName(rs.getString("full_name"));
-                u.setEmail(rs.getString("email"));
-                u.setPhone(rs.getString("phone"));
-                u.setStatus(Status.valueOf(rs.getString("status").toUpperCase()));
-                list.add(u);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return list;
+    private List<User> loadAllCustomers() throws SQLException {
+    	return userService.getAllUser();
     }
 
     /* ================= SEARCH ================= */

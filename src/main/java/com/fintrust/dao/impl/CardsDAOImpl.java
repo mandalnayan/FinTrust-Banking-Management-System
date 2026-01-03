@@ -260,6 +260,16 @@ public class CardsDAOImpl implements CardsDAO {
 		
 	   }
 	
+	public Long getNumberOfPendingRequest() throws SQLException {
+		String sql = "SELECT count(*) FROM card_request WHERE card_request_status = 'PENDING'";
+		
+		try(PreparedStatement ps =  DBConnection.getConnection().prepareStatement(sql)) {
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) return rs.getLong(1);
+		}
+		return 0l;
+	}
+	
 	public static void main(String[] args) {
 		CardsDAOImpl ob = new CardsDAOImpl();
 		System.err.println(ob.getPendingCardRequests());

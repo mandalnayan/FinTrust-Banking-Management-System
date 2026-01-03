@@ -75,4 +75,6 @@ public interface CardsDAO {
      * @throws SQLException if database operation fails
      */
     boolean delete(long cardId) throws SQLException;
+    
+    
 }

@@ -189,10 +189,13 @@ public class UserDAOImpl implements UserDAO {
 	
 	@Override
 	public Long getTotalUsers() throws SQLException {
-		String sql = "Select count(*) from users";
 		
-		try(Statement stmt = connection.createStatement()) {
-			ResultSet rs = stmt.executeQuery(sql);
+		String sql = "Select count(*) from users where role = ?";
+		
+		
+		try(PreparedStatement ps = connection.prepareStatement(sql)) {
+			ps.setString(1, User.Role.ROLE_USER.toString());
+			ResultSet rs = ps.executeQuery();
 			if (rs.next()) return rs.getLong(1);
 		}
 		return 0l;
@@ -253,5 +256,29 @@ public class UserDAOImpl implements UserDAO {
 			}
 			return false;
 		}
+	}
+
+	
+	@Override
+	public List<User> findAllUsers() throws SQLException {
+		List<User> allUser = new ArrayList<>();
+		String sql = "SELECT * FROM users WHERE role='ROLE_USER' ORDER BY user_id DESC";
+
+		try (Connection con = DBConnection.getConnection(); 
+			PreparedStatement ps = con.prepareStatement(sql)) {
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				User u = new User();
+				u.setId(rs.getLong("user_id"));
+				u.setFullName(rs.getString("full_name"));
+				u.setEmail(rs.getString("email"));
+				u.setPhone(rs.getString("phone"));
+				u.setStatus(Status.valueOf(rs.getString("status").toUpperCase()));
+				u.setKycStatus(User.KycStatus.valueOf(rs.getString("kyc_status").toUpperCase()));
+				allUser.add(u);
+			}
+		}
+		return allUser;
 	}
 }

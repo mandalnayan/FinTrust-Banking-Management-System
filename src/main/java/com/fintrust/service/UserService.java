@@ -1,6 +1,7 @@
 package com.fintrust.service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import com.fintrust.model.User;
 import com.fintrust.model.User.Status;
@@ -71,5 +72,6 @@ public interface UserService {
 	Long getTotalUsers();
 	
 	boolean changeUserStatus(Long userId , Status updatedStatus);
-    
+	
+	List<User> getAllUser() throws SQLException ;
 }
