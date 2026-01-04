@@ -139,6 +139,7 @@ import java.security.MessageDigest;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -230,68 +231,130 @@ public class NewTransactionHistoryController extends SelectorComposer<Component>
     }
   
     @Listen("onClick = #btnDownloadPdf")
-    public void downloadBankStatement() {
+    public  void generateStatement() throws Exception {
+    	   System.out.println("sdf");
+    	        Connection con = DBConnection.getConnection();
+    	       // Long userId = (Long) Sessions.getCurrent().getAttribute("user_id");
 
-        Long userId = (Long) Sessions.getCurrent().getAttribute("user_id");
-        java.util.Date to = new java.util.Date();
+    	        Map<String, Object> params = fetchUserHeader(con, 5L);
+    	        List<Transaction> transactions = fetchLastMonthTransactions(con, 5L);
 
-        // 3 months ago
-        LocalDate fromLocal = LocalDate.now().minusMonths(3);
-        java.util.Date from = java.sql.Date.valueOf(fromLocal);
+    	        JasperReport report =
+    	                JasperCompileManager.compileReport("bank_statement.jrxml");
 
-        TransactionsDAOImpl dao = new TransactionsDAOImpl(DBConnection.getConnection());
-        List<Transaction> transactions;
-        try {
-            transactions = dao.allCurrentUserTransactions(new java.sql.Date(from.getTime()), new java.sql.Date(to.getTime()));
+    	        JasperPrint print =
+    	                JasperFillManager.fillReport(
+    	                        report,
+    	                        params,
+    	                        new JRBeanCollectionDataSource(transactions)
+    	                );
 
-            // Prepare safe fields for JasperReports
-            List<Map<String, Object>> reportData = new ArrayList<>();
-            for (Transaction t : transactions) {
-                Map<String, Object> map = new HashMap<>();
-                map.put("transactionId", t.getTransactionId());
-                map.put("accountNumberSafe", t.getAccountNumber() != null ? t.getAccountNumber().toString() : "-");
-                map.put("counterpartyAccountNumberSafe", t.getCounterpartyAccountNumber() != null ? t.getCounterpartyAccountNumber().toString() : "-");
-                map.put("amountFormatted", (t.getTxnType().equalsIgnoreCase("debit") ? "-" : "+") + String.format("%.2f₹", t.getAmount()));
-                map.put("status", t.getStatus());
-                map.put("createdAt", t.getCreatedAt());
-                map.put("mode", t.getMode());
-                map.put("txnType", t.getTxnType());
-                map.put("balanceAfterFormatted", t.getBalanceAfter() != null ? String.format("%.2f₹", t.getBalanceAfter()) : "-");
-                reportData.add(map);
-            }
+    	        JasperExportManager.exportReportToPdfFile(
+    	                print,
+    	                "Bank_Statement_Last_Month.pdf"
+    	        );
 
-            // Compile Jasper report from the jrxml file path inside your web app
-            String jrxmlPath = Executions.getCurrent().getDesktop().getWebApp().getRealPath("/WEB-INF/resources/bank_statement.jrxml");
-            if (jrxmlPath == null) {
-                Messagebox.show("Report template path not found!", "Error", Messagebox.OK, Messagebox.ERROR);
-                return;
-            }
-            JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlPath);
+    	        con.close();
+    	    }
 
-            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(reportData);
+    	    // ================= USER + USER_DETAILS =================
+    	    private static Map<String, Object> fetchUserHeader(Connection con, long userId)
+    	            throws SQLException {
 
-            Map<String, Object> parameters = new HashMap<>();
-            parameters.put("REPORT_TITLE", "Last 3 Months Bank Statement");
-            parameters.put("FROM_DATE", from);
-            parameters.put("TO_DATE", to);
-            parameters.put("USER_NAME", Sessions.getCurrent().getAttribute("user_name"));
-            parameters.put("ACCOUNT_NUMBER", Sessions.getCurrent().getAttribute("primary_account_id").toString());
+    	        String sql =
+    	                "SELECT u.full_name, u.email, u.phone, t.account_number, " +
+    	                "ud.country, ud.state, ud.city, ud.pincode " +
+    	                "FROM users u " +
+    	                "LEFT JOIN transactions t ON u.user_id = t.user_id " +
+    	                "LEFT JOIN user_details ud ON u.user_id = ud.user_id " +
+    	                "WHERE u.user_id = ? LIMIT 1";
 
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+    	        PreparedStatement ps = con.prepareStatement(sql);
+    	        ps.setLong(1, userId);
 
-            // Export to PDF
-            ByteArrayOutputStream pdfStream = new ByteArrayOutputStream();
-            JasperExportManager.exportReportToPdfStream(jasperPrint, pdfStream);
+    	        ResultSet rs = ps.executeQuery();
+    	        rs.next();
 
-            // Send PDF to client browser
-            Filedownload.save(pdfStream.toByteArray(), "application/pdf", "Last3MonthsStatement.pdf");
+    	        Map<String, Object> map = new HashMap<>();
+    	        map.put("BANK_NAME", "ABC Bank Ltd.");
+    	        map.put("FULL_NAME", rs.getString("full_name"));
+    	        map.put("EMAIL", rs.getString("email"));
+    	        map.put("PHONE", rs.getString("phone"));
+    	        map.put("ACCOUNT_NUMBER", rs.getString("account_number"));
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            Messagebox.show("Failed to generate PDF: " + e.getMessage(), "Error", Messagebox.OK, Messagebox.ERROR);
-        }
-    }
+    	        String address = rs.getString("city") + ", "
+    	                + rs.getString("state") + ", "
+    	                + rs.getString("country") + " - "
+    	                + rs.getString("pincode");
 
+    	        map.put("ADDRESS", address);
+
+    	        LocalDate now = LocalDate.now();
+    	        LocalDate start = now.minusMonths(1).withDayOfMonth(1);
+    	        LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
+
+    	        map.put("STATEMENT_PERIOD",
+    	                start.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"))
+    	                        + " to " +
+    	                        end.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"))
+    	        );
+
+    	        return map;
+    	    }
+
+    	    // ================= TRANSACTIONS =================
+    	    private static List<Transaction> fetchLastMonthTransactions(
+    	            Connection con, long userId) throws SQLException {
+
+    	        List<Transaction> list = new ArrayList<>();
+
+    	        String sql =
+    	                "SELECT * FROM transactions " +
+    	                "WHERE user_id = ? " +
+    	                "AND created_at >= DATE_FORMAT(CURDATE() - INTERVAL 1 MONTH, '%Y-%m-01') " +
+    	                "AND created_at < DATE_FORMAT(CURDATE(), '%Y-%m-01') " +
+    	                "ORDER BY created_at";
+
+    	        PreparedStatement ps = con.prepareStatement(sql);
+    	        ps.setLong(1, userId);
+
+    	        ResultSet rs = ps.executeQuery();
+
+    	        while (rs.next()) {
+    	            Transaction t = new Transaction();
+    	            t.setTransactionId(rs.getLong("transaction_id"));
+    	            t.setTxnReference(rs.getString("txn_reference"));
+    	            t.setTxnType(rs.getString("txn_type"));
+    	            t.setMode(rs.getString("mode"));
+    	            t.setAmount(rs.getBigDecimal("amount"));
+    	            t.setBalanceAfter(rs.getBigDecimal("balance_after"));
+    	            t.setDescription(rs.getString("description"));
+    	            t.setStatus(rs.getString("status"));
+    	            Timestamp ts = rs.getTimestamp("created_at");
+    	            if (ts != null) {
+    	                t.setCreatedAt(ts.toLocalDateTime());
+    	            }
+
+    	            list.add(t);
+    	        }
+    	        return list;
+    	    }
+
+    	    // ================= MAIN =================
+    	    public static void main(String[] args) throws Exception {
+    	    	   System.out.println("sdf");
+    	    	   NewTransactionHistoryController ob= new NewTransactionHistoryController();
+    	       ob.generateStatement();
+    	        System.out.println("sdf");
+
+    	        System.out.println("PDF generated successfully");
+    	        System.out.println("sdf");
+
+    	    }
+    
+    
+    
+ 
 
 
 
