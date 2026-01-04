@@ -20,15 +20,17 @@ public class CardRequest {
 		return request_no;
 	}
 	public void setRequest_no(long request_no) {
-		this.reviewedBy = request_no;
+		this.request_no = request_no;
 	}
 	
 	public long getReviewedBy() {
 		return this.reviewedBy;
 	}
-	public void setReviewedBy(long request_no) {
-		this.request_no = request_no;
+	
+	public void setReviewedBy(long adminId) {
+		this.reviewedBy = adminId;
 	}
+	
 	public String getCard_type() {
 		return card_type;
 	}
@@ -87,9 +89,10 @@ public class CardRequest {
 	public String toString() {
 		return "CardRequest [request_no=" + request_no + ", card_type=" + card_type + ", card_category=" + card_category
 				+ ", address=" + address + ", remarks=" + remarks + ", card_request_status=" + card_request_status
-				+ ", user_id=" + user_id + ", account_no=" + account_no + ", requested_at=" + requested_at
+				+ ", user_id=" + user_id + ", reviewedBy "+ reviewedBy + ", account_no=" + account_no + ", requested_at=" + requested_at
 				+ ", approved_at=" + approved_at + "]";
 	}
+	
 	public CardRequest(long request_no, String card_type, String card_category, String address, String remarks,
 			String card_request_status, long user_id, long account_no, LocalDateTime requested_at,
 			LocalDateTime approved_at) {

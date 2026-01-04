@@ -33,14 +33,14 @@ public class CardApprovalController extends SelectorComposer<Component> {
 		if (adminId == null) {
 			Executions.sendRedirect("/user/login.zul");
 		}
-		Messagebox.show(adminId +"");
+		
 		loadPendingCardRequests();
 	}
 
 	private void loadPendingCardRequests() throws Exception {
 		CardsDAOImpl ob = new CardsDAOImpl();
 		List<CardRequest> list = ob.getPendingCardRequests();
-		
+		System.out.println(list);;
 		if (list.size() == 0) {
 			approveBtn.setVisible(false);
 			rejectBtn.setVisible(false);
@@ -86,7 +86,7 @@ public class CardApprovalController extends SelectorComposer<Component> {
 			return;
 		}
 		CardRequest req = requestList.getSelectedItem().getValue();
-		req.setReviewedBy(adminId);
+		req.setReviewedBy(adminId); 
 		CardsDAOImpl ob = new CardsDAOImpl();
 		ob.rejectCardRequests(req);
 

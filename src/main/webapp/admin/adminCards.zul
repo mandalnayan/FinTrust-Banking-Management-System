@@ -48,6 +48,7 @@
 					<listheader label="Card Type" />
 					<listheader label="Card Category" />
 					<listheader label="Remark" />
+					<listheader label="Status" />
 					<listheader label="Requested At" />
 				</listhead>
 				<template name="model">
@@ -58,6 +59,7 @@
 						<listcell label="${each.card_type}" />
 						<listcell label="${each.card_category}" />
 						<listcell label="${each.remarks}" />
+							<listcell label="${each.card_request_status}" />
 						<listcell label="${each.requested_at}" />
 					</listitem>
 				</template>
