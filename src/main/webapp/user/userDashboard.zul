@@ -31,8 +31,8 @@
 
 <zk xmlns:h="xhtml">
 	<!-- Use borderlayout for predictable ZK structure -->
-	<borderlayout sclass="dashboard-window"
-		apply="com.fintrust.controller.UserDashboardController">
+	<borderlayout id = "main" sclass="dashboard-window"
+		apply="com.fintrust.controller.UserDashboardController" onClientInfo="">
 
 		<!-- NORTH: Top header (compact) -->
 		<north>			
@@ -41,8 +41,8 @@
 
 		<!-- WEST: Sidebar navigation -->
 		<!-- viewModel="@id('vm') @init('com.fintrust.controller.UserDashboardController')" -->
-		<west closable="true" collapsible="true" size="240px"
-			splittable="true">
+		<west  id="westNav" closable="true" collapsible="true" size="240px"
+			splittable="true" open="true" sclass="ft-sidebar">
 			<vbox sclass="sidebar" spacing="12px">
 				<h:div sclass="sidebar-brand">
 					<image src="/resources/images/logo.png"
@@ -51,7 +51,7 @@
 				</h:div>
 
 				<!-- MVC  -->
-				<vbox sclass="sidebar-menu" vflex="1" spacing="6px" style="overflow:auto;">
+				<vbox sclass="sidebar-menu" vflex="1" spacing="6px" >
 					<toolbarbutton label="Dashboard"
 						sclass="menu-item active" id="userdashboard" />
 					<toolbarbutton label="open Accounts"
@@ -66,16 +66,6 @@
 					<toolbarbutton label="Profile" sclass="menu-item"
 						id="profile" />
 				</vbox>
-
-				<!-- MVVM -->
-				<!-- 
-					<vbox sclass="sidebar-menu" vflex="1" spacing="6px" >
-					<toolbarbutton label="Dashboard" sclass="menu-item active" onClick="@command('go','dashboard')"/>
-					<toolbarbutton label="open Accounts" sclass="menu-item" onClick="@command('go','accounts')"/>
-					<toolbarbutton label="Transactions" sclass="menu-item" onClick="@command('go','transactions')"/>
-					<toolbarbutton label="Cards" sclass="menu-item" onClick="@command('go','cards')"/>
-					<toolbarbutton label="Profile" sclass="menu-item" onClick="@command('go','profile')"/>
-					</vbox> -->
 
 				<div sclass="sidebar-footer">
 					<label value="Need help?" />

@@ -54,7 +54,45 @@
 .sidebar-logo-img { width:34px; }
 .sidebar-title { font-size:20px; font-weight:700; color:#fff; }
 
-.sidebar-menu { display:flex; flex-direction:column; gap:8px; margin-top:6px; flex:1; }
+.sidebar-menu {
+	display:flex; 
+	flex-direction:column;
+	 gap:8px;
+	  margin-top:6px;
+	   flex:1;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.sidebar-menu::-webkit-scrollbar {
+    display: none;
+}
+
+/* ===== Sidebar animation ===== */
+.ft-sidebar {
+    transition: width 0.28s ease, transform 0.28s ease;
+    will-change: width, transform;
+}
+
+/* When WEST is closed */
+.z-west.ft-sidebar.z-west-collapsed {
+    width: 0 !important;
+    transform: translateX(-100%);
+    overflow: hidden;
+}
+
+/* When WEST is open */
+.z-west.ft-sidebar {
+    transform: translateX(0);
+}
+
+/* Smooth shadow on open */
+.z-west.ft-sidebar {
+    box-shadow: 2px 0 14px rgba(0,0,0,0.25);
+}
+
 .menu-item {
   background:transparent;
   color:#cfe3f9;
@@ -173,11 +211,30 @@
 
 @media (max-width: 800px) {
   /* stack sidebar horizontally */
-  .z-west, .z-east { width:100% !important; }
+  .z-east { width:100% !important; }
   /* single column content */
   .summary-row, .widgets-row { grid-template-columns: 1fr; }
   .quick-actions { justify-self:center; }
   .main-content { padding:12px; }
+  /* side bar */
+   .z-west.ft-sidebar {
+        position: fixed;
+        left: 0;
+        top: 72px; /* header height */
+        height: calc(100% - 72px);
+        z-index: 1200;
+        background: linear-gradient(180deg,#012a5c 0%, #004c97 100%);
+    }
+
+    /* Dim background when sidebar is open */
+    body.sidebar-open::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.45);
+        z-index: 1100;
+    }
+  
 }
 
 /* utility fixes to avoid nested scrollbars (ZK often wraps with inner panels) */

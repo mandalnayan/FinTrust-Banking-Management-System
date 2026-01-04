@@ -5,7 +5,7 @@
 <zk xmlns:h="xhtml">
 
     <window
-    title=""
+    title=" "
         width="400px"
         mode="popup"
         closable="true"
@@ -17,9 +17,9 @@
 
         <vlayout spacing="16px"
                  sclass="reset-container">
-
+			
             <label value="OTP Verification"
-                   sclass="reset-title"/>
+                   sclass="reset-title" style = "text-align: center;" />
 
             <label value="Enter the 6-digit OTP sent to your registered email or phone"
                    sclass="reset-subtitle"/>
@@ -29,7 +29,7 @@
                      maxlength="6"
                      sclass="reset-input"
                      constraint="no empty"
-                     value="@bind(vm.otpCode)"/>
+                     value="@bind(vm.otpCode)" hflex="1"/>
 
             <button label="Verify OTP"
                     sclass="reset-btn"

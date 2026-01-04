@@ -29,6 +29,7 @@ import org.zkoss.zul.Window;
 
 import com.fintrust.model.UserDetails;
 import com.fintrust.model.UserDocument;
+import com.fintrust.exception.NetworkUnavailableException;
 import com.fintrust.model.User;
 import com.fintrust.model.UserKycDTO;
 import com.fintrust.service.OtpService;
@@ -75,17 +76,17 @@ public class KycFormVM {
 	public void init() {
 		// Load logged-in user's KYC details
 		userDetails = userDetailsService.getLogedInDetails();
-		
+
 		if (userDetails == null) {
 			NotificationUtil.showInstant("error", "Server error. Failed to load userdetails");
 			return;
 		}
-		
+
 		otpService = new OtpService();
 		addressProofDoc = new UserDocument();
 		photoDoc = new UserDocument();
 		addressProofDoc.setStoredFileName(userDetails.getAddressProofFileName());
-		photoDoc.setStoredFileName(userDetails.getPhotoFileName());		
+		photoDoc.setStoredFileName(userDetails.getPhotoFileName());
 
 		user = userDetails.getUser();
 
@@ -128,7 +129,7 @@ public class KycFormVM {
 		if (fileName == null || fileName.isBlank()) {
 			return "";
 		}
-		return fileName.substring(fileName.indexOf('$') + 1);		
+		return fileName.substring(fileName.indexOf('$') + 1);
 	}
 
 	public String getPhotoLabel() {
@@ -186,7 +187,7 @@ public class KycFormVM {
 	// --------------------------
 	@NotifyChange("userKycDTO.gender")
 	public void updateGender() {
-	//	System.out.println("Updating..");
+		// System.out.println("Updating..");
 	}
 
 	// --------------------------
@@ -198,7 +199,7 @@ public class KycFormVM {
 
 		Media addressMedia = event.getMedia();
 		String fileName = addressMedia.getName();
-		
+
 		addressProofDoc.setMedia(addressMedia);
 		addressProofDoc.setStoragePath(pdfUploadDir);
 		addressProofDoc.setDocType(addressMedia.getContentType());
@@ -208,25 +209,25 @@ public class KycFormVM {
 			// validate file (existing logic)
 			validateFile(addressMedia, "upload.address.max.size", addressType, "Address proof must be less than 5 MB");
 
-			// File name 
+			// File name
 
 			addressProofLabel = fileName;
 			userKycDTO.setAddressProofFileName(fileName);
-		
+
 			NotificationUtil.showInstant("success", "File uploaded successfully $");
 
 		} catch (WrongValueException ex) {
 			NotificationUtil.showInstant("warning", ex.getMessage());
 			logger.error("File format or size is not supported", ex);
-		} 
-	}	
+		}
+	}
 
 	@Command
 	@NotifyChange("*")
 	public void uploadPhoto(@org.zkoss.bind.annotation.BindingParam("event") UploadEvent event) {
 		Media photoMedia = event.getMedia();
 		String fileName = photoMedia.getName();
-		
+
 		photoDoc.setMedia(photoMedia);
 		photoDoc.setStoragePath(photoUploadDir);
 		photoDoc.setDocType(photoMedia.getContentType());
@@ -243,7 +244,7 @@ public class KycFormVM {
 		} catch (WrongValueException ex) {
 			NotificationUtil.showInstant("warning", ex.getMessage());
 			logger.error("File format or size is not supported", ex);
-		} 
+		}
 	}
 
 	@Command
@@ -419,12 +420,16 @@ public class KycFormVM {
 			session.setAttribute("addressDoc", addressProofDoc);
 //			Include inc = (Include) Sessions.getCurrent().getAttribute("main_content_sec");
 //			inc.setSrc("/WEB-INF/components/otpAuthentication.zul");
-			
+
 			Window win = (Window) Executions.createComponents("/WEB-INF/components/otpAuthentication.zul", null, null);
 			win.doModal();
-		} catch (MessagingException e) {
-			e.printStackTrace();
+		} catch (NetworkUnavailableException e) {
+			NotificationUtil.showInstant("error", "You're not connected to the internet. Please check your network.", 6000);
+			e.printStackTrace();    
+		}		
+		catch (MessagingException e) {			
+				NotificationUtil.showInstant("error", "Unable to send OTP. Please try again later.", 6000);
+				e.printStackTrace();
+			}
 		}
 	}
-
-}

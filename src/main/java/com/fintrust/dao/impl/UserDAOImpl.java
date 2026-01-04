@@ -151,27 +151,41 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public boolean update(User user) throws SQLException {
 
-    	String sql = "UPDATE users SET full_name = ?, phone = ?,kyc_status = ? WHERE user_id = ? ";
+    	String sql = "UPDATE users SET full_name = ?, phone = ? WHERE user_id = ? ";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
         	
             ps.setString(1, user.getFullName());
             ps.setString(2, user.getPhone());
-            ps.setString(3, "UPDATED");
-            ps.setLong(4, user.getId());
+            ps.setLong(3, user.getId());
 
             return ps.executeUpdate() > 0;
         }
 	}
 	
 	@Override
-	public boolean updateKycStatus(Long userId, String status) throws SQLException {
+	public String getUserKycStatus(Long userId) throws SQLException {
+		String sql = "Select kyc_status from users WHERE user_id = ? ";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        	
+            ps.setLong(1, userId);            
+            ResultSet rs = ps.executeQuery();
+            if (rs.next())
+            		return rs.getString(1);
+        }
+        return null;
+
+	}
+	
+	@Override
+	public boolean updateKycStatus(Long userId, User.KycStatus status) throws SQLException {
 
 		String sql = "UPDATE users SET kyc_status = ? WHERE user_id = ? ";
 
 		try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
-			ps.setString(1, status);
+			ps.setString(1, status.name());
 			ps.setLong(2, userId);
 
 			return ps.executeUpdate() > 0;
@@ -204,8 +218,7 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public Long getTotalUsers() throws SQLException {
 		
-		String sql = "Select count(*) from users where role = ?";
-		
+		String sql = "Select count(*) from users where role = ?";		
 		
 		try(PreparedStatement ps = connection.prepareStatement(sql)) {
 			ps.setString(1, User.Role.ROLE_USER.toString());
@@ -263,7 +276,7 @@ public class UserDAOImpl implements UserDAO {
 		
 		try (Connection con = DBConnection.getConnection(); 
 			PreparedStatement ps = con.prepareStatement(sql)) {
-			ps.setString(1, updatedStatus.toString().toLowerCase());
+			ps.setString(1, updatedStatus.name().toUpperCase());
 			ps.setLong(2, userId);
 			if(ps.executeUpdate() > 0) {
 				return true;
@@ -271,7 +284,6 @@ public class UserDAOImpl implements UserDAO {
 			return false;
 		}
 	}
-
 	
 	@Override
 	public List<User> findAllUsers() throws SQLException {

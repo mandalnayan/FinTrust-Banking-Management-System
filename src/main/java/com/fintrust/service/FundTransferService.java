@@ -1,14 +1,18 @@
 package com.fintrust.service;
 
+import java.rmi.ServerError;
 import java.sql.Connection;
 
 import org.zkoss.zk.ui.Sessions;
 
 import com.fintrust.dao.AccountDAO;
+import com.fintrust.dao.UserDAO;
 import com.fintrust.dao.impl.AccountDAOImpl;
 import com.fintrust.dao.impl.FundTransferDAO;
+import com.fintrust.dao.impl.UserDAOImpl;
 import com.fintrust.db.DBConnection;
 import com.fintrust.model.Transaction.TransactionStatus;
+import com.fintrust.model.User;
 import com.fintrust.util.NotificationUtil;
 
 public class FundTransferService {
@@ -16,6 +20,7 @@ public class FundTransferService {
 	private Connection connection = DBConnection.getConnection();
 	private final FundTransferDAO dao = new FundTransferDAO(connection);
 	private final AccountDAO accountDao = new AccountDAOImpl();
+	private final UserDAO userDAO = new UserDAOImpl(connection);
 
 	public boolean transferFunds(Long fromAcc, Long toAcc, String ifscCode, double amount) {
 
@@ -25,9 +30,9 @@ public class FundTransferService {
 		}
 
 		try {
-			// Either all operation must happened or nore
+			// Either all operation must happened or none
 			connection.setAutoCommit(false);
-			
+			validateUserKyc(userId);
 			validateBalance(fromAcc, amount);
 			validateReceiver(toAcc, ifscCode);
 
@@ -51,7 +56,7 @@ public class FundTransferService {
 
 		} catch (Exception e) {
 			rollbackQuietly();
-			NotificationUtil.showInstant("error", "Fund transfer failed! " + e.getMessage());
+			NotificationUtil.showInstant("error", "Failed to transfer! " + e.getMessage(), 6000);
 			try {
 				if (connection != null) {
 					dao.insertTransaction(userId, fromAcc, toAcc, amount,"debit",
@@ -64,6 +69,16 @@ public class FundTransferService {
 
 		} finally {
 			closeQuietly();
+		}
+	}
+	
+	private void validateUserKyc(Long userId) throws Exception {
+		String kycStatus = userDAO.getUserKycStatus(userId);
+		if (kycStatus == null) throw new ServerError("Internal server error!", null);
+		boolean isUpdated = kycStatus.equals(User.KycStatus.UPDATED);
+//		double balance = dao.getAccountBalance(fromAcc);
+		if (!isUpdated) {
+			throw new IllegalArgumentException("Your kyc status is " + kycStatus + ".\n You need to update your kyc for transaction.");
 		}
 	}
 

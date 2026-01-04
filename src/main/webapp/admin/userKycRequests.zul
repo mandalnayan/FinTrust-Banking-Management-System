@@ -1,0 +1,43 @@
+<?page title="Admin Kyc" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window hflex="1" border="normal" vflex="1"
+	apply="com.fintrust.admin.controller.AdminKycController">
+	<hbox pack="start" align="center" hflex="1">
+		<label value="Admin KYC Verification" style="font-size: 20px;"></label>
+	</hbox>
+	<space/>
+	<listbox id="kycList" vflex="1" emptyMessage="No request found">
+		<listhead>
+			<listheader label="Name" />
+			<listheader label="Aadhaar" />
+			<listheader label="PAN" />
+			<listheader label="Status" />
+			<listheader label="File View"/>
+		</listhead>
+		<template name="model">
+			<listitem value="${each}">
+				<listcell label="${each.fullName}" />
+				<listcell label="${each.maskedAadhaar}" />
+				<listcell label="${each.maskedPan}" />
+				<listcell label="${each.kycStatus}" />
+				<listcell>
+    				<hlayout>
+        				<button label="View Address Proof"></button>
+        				<button label="View Photo"></button>
+    				</hlayout>
+				</listcell>
+
+			</listitem>
+		</template>
+	</listbox>
+<space/>
+	<textbox id="remarksBox" rows="3" width="100%"
+		placeholder="Admin remarks (required for rejection)" />
+<space/>
+	<hlayout>
+		<button id="approveBtn" label="Approve" />
+		<button id="rejectBtn" label="Reject" />
+	</hlayout>
+
+</window>
+</zk>

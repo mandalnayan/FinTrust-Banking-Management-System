@@ -96,7 +96,7 @@
 						<button label="Update Profile"
 							sclass="update-btn" onClick="@command('updateProfile')" />
 						<button label="Change Password"
-							sclass="secondary-btn" onClick="@command('changePassword')" />
+							sclass="secondary-btn" onClick="@command('changePasswd', 'changePassword')" />
 					</hbox>
 				</vbox>
 

@@ -28,13 +28,19 @@ import com.fintrust.model.Notification;
 
 	    // Show instantly (no redirect)
 	    public static void showInstant(String type, String message) {
-	        Clients.showNotification(message, type, null, "top_center", 3000);
+	        Clients.showNotification(message, type, null, "top_center", 5000);
 	    }
 	    
 	 // Show instantly (no redirect)
 	    public static void showInstant(Notification notification) {
 	    	String type = notification.getType(), message = notification.getMessage();
 	        Clients.showNotification(message, type, null, "top_center", 4000);
+	    }
+	    
+	 // Show instantly (no redirect)
+	    public static void showInstant(String type, String message, int time) {
+	    	
+	    	 Clients.showNotification(message, type, null, "top_center", time);
 	    }
 
 	    // Called on page load to display pending session message

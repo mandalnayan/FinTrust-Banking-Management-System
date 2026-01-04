@@ -46,7 +46,7 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler {
 			} else {
 				httpSession.setAttribute("admin_id", user.getId());
 				httpSession.setAttribute("user_name", user.getFullName());
-				httpSession.setAttribute("admin_user_email", user.getEmail());
+				httpSession.setAttribute("admin_email", user.getEmail());
 				response.sendRedirect(request.getContextPath() + "/admin/adminDashboard.zul");
 			}
 		}

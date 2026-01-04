@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.util.Clients;
 
@@ -28,12 +29,12 @@ public class UserServiceImpl implements UserService {
 	private Connection connection = DBConnection.getConnection();
 	private UserDAO userDAO = new UserDAOImpl(connection);
 	private UserDetailsDAO userDetailsDAO = new UserDetailsDAOImpl(connection);
-	
+
 	private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-	
+
 	@Autowired
 	public void setUserDAO(UserDAO userDAO) {
 		this.userDAO = userDAO;
@@ -43,16 +44,15 @@ public class UserServiceImpl implements UserService {
 	public void setUserDetailsDAO(UserDetailsDAO userDetailsDAO) {
 		this.userDetailsDAO = userDetailsDAO;
 	}
-	
+
 	@Override
 	public User getUserByUserId(Long userId) throws SQLException {
 		User user = userDAO.findById(userId);
-		if(user != null) {
+		if (user != null) {
 			return user;
 		}
 		return null;
 	}
-
 
 	@Override
 	public boolean registerUser(User user) {
@@ -68,7 +68,6 @@ public class UserServiceImpl implements UserService {
 			e.printStackTrace();
 		}
 
-		
 		// Encrypted the password
 		String encrypted = encryptPassword(user.getPassword());
 		user.setPassword(encrypted);
@@ -110,28 +109,36 @@ public class UserServiceImpl implements UserService {
 			return new User();
 		}
 	}
-	
+
 	/**
 	 * Fetching logned user password user details
 	 */
 	public String getLoggedInUserPassword() {
-		Long userId = (Long) Sessions.getCurrent().getAttribute("user_id");
+		Boolean isAdminRequested = (Boolean) Sessions.getCurrent().getAttribute("adminPasswordRequest");
+	//	Executions.sendRedirect("/");
+		Long userId = -1l;
+		if (isAdminRequested == null || !isAdminRequested) {
+			userId = (Long) Sessions.getCurrent().getAttribute("user_id");
+		} else {
+			userId = (Long) Sessions.getCurrent().getAttribute("admin_id");
+		}
+
 		try {
 			return userDAO.findPasswordById(userId);
-			
-			 
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
+
 	public boolean isPasswordMatch(String rawPassword, String encodedPassword) {
 		return passwordEncoder.matches(rawPassword, encodedPassword);
 	}
 
 	/**
 	 * Updating user details
+	 * 
 	 * @param user
 	 */
 	public boolean updateUser(User user) {
@@ -143,7 +150,7 @@ public class UserServiceImpl implements UserService {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Getting total registered users details
 	 */
@@ -156,13 +163,12 @@ public class UserServiceImpl implements UserService {
 		}
 		return 0l;
 	}
-	
+
 	/**
 	 * Future implementation
 	 */
 	@Override
 	public void update2FA(UserDetails user) {
-	
 
 	}
 
@@ -218,8 +224,17 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean updatePassword(String password) {
 		String encryptedPassword = encryptPassword(password);
+		String email = null;
+		Boolean isAdminRequested = (Boolean) Sessions.getCurrent().getAttribute("adminPasswordRequest");
+		//	Executions.sendRedirect("/");
+			
+			if (isAdminRequested == null || !isAdminRequested) {
+				email = (String) Sessions.getCurrent().getAttribute("user_email");
+			} else {
+				email = (String) Sessions.getCurrent().getAttribute("admin_email");
+			}
 		try {
-			String email = (String) Sessions.getCurrent().getAttribute("user_email");
+		
 			if (email == null)
 				return false;
 			return userDAO.updatePassword(email, encryptedPassword);
@@ -228,17 +243,17 @@ public class UserServiceImpl implements UserService {
 		}
 		return false;
 	}
-	
+
 	private String encryptPassword(String password) {
 		// Encrypted the password
-				String encryptedPassword = passwordEncoder.encode(password);
-				return encryptedPassword;
+		String encryptedPassword = passwordEncoder.encode(password);
+		return encryptedPassword;
 	}
 
 	@Override
-	public boolean changeUserStatus(Long userId , Status updatedStatus)  {
+	public boolean changeUserStatus(Long userId, Status updatedStatus) {
 		try {
-			if(userDAO.updateUserStatus(userId, updatedStatus)){
+			if (userDAO.updateUserStatus(userId, updatedStatus)) {
 				return true;
 			}
 			return false;
@@ -251,7 +266,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> getAllUser() throws SQLException {
 		List<User> allUsers = userDAO.findAllUsers();
-		if(allUsers == null) {
+		if (allUsers == null) {
 			NotificationUtil.showInstant("warning", "No user found in database !");
 		}
 		return allUsers;

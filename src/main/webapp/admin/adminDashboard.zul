@@ -1,10 +1,10 @@
 <!-- ============================================================
- Page Name: Admin Dashboard.zul
- Purpose: Displays user overview after login.
- Features: 
- Controller: AdminDashboardController.java
- ============================================================ -->
- 
+	Page Name: Admin Dashboard.zul
+	Purpose: Displays user overview after login.
+	Features: 
+	Controller: AdminDashboardController.java
+	============================================================ -->
+
 <?page title="Dashboard - FinTrust Bank" contentType="text/html;charset=UTF-8"?>
 <!-- Dashboard css -->
 <?link rel="stylesheet" type="text/css" href="/resources/css/dashboard.css"?>
@@ -14,56 +14,77 @@
 <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 <!-- Global css -->
 <?link rel="stylesheet" type="text/css" href="/resources/css/global.css"?>
+<!-- OTP authentication page -->
+<?link rel="stylesheet" type="text/css" href="/resources/css/auth-common.css"?>
 
 <!-- Before loading page it ensuer page should not render -->
 <!-- <?init class = "com.fintrust.controller.AuthenticationController" ?> -->
+<!-- Show notification if any exist  -->
+<?init class="com.fintrust.util.PageInitNotifier" ?>
 
 <zk xmlns:h="xhtml">
-  <!-- Use borderlayout for predictable ZK structure -->
-  <borderlayout  sclass="dashboard-window" apply="com.fintrust.admin.controller.AdminDashboardController" style = "padding: 0px;">
+	<!-- Use borderlayout for predictable ZK structure -->
+	<borderlayout id="main" sclass="dashboard-window"
+		apply="com.fintrust.admin.controller.AdminDashboardController" onClientInfo=""
+		style="padding: 0px;">
 
-    <!-- NORTH: Top header (compact) -->
-  <north style = "padding: 0px;">    
-     <include src = "/WEB-INF/components/privateNavbar.zul" /> 
-    </north> 
+		<!-- NORTH: Top header (compact) -->
+		<north >			
+			<privateAdminNavbar width="100%"></privateAdminNavbar>
+		</north>
 
-    <!-- WEST: Sidebar navigation -->  <!-- viewModel="@id('vm') @init('com.fintrust.controller.UserDashboardController')" -->
-    <west closable="true" collapsible="true" size="240px"  splittable="true" style = "padding: 0px;" >
-      <vbox sclass="sidebar" spacing="12px" >
-        <h:div sclass="sidebar-brand">
-          <image src="/resources/images/logo.png" sclass="sidebar-logo-img"/>
-          <label value="FinTrust" sclass="sidebar-title"/>
-        </h:div>
+		<!-- WEST: Sidebar navigation -->
+		<!-- viewModel="@id('vm') @init('com.fintrust.controller.UserDashboardController')" -->
+		<west id="westNav" closable="true" collapsible="true"
+			size="240px" splittable="true" open="true" sclass="ft-sidebar">
+			<vbox sclass="sidebar" spacing="12px">
+				<h:div sclass="sidebar-brand">
+					<image src="/resources/images/logo.png"
+						sclass="sidebar-logo-img" />
+					<label value="FinTrust" sclass="sidebar-title" />
+				</h:div>
 
-		<!-- MVC  -->
-        <vbox sclass="sidebar-menu" vflex="1" spacing="6px" >
+				<!-- MVC  -->
+				<vbox sclass="sidebar-menu" vflex="1" spacing="6px">
 
-          <toolbarbutton label="Dashboard" sclass="menu-item active" id = "admindashboard"/>
-          <toolbarbutton label="Users" sclass="menu-item" id = "users"/>
-          <toolbarbutton label="View Accounts" sclass="menu-item" id = "accounts"/> 
-          <toolbarbutton label="Update Request" sclass="menu-item" id = "updateAccount"/> 
-          <toolbarbutton label="Close Request" sclass="menu-item" id = "closeAccount"/>
+					<toolbarbutton label="Dashboard"
+						sclass="menu-item active" id="admindashboard" />
+					<toolbarbutton label="Users" sclass="menu-item"
+						id="users" />
+					<toolbarbutton label="View Accounts"
+						sclass="menu-item" id="accounts" />
+					<toolbarbutton label="Kyc Request"
+						sclass="menu-item" id="kycRequest" />
+					<toolbarbutton label="Update Request"
+						sclass="menu-item" id="updateAccount" />
+					<toolbarbutton label="Close Request"
+						sclass="menu-item" id="closeAccount" />
+					<toolbarbutton label="Cards request"
+						sclass="menu-item" id="cardRequest" />
+					<toolbarbutton label="Admin Profile"
+						sclass="menu-item" id="profile" />
+				</vbox>
 
-          <toolbarbutton label="Cards request" sclass="menu-item" id = "cardRequest" />
-          <toolbarbutton label="Admin Profile" sclass="menu-item" id = "profile"/>
-        </vbox>
+				<div sclass="sidebar-footer">
+					<label value="Need help?" />
+					<separator />
+					<button label="Support" sclass="support-btn"
+						onClick='Executions.sendRedirect("/contact-us.zul")' />
+				</div>
+			</vbox>
+		</west>
 
-        <div sclass="sidebar-footer">
-          <label value="Need help?"/> <separator/>
-          <button label="Support" sclass="support-btn" onClick='Executions.sendRedirect("/contact-us.zul")'/>
-        </div>
-      </vbox>
-    </west>
+		<!-- CENTER: Main content area -->
 
-    <!-- CENTER: Main content area -->
-   
-    <center sclass = "zero-padding">
-    	<div zclass="no-defaultCSS" style="height:100%; width:100%;">
-    		<include id="main_content_sec" src="/WEB-INF/components/admin_dashboard.zul" vflex="1" hflex="1" />
-    	</div>
-    </center>
+		<center sclass="zero-padding">
+			<div zclass="no-defaultCSS"
+				style="height:100%; width:100%;">
+				<include id="main_content_sec"
+					src="/WEB-INF/components/admin_dashboard.zul" vflex="1" hflex="1" />
+			</div>
+		</center>
 
-  </borderlayout>
+	</borderlayout>
 </zk>
 
 

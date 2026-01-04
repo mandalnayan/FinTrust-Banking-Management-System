@@ -12,6 +12,8 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.event.ClientInfoEvent;
+import org.zkoss.zk.ui.event.ClientInfoEvent;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
@@ -20,6 +22,7 @@ import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Borderlayout;
 import org.zkoss.zul.Include;
 import org.zkoss.zul.Toolbarbutton;
+import org.zkoss.zul.West;
 
 public class UserDashboardController extends SelectorComposer<Component> {
 
@@ -31,6 +34,9 @@ public class UserDashboardController extends SelectorComposer<Component> {
 	@Wire
 	Include main_content_sec;
 
+	 @Wire
+	 private West westNav;
+	
 	@Wire
 	Toolbarbutton userdashboard, profile, account, viewAccounts, kyc, transactions;
 
@@ -39,9 +45,26 @@ public class UserDashboardController extends SelectorComposer<Component> {
 	@Override
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
-
+		
 		Sessions.getCurrent().setAttribute("main_content_sec", main_content_sec);
 	}
+	
+	/**
+	 * For closing side bar in small screen
+	 * @param event
+	 */
+	 @Listen("onClientInfo = #main")
+	    public void onClientInfo(ClientInfoEvent event) {
+
+	        int screenWidth = event.getDesktopWidth(); // ✅ CORRECT
+	      
+	        if (screenWidth <= 800) {
+	            westNav.setOpen(false);   // mobile
+	        } else {
+	            westNav.setOpen(true);    // desktop
+	        }
+	    }
+
 
 	@Listen("onClick=#home")
 	public void home() {

@@ -1,0 +1,36 @@
+
+<zk>
+
+    <!-- Topbar -->
+    <hbox width="100%"
+          sclass="topbar"
+          apply="com.fintrust.controller.UserDashboardController">
+
+        <!-- LEFT -->
+        <hbox sclass="top-left"
+              hflex="1"
+              pack="start"
+              onClick='Executions.sendRedirect("/user/userDashboard.zul")'
+              style="cursor:pointer;">
+            <image src="/resources/images/logo.png" sclass="top-logo" />
+            <label value="FinTrust Bank" sclass="top-title" />
+        </hbox>
+
+        <!-- RIGHT -->
+        <hbox sclass="top-right"
+              pack="end"
+              align="center">
+            <label value="Welcome, ${sessionScope.user_name}"
+                   sclass="top-welcome" />
+
+            <button iconSclass="z-icon-bell"
+                    tooltiptext="Notifications"
+                    sclass="icon-btn" />
+
+            <button label="Logout"
+                    sclass="logout-btn"
+                    id="logout" />
+        </hbox>
+
+    </hbox>
+</zk>

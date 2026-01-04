@@ -17,6 +17,12 @@
 <component-class>com.fintrust.controller.macro.PrivateNavbar</component-class>
 </component>
 
+<!-- map private Navbar micro component  -->
+<component>
+<component-name>privateAdminNavbar</component-name>
+<component-class>com.fintrust.controller.macro.PrivateNavbar</component-class>
+</component>
+
 <!-- map Navbar micro component  -->
 <component>
 <component-name>footer</component-name>

@@ -91,7 +91,15 @@ public interface UserDAO {
      * @return
      * @throws SQLException
      */
-    boolean updateKycStatus(Long userId, String status) throws SQLException;
+    boolean updateKycStatus(Long userId, User.KycStatus status) throws SQLException;
+    
+    /**
+     * Return kyc status
+     * @param userId
+     * @return
+     * @throws SQLException
+     */
+    public String getUserKycStatus(Long userId) throws SQLException;
 
     /**
      * Updates only the password hash for a user.

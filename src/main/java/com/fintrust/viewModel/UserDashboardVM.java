@@ -104,8 +104,23 @@ public class UserDashboardVM {
 	}
 
 	public String getKycLabel() {
-	    return "UPDATED".equals(kycStatus) ? "UPDATED 🎉" : "PENDING ⚠️";
+	    if (kycStatus == null) {
+	        return "PENDING ⚠️";
+	    }
+
+	    switch (kycStatus) {
+	        case "UPDATED":
+	            return "UPDATED 🎉";
+	        case "REQUESTED":
+	            return "REQUESTED ⏳";
+	        case "REJECTED":
+	            return "REJECTED ❌";
+	        case "PENDING":
+	        default:
+	            return "PENDING ⚠️";
+	    }
 	}
+
 
 	public String getKycStyle() {
 	    return "UPDATED".equals(kycStatus)

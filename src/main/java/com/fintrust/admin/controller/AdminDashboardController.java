@@ -12,6 +12,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.event.ClientInfoEvent;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
@@ -20,6 +21,7 @@ import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Borderlayout;
 import org.zkoss.zul.Include;
 import org.zkoss.zul.Toolbarbutton;
+import org.zkoss.zul.West;
 
 public class AdminDashboardController extends SelectorComposer<Component>{
 
@@ -29,7 +31,7 @@ public class AdminDashboardController extends SelectorComposer<Component>{
     private int activeCards = 0; 
     
     @Wire Include main_content_sec; 
-    
+    @Wire West westNav;
     @Wire Toolbarbutton admindashboard, users, accounts, closeAccount, cards,profile,updateAccount;
     
     private List<Include> includes = new ArrayList<>();
@@ -39,6 +41,23 @@ public class AdminDashboardController extends SelectorComposer<Component>{
     	super.doAfterCompose(comp);
     	Sessions.getCurrent().setAttribute("admin_main_content_sec", main_content_sec);
     } 
+    
+    /**
+	 * For closing side bar in small screen
+	 * @param event
+	 */
+	 @Listen("onClientInfo = #main")
+	    public void onClientInfo(ClientInfoEvent event) {
+
+	        int screenWidth = event.getDesktopWidth(); // ✅ CORRECT
+	      
+	        if (screenWidth <= 800) {
+	            westNav.setOpen(false);   // mobile
+	        } else {
+	            westNav.setOpen(true);    // desktop
+	        }
+	    }
+
     
     @Listen("onClick=#admindashboard")
     public void adminDashboard() {
@@ -50,6 +69,10 @@ public class AdminDashboardController extends SelectorComposer<Component>{
  	   main_content_sec.setSrc("/admin/customerDetails.zul");
     }
     
+    @Listen("onClick=#kycRequest")
+    public void viewUserKycRequest() {
+ 	   main_content_sec.setSrc("/admin/userKycRequests.zul");
+    }
  
     @Listen("onClick=#accounts")
     public void viewAccount() {

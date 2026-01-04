@@ -205,7 +205,7 @@ public class UserDetailsServiceImpl {
 			connection.setAutoCommit(false);
 
 			// Update user details
-			if (userDAOImpl.update(ud.getUser()) && userDetailsDAOImpl.updateKyc(ud)) {
+			if (userDAOImpl.update(ud.getUser()) && userDAOImpl.updateKycStatus(ud.getUserId(), User.KycStatus.REQUESTED) && userDetailsDAOImpl.updateKyc(ud)) {
 				// Saving document
 				saveDocument(addressDoc);
 				saveDocument(photoDoc);
