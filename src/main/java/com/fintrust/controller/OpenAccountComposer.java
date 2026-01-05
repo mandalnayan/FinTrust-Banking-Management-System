@@ -136,7 +136,7 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
             Nominee nominee = new Nominee(nomineeId,nomineeNameTextbox.getValue().trim(),nomineeRelationCombobox.getValue().trim());
 
             Long nomineeDbId = nomineeService.isPresentNominee(nomineeId);
-            alert(nomineeDbId + "");
+           
             if (nomineeDbId == null) {
                 nomineeDbId = nomineeService.saveNominee(nominee);
             }

@@ -9,11 +9,11 @@
 		.admin-card.danger { border-left: 4px solid #d32f2f; }
 	</style>
 
-	<window
+	<window 
 		viewModel="@id('vm') @init('com.fintrust.viewModel.AdminDashboardVM')"
-		width="100%" vflex="1" border="none" sclass="wind">
+		width="100%" vflex="1" border="none" zclass="wind" style="overflow:auto;">
 
-		<borderlayout width="100%" vflex="1">
+		<borderlayout width="100%" vflex="1" style="overflow:auto;">
 
 			<!-- NORTH: KPI CARDS -->
 			<north sclass="card-sec">
@@ -52,7 +52,7 @@
 			</north>
 
 			<!-- CENTER -->
-			<center sclass="card-sec card-sec-padding" vflex="1">
+			<center sclass="card-sec card-sec-padding" vflex="1" style="overflow:auto;">
 				<vlayout vflex="1" style="overflow:auto;">
 
 					<!-- Charts + Alerts -->
@@ -82,46 +82,24 @@
 						</vbox>
 
 					</hbox>
+					
+					<!-- show in buttom  -->
+					<vbox hflex="1" vflex="1" spacing="12px" 
+      style=" overflow:auto;
+             box-shadow:0 2px 6px rgba(0,0,0,0.1);"
+      apply="com.fintrust.chart.controller.DailyUserActiveTimeChartComposer">
 
-
-					<!-- <vbox>
-						<label value="Recent Transactions"
-						sclass="section-title" />
-						
-						<grid model="@load(vm.recentTransactions)"
-						sclass="transactions-grid" mold="paging" pageSize="5"
-						emptyMessage="No transactions">
-						
-						<columns>
-						<column label="Date" />
-						<column label="User" />
-						<column label="Type" />
-						<column label="Amount" />
-						<column label="Status" />
-						</columns>
-						
-						<rows>
-						<template name="model">
-						<row>
-						<label
-						value="@load(each.createdAt)" />
-						<label
-						value="@load(each.userId)" />
-						<label
-						value="@load(each.txnType)" />
-						<label
-						value="@load(each.amount)" />
-						<label
-						value="@load(each.status)" />
-						</row>
-						</template>
-						</rows>
-						</grid>
-						</vbox> 	 -->
-
+    <label value="Daily User Activity (24 Hours)" sclass="section-title"/>
+    <charts id="activeUserChart"
+            style="height:300px; width:100%;"
+            animation="true"
+            />
+</vbox>
 				</vlayout>
-			</center>
+								
 
+			</center>
+			
 		</borderlayout>
 	</window>
 </zk>
