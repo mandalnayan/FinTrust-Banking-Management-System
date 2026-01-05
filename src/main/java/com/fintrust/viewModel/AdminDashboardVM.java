@@ -12,7 +12,7 @@ import com.fintrust.dao.impl.CardsDAOImpl;
 import com.fintrust.dao.impl.TransactionDAO;
 import com.fintrust.dao.impl.UserDAOImpl;
 import com.fintrust.model.AccountCloseRequest;
-import com.fintrust.model.Transaction;
+import com.fintrust.model.Transaction_copy;
 import com.fintrust.service.AccountService;
 import com.fintrust.service.AccountServiceImpl;
 import com.fintrust.service.UserService;
@@ -26,7 +26,7 @@ public class AdminDashboardVM {
     private int pendingApprovals;
 
     private List<String> alerts;
-    private List<Transaction> recentTransactions;
+    private List<Transaction_copy> recentTransactions;
 
     private UserService userService;
     private AccountService accountService;
@@ -76,7 +76,7 @@ public class AdminDashboardVM {
         return alerts;
     }
 
-    public List<Transaction> getRecentTransactions() {
+    public List<Transaction_copy> getRecentTransactions() {
         return recentTransactions;
     }
 }

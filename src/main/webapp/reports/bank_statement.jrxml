@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
+              http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="BankStatement"
+              pageWidth="595"
+              pageHeight="842"
+              columnWidth="555"
+              leftMargin="20"
+              rightMargin="20"
+              topMargin="20"
+              bottomMargin="20">
+
+    <!-- ================= PARAMETERS ================= -->
+    <parameter name="BANK_NAME" class="java.lang.String"/>
+    <parameter name="FULL_NAME" class="java.lang.String"/>
+    <parameter name="ACCOUNT_NUMBER" class="java.lang.String"/>
+    <parameter name="EMAIL" class="java.lang.String"/>
+    <parameter name="PHONE" class="java.lang.String"/>
+    <parameter name="ADDRESS" class="java.lang.String"/>
+    <parameter name="STATEMENT_PERIOD" class="java.lang.String"/>
+
+    <!-- ================= FIELDS (MATCH POJO EXACTLY) ================= -->
+    <field name="createdAt" class="java.time.LocalDateTime"/>
+    <field name="txnReference" class="java.lang.String"/>
+    <field name="description" class="java.lang.String"/>
+    <field name="txnType" class="java.lang.String"/>
+    <field name="mode" class="java.lang.String"/>
+    <field name="amount" class="java.math.BigDecimal"/>
+    <field name="balanceAfter" class="java.math.BigDecimal"/>
+    <field name="status" class="java.lang.String"/>
+
+    <!-- ================= TITLE ================= -->
+    <title>
+        <band height="70">
+            <textField>
+                <reportElement x="0" y="0" width="555" height="30"/>
+                <textElement textAlignment="Center">
+                    <font size="16" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{BANK_NAME}]]></textFieldExpression>
+            </textField>
+
+            <textField>
+                <reportElement x="0" y="40" width="555" height="20"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression><![CDATA[
+                    "Statement Period: " + $P{STATEMENT_PERIOD}
+                ]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+
+    <!-- ================= HEADER ================= -->
+    <pageHeader>
+        <band height="95">
+
+            <textField>
+                <reportElement x="0" y="0" width="300" height="15"/>
+                <textFieldExpression><![CDATA["Name: " + $P{FULL_NAME}]]></textFieldExpression>
+            </textField>
+
+            <textField>
+                <reportElement x="0" y="18" width="300" height="15"/>
+                <textFieldExpression><![CDATA["Account No: " + $P{ACCOUNT_NUMBER}]]></textFieldExpression>
+            </textField>
+
+            <textField>
+                <reportElement x="0" y="36" width="300" height="15"/>
+                <textFieldExpression><![CDATA["Email: " + $P{EMAIL}]]></textFieldExpression>
+            </textField>
+
+            <textField>
+                <reportElement x="0" y="54" width="300" height="15"/>
+                <textFieldExpression><![CDATA["Phone: " + $P{PHONE}]]></textFieldExpression>
+            </textField>
+
+            <textField isStretchWithOverflow="true">
+                <reportElement x="0" y="72" width="555" height="20"/>
+                <textFieldExpression><![CDATA[
+                    "Address: " + ($P{ADDRESS} == null ? "N/A" : $P{ADDRESS})
+                ]]></textFieldExpression>
+            </textField>
+
+        </band>
+    </pageHeader>
+
+    <!-- ================= COLUMN HEADER ================= -->
+    <columnHeader>
+        <band height="22">
+
+            <staticText>
+                <reportElement x="0" y="0" width="70" height="22"/>
+                <text><![CDATA[Date]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="70" y="0" width="85" height="22"/>
+                <text><![CDATA[Reference]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="155" y="0" width="155" height="22"/>
+                <text><![CDATA[Description]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="310" y="0" width="60" height="22"/>
+                <text><![CDATA[Debit]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="370" y="0" width="60" height="22"/>
+                <text><![CDATA[Credit]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="430" y="0" width="75" height="22"/>
+                <text><![CDATA[Balance]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="505" y="0" width="50" height="22"/>
+                <text><![CDATA[Status]]></text>
+            </staticText>
+
+        </band>
+    </columnHeader>
+
+    <!-- ================= DETAIL ================= -->
+    <detail>
+        <band height="22">
+
+            <!-- DATE -->
+            <textField>
+                <reportElement x="0" y="0" width="70" height="22"/>
+                <textFieldExpression><![CDATA[
+                    $F{createdAt} == null
+                        ? ""
+                        : $F{createdAt}.format(
+                            java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy")
+                          )
+                ]]></textFieldExpression>
+            </textField>
+
+            <!-- REF -->
+            <textField>
+                <reportElement x="70" y="0" width="85" height="22"/>
+                <textFieldExpression><![CDATA[$F{txnReference}]]></textFieldExpression>
+            </textField>
+
+            <!-- DESCRIPTION -->
+            <textField isStretchWithOverflow="true">
+                <reportElement x="155" y="0" width="155" height="22"/>
+                <textFieldExpression><![CDATA[
+                    $F{description} == null ? "-" : $F{description}
+                ]]></textFieldExpression>
+            </textField>
+
+            <!-- DEBIT -->
+            <textField>
+                <reportElement x="310" y="0" width="60" height="22"/>
+                <textFieldExpression><![CDATA[
+                    "debit".equalsIgnoreCase($F{txnType})
+                        ? $F{amount}
+                        : ""
+                ]]></textFieldExpression>
+            </textField>
+
+            <!-- CREDIT -->
+            <textField>
+                <reportElement x="370" y="0" width="60" height="22"/>
+                <textFieldExpression><![CDATA[
+                    "credit".equalsIgnoreCase($F{txnType})
+                        ? $F{amount}
+                        : ""
+                ]]></textFieldExpression>
+            </textField>
+
+            <!-- BALANCE -->
+            <textField>
+                <reportElement x="430" y="0" width="75" height="22"/>
+                <textFieldExpression><![CDATA[$F{balanceAfter}]]></textFieldExpression>
+            </textField>
+
+            <!-- STATUS -->
+            <textField>
+                <reportElement x="505" y="0" width="50" height="22"/>
+                <textFieldExpression><![CDATA[
+                    $F{status} == null ? "N/A" : $F{status}
+                ]]></textFieldExpression>
+            </textField>
+
+        </band>
+    </detail>
+
+</jasperReport>

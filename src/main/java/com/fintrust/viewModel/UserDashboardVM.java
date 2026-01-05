@@ -8,6 +8,8 @@ import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Include;
 
 import com.fintrust.dao.impl.TransactionDAO;
+import com.fintrust.dao.impl.TransactionsDAOImpl;
+import com.fintrust.db.DBConnection;
 import com.fintrust.model.Account;
 import com.fintrust.model.Transaction;
 import com.fintrust.model.User;
@@ -16,14 +18,16 @@ import com.fintrust.service.AccountService;
 import com.fintrust.service.AccountServiceImpl;
 import com.fintrust.service.CardServices;
 import com.fintrust.service.UserDetailsServiceImpl;
+import com.fintrust.util.NotificationUtil;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class UserDashboardVM {
 
 	private AccountService accountService;
 	private UserDetailsServiceImpl userDetailsServiceImpl;
-	private TransactionDAO transactionDAO = new TransactionDAO();
+	private TransactionsDAOImpl transactionDAO = new TransactionsDAOImpl(DBConnection.getConnection());
 	private CardServices cardService = new CardServices();
 
 	private Account selectedAccount;
@@ -69,7 +73,12 @@ public class UserDashboardVM {
 		activeCards = cardService.getActiveCardCount();
 
 		// Load sample transactions
-		recentTransactions = transactionDAO.getTransactions(userId, null, null);
+		try {
+			recentTransactions = transactionDAO.allCurrentUserTransactions(null, null);
+		} catch (SQLException e) {
+			NotificationUtil.showInstant("error", "Failed to load transaction");
+			e.printStackTrace();
+		}
 	}
 
 	// ==========================
@@ -145,6 +154,14 @@ public class UserDashboardVM {
 		Executions.sendRedirect("/user/" + page + ".zul");
 	}
 
+	@Command
+	public void transactionHistory(@BindingParam("page") String url) {
+		Include mainContentSec = (Include) Sessions.getCurrent().getAttribute("main_content_sec");
+
+		mainContentSec.setSrc("/WEB-INF/components/" + url + ".zul");
+
+	}
+	
 	@Command
 	public void tranfer(@BindingParam("page") String url) {
 		Include mainContentSec = (Include) Sessions.getCurrent().getAttribute("main_content_sec");

@@ -92,13 +92,14 @@ public class FundTransferDAO {
                                   Long fromAcc,
                                   Long toAcc,
                                   double amount,
-                                  String txn_type,
+                                  String txn_type, double remaningBalance,
                                   String status) throws SQLException {
+    	
 
         String sql = """
             INSERT INTO transactions
-            (user_id, account_number, counterparty_account_number, amount, txn_type, status)
-            VALUES (?, ?, ?, ?, ?, ?)
+            (user_id, account_number, counterparty_account_number, amount,balance_after, txn_type, status)
+            VALUES (?, ?, ?, ?,?, ?, ?)
         """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -106,8 +107,9 @@ public class FundTransferDAO {
             ps.setLong(2, fromAcc);
             ps.setLong(3, toAcc);
             ps.setDouble(4, amount);
-            ps.setString(5, txn_type);
-            ps.setString(6, status);
+            ps.setDouble(5, remaningBalance);
+            ps.setString(6, txn_type);
+            ps.setString(7, status);
             ps.executeUpdate();
         }
     }

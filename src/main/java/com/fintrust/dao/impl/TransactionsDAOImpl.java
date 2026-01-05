@@ -3,9 +3,18 @@ package com.fintrust.dao.impl;
 
 
 import java.sql.*;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
+
 import com.fintrust.dao.TransactionsDAO;
+import com.fintrust.db.DBConnection;
+import com.fintrust.model.Transaction;
+
 
 /**
  * JDBC implementation of TransactionsDAO for banking systems.
@@ -22,10 +31,11 @@ public class TransactionsDAOImpl implements TransactionsDAO {
      *
      * @param connection JDBC connection managed externally
      */
+    
     public TransactionsDAOImpl(Connection connection) {
         this.connection = connection;
     }
-
+    
     @Override
     public long create(long accountId, Long relatedAccountId, Long beneficiaryId,
                        String txnReference, String txnType, String mode,
@@ -61,6 +71,74 @@ public class TransactionsDAOImpl implements TransactionsDAO {
         return -1;
     }
 
+    public List<Transaction> allCurrentUserTransactions(java.sql.Date from, java.sql.Date to) throws SQLException {
+
+        List<Transaction> list = new ArrayList<>();
+
+        Long userId = (Long) Sessions.getCurrent().getAttribute("user_id");
+
+
+        
+        String sql = "SELECT * FROM transactions WHERE user_id = ?";
+
+      if (from != null && to != null) {
+    	  sql += " AND DATE(created_at) BETWEEN ? AND ?";
+      }
+
+      sql += " ORDER BY created_at DESC";
+
+        
+
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {
+        	  pst.setLong(1, userId);         //take it from session..............
+        	 if (from != null && to != null) {
+        		 pst.setDate(2, from);
+        		 pst.setDate(3, to);
+             }
+        	
+        	
+         
+            try (ResultSet rs = pst.executeQuery()) {
+
+                while (rs.next()) {
+                    Transaction tx = new Transaction();
+
+                    tx.setTransactionId(rs.getLong("transaction_id"));
+                    tx.setUserId(rs.getLong("user_id"));
+                    tx.setAccountNumber(rs.getLong("account_number"));
+
+                    // Nullable columns
+                    tx.setCounterpartyAccountNumber(
+                            rs.getObject("counterparty_account_number", Long.class)
+                    );
+                    tx.setBeneficiaryId(
+                            rs.getObject("beneficiary_id", Long.class)
+                    );
+
+                    tx.setTxnReference(rs.getString("txn_reference"));
+                    tx.setTxnType(rs.getString("txn_type"));
+                    tx.setMode(rs.getString("mode"));
+                    tx.setAmount(rs.getBigDecimal("amount"));
+                    tx.setBalanceAfter(rs.getBigDecimal("balance_after"));
+                    tx.setDescription(rs.getString("description"));
+                    tx.setStatus(rs.getString("status"));
+
+                    // TIMESTAMP → LocalDateTime
+                    Timestamp ts = rs.getTimestamp("created_at");
+                    if (ts != null) {
+                        tx.setCreatedAt(ts.toLocalDateTime());
+                    }
+
+                    list.add(tx);
+                }
+            }
+        }
+
+        return list;
+    }
+
+    
+    
     @Override
     public Map<String, Object> findById(long transactionId) throws SQLException {
         String sql = "SELECT * FROM transactions WHERE transaction_id = ?";
@@ -74,7 +152,7 @@ public class TransactionsDAOImpl implements TransactionsDAO {
 
         return null;
     }
-
+   
     @Override
     public List<Map<String, Object>> findByAccountId(long accountId) throws SQLException {
         String sql = "SELECT * FROM transactions WHERE account_id = ? ORDER BY created_at DESC";
@@ -151,4 +229,95 @@ public class TransactionsDAOImpl implements TransactionsDAO {
         map.put("created_at", rs.getTimestamp("created_at"));
         return map;
     }
+
+
+    public static Map<String, Object> fetchUserHeader(
+            Connection con,
+            long userId,
+            java.sql.Date from,
+            java.sql.Date to
+    ) throws SQLException {
+
+        String sql =
+                "SELECT u.full_name, u.email, u.phone, t.account_number, " +
+                "ud.country, ud.state, ud.city, ud.pincode " +
+                "FROM users u " +
+                "LEFT JOIN transactions t ON u.user_id = t.user_id " +
+                "LEFT JOIN user_details ud ON u.user_id = ud.user_id " +
+                "WHERE u.user_id = ? LIMIT 1";
+
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setLong(1, userId);
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("BANK_NAME", "FinTrust Bank Pvt. Ltd.");
+        map.put("FULL_NAME", rs.getString("full_name"));
+        map.put("EMAIL", rs.getString("email"));
+        map.put("PHONE", rs.getString("phone"));
+        map.put("ACCOUNT_NUMBER", rs.getString("account_number"));
+
+        String address = rs.getString("city") + ", " +
+                         rs.getString("state") + ", " +
+                         rs.getString("country") + " - " +
+                         rs.getString("pincode");
+
+        map.put("ADDRESS", address);
+
+        DateTimeFormatter fmt =
+                DateTimeFormatter.ofPattern("dd-MMM-yyyy");
+
+        map.put("STATEMENT_PERIOD",
+                from.toLocalDate().format(fmt) +
+                        " to " +
+                        to.toLocalDate().format(fmt)
+        );
+
+        return map;
+    }
+  
+    public static List<Transaction> fetchTransactionsByDateRange(
+            Connection con,
+            long userId,
+            java.sql.Date from,
+            java.sql.Date to
+    ) throws SQLException {
+
+        List<Transaction> list = new ArrayList<>();
+
+        String sql =
+                "SELECT * FROM transactions " +
+                "WHERE user_id = ? " +
+                "AND DATE(created_at) BETWEEN ? AND ? " +
+                "ORDER BY created_at";
+
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setLong(1, userId);
+        ps.setDate(2, from);
+        ps.setDate(3, to);
+
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Transaction t = new Transaction();
+            t.setTransactionId(rs.getLong("transaction_id"));
+            t.setTxnReference(rs.getString("txn_reference"));
+            t.setTxnType(rs.getString("txn_type"));
+            t.setMode(rs.getString("mode"));
+            t.setAmount(rs.getBigDecimal("amount"));
+            t.setBalanceAfter(rs.getBigDecimal("balance_after"));
+            t.setDescription(rs.getString("description"));
+            t.setStatus(rs.getString("status"));
+
+            Timestamp ts = rs.getTimestamp("created_at");
+            if (ts != null) {
+                t.setCreatedAt(ts.toLocalDateTime());
+            }
+
+            list.add(t);
+        }
+        return list;
+    }
+
 }

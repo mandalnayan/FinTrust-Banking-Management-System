@@ -1,7 +1,7 @@
 package com.fintrust.dao.impl;
 
 import com.fintrust.db.DBConnection;
-import com.fintrust.model.Transaction;
+import com.fintrust.model.Transaction_copy;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,9 +9,9 @@ import java.util.List;
 
 public class TransactionDAO {
 
-    public List<Transaction> getTransactions(Long userId, Date from, Date to) {
+    public List<Transaction_copy> getTransactions(Long userId, Date from, Date to) {
 
-        List<Transaction> transactions = new ArrayList<>(); 
+        List<Transaction_copy> transaction_copies = new ArrayList<>(); 
 
         String sql = "SELECT * FROM transactions WHERE user_id = ?";
 
@@ -34,7 +34,7 @@ public class TransactionDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                Transaction t = new Transaction();
+                Transaction_copy t = new Transaction_copy();
                 t.setTransactionId(rs.getLong("transaction_id"));
                 t.setAccountNumber(rs.getLong("account_number"));
                 t.setCounterparty_account_number(rs.getLong("counterparty_account_number"));
@@ -44,14 +44,14 @@ public class TransactionDAO {
                 t.setStatus(rs.getString("status"));
                 t.setCreatedAt(rs.getTimestamp("created_at"));
 
-                transactions.add(t);
+                transaction_copies.add(t);
             }
 
         } catch (SQLException e) {
             throw new RuntimeException("Error fetching transactions", e);
         }
 
-        return transactions;
+        return transaction_copies;
     }
 }
 

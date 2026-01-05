@@ -11,7 +11,7 @@ import com.fintrust.dao.impl.AccountDAOImpl;
 import com.fintrust.dao.impl.FundTransferDAO;
 import com.fintrust.dao.impl.UserDAOImpl;
 import com.fintrust.db.DBConnection;
-import com.fintrust.model.Transaction.TransactionStatus;
+import com.fintrust.model.Transaction_copy.TransactionStatus;
 import com.fintrust.model.User;
 import com.fintrust.util.NotificationUtil;
 
@@ -21,7 +21,7 @@ public class FundTransferService {
 	private final FundTransferDAO dao = new FundTransferDAO(connection);
 	private final AccountDAO accountDao = new AccountDAOImpl();
 	private final UserDAO userDAO = new UserDAOImpl(connection);
-
+	private double senderBalance = 0;
 	/**
 	 * Transfer money
 	 * @param fromAcc
@@ -51,12 +51,16 @@ public class FundTransferService {
 			dao.debit(fromAcc, amount);
 			dao.credit(toAcc, amount);
 
-			dao.insertTransaction(userId, fromAcc, toAcc, amount, "debit",
+			if (senderBalance <= 0)  throw new IllegalArgumentException("Insufficient balance");
+			double remaningBalance = senderBalance - amount;
+			
+			dao.insertTransaction(userId, fromAcc, toAcc, amount, "debit", remaningBalance,
 					TransactionStatus.COMPLETED.name().toLowerCase());
 			
 //			Get user id of other person
 			Long toUserId = accountDao.findUserIdByAccountNo(toAcc);
-			dao.insertTransaction(toUserId, fromAcc, toAcc, amount, "credit",
+			double receiverRemaningBalance = dao.getAccountBalance(toAcc) + amount;
+			dao.insertTransaction(toUserId, fromAcc, toAcc, amount, "credit",receiverRemaningBalance,
 					TransactionStatus.COMPLETED.name().toLowerCase());
 			
 
@@ -68,7 +72,7 @@ public class FundTransferService {
 			NotificationUtil.showInstant("error", "Failed to transfer! " + e.getMessage(), 6000);
 			try {
 				if (connection != null) {
-					dao.insertTransaction(userId, fromAcc, toAcc, amount,"debit",
+					dao.insertTransaction(userId, fromAcc, toAcc, amount,"debit",senderBalance,
 							TransactionStatus.FAILED.name().toLowerCase());
 				}
 			} catch (Exception ignore) {
@@ -93,8 +97,8 @@ public class FundTransferService {
 
 	private void validateBalance(Long fromAcc, double amount) throws Exception {
 
-		double balance = dao.getAccountBalance(fromAcc);
-		if (balance < amount) {
+		senderBalance = dao.getAccountBalance(fromAcc);
+		if (senderBalance < amount) {
 			throw new IllegalArgumentException("Insufficient balance");
 		}
 	}

@@ -58,7 +58,7 @@ public void setCreated_at(String created_at) {
 }
 @Override
 public String toString() {
-	return "Transaction [id=" + id + ", from_account=" + from_account + ", to_account=" + to_account + ", amount="
+	return "Transaction_copy [id=" + id + ", from_account=" + from_account + ", to_account=" + to_account + ", amount="
 			+ amount + ", status=" + status + ", created_at=" + created_at + "]";
 }
 

@@ -1,7 +1,7 @@
 package com.fintrust.controller;
 
 import com.fintrust.dao.impl.TransactionDAO;
-import com.fintrust.model.Transaction;
+import com.fintrust.model.Transaction_copy;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Sessions;
@@ -61,10 +61,10 @@ public class TransactionHistoryController extends SelectorComposer<Component> {
 
         transactionListbox.getItems().clear();
 
-        List<Transaction> transactions =
+        List<Transaction_copy> transaction_copies =
                 transactionDAO.getTransactions(userId, from, to);
 
-        for (Transaction t : transactions) {
+        for (Transaction_copy t : transaction_copies) {
             Listitem item = new Listitem();
             item.appendChild(new Listcell(String.valueOf(t.getTransactionId())));
             item.appendChild(new Listcell(String.valueOf(t.getAccountNumber())));

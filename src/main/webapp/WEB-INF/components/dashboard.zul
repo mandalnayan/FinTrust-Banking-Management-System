@@ -130,7 +130,7 @@
 										<label
 											value="@load(each.accountNumber)" />
 										<label
-											value="@load(each.counterparty_account_number)" />
+											value="@load(each.counterpartyAccountNumber)" />
 										<label
 											value="@load(each.status)" />
 									</row>
@@ -141,7 +141,7 @@
 						<hbox style="justify-content:flex-end; ">
 							<button label="View All Transactions"
 								class="view-all-btn"
-								onClick="@command('go', page='transactionHistory')" />
+								onClick="@command('transactionHistory', page='transactionHistory')" />
 						</hbox>
 					</vbox>
 
