@@ -67,35 +67,35 @@
                 <rows>
                     <row>
                         <label value="Account No:"/>
-                        <label id="accountNo"/>
+                        <label id="accountNoLabel"/>
                     </row>
                     <row>
                         <label value="Account Type:"/>
-                        <label id="accountType"/>
+                        <label id="accountTypeLabel"/>
                     </row>
                     <row>
                         <label value="Balance:"/>
-                        <label id="accountBalance"/>
+                        <label id="accountBalanceLabel"/>
                     </row>
                     <row>
                         <label value="Status:"/>
-                        <label id="accountStatus"/>
+                        <label id="accountStatusLabel"/>
                     </row>
                     <row>
                         <label value="Branch:"/>
-                        <label id="accountBranch"/>
+                        <label id="accountBranchLabel"/>
                     </row>
                     <row>
                         <label value="IFSC Code:"/>
-                        <label id="ifscCode"/>
+                        <label id="ifscCodeLabel"/>
                     </row>
                     <row>
                         <label value="Mode of Operation:"/>
-                        <label id="modeOfOperation"/>
+                        <label id="modeOfOperationLabel"/>
                     </row>
                     <row>
                         <label value="Nominee ID:"/>
-                        <label id="nomineeId"/>
+                        <label id="nomineeIdLabel"/>
                     </row>
                 </rows>
             </grid>

@@ -8,6 +8,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.*;
 
+import com.fintrust.model.Account;
 import com.fintrust.model.AccountUpdateRequest;
 import com.fintrust.util.NotificationUtil;
 import com.fintrust.dao.impl.AccountUpdateRequestDao;
@@ -16,6 +17,7 @@ import com.fintrust.dao.impl.AccountUpdateRequestDao;
 
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class EmployeeApprovalControllercopy extends SelectorComposer<Component> {
     private static final long serialVersionUID = 1L;
@@ -24,6 +26,10 @@ public class EmployeeApprovalControllercopy extends SelectorComposer<Component> 
     @Wire Button approveBtn,rejectBtn;
     private Long currentEmployeeId;
     
+    @Wire
+	private Textbox searchBox; 
+    
+    List<AccountUpdateRequest> allUpdateAccountRequest;
     private AccountUpdateRequestDao dao = new AccountUpdateRequestDao();
 
     @Override
@@ -31,12 +37,18 @@ public class EmployeeApprovalControllercopy extends SelectorComposer<Component> 
         super.doAfterCompose(comp);
         currentEmployeeId = (Long) Sessions.getCurrent().getAttribute("admin_id");
         if (currentEmployeeId == null) return;
-        loadPendingRequests();
+        loadAccounts();
+    }
+    
+    /** Load all accounts initially 
+     * @throws Exception **/
+    private void loadAccounts() throws Exception {
+    	allUpdateAccountRequest = dao.getPendingRequests();
+        loadPendingRequests(allUpdateAccountRequest);
     }
 
-    private void loadPendingRequests() throws Exception {
-        List<AccountUpdateRequest> list = dao.getPendingRequests();
-        if(list.isEmpty()) {
+    private void loadPendingRequests(List<AccountUpdateRequest> allUpdateAccountRequest) throws Exception {
+        if(allUpdateAccountRequest.isEmpty()) {
         	Hbox box = new Hbox();
         	box.setWidth("100%");
         	box.setHeight("50px");
@@ -50,7 +62,7 @@ public class EmployeeApprovalControllercopy extends SelectorComposer<Component> 
         	requestList.getParent().appendChild(box);
         	return;
         }
-        requestList.setModel(new ListModelList<>(list));
+        requestList.setModel(new ListModelList<>(allUpdateAccountRequest));
     }
     
     @Listen("onSelect = #requestList")
@@ -66,6 +78,24 @@ public class EmployeeApprovalControllercopy extends SelectorComposer<Component> 
         
         Include centerArea = (Include) getPage().getFellow("main_content_sec");
         centerArea.setSrc("/admin/account/view_Upated_Data.zul");
+    }
+    
+    /** Search event 
+     * @throws Exception **/
+    @Listen("onClick = #searchBtn")
+    public void onSearch() throws Exception {
+        String searchText = searchBox.getValue().trim().toLowerCase();
+
+        if (searchText.isEmpty()) {
+        	loadPendingRequests(allUpdateAccountRequest);
+            return;
+        }
+
+        List<com.fintrust.model.AccountUpdateRequest> filtered = allUpdateAccountRequest.stream()
+                .filter(acc -> (acc.getAccountNo() +"").contains(searchText))
+                .collect(Collectors.toList());
+
+        loadPendingRequests(filtered);
     }
 }
 
