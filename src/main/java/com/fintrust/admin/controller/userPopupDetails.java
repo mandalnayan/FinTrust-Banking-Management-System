@@ -19,7 +19,14 @@ import com.fintrust.util.NotificationUtil;
 
 public class userPopupDetails extends SelectorComposer<Component>{
 	 private static final long serialVersionUID = -5378213970005720355L;
-	 @Wire private Label userNameLabel, userEmailLabel, userGenderLabel, userDOBLabel, userDistrictLabel, userStateLabel, userCountryLabel;
+	 @Wire Label userNameLabel;
+	 @Wire Label userEmailLabel;
+	 @Wire Label userGenderLabel;
+	 @Wire Label userDOBLabel;
+	 @Wire Label userDistrictLabel;
+	 @Wire Label userStateLabel;
+	 @Wire Label userCountryLabel;
+	 
 	 @Wire Button closeBtn;
 	 
 	 private Long selectedUser;

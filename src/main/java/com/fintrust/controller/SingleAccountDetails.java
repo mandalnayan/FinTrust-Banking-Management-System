@@ -41,14 +41,14 @@ public class SingleAccountDetails extends SelectorComposer<Window> {
     private final BranchDao branchDao = new BranchDao();
 
     /* UI Components */
-    @Wire private Label accountNoLabel;
-    @Wire private Label accountTypeLabel;
-    @Wire private Label ifscCodeLabel;
-    @Wire private Label accountBalanceLabel;
-    @Wire private Label accountStatusLabel;
-    @Wire private Label accountBranchLabel;
-    @Wire private Label modeOfOperationLabel;
-    @Wire private Label nomineeIdLabel;
+    @Wire Label accountNoLabel;
+    @Wire Label accountTypeLabel;
+    @Wire Label ifscCodeLabel;
+    @Wire Label accountBalanceLabel;
+    @Wire Label accountStatusLabel;
+    @Wire Label accountBranchLabel;
+    @Wire Label modeOfOperationLabel;
+    @Wire Label nomineeIdLabel;
 
     /**
      * Called after ZUL components are composed.

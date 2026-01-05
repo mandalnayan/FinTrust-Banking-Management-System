@@ -46,13 +46,13 @@ public class UpdateAccountRequest extends SelectorComposer<Component> {
     private static final String VIEW_ALL_ACCOUNTS_PAGE = "/WEB-INF/components/view_all_account.zul";
 
     /* ---------- UI Components ---------- */
-    @Wire private Label accountNoLabel;
-    @Wire private Label accountBalanceLabel;
-    @Wire private Label accountStatusLabel;
+    @Wire Label accountNoLabel;
+    @Wire Label accountBalanceLabel;
+    @Wire Label accountStatusLabel;
 
-    @Wire private Combobox accountTypeComboBox;
-    @Wire private Combobox accountBranchBox;
-    @Wire private Combobox accountModeBox;
+    @Wire Combobox accountTypeComboBox;
+    @Wire Combobox accountBranchBox;
+    @Wire Combobox accountModeBox;
 
     /* ---------- Services & DAOs ---------- */
     private final AccountServiceImpl accountService = new AccountServiceImpl();

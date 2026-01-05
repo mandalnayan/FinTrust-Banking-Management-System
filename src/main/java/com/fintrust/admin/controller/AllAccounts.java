@@ -24,8 +24,8 @@ public class AllAccounts extends SelectorComposer<Window> {
 
 	private final AccountServiceImpl acconntService = new AccountServiceImpl();
 	
-	@Wire private Textbox searchBox; 
-    @Wire private Listbox accountListbox;
+	@Wire Textbox searchBox; 
+    @Wire Listbox accountListbox;
     
     private List<Account> allAccounts;
 

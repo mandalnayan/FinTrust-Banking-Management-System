@@ -38,7 +38,7 @@ public class AllAccountsComposer extends SelectorComposer<Window> {
     private static final String CLOSE_ACCOUNT_ZUL = "/user/account/close_account.zul";
     private static final String CUSTOMER_DASHBOARD_ZUL = "/user/account/customer_dashboard.zul";
 
-    @Wire private Listbox accountListbox;
+    @Wire Listbox accountListbox;
 
     /**
      * Initializes the UI after component composition.

@@ -38,6 +38,8 @@ public class AccountCloseApprovelComposer extends SelectorComposer<Component> {
 	@Wire Button approveBtn;
 	@Wire Button rejectBtn;
 	@Wire Textbox searchBox; 
+	
+	@Wire Hbox messageBox;
 	    
 	private Long currentEmployeeId;
 	List<AccountCloseRequest> allCloseAccountRequest;
@@ -62,6 +64,8 @@ public class AccountCloseApprovelComposer extends SelectorComposer<Component> {
 		loadAccounts();
 	}
 	
+	
+	
 	/**
 	 * Loads all pending account close requests.
 	 *
@@ -73,6 +77,8 @@ public class AccountCloseApprovelComposer extends SelectorComposer<Component> {
 		loadPendingRequests(allCloseAccountRequest);
 	}
 	
+	
+	
 	/**
 	 * Displays pending requests in the listbox.
 	 *
@@ -80,30 +86,27 @@ public class AccountCloseApprovelComposer extends SelectorComposer<Component> {
 	 */
 	private void loadPendingRequests(List<AccountCloseRequest> allCloseAccountRequest) {
 		requestList.getItems().clear();
+		
 		if (allCloseAccountRequest.isEmpty()) {
 			logger.info("No pending account close requests found");
+			
+            approveBtn.setVisible(false);
+            rejectBtn.setVisible(false);
+            messageBox.setVisible(true);
 
-			approveBtn.setVisible(false);
-			rejectBtn.setVisible(false);
-	        	
-			Hbox box = new Hbox();
-			box.setWidth("100%");
-			box.setHeight("50px");
-			box.setPack("center");
-			box.setAlign("center");
-	        	
-			Label label = new Label("No Account Pending for the Approvel");
-			label.setStyle("font-size:22px");
-			box.appendChild(label);
-	        	
-			requestList.getParent().appendChild(box);
-			return;
+            return;
 		}
-
+		
+		approveBtn.setVisible(true);
+	    rejectBtn.setVisible(true);
+		messageBox.setVisible(false);
+		
 		logger.debug("Rendering {} pending requests",allCloseAccountRequest.size());
 		
 		requestList.setModel(new ListModelList<>(allCloseAccountRequest));
 	}
+	
+	
 	
 	/**
 	 * Approves selected account close request.
@@ -137,6 +140,8 @@ public class AccountCloseApprovelComposer extends SelectorComposer<Component> {
 		loadAccounts();
 	}
 	
+	
+	
 	/**
 	 * Rejects selected account close request.
 	 *
@@ -162,6 +167,8 @@ public class AccountCloseApprovelComposer extends SelectorComposer<Component> {
 		loadAccounts();
 	}
 	
+	
+	
 	/**
 	 * Searches account close requests by account number.
 	 *
@@ -169,7 +176,6 @@ public class AccountCloseApprovelComposer extends SelectorComposer<Component> {
 	 */
 	@Listen("onClick = #searchBtn")
 	public void onSearch() throws Exception {
-
 		String searchText = searchBox.getValue().trim().toLowerCase();
 		logger.debug("Search triggered with value={}", searchText);
 

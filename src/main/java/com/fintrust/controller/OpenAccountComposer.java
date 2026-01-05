@@ -43,17 +43,17 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
     private static final int NOMINEE_ID_LENGTH = 12;
 
     /* UI Components */
-    @Wire private Combobox accountTypeCombobox;
-    @Wire private Combobox branchCombobox;
-    @Wire private Combobox modeOfOperationCombobox;
-    @Wire private Combobox nomineeRelationCombobox;
+    @Wire Combobox accountTypeCombobox;
+    @Wire Combobox branchCombobox;
+    @Wire Combobox modeOfOperationCombobox;
+    @Wire Combobox nomineeRelationCombobox;
 
-    @Wire private Longbox nomineeIdLongbox;
-    @Wire private Doublebox initialDepositDoublebox;
-    @Wire private Textbox nomineeNameTextbox;
+    @Wire Longbox nomineeIdLongbox;
+    @Wire Doublebox initialDepositDoublebox;
+    @Wire Textbox nomineeNameTextbox;
 
-    @Wire private Button btnSubmit;
-    @Wire private Button btnReset;
+    @Wire Button btnSubmit;
+    @Wire Button btnReset;
 
     /* Services & DAO */
     private final AccountServiceImpl accountService = new AccountServiceImpl();

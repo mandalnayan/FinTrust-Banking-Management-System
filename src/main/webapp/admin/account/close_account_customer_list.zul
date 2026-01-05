@@ -127,8 +127,14 @@
        			
        		</listitem>
        </template>
-    </listbox>
-    <hbox align="center" spacing="10px" style="margin-top:10px;">
+    </listbox> 
+    
+   <!-- NO DATA MESSAGE (REUSABLE) -->
+   <hbox id="messageBox" width="100%" height="50px" align="center" pack="center" visible="false">
+   	 <label value="No Account Pending for Approval" style="font-size:22px;font-weight:bold;color:#666;" />
+   </hbox>
+   
+   <hbox align="center" spacing="10px" style="margin-top:10px;">
         <button id="approveBtn" label="Approve" sclass="btn-primary"/>
         <button id="rejectBtn" label="Reject" sclass="btn-primary"/>
     </hbox>
