@@ -73,9 +73,9 @@ public class UserSignupController extends SelectorComposer<Component> {
 	// ------------------ Validation Methods ------------------
 
 	private boolean isValidEmail(String email) {
-		// Basic regex for email format
-		return email != null && email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
+	    return email != null && email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$");
 	}
+
 
 	private boolean isValidPhone(String phone) {
 	    if (phone == null) return false;
@@ -88,7 +88,8 @@ public class UserSignupController extends SelectorComposer<Component> {
 	}
 
 	private boolean isValidPassword(String password) {
-		// Minimum 8 characters
-		return password != null && password.length() >= 1;
+	    if (password == null) return false;
+	    return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{8,}$");
 	}
+
 }

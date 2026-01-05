@@ -9,8 +9,8 @@
 <!-- sclass="support-page" -->
 <zk >
 
-   <include src = "/WEB-INF/components/privateNavbar.zul" /> 
-
+   
+<!-- <include src = "/WEB-INF/components/privateNavbar.zul" />  -->
 	<style>
 
 		.help{ font-weight: bold; }
@@ -34,13 +34,13 @@
 		.sidebar-section { height:100vh; overflow-y:auto; }
 	</style>
 
-	<window border="normal" width="100%"
+	<window  width="100%"
 		height="100%" apply="com.fintrust.controller.ContactController" >
 		<window width="30%" style="margin: 0px auto;">
-		<hbox pack="center" align="center" width="1000px">
+		 <hbox pack="center" align="center" width="1000px"> 
 				<label hflex="1" sclass="help" value = "Contact Support" style="text-align:center; font-size: 25px; font-weight:bold;"/>
-				<space spacing="20px"/>
-		</hbox>
+			<!-- 	<space spacing="20px"/>  -->
+		 </hbox> 
 		</window>
 		<div class="container">
 			<div class="main-form"  width="100%">
@@ -64,7 +64,7 @@
 						<row>
 							<label value="Email *" />
 							<textbox id="email"
-								placeholder="you@domain.com" />
+								placeholder="youremail@domain.com" />
 						</row>
 						<row>
 							<label
