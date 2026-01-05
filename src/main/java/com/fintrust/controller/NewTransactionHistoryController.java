@@ -129,13 +129,14 @@ public class NewTransactionHistoryController extends SelectorComposer<Component>
 
         Connection con = DBConnection.getConnection();
         Long userId = (Long) Sessions.getCurrent().getAttribute("user_id");
-
+        TransactionsDAOImpl dao =
+                new TransactionsDAOImpl(DBConnection.getConnection());
         Map<String, Object> params =
-                fetchUserHeader(con, userId, sqlFrom, sqlTo);
-
+                dao.fetchUserHeader(con, userId, sqlFrom, sqlTo);
+        
         List<Transaction> transactions =
-                fetchTransactionsByDateRange(con, userId, sqlFrom, sqlTo);
-
+        		dao.fetchTransactionsByDateRange(con, userId, sqlFrom, sqlTo);
+        
         InputStream reportStream =
                 Executions.getCurrent()
                         .getDesktop()
@@ -170,94 +171,5 @@ public class NewTransactionHistoryController extends SelectorComposer<Component>
         con.close();
     }
 
-    // ================= HEADER DATA =================
-    private static Map<String, Object> fetchUserHeader(
-            Connection con,
-            long userId,
-            java.sql.Date from,
-            java.sql.Date to
-    ) throws SQLException {
-
-        String sql =
-                "SELECT u.full_name, u.email, u.phone, t.account_number, " +
-                "ud.country, ud.state, ud.city, ud.pincode " +
-                "FROM users u " +
-                "LEFT JOIN transactions t ON u.user_id = t.user_id " +
-                "LEFT JOIN user_details ud ON u.user_id = ud.user_id " +
-                "WHERE u.user_id = ? LIMIT 1";
-
-        PreparedStatement ps = con.prepareStatement(sql);
-        ps.setLong(1, userId);
-        ResultSet rs = ps.executeQuery();
-        rs.next();
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("BANK_NAME", "FinTrust Bank Pvt. Ltd.");
-        map.put("FULL_NAME", rs.getString("full_name"));
-        map.put("EMAIL", rs.getString("email"));
-        map.put("PHONE", rs.getString("phone"));
-        map.put("ACCOUNT_NUMBER", rs.getString("account_number"));
-
-        String address = rs.getString("city") + ", " +
-                         rs.getString("state") + ", " +
-                         rs.getString("country") + " - " +
-                         rs.getString("pincode");
-
-        map.put("ADDRESS", address);
-
-        DateTimeFormatter fmt =
-                DateTimeFormatter.ofPattern("dd-MMM-yyyy");
-
-        map.put("STATEMENT_PERIOD",
-                from.toLocalDate().format(fmt) +
-                        " to " +
-                        to.toLocalDate().format(fmt)
-        );
-
-        return map;
-    }
-
-    // ================= TRANSACTIONS =================
-    private static List<Transaction> fetchTransactionsByDateRange(
-            Connection con,
-            long userId,
-            java.sql.Date from,
-            java.sql.Date to
-    ) throws SQLException {
-
-        List<Transaction> list = new ArrayList<>();
-
-        String sql =
-                "SELECT * FROM transactions " +
-                "WHERE user_id = ? " +
-                "AND DATE(created_at) BETWEEN ? AND ? " +
-                "ORDER BY created_at";
-
-        PreparedStatement ps = con.prepareStatement(sql);
-        ps.setLong(1, userId);
-        ps.setDate(2, from);
-        ps.setDate(3, to);
-
-        ResultSet rs = ps.executeQuery();
-
-        while (rs.next()) {
-            Transaction t = new Transaction();
-            t.setTransactionId(rs.getLong("transaction_id"));
-            t.setTxnReference(rs.getString("txn_reference"));
-            t.setTxnType(rs.getString("txn_type"));
-            t.setMode(rs.getString("mode"));
-            t.setAmount(rs.getBigDecimal("amount"));
-            t.setBalanceAfter(rs.getBigDecimal("balance_after"));
-            t.setDescription(rs.getString("description"));
-            t.setStatus(rs.getString("status"));
-
-            Timestamp ts = rs.getTimestamp("created_at");
-            if (ts != null) {
-                t.setCreatedAt(ts.toLocalDateTime());
-            }
-
-            list.add(t);
-        }
-        return list;
-    }
+ 
 }
