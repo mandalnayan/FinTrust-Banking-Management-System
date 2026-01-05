@@ -1,5 +1,7 @@
 package com.fintrust.admin.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.*;
@@ -7,40 +9,66 @@ import org.zkoss.zul.*;
 
 import com.fintrust.model.Account;
 import com.fintrust.service.AccountServiceImpl;
-import com.fintrust.service.NomineeServiceImp;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Controller for displaying all accounts
+ * and navigating to single account details.
+ */
 public class AllAccounts extends SelectorComposer<Window> {
+    private static final long serialVersionUID = 2492592400378886456L;
+
+	private static final Logger logger = LoggerFactory.getLogger(AllAccounts.class);
+
 	private final AccountServiceImpl acconntService = new AccountServiceImpl();
-	private final NomineeServiceImp nomineeService = new NomineeServiceImp();
 	
-	@Wire
-	private Textbox searchBox; 
-	
-    @Wire 
-    private Listbox accountListbox;
+	@Wire Textbox searchBox; 
+    @Wire Listbox accountListbox;
     
     private List<Account> allAccounts;
 
+    /**
+     * Called after ZUL components are composed.
+     *
+     * @param comp main window component
+     * @throws Exception if any UI error occurs
+     */
     @Override
     public void doAfterCompose(Window comp) throws Exception {
         super.doAfterCompose(comp);
+        logger.info("AllAccounts page initialized");
         loadAccounts();
     }
-    
 
-    /** Load all accounts initially **/
+    /**
+     * Loads all accounts from service layer.
+     */
     private void loadAccounts() {
+        logger.debug("Loading all accounts");
         allAccounts = acconntService.getAllAccounts();
+        logger.info("Total accounts loaded: {}", 
+                allAccounts != null ? allAccounts.size() : 0);
         renderAccountList(allAccounts);
     }
-    
+
+    /**
+     * Renders the account list in the listbox.
+     *
+     * @param allAccounts list of accounts to display
+     */
     private void renderAccountList(List<Account> allAccounts) {
-  
+
         accountListbox.getItems().clear();
+
+        if (allAccounts == null || allAccounts.isEmpty()) {
+            logger.warn("No accounts available to render");
+            return;
+        }
+
         for (Account acc : allAccounts) {
+
         	 Listitem item = new Listitem();
         	 String accountStatus = acc.getAccount_status().name();
 
@@ -77,39 +105,55 @@ public class AllAccounts extends SelectorComposer<Window> {
 
              accountListbox.appendChild(item);
         }
-        
-    }
-    
- 
 
-    
-    /** Search event **/
+        logger.debug("Account list rendered successfully");
+    }
+
+    /**
+     * Handles search button click event.
+     */
     @Listen("onClick = #searchBtn")
     public void onSearch() {
         String searchText = searchBox.getValue().trim().toLowerCase();
+        logger.debug("Search triggered with value: {}", searchText);
 
         if (searchText.isEmpty()) {
             renderAccountList(allAccounts);
             return;
         }
 
-        List<com.fintrust.model.Account> filtered = allAccounts.stream()
-                .filter(acc -> (acc.getAccountNumber()+"").contains(searchText))
+        List<Account> filtered = allAccounts.stream()
+                .filter(acc -> (acc.getAccountNumber() + "").contains(searchText))
                 .collect(Collectors.toList());
 
+        logger.info("Search result count: {}", filtered.size());
         renderAccountList(filtered);
     }
 
-    private void openAccountDetail(com.fintrust.model.Account acc) {
-        // Store selected account number in session
+    /**
+     * Opens the selected account detail page.
+     *
+     * @param acc selected account
+     */
+    private void openAccountDetail(Account acc) {
+        if (acc == null) {
+            logger.warn("Selected account is null");
+            return;
+        }
+
+        logger.info("Opening details for account number: {}", acc.getAccountNumber());
+
         Executions.getCurrent().getSession().setAttribute("selected_account_no", acc.getAccountNumber());
-        // Redirect to details page
         Include centerArea = (Include) getPage().getFellow("main_content_sec");
         centerArea.setSrc("/admin/account/view_spc_account.zul");
     }
 
+    /**
+     * Handles back button click event.
+     */
     @Listen("onClick = #backBtn")
     public void onBackClick() {
+        logger.info("Back button clicked, redirecting to account list");
         Executions.sendRedirect("view_all_account.zul");
     }
 }

@@ -25,7 +25,8 @@ import org.zkoss.zul.West;
 
 public class AdminDashboardController extends SelectorComposer<Component>{
 
-    // sample properties; replace with actual service calls
+    private static final long serialVersionUID = 5306349352114090656L;
+	// sample properties; replace with actual service calls
     private int pendingCount = 3;
     private int rewardPoints = 1200;
     private int activeCards = 0; 
@@ -94,10 +95,10 @@ public class AdminDashboardController extends SelectorComposer<Component>{
 	   main_content_sec.setSrc("/admin/adminCards.zul"); 
     }
     	
-     	@Listen("onClick=#profile")
-        public void profile() {
-    	   main_content_sec.setSrc("/WEB-INF/components/adminProfile.zul"); 
-        }
+    @Listen("onClick=#profile")
+    public void profile() {
+    	main_content_sec.setSrc("/WEB-INF/components/adminProfile.zul"); 
+    }
    
     // getters for data binding if you bind via MVVM (optional)   
     public int getPendingCount() { return pendingCount; }

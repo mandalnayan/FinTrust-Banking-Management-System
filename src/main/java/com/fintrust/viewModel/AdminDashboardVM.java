@@ -52,8 +52,7 @@ public class AdminDashboardVM {
             "⚠ High-value transfer pending approval",
             "⚠ Suspicious IP activity detected"
         );
-
-   //     recentTransactions = transactionDAO.getRecentTransactionsForAdmin();
+        //recentTransactions = transactionDAO.getRecentTransactionsForAdmin();
     }
 
     public long getTotalUsers() {

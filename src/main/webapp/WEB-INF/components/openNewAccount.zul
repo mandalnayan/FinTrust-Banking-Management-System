@@ -20,12 +20,12 @@
                     <hbox width="100%" spacing="15px" class="form-row">
                         <vlayout hflex="1">
                             <label value="Account Type"/>
-                            <combobox id="accountType" width="100%" readonly="true"/>
+                            <combobox id="accountTypeCombobox" width="100%" readonly="true"/>
                             
                         </vlayout>
                         <vlayout hflex="1">
                             <label value="Branch"/>
-                            <combobox id="branch" width="100%" readonly="true">
+                            <combobox id="branchCombobox" width="100%" readonly="true">
                             </combobox>
                         </vlayout>
                     </hbox>
@@ -34,11 +34,11 @@
                     <hbox width="100%" spacing="15px" class="form-row">
                         <vlayout hflex="1">
                             <label value="Initial Deposit"/>
-                            <doublebox id="initialDeposit" width="100%" placeholder="Min 1000"/>
+                            <doublebox id="initialDepositDoublebox" width="100%" placeholder="Min 1000"/>
                         </vlayout>
                         <vlayout hflex="1">
                             <label value="Mode of Operation"/>
-                            <combobox id="modeOfOperation" width="100%" readonly="true">
+                            <combobox id="modeOfOperationCombobox" width="100%" readonly="true">
                                 <comboitem label="Self"/>
                             </combobox>
                         </vlayout>
@@ -48,11 +48,11 @@
                     <hbox width="100%" spacing="15px" class="form-row">
                         <vlayout hflex="1">
                             <label value="Nominee Name"/>
-                            <textbox id="nomineeName" width="100%"/>
+                            <textbox id="nomineeNameTextbox" width="100%"/>
                         </vlayout>
                         <vlayout hflex="1">
                             <label value="Nominee Relationship"/>
-                            <combobox id="nomineeRelation" width="100%" readonly="true">
+                            <combobox id="nomineeRelationCombobox" width="100%" readonly="true">
                                 <comboitem label="Mother"/>
                                 <comboitem label="Father"/>
                                 <comboitem label="Brother"/>
@@ -65,7 +65,7 @@
                     <!-- Nominee ID Number -->
                     <vlayout width="100%">
                         <label value="Nominee ID Number"/>
-                        <longbox id="nomineeId" width="100%" placeholder="Aadhar Number"/>
+                        <longbox id="nomineeIdLongbox" width="100%" placeholder="Aadhar Number"/>
                     </vlayout>
 
                     <!-- Buttons -->

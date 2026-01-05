@@ -69,17 +69,17 @@
                 <rows>
                     <row>
                     	<label value="Account Number:"/>
-                    	<label id="accountNo" style="font-weight:bold"></label>
+                    	<label id="accountNoLabel" style="font-weight:bold"></label>
                     </row>
 
                     <row>
                         <label value="Reason for Closing:"/>
-                     	<textbox multiline="true" id="reason" width="180px" height="60px" style="padding:10px"></textbox>
+                     	<textbox multiline="true" id="reasonTextbox" width="180px" height="60px" style="padding:10px"></textbox>
                     </row>
 
                     <row>
                     	<cell colspan="2"> 
-                    		<checkbox id="confirmClose" label="I confirm that I want to close my account."/>
+                    		<checkbox id="confirmCloseCheckbox" label="I confirm that I want to close my account."/>
                     	</cell>
                     </row>
                 </rows>

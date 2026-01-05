@@ -66,15 +66,15 @@
             <rows>
                 <row>
                     <label value="Account Number:" width="40%"/>
-                    <label id="accountNo" style="font-weight:bold"/>
+                    <label id="accountNoLabel" style="font-weight:bold"/>
                 </row>
                 <row>
                     <label value="Current Balance:" width="40%"/>
-                    <label id="accountBalance" />
+                    <label id="accountBalanceLabel" />
                 </row>
                 <row>
                     <label value="Account Status:" width="40%"/>
-                    <label id="accountStatus" />
+                    <label id="accountStatusLabel" />
                 </row>
             </rows>
         </grid>

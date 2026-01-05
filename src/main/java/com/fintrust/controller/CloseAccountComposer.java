@@ -1,8 +1,8 @@
 package com.fintrust.controller;
 
-import java.security.MessageDigest;
 import java.sql.SQLException;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
@@ -19,61 +19,133 @@ import com.fintrust.service.AccountCloseRequestService;
 import com.fintrust.service.UserServiceImpl;
 import com.fintrust.util.NotificationUtil;
 
+/**
+ * Controller responsible for submitting account close requests.
+ * Handles user confirmation, validation, and request submission.
+ *
+ * @author Harish
+ * @version 1.0
+ */
+public class CloseAccountComposer extends SelectorComposer<Component> {
 
-public class CloseAccountComposer extends SelectorComposer<Component>{
-	private static final long serialVersionUID = 1L;
-	
-	@Wire private Label accountNo;
-	@Wire private Textbox reason;
-	@Wire private Checkbox confirmClose;
-	
-	private final AccountCloseRequestService closeRequetService = new AccountCloseRequestService();
-	
-	private Long accountNum;
-	
-	@Override
-	public void doAfterCompose(Component comp) throws Exception {
-		super.doAfterCompose(comp);
-		accountNum = (Long) Executions.getCurrent().getSession().getAttribute("selected_account_no");
-	    accountNo.setValue(accountNum+"");
-	}
-	
-	@Listen("onClick=#btnSubmit")
-	public void submitCloseAccountRequest() throws SQLException {
-		String reasonClose = reason.getValue();
-		long accountNo = accountNum;
-		long userId = (long) Sessions.getCurrent().getAttribute("user_id");
-		
-		AccountCloseRequest accReq = new AccountCloseRequest();
-		accReq.setAccountNo(accountNo);
-		accReq.setReason(reasonClose);
-		accReq.setRequestedBy(new UserServiceImpl().getUserByUserId(userId));
-		
-		if(!confirmClose.isChecked()) {
-			NotificationUtil.showInstant("warning", "Please confirm first!");
-			return;
-		}
-		
-		if(closeRequetService.saveReq(accReq)) {
-			NotificationUtil.showInstant("info", "Request send Successfully for closing the account");
-			
-			Component root = getSelf();
-			Include inc = (Include) root.getPage().getFellow("main_content_sec");
-			inc.setSrc("/WEB-INF/components/view_all_account.zul");
-		} 
-		else {
-			NotificationUtil.showInstant("warning", "Request is already submitted for closing the account");
-			
-			Component root = getSelf();
-			Include inc = (Include) root.getPage().getFellow("main_content_sec");
-			inc.setSrc("/WEB-INF/components/view_all_account.zul");
-		}
-	}
-	
-	@Listen("onClick=#btnReset")
-	public void resetRequest() {
-		Component root = getSelf();
-		Include inc = (Include) root.getPage().getFellow("main_content_sec");
-		inc.setSrc("/WEB-INF/components/view_all_account.zul");
-	}
+    private static final long serialVersionUID = 1L;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CloseAccountComposer.class);
+
+    /* ---------- Constants ---------- */
+    private static final String SESSION_SELECTED_ACCOUNT = "selected_account_no";
+    private static final String SESSION_USER_ID = "user_id";
+    private static final String MAIN_CONTENT = "main_content_sec";
+    private static final String VIEW_ALL_ACCOUNTS_PAGE = "/WEB-INF/components/view_all_account.zul";
+
+    /* ---------- UI Components ---------- */
+    @Wire private Label accountNoLabel;
+    @Wire private Textbox reasonTextbox;
+    @Wire private Checkbox confirmCloseCheckbox;
+
+    /* ---------- Services ---------- */
+    private final AccountCloseRequestService closeRequestService = new AccountCloseRequestService();
+    private final UserServiceImpl userService = new UserServiceImpl();
+
+    private Long accountNumber;
+
+    /**
+     * Initializes account number after UI composition.
+     *
+     * @param comp root UI component
+     * @throws Exception if session data is missing
+     */
+    
+    @Override
+    public void doAfterCompose(Component comp) throws Exception {
+        super.doAfterCompose(comp);
+
+        accountNumber = (Long) Executions.getCurrent().getSession().getAttribute(SESSION_SELECTED_ACCOUNT);
+
+        if (accountNumber == null) {
+            LOGGER.warn("No account number found in session");
+            redirectToAccountList();
+            return;
+        }
+
+        LOGGER.info("Preparing close request for accountNumber={}", accountNumber);
+        accountNoLabel.setValue(String.valueOf(accountNumber));
+    }
+
+    /**
+     * Submits account close request after validation and confirmation.
+     *
+     * @throws SQLException if database access fails
+     */
+    @Listen("onClick=#btnSubmit")
+    public void submitCloseAccountRequest() throws SQLException {
+
+        if (!confirmCloseCheckbox.isChecked()) {
+            LOGGER.debug("Close request confirmation checkbox not selected");
+            NotificationUtil.showInstant("warning", "Please confirm first!");
+            return;
+        }
+
+        Long userId = (Long) Sessions.getCurrent().getAttribute(SESSION_USER_ID);
+
+        if (userId == null) {
+            LOGGER.warn("User session expired during close request");
+            redirectToAccountList();
+            return;
+        }
+
+        AccountCloseRequest request = buildCloseRequest(userId);
+
+        LOGGER.info("Submitting close request for accountNumber={}", accountNumber);
+
+        boolean isSaved = closeRequestService.saveReq(request);
+
+        if (isSaved) {
+            NotificationUtil.showInstant(
+                    "info",
+                    "Request sent successfully for closing the account"
+            );
+            LOGGER.info("Close request submitted successfully");
+        } else {
+            NotificationUtil.showInstant(
+                    "warning",
+                    "Request already submitted for closing the account"
+            );
+            LOGGER.warn("Duplicate close request attempt detected");
+        }
+
+        redirectToAccountList();
+    }
+
+    /**
+     * Resets close request process and navigates back to account list.
+     */
+    @Listen("onClick=#btnReset")
+    public void resetRequest() {
+        LOGGER.debug("Close request reset by user");
+        redirectToAccountList();
+    }
+
+    /**
+     * Builds account close request object.
+     *
+     * @param userId logged-in user ID
+     * @return populated AccountCloseRequest object
+     * @throws SQLException 
+     */
+    private AccountCloseRequest buildCloseRequest(Long userId) throws SQLException {
+        AccountCloseRequest request = new AccountCloseRequest();
+        request.setAccountNo(accountNumber);
+        request.setReason(reasonTextbox.getValue());
+        request.setRequestedBy(userService.getUserByUserId(userId));
+        return request;
+    }
+
+    /**
+     * Redirects user to account list page.
+     */
+    private void redirectToAccountList() {
+        Include include = (Include) getSelf().getPage().getFellow(MAIN_CONTENT);
+        include.setSrc(VIEW_ALL_ACCOUNTS_PAGE);
+    }
 }

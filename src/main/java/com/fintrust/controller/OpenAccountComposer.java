@@ -1,205 +1,243 @@
 package com.fintrust.controller;
 
-import org.zkoss.zhtml.Messagebox;
+import java.sql.SQLException;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
-import org.zkoss.zul.*;
+import org.zkoss.zul.Button;
+import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Comboitem;
+import org.zkoss.zul.Doublebox;
+import org.zkoss.zul.Longbox;
+import org.zkoss.zul.Textbox;
 
 import com.fintrust.dao.impl.BranchDao;
 import com.fintrust.model.Account;
-import com.fintrust.model.Nominee;
-import com.fintrust.model.Account.AccountStatus;
 import com.fintrust.model.Account.AccountType;
 import com.fintrust.model.Branch;
-import com.fintrust.model_copy.Account.ModeOfOperation;
+import com.fintrust.model.Nominee;
+import com.fintrust.model.Notification;
 import com.fintrust.service.AccountServiceImpl;
 import com.fintrust.service.NomineeServiceImp;
 import com.fintrust.util.NotificationUtil;
-import com.fintrust.model.Notification;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
+/**
+ * Controller responsible for handling
+ * Open Account screen operations.
+ * @author Harish
+ * @version 1.0
+ */
 public class OpenAccountComposer extends SelectorComposer<Component> {
 
-	@Wire
-	private Combobox accountType, branch, modeOfOperation, nomineeRelation;
+    private static final long serialVersionUID = -5397028081596145397L;
+    private static final Logger LOGGER = LoggerFactory.getLogger(OpenAccountComposer.class);
 
-	@Wire
-	private Longbox nomineeId;
+    /** constants */
+    private static final double MIN_INITIAL_DEPOSIT = 1000.0;
+    private static final int NOMINEE_ID_LENGTH = 12;
 
-	@Wire
-	private Doublebox initialDeposit;
+    /* UI Components */
+    @Wire Combobox accountTypeCombobox;
+    @Wire Combobox branchCombobox;
+    @Wire Combobox modeOfOperationCombobox;
+    @Wire Combobox nomineeRelationCombobox;
 
-	@Wire
-	private Textbox nomineeName;
+    @Wire Longbox nomineeIdLongbox;
+    @Wire Doublebox initialDepositDoublebox;
+    @Wire Textbox nomineeNameTextbox;
 
-	@Wire
-	private Button btnSubmit, btnReset;
+    @Wire Button btnSubmit;
+    @Wire Button btnReset;
 
-	private final AccountServiceImpl acconntService = new AccountServiceImpl();
-	private final NomineeServiceImp nomineeService = new NomineeServiceImp();
-	private final BranchDao BranchDao = new BranchDao();
+    /* Services & DAO */
+    private final AccountServiceImpl accountService = new AccountServiceImpl();
+    private final NomineeServiceImp nomineeService = new NomineeServiceImp();
+    private final BranchDao branchDao = new BranchDao();
 
-	@Override
-	public void doAfterCompose(Component comp) throws Exception {
-		super.doAfterCompose(comp);
-		modeOfOperation.setSelectedIndex(0); // Default value
+    /**
+     * Initializes UI components after ZUL composition.
+     *
+     * @param comp root component
+     * @throws Exception if initialization fails
+     */
+    @Override
+    public void doAfterCompose(Component comp) throws Exception {
+        super.doAfterCompose(comp);
+        LOGGER.info("OpenAccountComposer initialized");
 
-		AccountType accountTypes[] = Account.AccountType.values();
-		System.out.println("Types: " + accountTypes.length);
-		for (AccountType at : accountTypes) {
-			accountType.appendChild(new Comboitem(at.name()));
-		}
-		accountType.setSelectedIndex(0);
-		
-		List<Branch> allBranch = BranchDao.findAll();
-		for(Branch myBranch : allBranch) {
-			branch.appendChild(new Comboitem(myBranch.getBranchName()));
-		}
-	}
+        loadAccountTypes();
+        loadBranches();
+        modeOfOperationCombobox.setSelectedIndex(0);
+    }
 
-	// Handle Submit button click
-	@Listen("onClick = #btnAccountSubmit")
-	public void onSubmit() {
-		if (!isFormValid())
-			return;
+    /**
+     * Loads account types into combobox.
+     */
+    private void loadAccountTypes() {
+        AccountType[] accountTypes = AccountType.values();
+        for (AccountType type : accountTypes) {
+            accountTypeCombobox.appendChild(new Comboitem(type.name()));
+        }
+        accountTypeCombobox.setSelectedIndex(0);
+        LOGGER.debug("Account types loaded");
+    }
 
-		try {
-			// Collecting form data
-			String accType = accountType.getSelectedItem().getLabel().toUpperCase();
-			String branchName = branch.getSelectedItem().getLabel();
-			String mode = modeOfOperation.getSelectedItem().getLabel().toUpperCase();
-			double deposit = initialDeposit.getValue();
+    /**
+     * Loads branch list into combobox.
+     * @throws SQLException 
+     */
+    private void loadBranches() throws SQLException {
+        List<Branch> branches = branchDao.findAll();
+        for (Branch branch : branches) {
+            branchCombobox.appendChild(new Comboitem(branch.getBranchName()));
+        }
+        LOGGER.debug("Branches loaded: {}", branches.size());
+    }
 
-			String nominee_name = nomineeName.getValue().trim();
-			String relation = nomineeRelation.getValue().trim();
-			long nomineeIdNum = nomineeId.longValue();
-			Long nom_id = nomineeIdNum;
-			
-			Long userId  = (Long) Sessions.getCurrent().getAttribute("user_id");
-			if(acconntService.isAccountExists(userId, accType)){
-				System.out.println("account exists aready ....................");
-				String message = accType + " Account already exists with this user_id";
-				
-				NotificationUtil.push("info", message);			
-				resetForm();
-				Executions.sendRedirect("");
-			}
+    /**
+     * Handles Account Submit button click.
+     */
+    @Listen("onClick = #btnAccountSubmit")
+    public void onSubmit() {
+        LOGGER.info("Submit button clicked");
 
-			// check given nominee id already exist in db or not?
-			Nominee nom = new Nominee(nomineeIdNum, nominee_name, relation);
-			nom_id = nomineeService.isPresentNominee(nomineeIdNum);
-			if (nom_id == null) {
-				nom_id = nomineeService.saveNominee(nom);
-			}
-			if (nom_id == -1l)
-				return;
+        if (!isFormValid()) {
+            LOGGER.warn("Form validation failed");
+            return;
+        }
 
-			// GET THE Brach_id using branch name
-			long branchId = BranchDao.findByBranchName(branchName).getBranchId();
+        try {
+            Long userId = (Long) Sessions.getCurrent().getAttribute("user_id");
+            if (userId == null) {
+                NotificationUtil.push("error", "Session expired. Please login again.");
+                LOGGER.warn("User session expired");
+                return;
+            }
 
-			// Create Account object
-			Account account = new Account();
-			account.setAccountType(AccountType.valueOf(accType));
-			account.setBalance(deposit);
-			account.setNominee_id(nom_id);
-			account.setBranchId(branchId);
+            String accountType = accountTypeCombobox.getSelectedItem().getLabel();
+            String branchName = branchCombobox.getSelectedItem().getLabel();
+            double deposit = initialDepositDoublebox.getValue();
 
+            if (accountService.isAccountExists(userId, accountType)) {
+                LOGGER.info("Account already exists for userId={}", userId);
+                NotificationUtil.push("info", accountType + " Account already exists for this user.");
+                resetForm();
+                return;
+            }
 
-			Notification notification = acconntService.openAccount(account);
-		
-			if (!notification.getType().equals("warning")) {
-				NotificationUtil.push(notification);
-				Executions.sendRedirect("");			
-	
-			if (notification.getType().equals("info")) {
-				String message = "Account created successfully!";
-				NotificationUtil.push("info", message);				
-				resetForm();
-				Executions.sendRedirect("");				
+            long nomineeId = nomineeIdLongbox.getValue();
+            Nominee nominee = new Nominee(nomineeId,nomineeNameTextbox.getValue().trim(),nomineeRelationCombobox.getValue().trim());
 
-			} else {
-				NotificationUtil.showInstant(notification);
-			}
-			}
-		} catch (IllegalArgumentException e) {
-			String message = "Please give valid input!";
-			NotificationUtil.push("error", message);
-			e.printStackTrace();
+            Long nomineeDbId = nomineeService.isPresentNominee(nomineeId);
+            if (nomineeDbId == null) {
+                nomineeDbId = nomineeService.saveNominee(nominee);
+            }
+            if (nomineeDbId == -1L) {
+                LOGGER.error("Failed to save nominee");
+                return;
+            }
 
-		} catch (Exception e) {
-			String message = "Server error. Failed to create Account. Please try again!";
-			NotificationUtil.push("error", message);
+            long branchId = branchDao.findByBranchName(branchName).getBranchId();
 
-			e.printStackTrace();
-		}
-	}
+            Account account = new Account();
+            account.setAccountType(AccountType.valueOf(accountType));
+            account.setBalance(deposit);
+            account.setNominee_id(nomineeDbId);
+            account.setBranchId(branchId);
 
-	// Handle Reset button click
-	@Listen("onClick = #btnAccountReset")
-	public void onReset() {
-		resetForm();
-	}
+            Notification notification = accountService.openAccount(account);
+            NotificationUtil.push(notification);
 
-	// Validate the form fields
-	private boolean isFormValid() {
-		if (accountType.getSelectedItem() == null) {
-			showWarning("Please select Account Type.");
-			return false;
-		}
-		if (branch.getSelectedItem() == null) {
-			showWarning("Please select Branch.");
-			return false;
-		}
-		if (initialDeposit.getValue() == null || initialDeposit.getValue() < 1000) {
-			showWarning("Minimum initial deposit must be ₹1000 or above.");
-			return false;
-		}
-		if (modeOfOperation.getSelectedItem() == null) {
-			showWarning("Please select Mode of Operation.");
-			return false;
-		}
-		if (nomineeName.getValue().trim().isEmpty()) {
-			showWarning("Nominee Name cannot be empty.");
-			return false;
-		}
-		if (!nomineeName.getValue().trim().matches("[a-z-A-Z ]+")) {
-			showWarning("Nominee Name cannot have other than character");
-			return false;
-		}
-		if (nomineeRelation.getSelectedItem() == null) {
-			showWarning("Please select the Nominee Relation");
-			return false;
-		}
-		if (nomineeId.getValue() == null) {
-			showWarning("Nominee Id cannot be empty");
-			return false;
-		}
-		if (String.valueOf(nomineeId.getValue()).length() != 12) {
-			showWarning("Nominee Id must be 12 digit");
-			return false;
-		}
-		return true;
-	}
+            if ("info".equals(notification.getType())) {
+                LOGGER.info("Account created successfully");
+                resetForm();
+            }
 
-	// Helper to show warning messages
-	private void showWarning(String msg) {
-		Messagebox.show(msg, "Validation Error", Messagebox.OK, Messagebox.EXCLAMATION);
-	}
+        } catch (IllegalArgumentException ex) {
+            LOGGER.error("Invalid input", ex);
+            NotificationUtil.push("error", "Invalid input provided.");
+        } catch (Exception ex) {
+            LOGGER.error("Account creation failed", ex);
+            NotificationUtil.push("error", "Server error. Failed to create account.");
+        }
+    }
 
-	// Reset the form
-	private void resetForm() {
-		accountType.setSelectedIndex(-1);
-		branch.setSelectedIndex(-1);
-		initialDeposit.setValue(null);
-		modeOfOperation.setSelectedIndex(-1);
-		nomineeName.setValue("");
-		nomineeId.setText("");
-		nomineeRelation.setValue("");
-	}
+    /**
+     * Handles Reset button click.
+     */
+    @Listen("onClick = #btnAccountReset")
+    public void onReset() {
+        LOGGER.info("Reset button clicked");
+        resetForm();
+    }
+
+    /**
+     * Validates all form fields.
+     *
+     * @return true if form is valid
+     */
+    private boolean isFormValid() {
+
+        if (accountTypeCombobox.getSelectedItem() == null) {
+            showWarning("Please select Account Type.");
+            return false;
+        }
+        if (branchCombobox.getSelectedItem() == null) {
+            showWarning("Please select Branch.");
+            return false;
+        }
+        if (initialDepositDoublebox.getValue() == null
+                || initialDepositDoublebox.getValue() < MIN_INITIAL_DEPOSIT) {
+            showWarning("Minimum deposit must be ₹1000 or more.");
+            return false;
+        }
+        if (modeOfOperationCombobox.getSelectedItem() == null) {
+            showWarning("Please select Mode of Operation.");
+            return false;
+        }
+        if (nomineeNameTextbox.getValue().trim().isEmpty()
+                || !nomineeNameTextbox.getValue().matches("[a-zA-Z ]+")) {
+            showWarning("Invalid Nominee Name.");
+            return false;
+        }
+        if (nomineeRelationCombobox.getSelectedItem() == null) {
+            showWarning("Please select Nominee Relation.");
+            return false;
+        }
+        if (nomineeIdLongbox.getValue() == null
+                || String.valueOf(nomineeIdLongbox.getValue()).length() != NOMINEE_ID_LENGTH) {
+            showWarning("Nominee Id must be 12 digits.");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Displays warning message.
+     *
+     * @param message warning text
+     */
+    private void showWarning(String message) {
+        NotificationUtil.showInstant("warning", message);
+    }
+
+    /**
+     * Resets all form fields.
+     */
+    private void resetForm() {
+        accountTypeCombobox.setSelectedIndex(-1);
+        branchCombobox.setSelectedIndex(-1);
+        modeOfOperationCombobox.setSelectedIndex(-1);
+        initialDepositDoublebox.setValue(null);
+        nomineeNameTextbox.setValue("");
+        nomineeIdLongbox.setText("");
+        nomineeRelationCombobox.setValue("");
+        LOGGER.debug("Form reset completed");
+    }
 }
