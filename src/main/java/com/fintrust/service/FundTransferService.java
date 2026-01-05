@@ -40,6 +40,7 @@ public class FundTransferService {
 		try {
 			// Either all operation must happened or none
 			connection.setAutoCommit(false);
+			
 			validateUserKyc(userId);
 			validateBalance(fromAcc, amount);
 			validateReceiver(toAcc, ifscCode);
@@ -83,7 +84,7 @@ public class FundTransferService {
 	private void validateUserKyc(Long userId) throws Exception {
 		String kycStatus = userDAO.getUserKycStatus(userId);
 		if (kycStatus == null) throw new ServerError("Internal server error!", null);
-		boolean isUpdated = kycStatus.equals(User.KycStatus.UPDATED);
+		boolean isUpdated = kycStatus.equals(User.KycStatus.UPDATED.name());
 //		double balance = dao.getAccountBalance(fromAcc);
 		if (!isUpdated) {
 			throw new IllegalArgumentException("Your kyc status is " + kycStatus + ".\n You need to update your kyc for transaction.");
