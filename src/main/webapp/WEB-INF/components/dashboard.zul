@@ -72,24 +72,30 @@
 						</vbox>
 
 						<vbox class="widget widget-card">
-							<label value="Active Cards"
-								class="widget-title" />
-							<label value="@load(vm.activeCards)"
-								class="widget-desc summary-value" />
+							<hbox hflex="1" pack="start"
+								align="center">
+								<label value="Active Cards:"
+									class="widget-title" />
+								<label value="@load(vm.activeCards)"
+									class="widget-title summary-value" />
+							</hbox>
+							<label value="View and manage your card"
+								class="widget-desc" />
 							<button label="Manage Cards"
 								class="widget-btn"
 								onClick="@command('go', page='card/cardHome')" />
 						</vbox>
 
 						<vbox class="widget widget-chart">
+						<hbox hflex="1" pack="start"
+								align="center">
 							<label value="Kyc Status"
 								class="widget-title" />
-							<label
-    value="@load(vm.kycLabel)"
-    style="@load(vm.kycStyle)"
-    sclass="widget-desc summary-value"/>
-
-							
+							<label value="@load(vm.kycLabel)" 
+								style="@load(vm.kycStyle)" sclass="widget-desc summary-value" />
+								</hbox>
+<label value= "@load(vm.kycStatusLabel)"
+								class="widget-desc" />
 							<button label="Update" class="widget-btn"
 								onClick="@command('kycUpdate', page='kycForm')" />
 						</vbox>

@@ -8,7 +8,7 @@
     <vlayout vflex="1" hflex="1" sclass="main-layout">
 
         <!-- HEADER -->
-        <vbox sclass="header" align="center">
+        <vbox sclass="header" align="center" pack = "center" hflex="1">
             <label value="Fund Transfer Portal" sclass="title"/>
             <label value="Secure and Fast Money Transfer" sclass="subtitle"/>
         </vbox>
@@ -116,7 +116,7 @@
     justify-content: center;
     gap: 16px;
 }
-.z-button { border-radius: 8px; padding: 10px 22px; font-weight: 600; }
+.z-button { border-radius: 8px; font-weight: 600; }
 .btn-primary { background: linear-gradient(135deg,#1e3a8a,#2563eb); color:white; }
 .btn-secondary { background:#e5e7eb; color:#111827; }
 .btn-outline { background:white; border:1px solid #2563eb; color:#2563eb; }

@@ -69,7 +69,7 @@ public class AdminKycDAOImpl {
 
         String sql = """
 			           UPDATE users
-        		     		    SET kyc_status = ?, kyc_reviewed_by,
+        		     		    SET kyc_status = ?, kyc_reviewed_by = ?,
         		     		    updated_at = NOW()
         								WHERE user_id = ?;
         """;

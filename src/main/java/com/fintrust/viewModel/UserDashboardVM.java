@@ -39,6 +39,7 @@ public class UserDashboardVM {
 	private String transferAmount;
 	private User user;
 	private String kycStatus;
+	private String kycStatusLabel;
 
 	private List<Transaction> recentTransactions;
 	private List<Account> accountList;
@@ -114,18 +115,23 @@ public class UserDashboardVM {
 
 	public String getKycLabel() {
 	    if (kycStatus == null) {
+	     	kycStatusLabel = "Update your kyc status for account service!";
 	        return "PENDING ⚠️";
 	    }
 
 	    switch (kycStatus) {
 	        case "UPDATED":
+	         	kycStatusLabel = "Re-Update your kyc status.";
 	            return "UPDATED 🎉";
 	        case "REQUESTED":
+	         	kycStatusLabel = "Wait your kyc is under review!";
 	            return "REQUESTED ⏳";
 	        case "REJECTED":
+	        	kycStatusLabel = "Resubmit your Kyc details carefully!";
 	            return "REJECTED ❌";
 	        case "PENDING":
 	        default:
+	        	kycStatusLabel = "Update your kyc status for account service!";
 	            return "PENDING ⚠️";
 	    }
 	}
@@ -133,8 +139,12 @@ public class UserDashboardVM {
 
 	public String getKycStyle() {
 	    return "UPDATED".equals(kycStatus)
-	        ? "font-weight:bold;color:green;"
-	        : "font-weight:bold;color:red;";
+	        ? "font-weight:bold;color:green; font-size:14px"
+	        : "font-weight:bold;color:red; font-size:14px";
+	}
+	
+	public String getKycStatusLable() {
+	    return kycStatusLabel;
 	}
 
 

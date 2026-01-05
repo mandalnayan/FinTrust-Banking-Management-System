@@ -1,0 +1,8 @@
+<?page title="TransactionChart" contentType="text/html;charset=UTF-8"?>
+<zk>
+    <window apply="com.fintrust.chart.linetimecomposer.LineTimeSeriesComposer">
+        <charts id="chart" zoomType="x" 
+            title="Daily Transaction Amounts"
+            subtitle="Click and drag in the plot area to zoom in"/>
+    </window>
+</zk>

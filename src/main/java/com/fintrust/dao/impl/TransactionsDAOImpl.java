@@ -137,7 +137,20 @@ public class TransactionsDAOImpl implements TransactionsDAO {
         return list;
     }
 
-    
+    @Override
+    public Double getTodayTotalTransactionAmount() throws SQLException {
+
+        String sql = """
+            SELECT COALESCE(SUM(amount), 0)
+            FROM transactions
+            WHERE DATE(created_at) = CURRENT_DATE
+              AND status = 'COMPLETED' AND txn_type = 'credit'
+        """;
+        	Statement stmt = connection.createStatement();
+        	ResultSet rs = stmt.executeQuery(sql);
+        	if (rs.next()) return rs.getDouble(1);
+        	return 0d;
+    }
     
     @Override
     public Map<String, Object> findById(long transactionId) throws SQLException {

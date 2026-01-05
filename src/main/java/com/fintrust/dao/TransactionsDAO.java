@@ -70,6 +70,13 @@ public interface TransactionsDAO {
     boolean updateStatus(long transactionId, String status) throws SQLException;
 
     /**
+     * Get completed transaction of today
+     * @return
+     * @throws SQLException
+     */
+    Double getTodayTotalTransactionAmount() throws SQLException;
+    
+    /**
      * Deletes a transaction record.
      *
      * @param transactionId transaction ID

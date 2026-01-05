@@ -1,8 +1,6 @@
 <?page title="Customer KYC - FinTrust Bank" contentType="text/html;charset=UTF-8"?>
 <?link rel="stylesheet" type="text/css" href="/resources/css/bankingForms.css"?>
 
-
-
 <zk xmlns="http://www.zkoss.org/2005/zul" xmlns:h="xhtml">
 
 	<window width="100%" vflex="1" zclass="wnd" id="windw"

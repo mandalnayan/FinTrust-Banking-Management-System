@@ -163,19 +163,35 @@ public class UserDAOImpl implements UserDAO {
         }
 	}
 	
+	
 	@Override
 	public String getUserKycStatus(Long userId) throws SQLException {
 		String sql = "Select kyc_status from users WHERE user_id = ? ";
-
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        	
-            ps.setLong(1, userId);            
-            ResultSet rs = ps.executeQuery();
-            if (rs.next())
-            		return rs.getString(1);
-        }
-        return null;
-
+		
+		try (PreparedStatement ps = connection.prepareStatement(sql)) {
+			
+			ps.setLong(1, userId);            
+			ResultSet rs = ps.executeQuery();
+			if (rs.next())
+				return rs.getString(1);
+		}
+		return null;
+		
+	}
+	
+	@Override
+	public Long getNumberOfPendingKycRequest() throws SQLException {
+		String sql = "Select count(*) from users WHERE kyc_status = 'REQUESTED' ";
+		
+		try (Connection connection = DBConnection.getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
+			
+			         
+			ResultSet rs = ps.executeQuery();
+			if (rs.next())
+				return rs.getLong(1);
+		}
+		return null;
+		
 	}
 	
 	@Override

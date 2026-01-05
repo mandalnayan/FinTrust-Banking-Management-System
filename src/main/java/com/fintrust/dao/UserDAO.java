@@ -130,5 +130,17 @@ public interface UserDAO {
     
     boolean updateUserStatus(long userId , Status updatedStatus) throws SQLException;
     
+    /**
+     * find all users
+     * @return
+     * @throws SQLException
+     */
     List<User> findAllUsers() throws SQLException;
+
+    /**
+     * Fetching total pending KYC request
+     * @return
+     * @throws SQLException
+     */
+	Long getNumberOfPendingKycRequest()throws SQLException;
 }

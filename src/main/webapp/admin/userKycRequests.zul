@@ -21,10 +21,10 @@
 				<listcell label="${each.maskedPan}" />
 				<listcell label="${each.kycStatus}" />
 				<listcell>
-    				<hlayout>
-        				<button label="View Address Proof"></button>
+    				<vbox>
+        				<button label="Address Proof"></button>
         				<button label="View Photo"></button>
-    				</hlayout>
+    				</vbox>
 				</listcell>
 
 			</listitem>

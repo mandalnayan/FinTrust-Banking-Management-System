@@ -312,6 +312,7 @@ public class KycFormVM {
 		return dto;
 	}
 
+	
 	private UserDetails mapDTOToEntity(UserKycDTO dto, UserDetails entity) {
 		if (entity == null)
 			entity = new UserDetails();

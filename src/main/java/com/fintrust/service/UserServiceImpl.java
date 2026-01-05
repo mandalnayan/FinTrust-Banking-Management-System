@@ -109,6 +109,20 @@ public class UserServiceImpl implements UserService {
 			return new User();
 		}
 	}
+	
+	/**
+	 * Fetching logined user details
+	 */
+	public Long getNumberOfPendingKycRequest() {
+		
+		try {
+			return userDAO.getNumberOfPendingKycRequest();
+		} catch (SQLException e) {
+			NotificationUtil.showInstant("error", "Failed to fetch user kyc request count");
+			e.printStackTrace();
+		}
+		return 0l;
+	}
 
 	/**
 	 * Fetching logned user password user details

@@ -86,6 +86,17 @@ public interface UserService {
 	
 	boolean changeUserStatus(Long userId , Status updatedStatus);
 	
+	/**
+	 * find all user details
+	 * @return
+	 * @throws SQLException
+	 */
 	List<User> getAllUser() throws SQLException ;
+
+	/**
+	 * Find user kyc request count
+	 * @return
+	 */
+	Long getNumberOfPendingKycRequest();
 
 }

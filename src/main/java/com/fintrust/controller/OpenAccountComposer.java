@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
@@ -126,7 +127,7 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 
             if (accountService.isAccountExists(userId, accountType)) {
                 LOGGER.info("Account already exists for userId={}", userId);
-                NotificationUtil.push("info", accountType + " Account already exists for this user.");
+                NotificationUtil.showInstant("warning", accountType + " Account already exists for this user.");
                 resetForm();
                 return;
             }
@@ -135,6 +136,7 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
             Nominee nominee = new Nominee(nomineeId,nomineeNameTextbox.getValue().trim(),nomineeRelationCombobox.getValue().trim());
 
             Long nomineeDbId = nomineeService.isPresentNominee(nomineeId);
+            alert(nomineeDbId + "");
             if (nomineeDbId == null) {
                 nomineeDbId = nomineeService.saveNominee(nominee);
             }
@@ -156,7 +158,7 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
 
             if ("info".equals(notification.getType())) {
                 LOGGER.info("Account created successfully");
-                resetForm();
+                resetForm();               
             }
 
         } catch (IllegalArgumentException ex) {
@@ -166,6 +168,7 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
             LOGGER.error("Account creation failed", ex);
             NotificationUtil.push("error", "Server error. Failed to create account.");
         }
+        Executions.sendRedirect("");
     }
 
     /**
