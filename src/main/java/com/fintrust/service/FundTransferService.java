@@ -22,6 +22,14 @@ public class FundTransferService {
 	private final AccountDAO accountDao = new AccountDAOImpl();
 	private final UserDAO userDAO = new UserDAOImpl(connection);
 
+	/**
+	 * Transfer money
+	 * @param fromAcc
+	 * @param toAcc
+	 * @param ifscCode
+	 * @param amount
+	 * @return
+	 */
 	public boolean transferFunds(Long fromAcc, Long toAcc, String ifscCode, double amount) {
 
 		Long userId = (Long) Sessions.getCurrent().getAttribute("user_id");
