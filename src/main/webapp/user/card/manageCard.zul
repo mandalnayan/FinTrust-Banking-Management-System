@@ -3,16 +3,11 @@
 
 <zk>
 
-    <!-- ================= FIXED NAVBAR ================= -->
-    <div class="navbar-fixed">
-        <include src="/WEB-INF/components/privateNavbar.zul" />
-    </div>
-
     <!-- ================= MAIN CONTENT ================= -->
+<privateNavbar width = "100%"></privateNavbar>
     <window width="100%"
             apply="com.fintrust.cards.controller.manageCardController"
             class="page-container">
-
         <vlayout spacing="20px" class="content-wrapper">
 
             <!-- ===== HEADER ===== -->

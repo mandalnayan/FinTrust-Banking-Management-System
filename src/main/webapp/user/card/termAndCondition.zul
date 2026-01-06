@@ -3,10 +3,7 @@
 
 <zk>
 
-    <!-- ================= FIXED NAVBAR ================= -->
-    <div class="fixed-navbar">
-        <include src="/WEB-INF/components/privateNavbar.zul" />
-    </div>
+ <privateNavbar width="100%"></privateNavbar>
 
     <!-- ================= TOP BACK BUTTON ================= -->
     <a href="/user/card/cardHome.zul" class="top-back-btn">

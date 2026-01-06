@@ -143,7 +143,7 @@ public class UserDashboardVM {
 	        : "font-weight:bold;color:red; font-size:14px";
 	}
 	
-	public String getKycStatusLable() {
+	public String getKycStatusLabel() {
 	    return kycStatusLabel;
 	}
 

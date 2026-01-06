@@ -325,7 +325,13 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public List<Long> getAllAccountsNumber() {
-		return null;
+		 Long userId = (Long) Sessions.getCurrent().getAttribute("user_id");
+		 try {
+			return accountDAO.findByNumberUserId(userId);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		 return new ArrayList<Long>();
 	}
 
 	@Override
