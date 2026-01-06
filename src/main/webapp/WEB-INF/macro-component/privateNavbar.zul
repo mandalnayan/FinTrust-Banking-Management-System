@@ -17,7 +17,7 @@
     </hbox>
 
     <!-- RIGHT -->
-    <hbox sclass="top-right" pack="end" align="center">
+    <hbox sclass="top-right" pack="end" align="center" >
         <label value="Welcome, ${sessionScope.user_name}"
                sclass="top-welcome" />
 
@@ -27,7 +27,7 @@
         <popup id="fundTransferTip" sclass="icon-tooltip">
             Fund transfer
         </popup>
-
+	<space/>
         <button iconSclass="z-icon-bell"
                 tooltip="NotificationTip"
                 sclass="icon-btn ntf-icon-btn" />
@@ -35,7 +35,8 @@
         <popup id="NotificationTip" sclass="icon-tooltip">
             Notifications
         </popup>
-
+		<space/>
+		
         <button label="Logout" sclass="logout-btn" id="logout" />
     </hbox>
 

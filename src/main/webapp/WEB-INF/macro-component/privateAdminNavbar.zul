@@ -22,11 +22,11 @@
               align="center">
             <label value="Welcome, ${sessionScope.user_name}"
                    sclass="top-welcome" />
-
+	<space/>
             <button iconSclass="z-icon-bell"
                     tooltiptext="Notifications"
                     sclass="icon-btn" />
-
+<space/>
             <button label="Logout"
                     sclass="logout-btn"
                     id="logout" />

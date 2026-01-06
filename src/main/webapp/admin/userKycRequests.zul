@@ -22,8 +22,11 @@
 				<listcell label="${each.kycStatus}" />
 				<listcell>
     				<vbox>
-        				<button label="Address Proof"></button>
-        				<button label="View Photo"></button>
+    				<combobox value="view doc">
+    				<comboitem label="Address Proof"/>
+    				<comboitem label="View Photo"/>
+    				</combobox>
+    				
     				</vbox>
 				</listcell>
 

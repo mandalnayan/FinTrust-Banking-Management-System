@@ -1,6 +1,5 @@
 package com.fintrust.viewModel;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -49,7 +48,7 @@ public class UserProfileVM {
 	public void init() {
 		accountService = new AccountServiceImpl();
 
-		accountList = accountService.getAllAccounts();
+		accountList = accountService.getAllUserAccounts();
 		if (accountList == null || accountList.size() == 0) {
 			NotificationUtil.showInstant("error", "Faild to load account details. \nPlease refresh the page");
 			placeholderMsg = "Account is not available";

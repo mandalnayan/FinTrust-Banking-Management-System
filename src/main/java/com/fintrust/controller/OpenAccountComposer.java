@@ -95,6 +95,7 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
      */
     private void loadBranches() throws SQLException {
         List<Branch> branches = branchDao.findAll();
+    
         for (Branch branch : branches) {
             branchCombobox.appendChild(new Comboitem(branch.getBranchName()));
         }
@@ -128,7 +129,7 @@ public class OpenAccountComposer extends SelectorComposer<Component> {
             if (accountService.isAccountExists(userId, accountType)) {
                 LOGGER.info("Account already exists for userId={}", userId);
                 NotificationUtil.showInstant("warning", accountType + " Account already exists for this user.");
-                resetForm();
+              //  resetForm();
                 return;
             }
 

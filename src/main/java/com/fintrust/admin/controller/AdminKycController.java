@@ -44,7 +44,8 @@ public class AdminKycController extends SelectorComposer<Component> {
 		AdminKycDTO dto = request.getValue();
 		service.approve(dto.getUserId());
 		loadKycs();
-		Messagebox.show("KYC Approved");
+		NotificationUtil.showInstant("info", "KYC Approved");
+		
 	}
 
 	@Listen("onClick=#rejectBtn")
@@ -55,13 +56,13 @@ public class AdminKycController extends SelectorComposer<Component> {
 			return;
 		}
 		AdminKycDTO dto = request.getValue();
-		if (remarksBox.getValue().isBlank()) {
-			Messagebox.show("Remarks required");
+		if (remarksBox.getValue().isBlank()) {			
+			NotificationUtil.showInstant("warning", "Remarks required");
 			return;
 		}
 
 		service.reject(dto.getUserId(), remarksBox.getValue());
-		loadKycs();
-		Messagebox.show("KYC Rejected");
+		loadKycs();		
+		NotificationUtil.showInstant("warning", "KYC Rejected");
 	}
 }
