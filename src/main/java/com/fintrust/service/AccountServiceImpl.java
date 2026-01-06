@@ -11,6 +11,7 @@ import org.zkoss.zk.ui.Sessions;
 
 import com.fintrust.dao.AccountDAO;
 import com.fintrust.dao.UserDetailsDAO;
+import com.fintrust.dao.impl.AccountCloseRequestDao;
 import com.fintrust.dao.impl.AccountDAOImpl;
 import com.fintrust.dao.impl.UserDetailsDAOImpl;
 import com.fintrust.db.DBConnection;
@@ -18,6 +19,14 @@ import com.fintrust.model.Account;
 import com.fintrust.model.Account.AccountStatus;
 import com.fintrust.model.Notification;
 
+/**
+ * Service class to handle operations related to account.
+ * <p>
+ * This class interacts with {@link accountDAO} and {@link userDetailsDAO} to perform database
+ * operations like checking for opening account and fetching accouns details.
+ * <p>
+ * It is designed for use in a banking application and ensures proper logging of events.
+ */
 public class AccountServiceImpl implements AccountService {
 
     /** Logger for this class */

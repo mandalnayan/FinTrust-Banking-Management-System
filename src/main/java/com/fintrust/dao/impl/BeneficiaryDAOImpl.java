@@ -3,28 +3,45 @@ package com.fintrust.dao.impl;
 import java.sql.*;
 import java.util.*;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.fintrust.dao.BeneficiaryDAO;
 import com.fintrust.model.Beneficiary;
 
 /**
- * JDBC implementation of BeneficiariesDAO for banking systems.
+ * JDBC implementation of {@link BeneficiaryDAO}.
  * <p>
- * All CRUD operations are implemented securely using PreparedStatements
- * and follow banking standards.
+ * This DAO handles all beneficiary-related CRUD operations using
+ * {@link PreparedStatement} to ensure SQL injection safety.
+ * <p>
+ * Designed for banking applications with proper logging for auditing
+ * and troubleshooting.
  */
 public class BeneficiaryDAOImpl implements BeneficiaryDAO {
 
+    private static final Logger logger = LogManager.getLogger(BeneficiaryDAOImpl.class);
+
+    /** JDBC connection managed externally */
     private final Connection connection;
 
     /**
      * Constructor for dependency injection.
      *
-     * @param connection JDBC connection managed externally
+     * @param connection JDBC connection managed by the service layer
      */
     public BeneficiaryDAOImpl(Connection connection) {
         this.connection = connection;
+        logger.debug("BeneficiaryDAOImpl initialized with provided JDBC connection.");
     }
 
+    /**
+     * Creates a new beneficiary record in the database.
+     *
+     * @param beneficiary beneficiary details
+     * @return generated beneficiary ID, or -1 if creation fails
+     * @throws SQLException if database operation fails
+     */
     @Override
     public long create(Beneficiary beneficiary) throws SQLException {
 
@@ -43,13 +60,31 @@ public class BeneficiaryDAOImpl implements BeneficiaryDAO {
             ps.executeUpdate();
 
             try (ResultSet rs = ps.getGeneratedKeys()) {
-                if (rs.next()) return rs.getLong(1);
+                if (rs.next()) {
+                    long id = rs.getLong(1);
+                    logger.info(
+                        "Beneficiary created successfully. beneficiaryId={}, userId={}, accountNumber={}",
+                        id, beneficiary.getUserId(), beneficiary.getAccountNumber()
+                    );
+                    return id;
+                }
             }
         }
 
+        logger.warn(
+            "Failed to create beneficiary. userId={}, accountNumber={}",
+            beneficiary.getUserId(), beneficiary.getAccountNumber()
+        );
         return -1;
     }
 
+    /**
+     * Fetches a beneficiary by beneficiary ID.
+     *
+     * @param beneficiaryId beneficiary ID
+     * @return {@link Beneficiary} object or {@code null} if not found
+     * @throws SQLException if database access fails
+     */
     @Override
     public Beneficiary findById(long beneficiaryId) throws SQLException {
         String sql = "SELECT * FROM beneficiaries WHERE beneficiary_id = ?";
@@ -57,12 +92,24 @@ public class BeneficiaryDAOImpl implements BeneficiaryDAO {
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setLong(1, beneficiaryId);
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) return mapRowtoModel(rs);
+                if (rs.next()) {
+                    logger.debug("Beneficiary found for beneficiaryId={}", beneficiaryId);
+                    return mapRowtoModel(rs);
+                }
             }
         }
+
+        logger.debug("No beneficiary found for beneficiaryId={}", beneficiaryId);
         return null;
     }
 
+    /**
+     * Fetches all beneficiaries for a specific user.
+     *
+     * @param userId user ID
+     * @return list of beneficiaries
+     * @throws SQLException if database access fails
+     */
     @Override
     public List<Beneficiary> findByUserId(long userId) throws SQLException {
         String sql = "SELECT * FROM beneficiaries WHERE user_id = ?";
@@ -77,9 +124,16 @@ public class BeneficiaryDAOImpl implements BeneficiaryDAO {
             }
         }
 
+        logger.info("Fetched {} beneficiaries for userId={}", list.size(), userId);
         return list;
     }
 
+    /**
+     * Fetches all beneficiaries in the system.
+     *
+     * @return list of all beneficiaries
+     * @throws SQLException if database access fails
+     */
     @Override
     public List<Beneficiary> findAll() throws SQLException {
         String sql = "SELECT * FROM beneficiaries ORDER BY beneficiary_id ASC";
@@ -92,9 +146,22 @@ public class BeneficiaryDAOImpl implements BeneficiaryDAO {
                 list.add(mapRowtoModel(rs));
             }
         }
+
+        logger.info("Fetched total {} beneficiaries from database.", list.size());
         return list;
     }
 
+    /**
+     * Updates beneficiary details.
+     *
+     * @param beneficiaryId beneficiary ID
+     * @param name updated name
+     * @param accountNumber updated account number
+     * @param bankName updated bank name
+     * @param ifscCode updated IFSC code
+     * @return {@code true} if update successful
+     * @throws SQLException if database access fails
+     */
     @Override
     public boolean update(long beneficiaryId, String name, String accountNumber,
                           String bankName, String ifscCode) throws SQLException {
@@ -112,25 +179,47 @@ public class BeneficiaryDAOImpl implements BeneficiaryDAO {
             ps.setString(4, ifscCode);
             ps.setLong(5, beneficiaryId);
 
-            return ps.executeUpdate() > 0;
+            boolean updated = ps.executeUpdate() > 0;
+            if (updated) {
+                logger.info("Beneficiary updated successfully. beneficiaryId={}", beneficiaryId);
+            } else {
+                logger.warn("No beneficiary updated. beneficiaryId={}", beneficiaryId);
+            }
+            return updated;
         }
     }
 
+    /**
+     * Deletes a beneficiary by ID.
+     *
+     * @param beneficiaryId beneficiary ID
+     * @return {@code true} if deletion successful
+     * @throws SQLException if database access fails
+     */
     @Override
     public boolean delete(long beneficiaryId) throws SQLException {
         String sql = "DELETE FROM beneficiaries WHERE beneficiary_id = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setLong(1, beneficiaryId);
-            return ps.executeUpdate() > 0;
+            boolean deleted = ps.executeUpdate() > 0;
+
+            if (deleted) {
+                logger.info("Beneficiary deleted successfully. beneficiaryId={}", beneficiaryId);
+            } else {
+                logger.warn("No beneficiary deleted. beneficiaryId={}", beneficiaryId);
+            }
+            return deleted;
         }
     }
 
     /**
-     * Maps a ResultSet row into a Map representing the beneficiary record.
+     * Maps a ResultSet row into a Map representation.
+     * <p>
+     * This method is currently unused and kept for future extensibility.
      *
      * @param rs ResultSet positioned at the row
-     * @return Map with column names as keys and values as map values
+     * @return map containing column-value pairs
      * @throws SQLException if column access fails
      */
     private Map<String, Object> mapRow(ResultSet rs) throws SQLException {
@@ -144,12 +233,13 @@ public class BeneficiaryDAOImpl implements BeneficiaryDAO {
         map.put("added_at", rs.getTimestamp("added_at"));
         return map;
     }
-    
+
     /**
-     * 
-     * @param rs
-     * @return
-     * @throws SQLException
+     * Maps a ResultSet row to a {@link Beneficiary} domain model.
+     *
+     * @param rs ResultSet positioned at the row
+     * @return populated {@link Beneficiary} object
+     * @throws SQLException if column access fails
      */
     private Beneficiary mapRowtoModel(ResultSet rs) throws SQLException {
         Beneficiary b = new Beneficiary();
@@ -157,15 +247,11 @@ public class BeneficiaryDAOImpl implements BeneficiaryDAO {
         b.setBeneficiaryId(rs.getLong("beneficiary_id"));
         b.setUserId(rs.getLong("user_id"));
         b.setName(rs.getString("name"));
-
-        // account_number is BIGINT UNSIGNED → use getLong()
         b.setAccountNumber(rs.getLong("account_number"));
-
         b.setBankName(rs.getString("bank_name"));
         b.setIfscCode(rs.getString("ifsc_code"));
         b.setAddedAt(rs.getTimestamp("added_at"));
 
         return b;
     }
-
 }

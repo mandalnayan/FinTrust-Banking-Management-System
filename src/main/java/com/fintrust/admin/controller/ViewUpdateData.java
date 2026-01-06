@@ -14,6 +14,8 @@ import org.zkoss.zul.Label;
 
 import com.fintrust.dao.impl.AccountUpdateRequestDao;
 import com.fintrust.model.AccountUpdateRequest;
+import com.fintrust.service.EmailService;
+import com.fintrust.service.MailMessageService;
 import com.fintrust.util.NotificationUtil;
 
 /**
@@ -64,7 +66,8 @@ public class ViewUpdateData extends SelectorComposer<Component> {
 
     private AccountUpdateRequest selectedRequest;
     private Long currentEmployeeId;
-
+    private MailMessageService emailMsgService;
+    
     /**
      * Initializes request details after UI composition.
      */
@@ -86,7 +89,7 @@ public class ViewUpdateData extends SelectorComposer<Component> {
             Executions.sendRedirect(INDEX_PAGE);
             return;
         }
-
+        emailMsgService = new MailMessageService();
         logger.info("Viewing account update requestId={}",selectedRequest.getRequestId());
         populateRequestDetails();
     }
@@ -118,12 +121,21 @@ public class ViewUpdateData extends SelectorComposer<Component> {
     @Listen("onClick = #approveBtn")
     public void approveRequest() throws Exception {
 
-        logger.info("Approving requestId={} by adminId={}",selectedRequest.getRequestId(),currentEmployeeId);
+        logger.info("Approving requestId={} by adminId={}", selectedRequest.getRequestId(),currentEmployeeId);
 
-        dao.approveRequest(selectedRequest.getRequestId(),currentEmployeeId);
-
+        if(dao.approveRequest(selectedRequest.getRequestId(),currentEmployeeId)) {
+       
+        	String message = "Your account updation reqeust has completed. Please Check your new data.";
+		 String subject = "Account Updation Acknowledgment";
+        String userEmail = "kumarnayan600@gmail.com";
+        emailMsgService.generateAndSendMessage(userEmail, subject, message);
+       
         NotificationUtil.showInstant(INFO, "Request approved successfully!");
         redirectToListPage();
+        } else {
+       //     NotificationUtil.showInstant("error", "Failed to update!");
+
+        }
     }
 
     /**
@@ -135,7 +147,10 @@ public class ViewUpdateData extends SelectorComposer<Component> {
         logger.info("Rejecting requestId={} by adminId={}",selectedRequest.getRequestId(),currentEmployeeId);
 
         dao.rejectRequest(selectedRequest.getRequestId(),currentEmployeeId);
-
+        String message = "Your account updation reqeust has rejected. Please contact with suppoert team for more details.";
+		 String subject = "Account Updation Acknowledgment";
+       String userEmail = "kumarnayan600@gmail.com";
+       emailMsgService.generateAndSendMessage(userEmail, subject, message);
         NotificationUtil.showInstant(INFO, "Request rejected!");
         redirectToListPage();
     }

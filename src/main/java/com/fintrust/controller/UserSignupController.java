@@ -82,10 +82,6 @@ public class UserSignupController extends SelectorComposer<Component> {
 		if (phone == null)
 			return false;
 
-		// Regex Explanation:
-		// ^(\+91[\-\s]?)? → optional +91 or +91- or +91(space)
-		// 0? → optional leading 0
-		// [6-9]\d{9}$ → starts with 6-9 and followed by 9 digits
 		return phone.matches("^(\\+91[\\-\\s]?)?0?[6-9]\\d{9}$");
 	}
 

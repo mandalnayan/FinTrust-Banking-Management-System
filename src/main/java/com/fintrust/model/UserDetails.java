@@ -4,29 +4,31 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class UserDetails {
-    private Long detailsId;
-    private User user;
-    private Long primaryAccountId;
-    private String gender;
-    private LocalDate dob;
-    private String aadhaarMasked;
-    private String panMasked;
-    private String country;
-    private String state;
-    private String district;
-    private String city;
-    private String pincode;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    
-    // File paths or blob IDs
-    private String addressProofFileName;
-    private String photoFileName;
+/**
+ * Represents a user in the banking system.
+ * 
+ * Contains basic user information such as name, email, phone, role, status, 
+ * and timestamps for creation and updates.
+ */
+public non-sealed class UserDetails extends User {
+	private Long detailsId;
+	private Long primaryAccountId;
+	private String gender;
+	private LocalDate dob;
+	private String aadhaarMasked;
+	private String panMasked;
+	private String country;
+	private String state;
+	private String district;
+	private String city;
+	private User user;
+	private String pincode;
+	private LocalDateTime createdAt;
+	private LocalDateTime updatedAt;
 
-    public UserDetails() {
-    		user = new User();
-    }
+	// File paths or blob IDs
+	private String addressProofFileName;
+	private String photoFileName;
 
 	public UserDetails(Long detailsId, Long userId, String gender, LocalDate dob, String aadhaarMasked,
 			String panMasked, String country, String state, String district, String city, String pincode,
@@ -45,7 +47,11 @@ public class UserDetails {
 		this.pincode = pincode;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
-	}	
+	}
+
+	public UserDetails() {
+		user = new User();
+	}
 
 	public Long getPrimaryAccountId() {
 		return primaryAccountId;
@@ -66,6 +72,7 @@ public class UserDetails {
 	public void setUser(User user) {
 		this.user = user;
 	}
+
 	public Long getUserId() {
 		return user.getId();
 	}
@@ -161,7 +168,7 @@ public class UserDetails {
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-	
+
 	public String getAddressProofFileName() {
 		return addressProofFileName;
 	}
@@ -186,6 +193,5 @@ public class UserDetails {
 				+ ", pincode=" + pincode + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", addressProof="
 				+ addressProofFileName + ", photo=" + photoFileName + "]";
 	}
-    
-    
+
 }

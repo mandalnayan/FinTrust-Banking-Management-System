@@ -78,7 +78,10 @@ public class ContactController extends SelectorComposer<Component> {
     }
 
 
-   
+   /**
+    * Handling file upload
+    * @param event
+    */
     private void handleFileUpload(UploadEvent event) {
         Media media = event.getMedia();
         uploadedFiles.add(media);
@@ -89,7 +92,10 @@ public class ContactController extends SelectorComposer<Component> {
         Messagebox.show("File uploaded: " + media.getName());
     }
 
-
+/**
+ * Saving file 
+ * @param media
+ */
     private void saveFileToFolder(Media media) {
 
         String realPath = Executions.getCurrent().getDesktop().getWebApp()

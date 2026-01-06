@@ -24,6 +24,9 @@ public class AddBeneficiaryController extends SelectorComposer<Component> {
     @Wire private Longbox accountBox;
     @Wire private Label statusLabel;
 
+    /**
+     * Adding beneficiary details
+     */
     @Listen("onClick=#addBtn")
     public void addBeneficiary() {
         String name = nameBox.getValue();

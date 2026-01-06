@@ -15,6 +15,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.select.SelectorComposer;
+import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 
 import com.fintrust.model.LineTimeSeriesData;
@@ -68,13 +69,15 @@ public class LineTimeSeriesComposer extends SelectorComposer<Component> {
                 .collect(Collectors.toList())
                 .toArray(new Point[0]));
 
-        // Optional: change gradient on theme change
+        // change gradient on theme change
         chart.addEventListener(0, ChartsEvents.ON_PLOT_THEME_CHANGE, new EventListener() {
             public void onEvent(Event event) throws Exception {
                 LinearGradient newFill = new LinearGradient(0, 0, 0, 1);
                 newFill.setStops(chart.getColors().get(0).stringValue(), "rgba(44,175,254,0)");
                 chart.getPlotOptions().getArea().setFillColor(newFill);
             }
-        });
+        });        
+        
     }
+    
 }

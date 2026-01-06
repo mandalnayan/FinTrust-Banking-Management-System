@@ -312,7 +312,6 @@ public class KycFormVM {
 		return dto;
 	}
 
-	
 	private UserDetails mapDTOToEntity(UserKycDTO dto, UserDetails entity) {
 		if (entity == null)
 			entity = new UserDetails();
@@ -375,7 +374,7 @@ public class KycFormVM {
 		if (dto.getCity() == null || dto.getCity().trim().isEmpty())
 			return "City is required";
 
-		if (dto.getPincode() == null || !dto.getPincode().matches("^[0-9]{6}$"))
+		if (dto.getPincode() == null || !dto.getPincode().matches("[0-9]{6}$"))
 			return "Pincode must be 6 digits";
 		if (addressProofLabel == null)
 			return "address proof is required";
@@ -419,18 +418,16 @@ public class KycFormVM {
 			session.setAttribute("otpService", otpService);
 			session.setAttribute("photoDoc", photoDoc);
 			session.setAttribute("addressDoc", addressProofDoc);
-//			Include inc = (Include) Sessions.getCurrent().getAttribute("main_content_sec");
-//			inc.setSrc("/WEB-INF/components/otpAuthentication.zul");
 
 			Window win = (Window) Executions.createComponents("/WEB-INF/components/otpAuthentication.zul", null, null);
 			win.doModal();
 		} catch (NetworkUnavailableException e) {
-			NotificationUtil.showInstant("error", "You're not connected to the internet. Please check your network.", 6000);
-			e.printStackTrace();    
-		}		
-		catch (MessagingException e) {			
-				NotificationUtil.showInstant("error", "Unable to send OTP. Please try again later.", 6000);
-				e.printStackTrace();
-			}
+			NotificationUtil.showInstant("error", "You're not connected to the internet. Please check your network.",
+					6000);
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			NotificationUtil.showInstant("error", "Unable to send OTP. Please try again later.", 6000);
+			e.printStackTrace();
 		}
 	}
+}

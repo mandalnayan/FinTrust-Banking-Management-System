@@ -9,9 +9,10 @@
 		.admin-card.danger { border-left: 4px solid #d32f2f; }
 	</style>
 
-	<window 
+	<window
 		viewModel="@id('vm') @init('com.fintrust.viewModel.AdminDashboardVM')"
-		width="100%" vflex="1" border="none" zclass="wind" style="overflow:auto;">
+		width="100%" vflex="1" border="none" zclass="wind"
+		style="overflow:auto;">
 
 		<borderlayout width="100%" vflex="1" style="overflow:auto;">
 
@@ -52,54 +53,55 @@
 			</north>
 
 			<!-- CENTER -->
-			<center sclass="card-sec card-sec-padding" vflex="1" style="overflow:auto;">
+			<center sclass="card-sec card-sec-padding" vflex="1"
+				style="overflow:auto;">
 				<vlayout vflex="1" style="overflow:auto;">
 
 					<!-- Charts + Alerts -->
-					<hbox spacing="10px"
+					<hbox spacing="15px"
 						style="flex-wrap:wrap; width:100%;">
 
 						<!-- Daily Transactions Chart -->
-						<vbox hflex="1" vflex="1" spacing="12px" sclass = "pop-animation"
+						<vbox hflex="1" vflex="1" spacing="12px"
+							sclass="pop-animation"
 							style="min-width:420px; padding:12px; background:#ffffff; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1);"
 							apply="com.fintrust.chart.controller.LineTimeSeriesComposer">
 
 							<label value="Daily Transaction Amounts"
 								sclass="section-title" />
 							<charts id="chart" zoomType="x"
-								style="height:300px; width:100%;" animation="true" />
+								style="width:100%;" animation="true" />
 						</vbox>
 
 						<!-- Weekly User Registrations Chart -->
-						<vbox hflex="1" vflex="1" spacing="12px" sclass = "pop-animation"
+						<vbox hflex="1" vflex="1" spacing="12px"
+							sclass="pop-animation"
 							style="min-width:420px; padding:12px; background:#ffffff; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1);"
 							apply="com.fintrust.chart.controller.UserRegistrationChartComposer">
 
 							<label value="Weekly User Registrations"
 								sclass="section-title" />
 							<charts id="userChart" zoomType="x"
-								style="height:300px; width:100%;" />
+								/>
 						</vbox>
 
 					</hbox>
-					
-					<!-- show in buttom  -->
-					<vbox hflex="1" vflex="1" spacing="12px" 
-      style=" overflow:auto;
-             box-shadow:0 2px 6px rgba(0,0,0,0.1);"
-      apply="com.fintrust.chart.controller.DailyUserActiveTimeChartComposer">
 
-    <label value="Daily User Activity (24 Hours)" sclass="section-title"/>
-    <charts id="activeUserChart"
-            style="height:300px; width:100%;"
-            animation="true"
-            />
-</vbox>
+					<!-- show in buttom  -->
+					<vbox hflex="1" vflex="1" spacing="12px"
+						style=" overflow:auto;
+             box-shadow:0 2px 6px rgba(0,0,0,0.1);"
+						apply="com.fintrust.chart.controller.DailyUserActiveTimeChartComposer">
+
+						<label value="Daily User Activity (24 Hours)"
+							sclass="section-title" />
+						<charts id="activeUserChart" animation="true" />
+					</vbox>
 				</vlayout>
-								
+
 
 			</center>
-			
+
 		</borderlayout>
 	</window>
 </zk>

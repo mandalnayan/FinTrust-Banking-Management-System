@@ -49,7 +49,7 @@
 								<label value="Full Name:" />
 								<textbox
 									value="@bind(vm.userDetails.user.fullName)" hflex="1"
-									placeholder="full name" />
+									placeholder="full name" readonly="true" />
 							</row>
 							<row>
 								<label value="Email:" />

@@ -108,7 +108,7 @@
      	<button id="searchBtn" label="Search" />
      </hbox>
 	 <space/>
-    <listbox id="requestList" width="100%" mold="paging" pageSize="10" vflex="1">
+    <listbox id="requestList" width="100%" mold="paging" pageSize="5" vflex="100%">
        <listhead>
        		<listheader width="100px">Request ID</listheader>
        		<listheader>accountNo</listheader>

@@ -13,6 +13,7 @@ import com.fintrust.model.AccountUpdateRequest;
 import com.fintrust.model.Branch;
 import com.fintrust.model.User;
 import com.fintrust.service.UserServiceImpl;
+import com.fintrust.util.NotificationUtil;
 
 /**
  * DAO class for handling account update requests.
@@ -169,7 +170,7 @@ public class AccountUpdateRequestDao {
      * @param reqId request id
      * @param empId reviewer employee id
      */
-    public void approveRequest(long reqId, long empId) {
+    public boolean approveRequest(long reqId, long empId) {
         logger.info("Approving account update requestId={}", reqId);
 
         String fetchSql = "SELECT * FROM account_update_request WHERE request_id = ?";
@@ -182,7 +183,7 @@ public class AccountUpdateRequestDao {
             try (PreparedStatement ps = conn.prepareStatement(fetchSql)) {
                 ps.setLong(1, reqId);
                 ResultSet rs = ps.executeQuery();
-                if (!rs.next()) return;
+                if (!rs.next()) return false;
 
                 try (PreparedStatement upd = conn.prepareStatement(updateAccountSql)) {
                     upd.setString(1, rs.getString("new_account_type"));
@@ -201,9 +202,12 @@ public class AccountUpdateRequestDao {
             }
 
             conn.commit();
+            return true;
         } catch (SQLException e) {
             logger.error("Error approving update request", e);
+            NotificationUtil.showInstant("error", e.getMessage());
         }
+        return false;
     }
 
     /**

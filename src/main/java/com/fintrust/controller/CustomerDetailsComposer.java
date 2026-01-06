@@ -39,7 +39,9 @@ public class CustomerDetailsComposer extends SelectorComposer<Window> {
         updateSummary(allCustomers);
     }
 
-    
+    /**
+     * Loading all customer
+     */
     private void loadAllCustomers() {
         try {
             Connection con = DBConnection.getConnection();
@@ -79,7 +81,9 @@ public class CustomerDetailsComposer extends SelectorComposer<Window> {
         customerList.setModel(new ListModelList<>(list));
     }
 
-    
+    /**
+     * Searching by specific field
+     */
     public void searchBySpecificField() {
 
         String field = cmbSearchType.getValue();

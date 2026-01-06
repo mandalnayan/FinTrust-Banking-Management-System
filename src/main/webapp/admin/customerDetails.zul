@@ -50,7 +50,7 @@
         <!-- ========== SCROLLABLE CUSTOMER LIST SECTION ========== -->
         <div style="height:450px; overflow-y:auto; border:1px solid #ddd; border-radius:5px;">
 
-            <listbox id="customerList" width="100%" mold="paging" pageSize="10">
+            <listbox id="customerList" width="100%" mold="paging" pageSize="7">
                 <listhead>
                     <listheader label="ID" width="70px"/>
                     <listheader label="Name" width="200px"/>
@@ -60,8 +60,7 @@
                     <listheader label="Actions"/>
                 </listhead>
             </listbox>
-            <!-- CENTER AREA FOR VIEW -->
-        	<include id="main_content_sec"/>
+           
         </div>
     </window>
 </zk>

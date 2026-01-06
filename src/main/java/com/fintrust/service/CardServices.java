@@ -11,8 +11,21 @@ import org.zkoss.zk.ui.util.Clients;
 
 import com.fintrust.db.DBConnection;
 
+/**
+ * To handle car related request
+ */
 public class CardServices {
 
+	/**
+	 * Submiting card request details
+	 * @param accNumber
+	 * @param cardTypes
+	 * @param cardCat
+	 * @param addresss
+	 * @param remark
+	 * @return
+	 * @throws SQLException
+	 */
   public boolean submitCardRequest(String accNumber,String cardTypes,String cardCat,String addresss,String remark) throws SQLException
   {
 	  Long user_id = (Long) Sessions.getCurrent().getAttribute("user_id");

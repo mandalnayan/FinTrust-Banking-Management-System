@@ -58,8 +58,7 @@ public class DailyUserActiveTimeChartComposer extends SelectorComposer<Component
         series.setName("Active Users");
         series.setData(
             Arrays.stream(DailyUserActiveTimeData.getData())
-                  .map(d -> new Point(d[0], d[1]))
-                  .collect(Collectors.toList())
+                  .map(d -> new Point(d[0], d[1])).toList()                  
                   .toArray(new Point[0])
         );
     }

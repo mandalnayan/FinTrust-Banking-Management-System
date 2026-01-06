@@ -59,9 +59,6 @@
             </listhead>
         </listbox>
 
-       <!--  <hbox pack="center" style="margin-top:15px;">
-            <button id="backBtn" label="Back to Dashboard" sclass="btn"/>
-        </hbox> -->
     </vlayout>
 </window>
 </hbox>

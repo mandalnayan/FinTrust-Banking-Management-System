@@ -89,7 +89,7 @@
 						<vbox class="widget widget-chart">
 						<hbox hflex="1" pack="start"
 								align="center">
-							<label value="Kyc Status"
+							<label value="Kyc Status:"
 								class="widget-title" />
 							<label value="@load(vm.kycLabel)" 
 								style="@load(vm.kycStyle)" sclass="widget-desc summary-value" />

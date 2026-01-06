@@ -10,8 +10,7 @@ import java.time.LocalDateTime;
  * of accidental modifications, which is a key requirement in financial applications.
  */
 
-
-public class User {
+public sealed class User permits UserDetails{
 
     private Long id;
     private String fullName;

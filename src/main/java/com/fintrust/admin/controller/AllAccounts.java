@@ -73,14 +73,14 @@ public class AllAccounts extends SelectorComposer<Window> {
         	 String accountStatus = acc.getAccount_status().name();
 
              String bgcolor = "#E8F5E9";
-             String border = "4px solid #2E7D32";
+             String border = "1.5px solid #2E7D32";
 
              if (accountStatus.equalsIgnoreCase("inactive")) {
                  bgcolor = "#FFF8E1";
-                 border = "4px solid #F9A825";
+                 border = "1.5px solid #F9A825";
              } else if (accountStatus.equalsIgnoreCase("closed")) {
                  bgcolor = "#FDECEA";
-                 border = "4px solid #C62828";
+                 border = "1.5px solid #C62828";
              }
 
              String cellStyle = "background-color:" + bgcolor + ";border-bottom:" + border + ";";
