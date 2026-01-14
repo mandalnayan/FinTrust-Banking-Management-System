@@ -76,8 +76,6 @@ public class TransactionsDAOImpl implements TransactionsDAO {
         List<Transaction> list = new ArrayList<>();
 
         Long userId = (Long) Sessions.getCurrent().getAttribute("user_id");
-
-
         
         String sql = "SELECT * FROM transactions WHERE user_id = ?";
 
@@ -244,7 +242,7 @@ public class TransactionsDAOImpl implements TransactionsDAO {
     }
 
 
-    public static Map<String, Object> fetchUserHeader(
+    public  Map<String, Object> fetchUserHeader(
             Connection con,
             long userId,
             java.sql.Date from,
@@ -316,6 +314,7 @@ public class TransactionsDAOImpl implements TransactionsDAO {
             Transaction t = new Transaction();
             t.setTransactionId(rs.getLong("transaction_id"));
             t.setTxnReference(rs.getString("txn_reference"));
+            
             t.setTxnType(rs.getString("txn_type"));
             t.setMode(rs.getString("mode"));
             t.setAmount(rs.getBigDecimal("amount"));

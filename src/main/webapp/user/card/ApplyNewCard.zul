@@ -31,7 +31,7 @@
                     <rows>
                         <row>
                             <label value="Account Number:" class="label" />
-                            <combobox readonly="true" id="accountList" class="input"
+                            <combobox readonly="true" id="accountList" sclass="input"
                                 placeholder="Select account number" autodrop="false" />
                         </row>
 
@@ -143,7 +143,7 @@
                 min-width: 200px;
             }
 
-            .input { width: 100% !important; }
+         
 
             /* Buttons */
             .button-row {

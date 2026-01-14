@@ -59,7 +59,7 @@
                 <!-- REFRESH BUTTON (EXTREME RIGHT) -->
                 <button label="⟳"
                         tooltiptext="Refresh"
-                        onClick='Executions.sendRedirect(null);'
+                        id = "btnReferesh"
                         style="background:#2563eb;
                                color:white;
                                border:none;

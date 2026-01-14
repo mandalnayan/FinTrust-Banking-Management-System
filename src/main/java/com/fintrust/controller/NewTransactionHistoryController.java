@@ -19,162 +19,169 @@ import org.zkoss.zul.*;
 import com.fintrust.dao.impl.TransactionsDAOImpl;
 import com.fintrust.db.DBConnection;
 import com.fintrust.model.Transaction;
+import com.fintrust.util.NotificationUtil;
 
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 public class NewTransactionHistoryController extends SelectorComposer<Component> {
 
-    @Wire
-    private Listbox transactionListbox;
+	@Wire
+	private Listbox transactionListbox;
 
-    @Wire
-    private Datebox fromDate;
+	@Wire
+	private Datebox fromDate;
 
-    @Wire
-    private Datebox toDate;
+	@Wire
+	private Datebox toDate;
 
-    @Wire
-    private Button btnDownloadPdf;
+	@Wire
+	private Button btnDownloadPdf;
 
-    @Override
-    public void doAfterCompose(Component comp) throws Exception {
-        super.doAfterCompose(comp);
-        loadTransactionData(null, null);
-    }
+	@Override
+	public void doAfterCompose(Component comp) throws Exception {
+		super.doAfterCompose(comp);
+		loadTransactionData(null, null);
+	}
 
-    // ================= FILTER LISTBOX =================
-    @Listen("onClick = #filterBtn")
-    public void filterByDateRange() {
+	// ================= FILTER LISTBOX =================
+	@Listen("onClick = #filterBtn")
+	public void filterByDateRange() {
 
-        java.util.Date from = fromDate.getValue();
-        java.util.Date to = toDate.getValue();
+		java.util.Date from = fromDate.getValue();
+		java.util.Date to = toDate.getValue();
 
-        if (from == null || to == null) {
-            Messagebox.show("Please select both From and To dates.");
-            return;
-        }
+		if (from == null || to == null) {
+			NotificationUtil.showInstant("warning", "Please select From and To dates before downloading.");
+			return;
+		}
 
-        if (to.before(from)) {
-            Messagebox.show("'To Date' must be after 'From Date'.");
-            return;
-        }
+		if (to.before(from)) {
+			NotificationUtil.showInstant("warning", "'To Date' must be after 'From Date'.");
+			return;
+		}
 
-        loadTransactionData(
-                new java.sql.Date(from.getTime()),
-                new java.sql.Date(to.getTime())
-        );
-    }
+		loadTransactionData(new java.sql.Date(from.getTime()), new java.sql.Date(to.getTime()));
+	}
 
-    private void loadTransactionData(java.sql.Date from, java.sql.Date to) {
+	/**
+	 * Reloading transactions
+	 */
+	@Listen("onClick = #btnReferesh")
+	public void reloadTransactions() {
+		loadTransactionData(null, null);
+	}
 
-        TransactionsDAOImpl dao =
-                new TransactionsDAOImpl(DBConnection.getConnection());
+	// ================= DOWNLOAD PDF =================
+	@Listen("onClick = #btnDownloadPdf")
+	public void generateStatement() throws Exception {
 
-        transactionListbox.getItems().clear();
+		java.util.Date from = fromDate.getValue();
+		java.util.Date to = toDate.getValue();
 
-        try {
-            List<Transaction> transactions =
-                    dao.allCurrentUserTransactions(from, to);
-         
-            for (Transaction t : transactions) {
+		if (from == null || to == null) {
+			NotificationUtil.showInstant("warning", "Please select From and To dates before downloading.");
+			return;
+		}
 
-                Listitem item = new Listitem();
-                item.appendChild(new Listcell(String.valueOf(t.getTransactionId())));
-                item.appendChild(new Listcell(String.valueOf(t.getAccountNumber())));
-                item.appendChild(new Listcell(
-                        t.getCounterpartyAccountNumber() == null ? "-" :
-                                String.valueOf(t.getCounterpartyAccountNumber())
-                ));
+		if (to.before(from)) {
+			NotificationUtil.showInstant("warning", "'To Date' must be after 'From Date'.");
+			return;
+		}
 
-                String sign = t.getTxnType().equalsIgnoreCase("debit") ? "-" : "+";
-                String color = t.getTxnType().equalsIgnoreCase("debit") ? "red" : "green";
+		java.sql.Date transactionDateFrom = new java.sql.Date(from.getTime());
+		java.sql.Date transactionDateTo = new java.sql.Date(to.getTime());
 
-                Listcell amt = new Listcell(sign + t.getAmount() + " ₹");
-                amt.setStyle("color:" + color);
-                item.appendChild(amt);
+		Connection con = DBConnection.getConnection();
+		Long userId = (Long) Sessions.getCurrent().getAttribute("user_id");
+		TransactionsDAOImpl dao = new TransactionsDAOImpl(DBConnection.getConnection());
+		Map<String, Object> userInfo = dao.fetchUserHeader(con, userId, transactionDateFrom, transactionDateTo);
 
-                item.appendChild(new Listcell(t.getStatus()));
-                item.appendChild(new Listcell(t.getCreatedAt().toString()));
-                item.appendChild(new Listcell(t.getMode()));
-                item.appendChild(new Listcell(t.getTxnType()));
-                String remaningAmount = t.getBalanceAfter() + "";
-               
-                Listcell remaningAmountCell = new Listcell(!remaningAmount.equals(null) ? remaningAmount : "Failed to load");
-                remaningAmountCell.setStyle("color:" + color);
-                item.appendChild(remaningAmountCell);
-                
-                transactionListbox.appendChild(item);
-            }
+		List<Transaction> transactions = dao.allCurrentUserTransactions(transactionDateFrom,
+				transactionDateTo);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+		Map<String, Object> parameters = new HashMap<>();
 
-    // ================= DOWNLOAD PDF =================
-    @Listen("onClick = #btnDownloadPdf")
-    public void generateStatement() throws Exception {
+		// Column header
+		parameters.put("column1", "Transaction Id");
+		parameters.put("column2", "From Account");
+		parameters.put("column3", "CounterParty Account");
+		parameters.put("column4", "Transaction Type");
+		parameters.put("column5", "Balance");
 
-        java.util.Date from = fromDate.getValue();
-        java.util.Date to = toDate.getValue();
+		parameters.put("name", userInfo.get("FULL_NAME"));
+		parameters.put("address", "Delhi, NCR 878654");
+		
+		String duration = transactionDateFrom + " to " + transactionDateTo;
+		
+		parameters.put("duration", duration);
+		parameters.put("accountNo", Long.parseLong(userInfo.get("ACCOUNT_NUMBER").toString()));
 
-        if (from == null || to == null) {
-            Messagebox.show("Please select From and To dates before downloading.");
-            return;
-        }
+		// Summary information
+		parameters.put("totalBalance", 5670.9);
 
-        if (to.before(from)) {
-            Messagebox.show("'To Date' must be after 'From Date'.");
-            return;
-        }
+		InputStream reportStream = Executions.getCurrent().getDesktop().getWebApp()
+				.getResourceAsStream("/reports/transactions_jasper_report.jrxml");
 
-        java.sql.Date sqlFrom = new java.sql.Date(from.getTime());
-        java.sql.Date sqlTo = new java.sql.Date(to.getTime());
+		if (reportStream == null) {
+			throw new RuntimeException("bank_statement.jrxml not found");
+		}
 
-        Connection con = DBConnection.getConnection();
-        Long userId = (Long) Sessions.getCurrent().getAttribute("user_id");
-        TransactionsDAOImpl dao =
-                new TransactionsDAOImpl(DBConnection.getConnection());
-        Map<String, Object> params =
-                dao.fetchUserHeader(con, userId, sqlFrom, sqlTo);
-        
-        List<Transaction> transactions =
-        		dao.fetchTransactionsByDateRange(con, userId, sqlFrom, sqlTo);
-        
-        InputStream reportStream =
-                Executions.getCurrent()
-                        .getDesktop()
-                        .getWebApp()
-                        .getResourceAsStream("/reports/bank_statement.jrxml");
+		JasperReport report = JasperCompileManager.compileReport(reportStream);
 
-        if (reportStream == null) {
-            throw new RuntimeException("bank_statement.jrxml not found");
-        }
+		JasperPrint print = JasperFillManager.fillReport(report, parameters,
+				new JRBeanCollectionDataSource(transactions));
 
-        JasperReport report =
-                JasperCompileManager.compileReport(reportStream);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		JasperExportManager.exportReportToPdfStream(print, baos);
 
-        JasperPrint print =
-                JasperFillManager.fillReport(
-                        report,
-                        params,
-                        new JRBeanCollectionDataSource(transactions)
-                );
+		AMedia media = new AMedia("Bank_Statement.pdf", "pdf", "application/pdf", baos.toByteArray());
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        JasperExportManager.exportReportToPdfStream(print, baos);
+		Filedownload.save(media);
+		con.close();
+	}
 
-        AMedia media = new AMedia(
-                "Bank_Statement.pdf",
-                "pdf",
-                "application/pdf",
-                baos.toByteArray()
-        );
+	private void loadTransactionData(java.sql.Date from, java.sql.Date to) {
 
-        Filedownload.save(media);
-        con.close();
-    }
+		TransactionsDAOImpl dao = new TransactionsDAOImpl(DBConnection.getConnection());
 
- 
+		transactionListbox.getItems().clear();
+
+		try {
+			List<Transaction> transactions = dao.allCurrentUserTransactions(from, to);
+
+			for (Transaction t : transactions) {
+
+				Listitem item = new Listitem();
+				item.appendChild(new Listcell(String.valueOf(t.getTransactionId())));
+				item.appendChild(new Listcell(String.valueOf(t.getAccountNumber())));
+				item.appendChild(new Listcell(t.getCounterpartyAccountNumber() == null ? "-"
+						: String.valueOf(t.getCounterpartyAccountNumber())));
+
+				String sign = t.getTxnType().equalsIgnoreCase("debit") ? "-" : "+";
+				String color = t.getTxnType().equalsIgnoreCase("debit") ? "red" : "green";
+
+				Listcell amt = new Listcell(sign + t.getAmount() + " ₹");
+				amt.setStyle("color:" + color);
+				item.appendChild(amt);
+
+				item.appendChild(new Listcell(t.getStatus()));
+				item.appendChild(new Listcell(t.getCreatedAt().toString()));
+				item.appendChild(new Listcell(t.getMode()));
+				item.appendChild(new Listcell(t.getTxnType()));
+				String remaningAmount = t.getBalanceAfter() + "";
+
+				Listcell remaningAmountCell = new Listcell(
+						!remaningAmount.equals(null) ? remaningAmount : "Failed to load");
+				remaningAmountCell.setStyle("color:" + color);
+				item.appendChild(remaningAmountCell);
+
+				transactionListbox.appendChild(item);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }
