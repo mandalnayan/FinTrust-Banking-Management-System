@@ -3,6 +3,7 @@ package com.fintrust.controller;
 import java.util.List;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
@@ -45,7 +46,7 @@ public class FundTransferController extends SelectorComposer<Component> {
 		super.doAfterCompose(comp);
 
 		accountService = new AccountServiceImpl();
-		List<Account> accounts = accountService.getAllAccounts();
+		List<Account> accounts = accountService.getAllUserAccounts();
 		System.out.println(accounts);
 		beneficiaryService = new BeneficiaryService();
 
@@ -118,6 +119,13 @@ public class FundTransferController extends SelectorComposer<Component> {
 		beneficiaryComboBox.setValue(null);
 		toAccountBox.setValue(null);
 		amountBox.setValue(null);	
+	}
+	
+	@Listen("onClick=#addBeneiciary")
+	public void addBeneiciary() {
+		Include mainContentSec = (Include) Sessions.getCurrent().getAttribute("main_content_sec");
+
+		mainContentSec.setSrc("/WEB-INF/components/addBeneficiary.zul");
 	}
 
 	public Notification isValid(Long fromAcc, Long toAcc, Double amt, String ifscCode) {

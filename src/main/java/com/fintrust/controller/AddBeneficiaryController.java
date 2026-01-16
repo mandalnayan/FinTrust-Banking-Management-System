@@ -35,7 +35,7 @@ public class AddBeneficiaryController extends SelectorComposer<Component> {
         String ifsc = ifscBox.getValue();
 
         if (name.isEmpty() || accountNumber == null || toString().valueOf(accountNumber).length() != 12 || bank.isEmpty() || ifsc.isEmpty() || ifsc.length() != 11) {
-            NotificationUtil.showInstant("warning", " Fill all fields!");
+            NotificationUtil.showInstant("warning", "All fields are required!");
             return;
         }
 
@@ -61,7 +61,7 @@ public class AddBeneficiaryController extends SelectorComposer<Component> {
         } catch (Exception e) {
             e.printStackTrace();
 
-            NotificationUtil.showInstant("error", "Faild to add. " + e.getMessage());
+            NotificationUtil.showInstant("error", "Faild to add beneficiary ");
         }
     }
 }

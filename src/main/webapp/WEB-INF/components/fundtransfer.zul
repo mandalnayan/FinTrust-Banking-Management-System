@@ -68,7 +68,7 @@
         <div sclass="action-bar">
             <button id="transferBtn" label="Transfer Funds" sclass="btn-primary"/>
             <button id="clearBtn" label="Clear" sclass="btn-secondary"/>
-            <button label="Add Beneficiary" sclass="btn-outline"/>
+            <button id = "addBeneiciary" label="Add Beneficiary" sclass="btn-outline"/>
         </div>
 
     </vlayout>
