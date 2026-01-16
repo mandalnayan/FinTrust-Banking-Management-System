@@ -77,8 +77,6 @@ public class AccountCloseApprovelComposer extends SelectorComposer<Component> {
 		loadPendingRequests(allCloseAccountRequest);
 	}
 	
-	
-	
 	/**
 	 * Displays pending requests in the listbox.
 	 *
@@ -106,8 +104,7 @@ public class AccountCloseApprovelComposer extends SelectorComposer<Component> {
 		requestList.setModel(new ListModelList<>(allCloseAccountRequest));
 	}
 	
-	
-	
+
 	/**
 	 * Approves selected account close request.
 	 *
