@@ -3,244 +3,183 @@
 <?link rel="stylesheet" type="text/css" href="/resources/css/header-footer.css"?>
 
 <zk>
-        <privateNavbar width="100%"></privateNavbar>
-    <!-- FIXED: Removed height="130%" and added vflex="min" -->
-     <a href="/user/card/cardHome.zul" class="top-back-btn">
-        ← Back
-    </a>
-    <window border="none" width="100%" height="auto" vflex="min"
-        apply="com.fintrust.cards.controller.cardApplyPageController"
-        style="background: linear-gradient(135deg, #e6f0ff, #ffffff); padding-bottom:30px;">
+	<privateNavbar width="100%"></privateNavbar>
+	<!-- FIXED: Removed height="130%" and added vflex="min" -->
+	<a href="/user/card/cardHome.zul" class="top-back-btn">← Back</a>
+	<window border="none" width="100%" height="auto" vflex="min"
+		apply="com.fintrust.cards.controller.cardApplyPageController"
+		style="background: linear-gradient(135deg, #e6f0ff, #ffffff); padding-bottom:30px;">
 
-        <!-- 🌐 Top Navigation Bar -->
-        
+		<!-- 🌐 Top Navigation Bar -->
 
-        <!-- 🌈 Main Content Area -->
-        <div class="main-wrapper">
 
-            <!-- 💡 Glass-Style Form Card -->
-            <div class="form-card">
-              
-                <div class="form-header">
-                    <label value="💳 Apply for New Card" class="title" />
-                    <separator />
-                    <label value="Quick, Secure and Paperless Card Request Service" class="subtitle" />
-                </div>
-  
-                <grid width="100%" sclass="responsive-grid">
-                    <rows>
-                        <row>
-                            <label value="Account Number:" class="label" />
-                            <combobox readonly="true" id="accountList" sclass="input"
-                                placeholder="Select account number" autodrop="false" />
-                        </row>
+		<!-- 🌈 Main Content Area -->
+		<div class="main-wrapper">
 
-                        <row>
-                            <label value="Card Type:" class="label" />
-                            <radiogroup id="cardType" orient="horizontal">
-                                <radio label="VISA" value="VISA" checked="true" />
-                                <radio label="MasterCard" value="MasterCard" />
-                                <radio label="RuPay" value="RuPay" />
-                            </radiogroup>
-                        </row>
+			<!-- 💡 Glass-Style Form Card -->
+			<div class="form-card">
 
-                        <row>
-                            <label value="Card Category:" class="label" />
-                            <combobox buttonVisible="false" readonly="true" id="cardCategory" class="input"
-                                placeholder="Select category">
-                               <comboitem visible="true" id="dCardItem" label="Debit Card" value="Debit" />
-                                <comboitem visible="true" id="cCardItem" label="Credit Card" value="Credit" />
-                                <comboitem visible="true" id="pCardItem" label="Prepaid Card" value="Prepaid" /> 
-                                
-                        
-                            </combobox>
-                        </row>
+				<div class="form-header">
+					<label value="💳 Apply for New Card" class="title" />
+					<separator />
+					<label
+						value="Quick, Secure and Paperless Card Request Service"
+						class="subtitle" />
+				</div>
 
-                        <row>
-                            <label value="Delivery Address:" class="label" />
-                            <textbox id="address" class="input"
-                                multiline="true" rows="2"
-                                placeholder="Enter or confirm your address" />
-                        </row>
-                                                                     
-                        <row>
-                            <label value="Remarks:" class="label" />
-                            <textbox id="remarks" class="input"
-                                placeholder="e.g., Need card urgently" />
-                        </row>
+				<grid width="100%" sclass="responsive-grid">
+					<rows>
+						<row>
+							<label value="Account Number:"
+								class="label" />
+							<combobox readonly="true" id="accountList"
+								sclass="input" placeholder="Select account number"
+								autodrop="false" />
+						</row>
 
-                        <row>
-                            <label />
-                            <checkbox id="terms"
-                                label="I accept the Terms and Conditions of FinTrust Bank" />
-                        </row>
-                    </rows>
-                </grid>
+						<row>
+							<label value="Card Type:" class="label" />
+							<radiogroup id="cardType"
+								orient="horizontal">
+								<radio label="VISA" value="VISA"
+									checked="true" />
+								<radio label="MasterCard"
+									value="MasterCard" />
+								<radio label="RuPay" value="RuPay" />
+							</radiogroup>
+						</row>
 
-                <separator />
+						<row>
+							<label value="Card Category:" class="label" />
+							<combobox buttonVisible="false"
+								readonly="true" id="cardCategory" class="input"
+								placeholder="Select category">
+								<comboitem visible="true" id="dCardItem"
+									label="Debit Card" value="Debit" />
+								<comboitem visible="true" id="cCardItem"
+									label="Credit Card" value="Credit" />
+								<comboitem visible="true" id="pCardItem"
+									label="Prepaid Card" value="Prepaid" />
 
-                <!-- Buttons -->
-                <div class="button-row">
-                    <button label="Submit Request" sclass="btn-primary" id="submitApplyCard" />
-                    <button label="Cancel" sclass="btn-secondary"
-                        onClick='Executions.sendRedirect("cardHome.zul")' />
-                </div>
-            </div>
-        </div>
 
-        <!-- 🎨 CSS -->
-        <style>
-            html, body {
-                overflow-x: hidden !important;
-            }
-            
-            
+							</combobox>
+						</row>
 
-            .main-wrapper {
-                display: flex;
-                justify-content: center;
-                align-items: flex-start;
-                padding: 40px 10px;
-                box-sizing: border-box;
-            }
+						<row>
+							<label value="Delivery Address:"
+								class="label" />
+							<textbox id="address" class="input"
+								multiline="true" rows="2"
+								placeholder="Enter or confirm your address" />
+						</row>
 
-            .form-card {
-                background: rgba(255, 255, 255, 0.95);
-                backdrop-filter: blur(8px);
-                border-radius: 15px;
-                box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-                width: 800px;
-                max-width: 95%;
-                padding: 30px 35px;
-                box-sizing: border-box;
-                animation: fadeIn 0.8s ease;
-            }
+						<row>
+							<label value="Remarks:" class="label" />
+							<textbox id="remarks" class="input"
+								placeholder="e.g., Need card urgently" />
+						</row>
 
-            .form-header {
-                text-align: center;
-                margin-bottom: 20px;
-            }
+						<row>
+							<label />
+							<checkbox id="terms"
+								label="I accept the Terms and Conditions of FinTrust Bank" />
+						</row>
+					</rows>
+				</grid>
 
-            .title { font-size: 24px; font-weight: bold; color: #003366; }
-            .subtitle { color: #555; font-size: 13px; }
+				<separator />
 
-            .responsive-grid .z-row {
-                display: flex;
-                flex-wrap: wrap;
-                align-items: center;
-                margin-bottom: 10px;
-            }
+				<!-- Buttons -->
+				<div class="button-row">
+					<button label="Submit Request" sclass="btn-primary"
+						id="submitApplyCard" />
+					<button label="Cancel" sclass="btn-secondary"
+						onClick='Executions.sendRedirect("cardHome.zul")' />
+				</div>
+			</div>
+		</div>
 
-            .responsive-grid .z-row > *:first-child {
-                width: 200px;
-                min-width: 150px;
-                font-weight: 500;
-                color: #333;
-            }
+		<!-- 🎨 CSS -->
+		<style>
+			html, body { overflow-x: hidden !important; }
 
-            .responsive-grid .z-row > *:last-child {
-                flex: 1;
-                min-width: 200px;
-            }
 
-         
 
-            /* Buttons */
-            .button-row {
-                display: flex;
-                justify-content: center;
-                gap: 20px;
-                flex-wrap: wrap;
-                width: 100%;
-                margin-top: 15px;
-            }
+			.main-wrapper { display: flex; justify-content: center;
+			align-items: flex-start; padding: 40px 10px; box-sizing:
+			border-box; }
 
-            .button-row button {
-                padding: 10px 18px;
-                min-width: 140px;
-                border-radius: 8px;
-                border: none;
-                cursor: pointer;
-                font-weight: bold;
-                transition: 0.3s ease;
-            }
+			.form-card { background: rgba(255, 255, 255, 0.95);
+			backdrop-filter: blur(8px); border-radius: 15px; box-shadow:
+			0 6px 15px rgba(0, 0, 0, 0.15); width: 800px; max-width:
+			95%; padding: 30px 35px; box-sizing: border-box; animation:
+			fadeIn 0.8s ease; }
 
-            .btn-primary {
-                background: linear-gradient(90deg, #004080, #0073e6);
-                color: white;
-            }
-            .btn-secondary {
-                background: #f5f5f5;
-                color: #333;
-            }
-            
-            .top-back-btn {
-                position: fixed;
-                top: 90px; /* just below navbar */
-                left: 20px;
-                z-index: 1100;
-                background: white;
-                color: #004080;
-                padding: 6px 14px;
-                border-radius: 20px;
-                font-size: 13px;
-                font-weight: 600;
-                text-decoration: none;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-                transition: all 0.3s ease;
-            }
-            
-            
-              .top-back-btn:hover {
-                background: #004080;
-                color: white;
-                transform: translateX(-3px);
-            }
+			.form-header { text-align: center; margin-bottom: 20px; }
 
-            /* Mobile Fix */
-           @media (max-width: 500px) {
+			.title { font-size: 24px; font-weight: bold; color: #003366;
+			} .subtitle { color: #555; font-size: 13px; }
 
-    .form-card {
-        width: 100% !important;
-        max-width: 100% !important;
-        padding: 15px !important;
-    }
+			.responsive-grid .z-row { display: flex; flex-wrap: wrap;
+			align-items: center; margin-bottom: 10px; }
 
-    .responsive-grid .z-row {
-        flex-direction: column;
-    }
+			.responsive-grid .z-row > *:first-child { width: 200px;
+			min-width: 150px; font-weight: 500; color: #333; }
 
-    .responsive-grid .z-row > * {
-        width: 100% !important;
-    }
-    .z-combobox-popup {
-   
-    width: auto !important;
-  
-    box-sizing: border-box !important;
-}
-    
+			.responsive-grid .z-row > *:last-child { flex: 1; min-width:
+			200px; }
 
-    /* Button container full width */
-    .button-row {
-        flex-direction: column;
-        gap: 12px !important;
-        width: 100% !important;
-    }
 
-    /* ZK Button wrapper */
-    .button-row .z-button {
-        width: 100% !important;
-    }
 
-    /* Actual button inside */
-    .button-row .z-button button {
-        width: 100% !important;
-    }
-}
+			/* Buttons */ .button-row { display: flex; justify-content:
+			center; gap: 20px; flex-wrap: wrap; width: 100%; margin-top:
+			15px; }
 
-        </style>
+			.button-row button { padding: 10px 18px; min-width: 140px;
+			border-radius: 8px; border: none; cursor: pointer;
+			font-weight: bold; transition: 0.3s ease; }
 
-    </window>
+			.btn-primary { background: linear-gradient(90deg, #004080,
+			#0073e6); color: white; } .btn-secondary { background:
+			#f5f5f5; color: #333; }
+
+			.top-back-btn { position: fixed; top: 90px; /* just below
+			navbar */ left: 20px; z-index: 1100; background: white;
+			color: #004080; padding: 6px 14px; border-radius: 20px;
+			font-size: 13px; font-weight: 600; text-decoration: none;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: all 0.3s
+			ease; }
+
+
+			.top-back-btn:hover { background: #004080; color: white;
+			transform: translateX(-3px); }
+
+			/* Mobile Fix */ @media (max-width: 500px) {
+
+			.form-card { width: 100% !important; max-width: 100%
+			!important; padding: 15px !important; }
+
+			.responsive-grid .z-row { flex-direction: column; }
+
+			.responsive-grid .z-row > * { width: 100% !important; }
+			.z-combobox-popup {
+
+			width: auto !important;
+
+			box-sizing: border-box !important; }
+
+
+			/* Button container full width */ .button-row {
+			flex-direction: column; gap: 12px !important; width: 100%
+			!important; }
+
+			/* ZK Button wrapper */ .button-row .z-button { width: 100%
+			!important; }
+
+			/* Actual button inside */ .button-row .z-button button {
+			width: 100% !important; } }
+
+		</style>
+
+	</window>
 </zk>
- 
